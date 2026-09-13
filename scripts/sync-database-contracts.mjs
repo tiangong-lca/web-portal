@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const destinationRoot = resolve(repositoryRoot, "contracts/database-engine/portal");
 const manifestPath = resolve(destinationRoot, "manifest.json");
-const canonicalRepository = "tiangong-lca/database-engine";
+const canonicalRepository = "tiangong-lca/database";
 const contractNames = [
   "portal.common-types.v1",
   "portal.hybrid-database-input.v1",

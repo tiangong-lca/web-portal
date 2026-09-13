@@ -1,6 +1,6 @@
 {
   "schemaVersion": "portal.database-contract-snapshot.v1",
-  "sourceRepository": "tiangong-lca/database-engine",
+  "sourceRepository": "tiangong-lca/database",
   "sourceCommit": "521741a064f402c9b674583ef69a5947d1b5885f",
   "files": [
     {

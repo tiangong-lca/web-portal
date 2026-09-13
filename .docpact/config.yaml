@@ -1,14 +1,14 @@
 version: 1
 layout: repo
-lastReviewedAt: "2026-09-07"
-lastReviewedCommit: "3341a500616f1657a6a1696df87f0c4ba1e7930b"
-lastReviewedNote: "Reviewed for Portal #65: portable task entrypoints, focused UI/development owners and scoped local checks preserve product/security obligations, required CI, hosted evidence and the Next-managed block."
+lastReviewedAt: "2026-09-13"
+lastReviewedCommit: "92e4b1f8550d90e3a245a8782ad273ba806d1324"
+lastReviewedNote: "Portal #81: canonicalRepo migrated to tiangong-lca/web-portal; the Database contract synchronizer now records source identity tiangong-lca/database at the same reviewed source commit 521741a064f402c9b674583ef69a5947d1b5885f with all 34 contract bytes unchanged. Package name, Storybook negative guard and fixed location receipt are preserved."
 
 catalog:
   repos:
     - id: portal
       path: .
-      canonicalRepo: tiangong-lca/portal
+      canonicalRepo: tiangong-lca/web-portal
       entryDoc: AGENTS.md
       workflowDocs:
         - docs/development.md

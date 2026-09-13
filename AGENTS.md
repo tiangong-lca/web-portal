@@ -16,9 +16,9 @@ checkPaths:
   - docs/development.md
   - docs/ui-system.md
   - .docpact/config.yaml
-lastReviewedAt: 2026-09-09
-lastReviewedCommit: 16433f96e8c910f99392500f5f3ff2d70bc2a7ce
-lastReviewedNote: "Reviewed for Portal #65: portable task entrypoints, focused UI/development owners and scoped local checks preserve product/security obligations, required CI, hosted evidence and the Next-managed block."
+lastReviewedAt: 2026-09-13
+lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
+lastReviewedNote: "Portal #81: reviewed canonical repository identity migration to tiangong-lca/web-portal and the Database contract snapshot source identity move; repo contract, standing rules and generated-snapshot byte ownership unchanged."
 related:
   - docs/development.md
   - docs/ui-system.md

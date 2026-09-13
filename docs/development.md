@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-09
-lastReviewedCommit: 921e2e8d061f37fe6a1d6c3dd280c013f708ac99
+lastReviewedAt: 2026-09-13
+lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #77: Wix Team and Community content plus partner marks are repository-owned after migration; provenance, ordering, privacy and Storybook review requirements are documented."
+lastReviewedNote: "Portal #81: the Database contract synchronizer's active source identity is tiangong-lca/database (same reviewed source commit 521741a064f402c9b674583ef69a5947d1b5885f, 34 contract bytes unchanged); workflow, checks and hosted evidence expectations unchanged."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

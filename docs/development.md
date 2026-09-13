@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-13
-lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
+lastReviewedCommit: 4ee8cf2a2c7dbfa27e5c5ea4114d6a2276c1a958
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #81: the Database contract synchronizer's active source identity is tiangong-lca/database (same reviewed source commit 521741a064f402c9b674583ef69a5947d1b5885f, 34 contract bytes unchanged); workflow, checks and hosted evidence expectations unchanged."
+lastReviewedNote: "Reviewed for Portal #81 CI recovery: additive manual dispatch runs the same complete workflow when an expected event produces no run. Existing PR/main triggers, jobs, permissions, gates and exact-head evidence requirements remain intact."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -68,7 +68,7 @@ Run the checks that demonstrate the changed behavior before committing or pushin
 | Server, DTO or security behavior | Relevant contract and negative-path tests, typecheck, build and the applicable production integration/browser checks. Include `pnpm check:database-contracts` when consuming the generated snapshot. |
 | Dependencies, runtime/build configuration or deployment | Frozen install and affected tooling/build checks. Read the [runtime/deployment plan](design-plan.md#17-edgeone-makers-部署) and [compatibility matrix](r0/compatibility-matrix.md) when the change affects hosted behavior. |
 
-`pnpm check` is the aggregate static, unit, build and bundle command when the change warrants that breadth. [CI](../.github/workflows/ci.yml) retains the complete required checks on PRs and `main`, including production browser and Storybook checks. Focused local verification does not waive CI or the [release acceptance requirements](design-plan.md#194-发布门).
+`pnpm check` is the aggregate static, unit, build and bundle command when the change warrants that breadth. [CI](../.github/workflows/ci.yml) retains the complete required checks on PRs and `main`, including production browser and Storybook checks. If an expected event produces no run, its manual trigger can run the same complete workflow on the reviewed branch; verify the run's exact head before treating it as evidence. Focused local verification does not waive CI or the [release acceptance requirements](design-plan.md#194-发布门).
 
 Unit tests rendering shared localized client components must use `NextIntlClientProvider` with the test locale dictionary. Production browser checks open the shortlist add disclosure and filter drawer before interacting with their controls. For constrained local machines, use `--workers=2` for the multi-locale UI suite.
 

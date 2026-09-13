@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-09-10
-lastReviewedCommit: 0fe6d177cc9a47ba51c03dfe33be4a6b6b1c110c
-lastReviewedNote: "Reviewed for the production cinematic homepage: the four-language public route replaces the lifecycle sculpture with a decoded scroll-driven frame sequence while preserving the anonymous read-only product and data boundaries."
+lastReviewedAt: 2026-09-13
+lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
+lastReviewedNote: "Portal #81: section 22.1 canonical repository updated to tiangong-lca/web-portal and the generated contract snapshot identity moved to tiangong-lca/database at the same reviewed source commit; product, delivery and hosted-release requirements unchanged."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1341,7 +1341,7 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 
 ### 22.1 当前状态
 
-- canonical repository 为 `tiangong-lca/portal`，可写 `main` 是唯一长期分支；routine branch 从 `origin/main` 创建并 PR 回 `main`；
+- canonical repository 为 `tiangong-lca/web-portal`，可写 `main` 是唯一长期分支；routine branch 从 `origin/main` 创建并 PR 回 `main`；
 - workspace 已用 HTTPS URL 把 Portal 注册为 `tiangong-lca-portal` mode-160000 submodule，并在 delivery profile、Docpact catalog/ownership/routing、branch matrix、repository map 与 graph 中注册 `portal`；
 - live Project 已有 `Repo Tag=portal`，Portal executable work 由 workspace controller 创建、启动、提交和完成；
 - Portal 使用 `layout: repo` 的 repository-owned Docpact config；root Docpact 只拥有跨仓路由和 gitlink integration；

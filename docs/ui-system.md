@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-10
-lastReviewedCommit: 921e2e8d061f37fe6a1d6c3dd280c013f708ac99
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 0063580b2fc496e5459cf03f199aa1e5737f3393
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for the local Team and Community split: both routes share the Portal shell and responsive directory patterns while keeping their content responsibilities separate."
+lastReviewedNote: "Reviewed for Portal #83: ordinary Storybook files use at most two isolated workers while explicit WebGL remains serial. Same-source full A/B/A preserves all27files and240test identities/statuses; real-context canary and shared-context storage negative establish isolation. Four actual config-resolution regressions and independent source/document review pass. Renderer,30-second limits,retries,existingWebGL skips andthreeCIjobs remain unchanged; canonical and hosted validation are pending."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

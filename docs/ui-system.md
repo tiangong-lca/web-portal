@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-10
-lastReviewedCommit: 921e2e8d061f37fe6a1d6c3dd280c013f708ac99
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 3fe5aaf6a84cc4d9dfb8d6f8e7bd0faa24d4d0ee
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for the local Team and Community split: both routes share the Portal shell and responsive directory patterns while keeping their content responsibilities separate."
+lastReviewedNote: "Reviewed for Portal #83: ordinary local Storybook retains a two-file cap, while CI and explicit WebGL stay serial after hosted parallel run 35021620020 failed seven frame/visibility assertions. Five actual configuration-resolution cases and the complete local pnpm check pass. Existing isolation, 30-second deadlines, retry policy, product assertions and optional WebGL skips remain unchanged. New serial hosted validation is pending; local speedup is not a CI or Windows promise."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

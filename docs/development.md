@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-13
-lastReviewedCommit: 4ee8cf2a2c7dbfa27e5c5ea4114d6a2276c1a958
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 3fe5aaf6a84cc4d9dfb8d6f8e7bd0faa24d4d0ee
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #81 CI recovery: additive manual dispatch runs the same complete workflow when an expected event produces no run. Existing PR/main triggers, jobs, permissions, gates and exact-head evidence requirements remain intact."
+lastReviewedNote: "Reviewed for Portal #83: ordinary local Storybook retains a two-file cap, while CI and explicit WebGL stay serial after hosted parallel run 35021620020 failed seven frame/visibility assertions. Five actual configuration-resolution cases and the complete local pnpm check pass. Existing isolation, 30-second deadlines, retry policy, product assertions and optional WebGL skips remain unchanged. New serial hosted validation is pending; local speedup is not a CI or Windows promise."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -154,7 +154,7 @@ Palette interpolation follows elapsed wall time. Pausing retains the existing co
 
 Animation frames poll the previous GPU submission with a zero-timeout WebGL fence before submitting more drawing. This bounds software-rendering backlog without blocking JavaScript or reducing model, material or reflection quality. Initial rendering and frozen-preview resizing still draw synchronously, and disposal deletes the outstanding fence.
 
-Storybook test files run sequentially in `vitest.config.ts`: WebGL compilation otherwise competes with the other stories' focus and animation assertions. The Playwright provider uses `channel: "chromium"` for Chromium's current headless mode, which follows the full browser's rendering path. The existing `playwright install chromium` setup installs this browser in local development and CI. Its 30-second test deadline includes cold shader compilation and the complete interaction flow. Keep bounded waits for observable motion and pause checks; the deadline does not replace a rendered performance check or affect the unit-test runner.
+Ordinary local Storybook tests run at most two files concurrently in `vitest.config.ts`. CI remains sequential with one worker: the hosted two-worker experiment failed cinematic-frame and visibility assertions, despite the successful local comparison. The local speedup does not establish a CI or Windows performance guarantee. The explicit `PORTAL_WEBGL_TESTS=1` lane stays sequential with one worker in every environment. `PORTAL_STORYBOOK_SOFTWARE_WEBGL=1` selects the renderer without selecting the WebGL lane or disabling ordinary local parallelism. `tests/unit/storybook-lanes.test.ts` resolves the actual Vitest configuration to verify these boundaries. The Playwright provider uses `channel: "chromium"` for Chromium's current headless mode, which follows the full browser's rendering path. The existing `playwright install chromium` setup installs this browser in local development and CI. Its 30-second test deadline includes cold shader compilation and the complete interaction flow. Keep bounded waits for observable motion and pause checks; the deadline does not replace a rendered performance check or affect the unit-test runner.
 
 `vitest.config.ts` exports shared launch options for the runner and CI's renderer probe. CI explicitly selects [Chromium's SwiftShader OpenGL driver](https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md) for GPU-less hosts and logs the actual browser/WebGL identity. Reproduce that path locally with `PORTAL_STORYBOOK_SOFTWARE_WEBGL=1 pnpm test:storybook`. The flag affects the component test browser only; local previews keep their normal rendering path.
 

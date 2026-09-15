@@ -16,9 +16,9 @@ checkPaths:
   - AGENTS.md
   - docs/design-plan.md
   - package.json
-lastReviewedAt: 2026-09-13
-lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
-lastReviewedNote: "Portal #81: reviewed canonical repository identity migration to tiangong-lca/web-portal; project purpose and boundaries unchanged."
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 6067b52beaa0ae348d0449a98b6996cafbe2c34b
+lastReviewedNote: "Reviewed for Portal #83 governance completion: the actual Storybook configuration regression file is covered by the existing component-workspace rule. Ordinary two-file versus explicit-WebGL serial behavior, isolated contexts, all quality checks and three CI jobs are retained. Independent source, configuration, experiment and full governance-reading reviews pass; final canonical and hosted qualification remain pending."
 related:
   - docs/development.md
   - docs/ui-system.md

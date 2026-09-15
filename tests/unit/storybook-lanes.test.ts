@@ -19,7 +19,7 @@ const probe = `
   }));
 `;
 
-function resolveStorybook(environment: NodeJS.ProcessEnv) {
+function resolveStorybook(environment: Record<string, string | undefined>) {
   const env = { ...process.env };
   for (const key of [
     "CI",

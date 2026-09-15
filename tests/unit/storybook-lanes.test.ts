@@ -47,13 +47,20 @@ function resolveStorybook(environment: Record<string, string | undefined>) {
 describe("resolved Storybook execution lanes", () => {
   it.each([
     { name: "ordinary local", environment: {}, parallel: true, workers: 2, software: false },
-    { name: "ordinary CI", environment: { CI: "1" }, parallel: true, workers: 2, software: true },
+    { name: "ordinary CI", environment: { CI: "1" }, parallel: false, workers: 1, software: true },
     {
       name: "software rendering without the WebGL lane",
       environment: { PORTAL_STORYBOOK_SOFTWARE_WEBGL: "1", PORTAL_WEBGL_TESTS: "0" },
       parallel: true,
       workers: 2,
       software: true,
+    },
+    {
+      name: "explicit WebGL local",
+      environment: { PORTAL_WEBGL_TESTS: "1" },
+      parallel: false,
+      workers: 1,
+      software: false,
     },
     {
       name: "explicit WebGL CI",

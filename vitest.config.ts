@@ -4,6 +4,7 @@ import { playwright } from "@vitest/browser-playwright";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 
 const webGLTests = process.env.PORTAL_WEBGL_TESTS === "1";
+const parallelFiles = !webGLTests && !process.env.CI;
 const softwareWebGL =
   Boolean(process.env.CI) || process.env.PORTAL_STORYBOOK_SOFTWARE_WEBGL === "1";
 
@@ -23,9 +24,9 @@ export default defineConfig({
   ],
   test: {
     name: "storybook",
-    // Bound ordinary stories to two files; keep software WebGL compilation isolated.
-    fileParallelism: !webGLTests,
-    maxWorkers: webGLTests ? 1 : 2,
+    // Local ordinary stories may overlap; hosted rendering and WebGL remain serial.
+    fileParallelism: parallelFiles,
+    maxWorkers: parallelFiles ? 2 : 1,
     // Software WebGL shader compilation shares the deadline with the full interaction flow.
     testTimeout: 30000,
     browser: {

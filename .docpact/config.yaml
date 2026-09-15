@@ -281,6 +281,8 @@ rules:
         kind: component-workspace
       - path: vitest.config.ts
         kind: component-test-config
+      - path: tests/unit/storybook-lanes.test.ts
+        kind: component-test-config-check
       - path: scripts/check-storybook-manifest.mjs
         kind: component-documentation
       - path: scripts/pnpm-hooks.cjs

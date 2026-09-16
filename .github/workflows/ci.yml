@@ -69,6 +69,25 @@ jobs:
       - name: Production integration gates
         run: pnpm test:e2e
 
+      - name: Check out the pinned shared SEO checker
+        uses: actions/checkout@v7
+        with:
+          repository: tiangong-lca/workspace
+          ref: dff8180d00f5fbff8155be85ee354e522eb3c554
+          sparse-checkout: scripts/seo
+          sparse-checkout-cone-mode: false
+          path: .seo-checker
+
+      # Opt-in evidence lane: the ownership marker and the shared checker both need an indexable
+      # fixture origin, so this step configures one instead of changing the default lane's semantics.
+      - name: SEO evidence lane (fixture origin)
+        env:
+          PORTAL_SEO_EVIDENCE: "1"
+          SEO_CHECKER_PATH: ${{ github.workspace }}/.seo-checker/scripts/seo/check.py
+          PORTAL_PUBLIC_INDEXING: enabled
+          BAIDU_SITE_VERIFICATION: ${{ vars.BAIDU_SITE_VERIFICATION }}
+        run: pnpm test:e2e -- tests/e2e/seo-marker.spec.ts tests/e2e/seo-checker.spec.ts
+
   components:
     runs-on: ubuntu-latest
     timeout-minutes: 20

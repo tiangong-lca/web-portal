@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #85 SEO Plan v2: `Dataset` JSON-LD now carries the public `generalComment` description with explicit missing/short/over-long handling (rich-result eligibility stays separate from indexability), the base sitemap lists all 32 canonical language URLs with reciprocal alternates and a same-content `x-default`, and page metadata shares the single `PORTAL_PUBLIC_INDEXING` gate with robots.txt. The new SEO regression suites are registered in the Docpact coverage map; public DTO/version, shard sitemap, CSP and permission boundaries are unchanged. Shared checker and production samples remain integration/release items."
+lastReviewedNote: "Portal #85 SEO Plan v2（B 轮）：公开规范来源收口到 `https://www.tiangong.earth`；production 缺失/非法 `SITE_URL` 时 fail closed，显式 loopback 取值保留给本地与 CI fixture。可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供，配置时经共享 root document 元数据在四语言首页输出该标记，未配置时不输出。共享 SEO checker 以 opt-in evidence lane 在既有 fixture 服务上运行（CI 只 checkout pinned workspace 的 scripts/seo，不重复构建默认 lane、不改变 noindex/Dataset 语义）；apex 与 portal.tiangong.earth 的别名重定向仍由 provider/CDN 承担，Portal 不部署 Next proxy/middleware。公共 DTO、CSP、HMAC、分片 sitemap 与权限边界不变；production 样本与最终域名收口仍属发布阶段验证项。"
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -216,6 +216,20 @@ For routing changes, also run `list-rules`, `doctor`, `coverage` and `route` wit
 ## CI validation boundaries
 
 The static, production browser and Storybook jobs run independently; the required `validate` job succeeds only when all three succeed. New commits cancel superseded runs. Production Playwright uses two workers and one retry in CI. Storybook owns the full component theme, locale and viewport matrix; production UI smoke covers one desktop light and one mobile dark layout while retaining routing, SSR/no-JavaScript, BFF, private sharing, CSP, numeric identity and performance checks. Browser failures must be fixed, not bypassed by reducing assertions or removing security gates.
+
+### SEO evidence lane
+
+`pnpm test:e2e -- tests/e2e/seo-marker.spec.ts tests/e2e/seo-checker.spec.ts` runs the opt-in evidence lane against the fixture-backed server that the runner already builds and starts. Both specs skip themselves unless their environment is present, so the default lane is unchanged.
+
+| Variable | Contract |
+| --- | --- |
+| `SITE_URL` | Public origin. Production must set it; a missing or non-origin value fails closed, while an explicit loopback value stays valid for local and CI fixtures |
+| `PORTAL_PUBLIC_INDEXING` | `enabled` makes the fixture origin indexable, which the shared checker's HTTP mode requires |
+| `BAIDU_SITE_VERIFICATION` | Optional public ownership code; the marker spec asserts it verbatim on all four locale homes, and asserts no marker when unset |
+| `PORTAL_SEO_EVIDENCE` | `1` enables the marker spec inside the evidence lane |
+| `SEO_CHECKER_PATH` | Path to the pinned shared checker (`scripts/seo/check.py` from `tiangong-lca/workspace`); enables the checker spec |
+
+CI checks out only `scripts/seo` from the pinned workspace commit into the ignored `.seo-checker/` directory and runs the lane as its own step, so the pinned checker is never fetched from a moving ref.
 
 ### Optional WebGL verification
 

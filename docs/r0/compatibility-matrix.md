@@ -22,7 +22,7 @@ checkPaths:
   - tests/fixtures/hmac/**
 lastReviewedAt: 2026-09-16
 lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Portal #85 SEO Plan v2（含 root 复核修订与域名收口）：Dataset JSON-LD 仅在同时具备真实 name 与 50–5,000 Unicode 字符描述时输出，缺失/过短/无名称一律不输出该 script 且不填充；索引开关全局优先（未启用时覆盖显式 index:true），robots Disallow 会阻止爬虫读取 noindex，metadata 只作纵深防御。基础 sitemap 为 8×4=32 条规范语言 URL，互指同一语言集合并输出同内容 x-default。公开规范来源收口为 `https://www.tiangong.earth`（`SITE_URL`）：apex 与 portal.tiangong.earth 是 provider 原生永久重定向别名，Portal 不部署 Next proxy/middleware，host 级 alias 由 provider 规则承担；本地与 CI fixture 保持 loopback 取值。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享 checker 的 CI 接入方式待 root 决策，production 样本与最终域名收口仍属发布阶段验证项。"
+lastReviewedNote: "Portal #85 SEO Plan v2（B 轮）：公开规范来源收口到 `https://www.tiangong.earth`；production 缺失/非法 `SITE_URL` 时 fail closed，显式 loopback 取值保留给本地与 CI fixture。可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供，配置时经共享 root document 元数据在四语言首页输出该标记，未配置时不输出。共享 SEO checker 以 opt-in evidence lane 在既有 fixture 服务上运行（CI 只 checkout pinned workspace 的 scripts/seo，不重复构建默认 lane、不改变 noindex/Dataset 语义）；apex 与 portal.tiangong.earth 的别名重定向仍由 provider/CDN 承担，Portal 不部署 Next proxy/middleware。公共 DTO、CSP、HMAC、分片 sitemap 与权限边界不变；production 样本与最终域名收口仍属发布阶段验证项。"
 related:
   - ../design-plan.md
   - ../../AGENTS.md

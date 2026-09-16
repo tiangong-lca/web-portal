@@ -8,6 +8,8 @@ import {
   defaultLanguagePath,
   localizedMetadata,
   publicIndexingEnabled,
+  publicSiteUrl,
+  siteVerificationMetadata,
 } from "@/lib/seo";
 
 const siteOrigin = "https://portal.example";
@@ -188,5 +190,50 @@ describe("public origin guidance", () => {
     expect(absolutePortalUrl("/en")).toBe("http://localhost:3000/en");
     vi.stubEnv("PORTAL_PUBLIC_INDEXING", "disabled");
     expect(robots().rules).toEqual({ disallow: "/", userAgent: "*" });
+  });
+});
+
+describe("public origin contract", () => {
+  it("accepts the canonical origin and strips any path", () => {
+    expect(publicSiteUrl({ SITE_URL: "https://www.tiangong.earth" }).origin).toBe(
+      "https://www.tiangong.earth",
+    );
+    expect(publicSiteUrl({ SITE_URL: "https://www.tiangong.earth/portal" }).origin).toBe(
+      "https://www.tiangong.earth",
+    );
+  });
+
+  it("fails closed in production when the public origin is missing or unusable", () => {
+    for (const env of [
+      { NODE_ENV: "production" },
+      { NODE_ENV: "production", SITE_URL: "   " },
+      { NODE_ENV: "production", SITE_URL: "not-a-url" },
+      { NODE_ENV: "production", SITE_URL: "ftp://www.tiangong.earth" },
+      { NODE_ENV: "production", SITE_URL: "https://user:secret@www.tiangong.earth" },
+    ]) {
+      expect(() => publicSiteUrl(env)).toThrow(/SITE_URL/u);
+    }
+  });
+
+  it("keeps explicit loopback fixtures usable for local and CI runs", () => {
+    expect(publicSiteUrl({ SITE_URL: "http://127.0.0.1:4317" }).origin).toBe(
+      "http://127.0.0.1:4317",
+    );
+    expect(publicSiteUrl({}).origin).toBe("http://localhost:3000");
+    // The fixture-backed E2E lane builds with NODE_ENV=production against its own host.
+    expect(
+      publicSiteUrl({ NODE_ENV: "production", SITE_URL: "http://127.0.0.1:4317" }).origin,
+    ).toBe("http://127.0.0.1:4317");
+  });
+});
+
+describe("provider verification marker", () => {
+  it("publishes the configured code verbatim and nothing when unset", () => {
+    expect(siteVerificationMetadata({ BAIDU_SITE_VERIFICATION: "codeva-public-code" })).toEqual({
+      verification: { other: { "baidu-site-verification": "codeva-public-code" } },
+    });
+    expect(siteVerificationMetadata({})).toEqual({});
+    expect(siteVerificationMetadata({ BAIDU_SITE_VERIFICATION: "   " })).toEqual({});
+    expect("verification" in siteVerificationMetadata({ BAIDU_SITE_VERIFICATION: "" })).toBe(false);
   });
 });

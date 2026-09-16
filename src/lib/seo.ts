@@ -11,6 +11,47 @@ const openGraphLocales: Record<PortalLocale, string> = {
 };
 
 /**
+ * The origin every public URL is published from.
+ *
+ * A production deployment must name its public origin: a missing, blank or non-origin value fails
+ * closed instead of silently publishing loopback URLs, which is how a wrong canonical or sitemap
+ * would otherwise reach search engines unnoticed. An explicit loopback origin stays valid, because
+ * local runs, CI fixtures and the fixture-backed E2E lane deliberately serve from their own host;
+ * the returned origin never carries a path or credentials.
+ */
+export function publicSiteUrl(env: Record<string, string | undefined> = process.env): URL {
+  const raw = env.SITE_URL?.trim();
+  if (!raw) {
+    if (env.NODE_ENV === "production") {
+      throw new Error("SITE_URL must name the public origin in production; it is unset.");
+    }
+    return new URL("http://localhost:3000");
+  }
+  let parsed: URL;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    throw new Error(`SITE_URL must be an absolute http(s) origin; received ${raw}`);
+  }
+  if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password) {
+    throw new Error(`SITE_URL must be a credential-free http(s) origin; received ${raw}`);
+  }
+  return new URL(parsed.origin);
+}
+
+/**
+ * Provider ownership verification for the canonical public origin, published only when the
+ * deployment supplies the code. The token is a public value but stays in the environment, so an
+ * unset value publishes no marker at all rather than a stale or placeholder one.
+ */
+export function siteVerificationMetadata(
+  env: Record<string, string | undefined> = process.env,
+): Pick<Metadata, "verification"> {
+  const baidu = env.BAIDU_SITE_VERIFICATION?.trim();
+  return baidu ? { verification: { other: { "baidu-site-verification": baidu } } } : {};
+}
+
+/**
  * Single source of truth for the public indexing gate, read by `src/app/robots.ts` and by every
  * page's robots directive. Page metadata is defense-in-depth beside the crawl rules, never a
  * replacement for them: while robots.txt disallows a path, a crawler does not fetch it, so a
@@ -85,5 +126,5 @@ export function localizedMetadata({
 }
 
 export function absolutePortalUrl(path: string): string {
-  return new URL(path, process.env.SITE_URL ?? "http://localhost:3000").toString();
+  return new URL(path, publicSiteUrl()).toString();
 }

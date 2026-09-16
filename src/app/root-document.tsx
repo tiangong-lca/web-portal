@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 /* oxlint-disable next/no-sync-scripts -- The same-origin theme bootstrap must run before first paint and contains no inline code. */
 
 import type { PortalLocale } from "@/i18n/routing";
+import { publicSiteUrl, siteVerificationMetadata } from "@/lib/seo";
 import { brandConfig } from "@/server/brand";
 
 import { themeInitIntegrity } from "./theme-integrity.generated";
 
 export const portalMetadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
+  metadataBase: publicSiteUrl(),
+  ...siteVerificationMetadata(),
   title: {
     default: "天工 LCA 数据门户",
     template: "%s · 天工 LCA",

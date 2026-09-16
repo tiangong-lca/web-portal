@@ -217,6 +217,8 @@ For routing changes, also run `list-rules`, `doctor`, `coverage` and `route` wit
 
 The static, production browser and Storybook jobs run independently; the required `validate` job succeeds only when all three succeed. New commits cancel superseded runs. Production Playwright uses two workers and one retry in CI. Storybook owns the full component theme, locale and viewport matrix; production UI smoke covers one desktop light and one mobile dark layout while retaining routing, SSR/no-JavaScript, BFF, private sharing, CSP, numeric identity and performance checks. Browser failures must be fixed, not bypassed by reducing assertions or removing security gates.
 
+The static CI gate sets `SITE_URL=http://localhost:3000` explicitly for its production-mode fixture build. The browser lane uses the existing runner origin and a nonproduction Baidu marker, so neither lane needs deployment secrets or repository variables to prove its metadata contract.
+
 ### SEO evidence lane
 
 `pnpm test:e2e` runs the shared SEO checker and the ownership-marker proof against the fixture-backed server the runner already builds, so the lane adds no second build, no extra runtime and no indexing change. Both specs skip themselves unless their environment is present, and the production smoke keeps running separately.

@@ -24,7 +24,7 @@ checkPaths:
   - edgeone.json
 lastReviewedAt: 2026-09-16
 lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Portal #85 SEO Plan v2：Dataset JSON-LD 增加公开 generalComment 描述并明确缺失/过短/超长处理（展示资格与可索引性分离，不杜撰字段）；基础 sitemap 由 8 条中文 loc 展开为 8×4=32 条规范语言 URL，每条互指同一语言集合；深层 x-default 改为同内容默认语言页面，不再指向只做重定向的 `/`；页面 metadata 与 robots.txt 共用同一 PORTAL_PUBLIC_INDEXING 开关。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享检查与生产样本仍属集成与发布阶段的验证项。"
+lastReviewedNote: "Portal #85 SEO Plan v2（含 root 复核修订）：Dataset JSON-LD 仅在同时具备真实 name 与 50–5,000 Unicode 字符（按码点计数、不拆代理对）描述时输出；缺失、全空白、过短或无真实名称时不输出该 script，且不填充、不摘要、不用 identifier 顶替。超长按词边界截断，词边界结果短于 50 字符时退回按上限硬截断。索引开关全局优先：未启用时覆盖显式 index:true，页面仍可 index:false；robots Disallow 会阻止爬虫读取 noindex，metadata 只作纵深防御。基础 sitemap 为 8×4=32 条规范语言 URL，互指同一语言集合并输出同内容 x-default，深层不再回退到重定向根路径。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享检查、production 样本与 OG 复核仍属集成/发布阶段验证项。"
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -855,7 +855,7 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - `generateMetadata` 读取同一 server query，生成 title、description、canonical、Open Graph 与 alternates；
 - 每个公开版本输出 Schema.org `Dataset` JSON-LD；Database 目录输出 `DataCatalog`；
 - JSON-LD 只声明真实存在的 license、creator、spatialCoverage、temporalCoverage 和 distribution。
-- `Dataset.description` 取公开 `generalComment`（与页面可见文本、页面 metadata 同一来源），仅折叠排版空白；缺失或全空白时省略该字段，不填入 identifier、也不杜撰文本；超过 5,000 字符按词边界截断且不追加字符；短于 50 字符按原样输出。Google Dataset 的 50–5,000 字符要求只是展示资格，与页面是否可索引无关，不得为凑字段而增删内容。
+- `Dataset.description` 取公开 `generalComment`（与页面可见文本、页面 metadata 同一来源），仅折叠排版空白。只有同时具备真实 `name` 与 50–5,000 **Unicode 字符**（按码点计数，不拆分代理对）的描述时才输出该 JSON-LD；缺失、全空白、过短或没有真实名称时不输出该 script，也不得用 identifier、填充文本或摘要凑合。超长按词边界截断，但若词边界会使结果短于 50 字符则退回按上限硬截断（不追加字符）。展示资格与页面是否可索引相互独立：缺少合法描述不改变页面的 robots 指令、canonical 或 metadata description。
 
 ### 11.2 索引控制
 
@@ -864,7 +864,7 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - Facet URL 使用 `noindex,follow`，避免 query × filter 的无限索引空间；
 - zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`；基础 sitemap 为 8 个静态路径 × 4 种语言输出 32 条各自独立的规范 `<url>`，每条互指同一语言集合；
 - `x-default` 指向同内容的默认语言页面（`/zh-CN/...`）；`/` 只重定向到 `/zh-CN`，因此不进入 sitemap，也不作为 `x-default`；
-- 页面 metadata 与 robots.txt 共用同一 `PORTAL_PUBLIC_INDEXING` 开关，两者必须一致：未启用时都不索引。需要排除的页面下发可被抓取的 `noindex`；robots `Disallow` 只是抓取控制，不是去索引手段；
+- 页面 metadata 与 robots.txt 共用同一 `PORTAL_PUBLIC_INDEXING` 开关，且全局开关优先：未启用时即使页面显式 `index: true` 也不索引，页面仍可自行 `index: false` 退出。robots `Disallow` 仍会阻止爬虫抓取，被 disallow 的路径上的 `noindex` 因此读不到——metadata 属于纵深防御，不等于已从索引移除；确实需要移除时应让该页可被抓取并下发 `noindex`；
 - Database sitemap manifest 仍固定返回 64 个 opaque source shard。Portal 将每个 source shard 按稳定位置取模切成 4 个公开 part，因此根级 `/catalog-{process|flow}-sitemap.xml` 各固定列出 256 项；唯一规范参数为 `?shard={0..63}&part={0..3}`，确保根文件作用域覆盖四种语言；
 - shard 数字只接受规范化 `0..63`，Portal 按 manifest 数组位置选择 opaque cursor 并原样调用 Database；cursor 不进入 URL、XML、响应或日志；
 - 每个 Database source shard 最多 4,096 个 identity；每个公开 part 最多 1,024 个 identity，并为 zh-CN/en/de/fr 各生成一条 `<url>`，每条均列出四个 reciprocal alternate，最终 UTF-8 XML 必须严格小于 5 MiB；4 个 part 的 union 必须无重复、无遗漏地还原 source shard；

@@ -104,9 +104,11 @@ test("renders public search, exact details, numeric context, versions, and lates
   await page.goto(`/en/process/${processRef}`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Electricity, medium voltage");
   await expect(page.getByText("1 kWh", { exact: true })).toBeVisible();
-  expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
-    '"@type":"Dataset"',
-  );
+  const datasetJsonLd = await page.locator('script[type="application/ld+json"]').textContent();
+  expect(datasetJsonLd).toContain('"@type":"Dataset"');
+  const datasetDescription = JSON.parse(datasetJsonLd ?? "{}").description as string;
+  expect(Array.from(datasetDescription).length).toBeGreaterThanOrEqual(50);
+  expect(Array.from(datasetDescription).length).toBeLessThanOrEqual(5000);
 
   await page.goto(`/en/process/${processRef}/exchanges`);
   await expect(page.getByRole("cell", { name: "1.25 kg" })).toBeVisible();
@@ -140,6 +142,11 @@ test("renders public search, exact details, numeric context, versions, and lates
 
   await page.goto(`/en/flow/${flowRef}`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Carbon dioxide");
+  // The flow record has no public comment, so it must publish no Dataset rather than an invalid one,
+  // while the page itself stays a normal indexable page.
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/en\/flow\//);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /\S/u);
 
   const flowVersions = await request.get(`/en/flow/${flowRef}/versions`);
   expect(flowVersions.ok()).toBe(true);

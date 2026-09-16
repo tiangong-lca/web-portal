@@ -11,8 +11,10 @@ const openGraphLocales: Record<PortalLocale, string> = {
 };
 
 /**
- * Single source of truth for the public indexing gate. `src/app/robots.ts` and every page's
- * robots directive read it, so crawl rules and page metadata can never disagree.
+ * Single source of truth for the public indexing gate, read by `src/app/robots.ts` and by every
+ * page's robots directive. Page metadata is defense-in-depth beside the crawl rules, never a
+ * replacement for them: while robots.txt disallows a path, a crawler does not fetch it, so a
+ * `noindex` there cannot be read and its presence is not proof of removal.
  */
 export function publicIndexingEnabled(
   env: Record<string, string | undefined> = process.env,
@@ -75,7 +77,8 @@ export function localizedMetadata({
     },
     robots: {
       follow,
-      index: index ?? publicIndexingEnabled(),
+      // The global gate wins over an explicit `index: true`; a page may still opt out on its own.
+      index: publicIndexingEnabled() && index !== false,
     },
     title,
   };

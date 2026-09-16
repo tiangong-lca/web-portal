@@ -48,9 +48,22 @@ describe("public indexing gate", () => {
     expect(open.sitemap).toHaveLength(3);
   });
 
-  it("still honours an explicit index or follow override", () => {
+  it("lets the global gate win over an explicit index:true", () => {
+    vi.stubEnv("PORTAL_PUBLIC_INDEXING", "disabled");
+    expect(metadata({ index: true }).robots).toEqual({ follow: true, index: false });
+
+    vi.stubEnv("PORTAL_PUBLIC_INDEXING", "enabled");
+    expect(metadata({ index: true }).robots).toEqual({ follow: true, index: true });
+  });
+
+  it("still honours an explicit opt-out and follow override", () => {
     vi.stubEnv("PORTAL_PUBLIC_INDEXING", "enabled");
     expect(metadata({ index: false }).robots).toEqual({ follow: true, index: false });
+
+    vi.stubEnv("PORTAL_PUBLIC_INDEXING", "disabled");
+    expect(metadata({ index: false }).robots).toEqual({ follow: true, index: false });
+
+    vi.stubEnv("PORTAL_PUBLIC_INDEXING", "enabled");
     expect(metadata({ follow: false }).robots).toEqual({ follow: false, index: true });
   });
 });
@@ -110,9 +123,7 @@ describe("base sitemap", () => {
 
     for (const entry of entries) {
       const { locale, path } = entryCoordinates(entry.url);
-      const languages: Record<string, string | undefined> = {
-        ...(entry.alternates?.languages ?? {}),
-      };
+      const languages: Record<string, string | undefined> = { ...entry.alternates?.languages };
 
       for (const candidate of locales) {
         const alternate = languages[candidate];
@@ -121,7 +132,7 @@ describe("base sitemap", () => {
         const counterpart = urlToEntry.get(alternate ?? "");
         expect(counterpart).toBeDefined();
         const counterpartLanguages: Record<string, string | undefined> = {
-          ...(counterpart?.alternates?.languages ?? {}),
+          ...counterpart?.alternates?.languages,
         };
         expect(counterpartLanguages[locale]).toBe(entry.url);
       }

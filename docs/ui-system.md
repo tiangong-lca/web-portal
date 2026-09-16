@@ -124,7 +124,8 @@ Toggle 的选中态具有持续的边框、浅色背景和下划线；比较选�
 - UUID、版本、数值：`IBM Plex Mono`，启用 tabular numerals；
 - 正文 14px 起，主要结果行触达高度不低于 44px；
 - 8px 布局网格，6px 基础圆角，细边框优先于阴影；
-- 字体从站点自身提供或使用可靠系统回退，不依赖运行时访问 Google Fonts。
+- 字体从站点自身提供或使用可靠系统回退，不依赖运行时访问 Google Fonts；
+- `@font-face` 定义由 `src/app/globals.css` 单独拥有：产品布局与 Storybook 预览都经它加载，`src/features/**`、`src/components/**` 与 shell CSS 不再各自 `@import` fontsource 包——否则同一批 108 个 `@font-face` 会在每个入口 CSS 中重复（见 `docs/development.md`）。
 
 ## shadcn/ui
 

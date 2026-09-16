@@ -3,6 +3,9 @@
 @import "shadcn/tailwind.css";
 @import "./brand.generated.css";
 
+@import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/noto-sans-sc";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

@@ -64,8 +64,11 @@ async function collectVitals(page: Page, route: string): Promise<Vitals> {
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
   if (route === "/en") {
-    // Measure input responsiveness with the complete runtime artwork rendering.
-    await expect(page.locator(".lifecycle-study")).toHaveAttribute("data-renderer", "ready", {
+    // Measure input responsiveness with the complete runtime artwork rendering. The home page
+    // renders the cinematic hero, and the lifecycle sculpture that this wait used to name is not
+    // mounted by any route, so waiting for it could only ever time out. The hero publishes its own
+    // readiness once its media is decoded; the timeout and every metric below are unchanged.
+    await expect(page.locator(".brand-cinematic-hero")).toHaveAttribute("data-media", "ready", {
       timeout: artworkReadyTimeout,
     });
   }

@@ -23,6 +23,3 @@ pnpm-debug.log*
 .turbo/
 .docpact/runs/
 *.tsbuildinfo
-
-# Pinned shared SEO checker checkout used only by the opt-in evidence lane.
-/.seo-checker/

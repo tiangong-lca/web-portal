@@ -22,7 +22,7 @@ checkPaths:
   - tests/e2e/r0-compat.spec.ts
 lastReviewedAt: 2026-09-16
 lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Portal #85 SEO Plan v2（B 轮，按 root 的 loopback-preview checker 收口）：公开规范来源收口到 `https://www.tiangong.earth`；production 缺失/非法 `SITE_URL` 时 fail closed，显式 loopback 取值保留给本地与 CI fixture。可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供，配置时经共享 root document 元数据在四语言首页输出该标记，未配置时不输出。共享 SEO checker 以固定提交 `109ca8b2` 的 `--loopback-preview` 模式在既有 preview fixture 服务上运行：同一浏览器 job、无第二次构建、无 production fixture 切换、索引语义不变，报告以 `if: always()` 上传；提交失败仍失败该 job。apex 与 portal.tiangong.earth 的别名重定向仍由 provider/CDN 承担，Portal 不部署 Next proxy/middleware；公共 DTO、CSP、HMAC、分片 sitemap 与权限边界不变。"
+lastReviewedNote: "Portal #85 SEO Plan v2（B 轮，按 root 的公开快照与 loopback-preview 模式收口）：公开规范来源收口到 `https://www.tiangong.earth`；production 缺失/非法 `SITE_URL` 时 fail closed，显式 loopback 取值保留给本地与 CI fixture。可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供，配置时经共享 root document 元数据在四语言首页输出该标记，未配置时不输出。共享 SEO checker 以生成快照 `scripts/vendor/workspace-seo/`（源 `tiangong-lca/workspace@109ca8b2`，sha256 已记录在 manifest）消费：CI 使用 `python3 scripts/verify-vendored-seo.py` 与单测校验字节与来源字段，不 checkout 私有仓库、不新增构建或索引切换，以 `--loopback-preview` 在既有 fixture 服务上运行并把报告 `if: always()` 上传；本地摘要一致仅为完整性证明，来源证明由私有集成任务按 Git blob 校验。apex 与 portal.tiangong.earth 的别名重定向仍由 provider/CDN 承担，Portal 不部署 Next proxy/middleware；公共 DTO、CSP、HMAC 与权限边界不变。"
 related:
   - compatibility-matrix.md
   - ../design-plan.md

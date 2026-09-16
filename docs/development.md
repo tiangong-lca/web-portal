@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #85 SEO Plan v2（B 轮，按 root 的 loopback-preview checker 收口）：公开规范来源收口到 `https://www.tiangong.earth`；production 缺失/非法 `SITE_URL` 时 fail closed，显式 loopback 取值保留给本地与 CI fixture。可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供，配置时经共享 root document 元数据在四语言首页输出该标记，未配置时不输出。共享 SEO checker 以固定提交 `109ca8b2` 的 `--loopback-preview` 模式在既有 preview fixture 服务上运行：同一浏览器 job、无第二次构建、无 production fixture 切换、索引语义不变，报告以 `if: always()` 上传；提交失败仍失败该 job。apex 与 portal.tiangong.earth 的别名重定向仍由 provider/CDN 承担，Portal 不部署 Next proxy/middleware；公共 DTO、CSP、HMAC、分片 sitemap 与权限边界不变。"
+lastReviewedNote: "Portal #85 SEO Plan v2（B 轮，按 root 的公开快照与 loopback-preview 模式收口）：公开规范来源收口到 `https://www.tiangong.earth`；production 缺失/非法 `SITE_URL` 时 fail closed，显式 loopback 取值保留给本地与 CI fixture。可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供，配置时经共享 root document 元数据在四语言首页输出该标记，未配置时不输出。共享 SEO checker 以生成快照 `scripts/vendor/workspace-seo/`（源 `tiangong-lca/workspace@109ca8b2`，sha256 已记录在 manifest）消费：CI 使用 `python3 scripts/verify-vendored-seo.py` 与单测校验字节与来源字段，不 checkout 私有仓库、不新增构建或索引切换，以 `--loopback-preview` 在既有 fixture 服务上运行并把报告 `if: always()` 上传；本地摘要一致仅为完整性证明，来源证明由私有集成任务按 Git blob 校验。apex 与 portal.tiangong.earth 的别名重定向仍由 provider/CDN 承担，Portal 不部署 Next proxy/middleware；公共 DTO、CSP、HMAC 与权限边界不变。"
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -219,24 +219,32 @@ The static, production browser and Storybook jobs run independently; the require
 
 ### SEO evidence lane
 
-`pnpm test:e2e` runs the pinned shared checker and the ownership-marker proof against the fixture-backed server the runner already builds, so the lane adds no second build, no extra runtime and no indexing change. Both specs skip themselves unless their environment is present, and the production smoke keeps running separately.
+`pnpm test:e2e` runs the shared SEO checker and the ownership-marker proof against the fixture-backed server the runner already builds, so the lane adds no second build, no extra runtime and no indexing change. Both specs skip themselves unless their environment is present, and the production smoke keeps running separately.
+
+The checker is a **generated public snapshot**. Its authoritative source is `tiangong-lca/workspace`, which is private, so this repository consumes an exported copy at [`scripts/vendor/workspace-seo/`](../scripts/vendor/workspace-seo/) instead of checking the workspace out. The export carries a manifest (`schema`, `source_repository`, `source_commit`, `source_path`, `sha256`) and the snapshot is verified two ways:
+
+```bash
+python3 scripts/verify-vendored-seo.py   # standard library, also run as a CI step
+```
+
+`tests/unit/vendored-seo.test.ts` repeats the digest and identity checks with `node:crypto`, and `.gitattributes` pins the vendored files to LF so the digest cannot drift with a developer's platform. The vendored bytes are **read-only**: update them only by re-running the workspace export (`scripts/seo/export.py`) and committing its output, never by editing the copy. A local digest match proves the committed bytes are intact; it is **not** origin proof, which only the private integration job can give by hashing the Git blob at the recorded commit.
 
 | Variable | Contract |
 | --- | --- |
 | `SITE_URL` | Public origin. Production must set it; a missing or non-origin value fails closed, while an explicit loopback value stays valid for local and CI fixtures |
 | `BAIDU_SITE_VERIFICATION` | Optional public ownership code; the marker spec asserts it verbatim on all four locale homes, and asserts no marker when unset |
 | `PORTAL_SEO_EVIDENCE` | `1` enables the marker spec |
-| `SEO_CHECKER_PATH` | Path to the pinned shared checker (`scripts/seo/check.py` from `tiangong-lca/workspace`); enables the checker spec |
+| `SEO_CHECKER_PATH` | Path to the vendored checker; enables the checker spec |
 
 The checker runs in its `--loopback-preview` mode with explicit sitemap paths:
 
 ```bash
-python3 scripts/seo/check.py --origin http://127.0.0.1:4317 --loopback-preview \
+python3 scripts/vendor/workspace-seo/check.py --origin http://127.0.0.1:4317 --loopback-preview \
   --sitemap /sitemap.xml --sitemap /catalog-process-sitemap.xml \
   --sitemap /catalog-flow-sitemap.xml --sample 12 --output /tmp/portal-preview-seo.json
 ```
 
-That mode is accepted only for loopback origins without an artifact root, requires those explicit sitemap paths, asserts `Disallow` and per-page `noindex`, and labels the report `loopback-preview`; it cannot downgrade a public-host production check. CI checks out only `scripts/seo` from the pinned workspace commit into the ignored `.seo-checker/` directory, runs the lane as part of the existing browser job, and uploads the report with `if: always()`, so failures still fail the job while leaving evidence.
+That mode is accepted only for loopback origins without an artifact root, requires those explicit sitemap paths, asserts `Disallow` and per-page `noindex`, and labels the report `loopback-preview`; it cannot downgrade a public-host production check. CI verifies the snapshot, runs the lane inside the existing browser job, and uploads the report with `if: always()`, so failures still fail the job while leaving evidence.
 
 ### Optional WebGL verification
 

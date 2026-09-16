@@ -1,0 +1,3 @@
+# Generated consumption assets checked out verbatim: the vendored checker is hashed, so its bytes
+# must not change with the developer's platform line endings.
+scripts/vendor/workspace-seo/** text eol=lf

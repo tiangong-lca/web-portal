@@ -18,7 +18,7 @@ checkPaths:
   - .docpact/config.yaml
 lastReviewedAt: 2026-09-16
 lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Reviewed for Portal #85 SEO Plan v2: `Dataset` JSON-LD now carries the public `generalComment` description with explicit missing/short/over-long handling (rich-result eligibility stays separate from indexability), the base sitemap lists all 32 canonical language URLs with reciprocal alternates and a same-content `x-default`, and page metadata shares the single `PORTAL_PUBLIC_INDEXING` gate with robots.txt. The new SEO regression suites are registered in the Docpact coverage map; public DTO/version, shard sitemap, CSP and permission boundaries are unchanged. Shared checker and production samples remain integration/release items."
+lastReviewedNote: "Portal #85：standing rule 记录 vendored 共享 SEO checker 快照的校验与更新政策（只用私有 workspace 的导出脚本更新、不手工编辑、摘要一致不等于来源证明）。仓库边界、任务路由与交付要求不变。"
 related:
   - docs/development.md
   - docs/ui-system.md
@@ -44,6 +44,8 @@ Portal owns the anonymous, read-only LCA discovery UI, same-origin server adapte
 | `scripts/`, `docs/` | Executable tooling and task-specific guidance. |
 
 ## Standing rules
+
+- The shared SEO checker under `scripts/vendor/workspace-seo/` is a generated snapshot of the private `tiangong-lca/workspace` repository: verify it with `python3 scripts/verify-vendored-seo.py`, update it only by re-running that repository's export, and never edit the copy.
 
 - Keep end users anonymous. Add no login, account, user JWT or account-session persistence; explicit local shortlist and theme preferences follow the [browser-state rules](docs/design-plan.md#8-url浏览器状态与分享).
 - Keep LCA data read-only and public-only. Database schema/RPC/RLS/index changes belong to `database-engine`; Edge verification/runtime changes belong to `tiangong-lca-edge-functions`. See [ownership](docs/design-plan.md#3-跨项目职责).

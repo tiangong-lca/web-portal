@@ -18,7 +18,7 @@ checkPaths:
   - package.json
 lastReviewedAt: 2026-09-16
 lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Reviewed for Portal #85 SEO Plan v2: `Dataset` JSON-LD now carries the public `generalComment` description with explicit missing/short/over-long handling (rich-result eligibility stays separate from indexability), the base sitemap lists all 32 canonical language URLs with reciprocal alternates and a same-content `x-default`, and page metadata shares the single `PORTAL_PUBLIC_INDEXING` gate with robots.txt. The new SEO regression suites are registered in the Docpact coverage map; public DTO/version, shard sitemap, CSP and permission boundaries are unchanged. Shared checker and production samples remain integration/release items."
+lastReviewedNote: "Portal #85：README 记录 vendored 共享 SEO checker 快照的校验命令与更新政策（只按私有 workspace 的导出脚本更新，不手工编辑；摘要一致≠来源证明）。产品边界、技术形态与发布流程不变。"
 related:
   - docs/development.md
   - docs/ui-system.md
@@ -48,6 +48,15 @@ Next.js App Router 前后端同构，React Server Components 优先，部署到 
 - [开发指南](docs/development.md)：工具链与工作目录、按改动选择检查、Storybook/MCP、项目 skills 恢复与更新。
 - [UI 与组件规范](docs/ui-system.md)：视觉、共享控件、四语、无障碍和隔离场景要求。
 - [Agent 入口](AGENTS.md)：仓库边界、任务导航和 workspace 交付要求。
+
+常用本地校验与 vendored 资源：
+
+```bash
+pnpm check                               # 静态、单测、构建与体积门
+python3 scripts/verify-vendored-seo.py   # 校验共享 SEO checker 快照的字节与来源字段
+```
+
+`scripts/vendor/workspace-seo/` 是 `tiangong-lca/workspace`（私有库）导出的生成快照：只按导出脚本更新、绝不手工编辑；摘要一致只证明字节完整，来源证明由私有集成任务按 Git blob 完成。
 
 Storybook 展示真实基础组件与业务组合，支持语言、主题和视口切换。组件场景使用合成数据，开发工具独立于公众产品；新增或修改 UI 时按开发指南验证实际交互与呈现。
 

@@ -66,24 +66,18 @@ jobs:
 
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
-      - name: Check out the pinned shared SEO checker
-        uses: actions/checkout@v7
-        with:
-          repository: tiangong-lca/workspace
-          ref: 109ca8b2e865399b56c5377d82717521d7bc755a
-          sparse-checkout: scripts/seo
-          sparse-checkout-cone-mode: false
-          path: .seo-checker
+      # The checker is a generated public snapshot: the authoritative repository is private, so CI
+      # verifies the committed bytes against the manifest instead of checking it out.
+      - name: Verify the vendored shared SEO checker
+        run: python3 scripts/verify-vendored-seo.py
 
-      # The existing fixture-backed server runs the pinned checker in loopback-preview mode, which
-      # asserts the preview fixture's own disallow/noindex policy: no second build, no production
-      # fixture switch and no indexing change.
       - name: Production integration gates
         env:
-          SEO_CHECKER_PATH: ${{ github.workspace }}/.seo-checker/scripts/seo/check.py
+          SEO_CHECKER_PATH: ${{ github.workspace }}/scripts/vendor/workspace-seo/check.py
           PORTAL_SEO_EVIDENCE: "1"
           BAIDU_SITE_VERIFICATION: ${{ vars.BAIDU_SITE_VERIFICATION }}
         run: pnpm test:e2e
+
       - name: Upload shared SEO checker report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

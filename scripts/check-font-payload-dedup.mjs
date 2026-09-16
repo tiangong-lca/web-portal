@@ -1,10 +1,23 @@
 import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
-import { extname, join, relative } from "node:path";
+import { extname, join, relative, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const staticRoot = join(process.cwd(), ".next", "static");
 
-const fontFacePattern = /@font-face\s*\{[^}]*\}/gu;
+const fontFacePattern = /@font-face\s*\{(?:[^}"']|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')*\}/gu;
+
+function normalizeWhitespace(declaration) {
+  // Quoted font names and asset URLs can contain meaningful spaces. Outside strings,
+  // collapse whitespace and remove only spacing around declaration punctuation.
+  return declaration
+    .split(/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/gu)
+    .map((part, index) =>
+      index % 2 ? part : part.replace(/\s+/gu, " ").replace(/\s*([{}:;,])\s*/gu, "$1"),
+    )
+    .join("")
+    .trim();
+}
 
 /**
  * One emitted chunk's font payload, or null when the chunk defines no font.
@@ -19,10 +32,11 @@ export function fontPayload(css) {
   const declarations = css.match(fontFacePattern);
   if (!declarations || declarations.length === 0) return null;
 
-  // All whitespace is removed before hashing, so a formatter or minifier difference cannot hide a
-  // duplicate. Both sides receive the same treatment, so distinct declarations stay distinct.
-  const payload = declarations.map((declaration) => declaration.replace(/\s+/gu, "")).join("");
-  return { blocks: declarations.length, digest: createHash("sha256").update(payload).digest("hex") };
+  const payload = declarations.map(normalizeWhitespace).join("");
+  return {
+    blocks: declarations.length,
+    digest: createHash("sha256").update(payload).digest("hex"),
+  };
 }
 
 /** Chunks whose font payload is byte-identical to another chunk's, most-duplicated first. */
@@ -55,10 +69,13 @@ async function collectCssFiles(directory) {
   return files;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const paths = await collectCssFiles(staticRoot);
   const chunks = await Promise.all(
-    paths.map(async (path) => ({ name: relative(staticRoot, path), css: await readFile(path, "utf8") })),
+    paths.map(async (path) => ({
+      name: relative(staticRoot, path),
+      css: await readFile(path, "utf8"),
+    })),
   );
   const duplicated = findDuplicatedFontPayloads(chunks);
   const carrying = chunks.filter(({ css }) => fontPayload(css) !== null);

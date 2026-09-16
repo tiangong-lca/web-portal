@@ -86,4 +86,15 @@ describe("emitted font payload deduplication", () => {
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("1 of 1");
   });
+
+  it("preserves meaningful whitespace in quoted font families and asset URLs", async () => {
+    const result = await runAgainst({
+      "spaced.css": '@font-face{font-family:"Font A";src:url("/same.woff2");}',
+      "compact.css": '@font-face{font-family:"FontA";src:url("/same.woff2");}',
+      "url-space.css": '@font-face{font-family:"Other";src:url("/a b}.woff2");}',
+      "url-compact.css": '@font-face{font-family:"Other";src:url("/ab}.woff2");}',
+    });
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("4 of 4");
+  });
 });

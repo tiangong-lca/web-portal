@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
+lastReviewedCommit: a7b2777743575e6521975133f1427b2ba50b48f3
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #87: the font paragraph now records where the definitions live and what they cost. Component, feature and shell CSS no longer import the Fontsource packages, so the emitted build carries one 98,365-byte font payload instead of five identical copies; the fontscope statement, the OFL notices and the licence check are unchanged. The homepage performance guard's readiness wait now targets the mounted cinematic hero (data-media=ready) rather than the unmounted lifecycle sculpture, with the same timeout, the same PORTAL_WEBGL_TESTS=1 opt-in and the same metrics."
+lastReviewedNote: "Reviewed for Portal #89: publish the exact 32-byte Baidu-issued ownership file at the canonical www static path; its one exact formatter exclusion preserves provider bytes. No brand, UI, typography, language, canonical, sitemap or runtime routing rule changes. Original file and repository copy have SHA2560538ecc07f8ce0b7d4114344a95b9f30676e33eb84d0db93634ec648369a57f9. Required CI and hosted file/provider verification remain pending."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -190,6 +190,11 @@ git diff -- skills-lock.json
 The update command verifies the new installation before writing the lock. Commit the reviewed lock so other contributors can restore it. Update the Skills CLI itself with an exact reviewed dev dependency and commit the resulting package/lock changes. Recheck restoration after changes to the CLI, installer, source lock or license.
 
 ## Documentation ownership and checks
+
+Keep provider-issued site ownership files byte-identical to the downloaded proof. The canonical
+www Baidu file in `public/baidu_verify_codeva-TdxNc4b0Uq.html` has one exact `.prettierignore`
+entry so formatting does not alter its contents. Verify its production URL returns the file
+directly with status 200; verification acceptance is a separate provider-side check.
 
 | Source | Owns |
 | --- | --- |

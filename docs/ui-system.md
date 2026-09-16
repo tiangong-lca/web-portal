@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
+lastReviewedCommit: a7b2777743575e6521975133f1427b2ba50b48f3
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #87: the 字体与密度 rules gain the ownership statement that makes the fix durable. Fontsource variable-font @font-face definitions are owned by src/app/globals.css alone, which every product layout and the Storybook preview already load, so component, feature and shell CSS must not import the packages again. The families, roles, sizes and density rules are unchanged."
+lastReviewedNote: "Reviewed for Portal #89: publish the exact 32-byte Baidu-issued ownership file at the canonical www static path; its one exact formatter exclusion preserves provider bytes. No brand, UI, typography, language, canonical, sitemap or runtime routing rule changes. Original file and repository copy have SHA2560538ecc07f8ce0b7d4114344a95b9f30676e33eb84d0db93634ec648369a57f9. Required CI and hosted file/provider verification remain pending."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

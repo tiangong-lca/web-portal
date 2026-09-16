@@ -66,27 +66,31 @@ jobs:
 
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
-      - name: Production integration gates
-        run: pnpm test:e2e
-
       - name: Check out the pinned shared SEO checker
         uses: actions/checkout@v7
         with:
           repository: tiangong-lca/workspace
-          ref: dff8180d00f5fbff8155be85ee354e522eb3c554
+          ref: 109ca8b2e865399b56c5377d82717521d7bc755a
           sparse-checkout: scripts/seo
           sparse-checkout-cone-mode: false
           path: .seo-checker
 
-      # Opt-in evidence lane: the ownership marker and the shared checker both need an indexable
-      # fixture origin, so this step configures one instead of changing the default lane's semantics.
-      - name: SEO evidence lane (fixture origin)
+      # The existing fixture-backed server runs the pinned checker in loopback-preview mode, which
+      # asserts the preview fixture's own disallow/noindex policy: no second build, no production
+      # fixture switch and no indexing change.
+      - name: Production integration gates
         env:
-          PORTAL_SEO_EVIDENCE: "1"
           SEO_CHECKER_PATH: ${{ github.workspace }}/.seo-checker/scripts/seo/check.py
-          PORTAL_PUBLIC_INDEXING: enabled
+          PORTAL_SEO_EVIDENCE: "1"
           BAIDU_SITE_VERIFICATION: ${{ vars.BAIDU_SITE_VERIFICATION }}
-        run: pnpm test:e2e -- tests/e2e/seo-marker.spec.ts tests/e2e/seo-checker.spec.ts
+        run: pnpm test:e2e
+      - name: Upload shared SEO checker report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: portal-seo-checker-report
+          path: test-results/**/seo-report.json
+          if-no-files-found: ignore
 
   components:
     runs-on: ubuntu-latest

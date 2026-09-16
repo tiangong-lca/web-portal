@@ -4,10 +4,10 @@ import { promisify } from "node:util";
 import { expect, test } from "@playwright/test";
 
 /**
- * Runs the pinned shared SEO checker against the fixture-backed server that Playwright already
- * started, so the lane adds no build and no second runtime. Opt-in through SEO_CHECKER_PATH; the
- * origin must be indexable because the checker's HTTP mode verifies a production-shaped surface,
- * which the SEO evidence lane configures for the fixture host.
+ * Runs the pinned shared SEO checker in its loopback-preview mode against the fixture-backed server
+ * Playwright already started, so the lane adds no build, no runtime and no indexing change: the
+ * preview fixture keeps publishing `Disallow` and per-page `noindex`, and the checker asserts
+ * exactly that instead of a production-shaped surface. Opt-in through SEO_CHECKER_PATH.
  */
 const checkerPath = process.env.SEO_CHECKER_PATH?.trim() ?? "";
 
@@ -30,7 +30,22 @@ test("the pinned shared checker reports no findings for the fixture origin", asy
   try {
     await promisify(execFile)(
       "python3",
-      [checkerPath, "--origin", origin, "--sample", "12", "--output", report],
+      [
+        checkerPath,
+        "--origin",
+        origin,
+        "--loopback-preview",
+        "--sitemap",
+        "/sitemap.xml",
+        "--sitemap",
+        "/catalog-process-sitemap.xml",
+        "--sitemap",
+        "/catalog-flow-sitemap.xml",
+        "--sample",
+        "12",
+        "--output",
+        report,
+      ],
       { timeout: 180_000, maxBuffer: 8 * 1024 * 1024 },
     );
   } catch (error) {
@@ -42,7 +57,9 @@ test("the pinned shared checker reports no findings for the fixture origin", asy
   const parsed = JSON.parse(await fs.readFile(report, "utf8")) as {
     complete?: boolean;
     findings?: unknown[];
+    mode?: string;
   };
+  expect(parsed.mode, failure).toBe("loopback-preview");
   expect(parsed.complete, failure).toBe(true);
   expect(parsed.findings, failure).toEqual([]);
 });

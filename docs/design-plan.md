@@ -1110,7 +1110,7 @@ EdgeOne 只配置 Production 环境变量：
 | 主色 | `PORTAL_LIGHT_PRIMARY`、`PORTAL_DARK_PRIMARY`、`PORTAL_BRAND_VERSION` |
 | Logo | `PORTAL_LIGHT_LOGO`、`PORTAL_DARK_LOGO`、`PORTAL_LOGO_MARK`、`PORTAL_FAVICON` |
 | Logo metadata | `PORTAL_LOGO_ALT_ZH/EN/DE/FR`、`PORTAL_LOGO_WIDTH/HEIGHT`、可选 `PORTAL_BRAND_ASSET_ORIGIN` |
-| Social card | `PORTAL_SOCIAL_IMAGE`（默认 `/brand/social-card.png`）、`PORTAL_SOCIAL_WIDTH/HEIGHT`（默认 1200 × 630）|
+| Social card | `PORTAL_SOCIAL_IMAGE`（默认 `/brand/social-card.png`）、`PORTAL_SOCIAL_WIDTH/HEIGHT`（默认 1200 × 630） |
 
 Supabase Edge Function 配置按项目分别保存；当前批准的例外仅共享底层 Upstash endpoint/token。EdgeOne Production 只调用 Supabase Main；本地/CI 使用 loopback fixture 或 persistent Dev 的独立凭据。用户批准不创建单独 EdgeOne Preview，R0 hosted probes 在 Production 域名、索引关闭状态下验证真实 Main signer/namespace，不部署可调用业务内核的临时替代凭据：
 

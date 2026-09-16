@@ -58,7 +58,10 @@ describe("generated social card", () => {
     });
 
     const bytes = readFileSync(resolve(process.cwd(), "public", socialImage.replace(/^\//u, "")));
-    expect(pngSize(bytes)).toEqual({ height: brandConfig.socialHeight, width: brandConfig.socialWidth });
+    expect(pngSize(bytes)).toEqual({
+      height: brandConfig.socialHeight,
+      width: brandConfig.socialWidth,
+    });
   });
 
   it("honours a reviewed override and keeps the asset-origin rule", () => {

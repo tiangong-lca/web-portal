@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 
 import { locales } from "@/i18n/routing";
+import { publicIndexingEnabled } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   const siteUrl = new URL(process.env.SITE_URL ?? "http://localhost:3000");
-  if (process.env.PORTAL_PUBLIC_INDEXING !== "enabled") {
+  if (!publicIndexingEnabled()) {
     return {
       rules: {
         userAgent: "*",

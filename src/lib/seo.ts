@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { localePath, type PortalLocale } from "@/i18n/routing";
+import { defaultLocale, localePath, locales, type PortalLocale } from "@/i18n/routing";
 import { brandConfig } from "@/server/brand";
 
 const openGraphLocales: Record<PortalLocale, string> = {
@@ -9,6 +9,24 @@ const openGraphLocales: Record<PortalLocale, string> = {
   de: "de_DE",
   fr: "fr_FR",
 };
+
+/**
+ * Single source of truth for the public indexing gate. `src/app/robots.ts` and every page's
+ * robots directive read it, so crawl rules and page metadata can never disagree.
+ */
+export function publicIndexingEnabled(
+  env: Record<string, string | undefined> = process.env,
+): boolean {
+  return env.PORTAL_PUBLIC_INDEXING === "enabled";
+}
+
+/**
+ * Same-content default-language URL. `/` only redirects to `/zh-CN`, so an `x-default` pointing at
+ * `/` would advertise a redirect; every path, including the site root, resolves to its real page.
+ */
+export function defaultLanguagePath(path: string): string {
+  return localePath(defaultLocale, path.replace(/^\/+/, ""));
+}
 
 type LocalizedMetadataInput = {
   locale: PortalLocale;
@@ -22,22 +40,22 @@ type LocalizedMetadataInput = {
 export function localizedMetadata({
   description,
   follow = true,
-  index = true,
+  index,
   locale,
   path = "",
   title,
 }: LocalizedMetadataInput): Metadata {
   const normalizedPath = path.replace(/^\/+/, "");
+  const languages = Object.fromEntries(
+    locales.map((candidate) => [candidate, localePath(candidate, normalizedPath)]),
+  );
 
   return {
     alternates: {
       canonical: localePath(locale, normalizedPath),
       languages: {
-        en: localePath("en", normalizedPath),
-        de: localePath("de", normalizedPath),
-        fr: localePath("fr", normalizedPath),
-        "x-default": "/",
-        "zh-CN": localePath("zh-CN", normalizedPath),
+        ...languages,
+        "x-default": defaultLanguagePath(normalizedPath),
       },
     },
     description,
@@ -57,7 +75,7 @@ export function localizedMetadata({
     },
     robots: {
       follow,
-      index,
+      index: index ?? publicIndexingEnabled(),
     },
     title,
   };

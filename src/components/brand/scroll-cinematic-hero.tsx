@@ -111,7 +111,8 @@ export function ScrollCinematicHero({
       [primaryImage, primaryAmbient],
       [secondaryImage, secondaryAmbient],
     ] as const;
-    const warmFrames: HTMLImageElement[] = [];
+    const warmFrames = new Map<number, HTMLImageElement>();
+    const warmedFrames = new Set<number>([1]);
     let activeImage: 0 | 1 = 0;
     let displayedFrame = 1;
     let requestedFrame = 1;
@@ -121,6 +122,32 @@ export function ScrollCinematicHero({
 
     const frameSource = (imageNumber: number) =>
       `${frameBasePath}/frame-${String(imageNumber).padStart(3, "0")}.${frameExtension}`;
+
+    const warmNearFrame = (imageNumber: number) => {
+      if (preloadTimer) window.clearTimeout(preloadTimer);
+      if (imageNumber === 1 || reducedMotion || motionQuery.matches) return;
+      // Initial readers need only the first frame. Warm at most two neighbors after
+      // scrolling settles; never download the entire sequence on page entry.
+      preloadTimer = window.setTimeout(() => {
+        preloadTimer = 0;
+        for (const next of [imageNumber + 1, imageNumber - 1]) {
+          if (next < 1 || next > frameCount || warmedFrames.has(next) || warmFrames.size >= 2)
+            continue;
+          const preload = new Image();
+          preload.decoding = "async";
+          preload.fetchPriority = "low";
+          warmedFrames.add(next);
+          warmFrames.set(next, preload);
+          const release = () => warmFrames.delete(next);
+          preload.onload = release;
+          preload.onerror = () => {
+            warmedFrames.delete(next);
+            release();
+          };
+          preload.src = frameSource(next);
+        }
+      }, 120);
+    };
 
     const requestFrame = (imageNumber: number) => {
       if (imageNumber === displayedFrame) {
@@ -187,6 +214,7 @@ export function ScrollCinematicHero({
       root.dataset.frame = String(imageNumber);
       root.dataset.motion = shouldReduce ? "reduced" : "scrub";
       requestFrame(imageNumber);
+      warmNearFrame(imageNumber);
     };
 
     const scheduleUpdate = () => {
@@ -198,22 +226,14 @@ export function ScrollCinematicHero({
     window.addEventListener("resize", scheduleUpdate);
     motionQuery.addEventListener("change", scheduleUpdate);
 
-    let nextWarmFrame = 2;
-    const warmNextBatch = () => {
-      for (let batchIndex = 0; batchIndex < 6 && nextWarmFrame <= frameCount; batchIndex += 1) {
-        const preload = new Image();
-        preload.decoding = "async";
-        preload.src = frameSource(nextWarmFrame);
-        warmFrames.push(preload);
-        nextWarmFrame += 1;
-      }
-      if (nextWarmFrame <= frameCount) preloadTimer = window.setTimeout(warmNextBatch, 40);
-    };
-    preloadTimer = window.setTimeout(warmNextBatch, 0);
-
     return () => {
       if (frame) window.cancelAnimationFrame(frame);
       if (preloadTimer) window.clearTimeout(preloadTimer);
+      for (const preload of warmFrames.values()) {
+        preload.onload = null;
+        preload.onerror = null;
+      }
+      warmFrames.clear();
       for (const image of imagePairs.flat()) {
         image.onload = null;
         image.onerror = null;

@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 3fe5aaf6a84cc4d9dfb8d6f8e7bd0faa24d4d0ee
+lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #83: ordinary local Storybook retains a two-file cap, while CI and explicit WebGL stay serial after hosted parallel run 35021620020 failed seven frame/visibility assertions. Five actual configuration-resolution cases and the complete local pnpm check pass. Existing isolation, 30-second deadlines, retry policy, product assertions and optional WebGL skips remain unchanged. New serial hosted validation is pending; local speedup is not a CI or Windows promise."
+lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -162,7 +162,7 @@ Ordinary local Storybook tests run at most two files concurrently in `vitest.con
 
 `src/app/[locale]/page.tsx` loads the existing public summary and renders `BrandHome`. Its search form and all links remain server-rendered. The first section is the `ScrollCinematicHero` client island in every supported locale; the former lifecycle sculpture is no longer part of the production homepage.
 
-The cinematic hero scrubs 226 same-origin WebP frames from `public/brand/cinematic-v4/`. The first frame is requested eagerly and decoded before the loading curtain fades; subsequent frames warm in bounded batches. Two image buffers swap only after a requested frame has decoded, which prevents blank flashes while the user scrolls. The media surface fills the available width, preserves the 16:9 source, and extends missing height with a blurred ambient copy so narrow and tall viewports do not expose hard side boundaries or empty bands.
+The cinematic hero scrubs 226 same-origin WebP frames from `public/brand/cinematic-v4/`. The first frame is requested eagerly and decoded before the loading curtain fades. The remaining frames are on demand: nothing else is fetched on entry, and after the reader stops scrolling the component warms at most the two adjacent frames with low fetch priority and asynchronous decoding. Reduced-motion readers preload no further frames at all. Measured Core Web Vitals for the current deployment, including its frame loading, remain the pre-change baseline until this work is deployed; this paragraph describes behaviour, not a performance result. Two image buffers swap only after a requested frame has decoded, which prevents blank flashes while the user scrolls. The media surface fills the available width, preserves the 16:9 source, and extends missing height with a blurred ambient copy so narrow and tall viewports do not expose hard side boundaries or empty bands.
 
 The sequence is sticky directly beneath the measured site header and its visible height is `viewport - header`. Scroll progress controls the image frames only: all three localized text scenes occupy the same fixed content position and crossfade without translating. The first wheel or touch movement advances the sequence immediately. Reduced-motion mode keeps a representative static frame and exposes the same text and contrast treatment without scroll animation.
 
@@ -216,6 +216,37 @@ For routing changes, also run `list-rules`, `doctor`, `coverage` and `route` wit
 ## CI validation boundaries
 
 The static, production browser and Storybook jobs run independently; the required `validate` job succeeds only when all three succeed. New commits cancel superseded runs. Production Playwright uses two workers and one retry in CI. Storybook owns the full component theme, locale and viewport matrix; production UI smoke covers one desktop light and one mobile dark layout while retaining routing, SSR/no-JavaScript, BFF, private sharing, CSP, numeric identity and performance checks. Browser failures must be fixed, not bypassed by reducing assertions or removing security gates.
+
+The static CI gate sets `SITE_URL=http://localhost:3000` explicitly for its production-mode fixture build. The browser lane uses the existing runner origin and a nonproduction Baidu marker, so neither lane needs deployment secrets or repository variables to prove its metadata contract.
+
+### SEO evidence lane
+
+`pnpm test:e2e` runs the shared SEO checker and the ownership-marker proof against the fixture-backed server the runner already builds, so the lane adds no second build, no extra runtime and no indexing change. Both specs skip themselves unless their environment is present, and the production smoke keeps running separately.
+
+The checker is a **generated public snapshot**. Its authoritative source is `tiangong-lca/workspace`, which is private, so this repository consumes an exported copy at [`scripts/vendor/workspace-seo/`](../scripts/vendor/workspace-seo/) instead of checking the workspace out. The export carries a manifest (`schema`, `source_repository`, `source_commit`, `source_path`, `sha256`) and the snapshot is verified two ways:
+
+```bash
+python3 scripts/verify-vendored-seo.py   # standard library, also run as a CI step
+```
+
+`tests/unit/vendored-seo.test.ts` repeats the digest and identity checks with `node:crypto`, and `.gitattributes` pins the vendored files to LF so the digest cannot drift with a developer's platform. The vendored bytes are **read-only**: update them only by re-running the workspace export (`scripts/seo/export.py`) and committing its output, never by editing the copy. A local digest match proves the committed bytes are intact; it is **not** origin proof, which only the private integration job can give by hashing the Git blob at the recorded commit.
+
+| Variable | Contract |
+| --- | --- |
+| `SITE_URL` | Public origin. Production must set it; a missing or non-origin value fails closed, while an explicit loopback value stays valid for local and CI fixtures |
+| `BAIDU_SITE_VERIFICATION` | Optional public ownership code; the marker spec asserts it verbatim on all four locale homes, and asserts no marker when unset |
+| `PORTAL_SEO_EVIDENCE` | `1` enables the marker spec |
+| `SEO_CHECKER_PATH` | Path to the vendored checker; enables the checker spec |
+
+The checker runs in its `--loopback-preview` mode with explicit sitemap paths:
+
+```bash
+python3 scripts/vendor/workspace-seo/check.py --origin http://127.0.0.1:4317 --loopback-preview \
+  --sitemap /sitemap.xml --sitemap /catalog-process-sitemap.xml \
+  --sitemap /catalog-flow-sitemap.xml --sample 12 --output /tmp/portal-preview-seo.json
+```
+
+That mode is accepted only for loopback origins without an artifact root, requires those explicit sitemap paths, asserts `Disallow` and per-page `noindex`, and labels the report `loopback-preview`; it cannot downgrade a public-host production check. CI verifies the snapshot, runs the lane inside the existing browser job, and uploads the report with `if: always()`, so failures still fail the job while leaving evidence.
 
 ### Optional WebGL verification
 

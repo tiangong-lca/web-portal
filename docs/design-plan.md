@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-09-13
-lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
-lastReviewedNote: "Portal #81: section 22.1 canonical repository updated to tiangong-lca/web-portal and the generated contract snapshot identity moved to tiangong-lca/database at the same reviewed source commit; product, delivery and hosted-release requirements unchanged."
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
+lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -855,19 +855,25 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - `generateMetadata` 读取同一 server query，生成 title、description、canonical、Open Graph 与 alternates；
 - 每个公开版本输出 Schema.org `Dataset` JSON-LD；Database 目录输出 `DataCatalog`；
 - JSON-LD 只声明真实存在的 license、creator、spatialCoverage、temporalCoverage 和 distribution。
+- `Dataset.description` 取公开 `generalComment`（与页面可见文本、页面 metadata 同一来源），仅折叠排版空白。只有同时具备真实 `name` 与 50–5,000 **Unicode 字符**（按码点计数，不拆分代理对）的描述时才输出该 JSON-LD；缺失、全空白、过短或没有真实名称时不输出该 script，也不得用 identifier、填充文本或摘要凑合。超长按词边界截断，但若词边界会使结果短于 50 字符则退回按上限硬截断（不追加字符）。展示资格与页面是否可索引相互独立：缺少合法描述不改变页面的 robots 指令、canonical 或 metadata description。
 
 ### 11.2 索引控制
 
 - 可索引：首页、受控 Browse 目录、Process/Flow 精确版本、方法论、扩展阶段的 Database；
 - 不索引：任意 Search、Compare、Collections、Map 参数组合；
 - Facet URL 使用 `noindex,follow`，避免 query × filter 的无限索引空间；
-- zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`，根路径提供 `x-default`；
+- zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`；基础 sitemap 为 8 个静态路径 × 4 种语言输出 32 条各自独立的规范 `<url>`，每条互指同一语言集合；
+- `x-default` 指向同内容的默认语言页面（`/zh-CN/...`）；`/` 只重定向到 `/zh-CN`，因此不进入 sitemap，也不作为 `x-default`；
+- 页面 metadata 与 robots.txt 共用同一 `PORTAL_PUBLIC_INDEXING` 开关，且全局开关优先：未启用时即使页面显式 `index: true` 也不索引，页面仍可自行 `index: false` 退出。robots `Disallow` 仍会阻止爬虫抓取，被 disallow 的路径上的 `noindex` 因此读不到——metadata 属于纵深防御，不等于已从索引移除；确实需要移除时应让该页可被抓取并下发 `noindex`；
 - Database sitemap manifest 仍固定返回 64 个 opaque source shard。Portal 将每个 source shard 按稳定位置取模切成 4 个公开 part，因此根级 `/catalog-{process|flow}-sitemap.xml` 各固定列出 256 项；唯一规范参数为 `?shard={0..63}&part={0..3}`，确保根文件作用域覆盖四种语言；
 - shard 数字只接受规范化 `0..63`，Portal 按 manifest 数组位置选择 opaque cursor 并原样调用 Database；cursor 不进入 URL、XML、响应或日志；
 - 每个 Database source shard 最多 4,096 个 identity；每个公开 part 最多 1,024 个 identity，并为 zh-CN/en/de/fr 各生成一条 `<url>`，每条均列出四个 reciprocal alternate，最终 UTF-8 XML 必须严格小于 5 MiB；4 个 part 的 union 必须无重复、无遗漏地还原 source shard；
 - 最新版本进入 sitemap；命中的历史公开版本通过搜索展开直接发现，其他公开版本仍可在 Versions 页面浏览；
 - 成功响应默认 `no-store`，确保未验证的平台也满足零陈旧；只有 exact deployment 证明 cache key 精确包含规范 `shard` 参数、到期同步 revalidate、错误不缓存且不自动返回 stale 后，才设置 `PORTAL_SITEMAP_CACHE_MODE=shared-300` 并使用 `public, max-age=0, s-maxage=300, must-revalidate`；Vercel 的 `s-maxage` 会后台异步更新，因此当前禁止该模式；缺失参数表示 index，唯一参数只接受规范十进制 `0..63`，其他 query 全部在 Database 调用前返回 `404/no-store`；配置、上游、DTO 或字节门失败返回 `503/no-store`；禁止 query cache-bust、`stale-while-revalidate` 与 `stale-if-error`；
 - robots 不用于保护数据，真正的权限仍在 Database/Edge。
+- 公开规范来源由 `SITE_URL` 提供并收口到 `https://www.tiangong.earth`；production 部署缺失或非法取值时 fail closed（抛出而不是发布 loopback canonical），本地与 CI fixture 显式设置的 loopback 取值仍然可用；
+- 可选 `BAIDU_SITE_VERIFICATION` 由部署环境提供（仓库不写入取值），配置时在根 document 元数据输出 `<meta name="baidu-site-verification">` 供全部语言首页继承，未配置时不输出任何标记；
+- 共享 SEO checker 以生成快照形式消费（`scripts/vendor/workspace-seo/`，权威源 `tiangong-lca/workspace` 为私有库）：CI 只用标准库校验快照摘要与来源字段，不 checkout 私有仓库、不申请额外权限；本地摘要一致只证明字节完整，来源证明由私有集成任务按 Git blob 校验。
 
 ### 11.3 缓存与新鲜度
 
@@ -994,7 +1000,7 @@ MVP 不引入重量级状态管理、客户端查询缓存、Chart 或 Map 依�
 - 多 root layout 的 unmatched URL 使用 Next `experimental.globalNotFound` 输出完整、带语言和 `noindex` 的 404 document；该 experimental 能力与 SRI 一并进入 R0 compatibility gate；
 - TypeScript 7 使用 Next 16 默认 TypeScript CLI 路径，并在 compatibility spike 验证；不为默认已启用的行为保留冗余 experimental 配置；
 - `next-env.d.ts` 由 `next dev/build/typegen` 生成并纳入 `tsconfig`，但不提交到 Git；
-- 不部署 Next `proxy.ts`/legacy middleware；无 query 的根路径使用 `edgeone.json` exact redirect，R0 routing evidence 使用静态 headers；已知无 locale 的 stateful 路径使用 bounded same-origin 307 Route Handlers 原样保留 pathname/query 并 `no-store`；invalid locale 进入完整 zh-CN global 404 document；
+- 不部署 Next `proxy.ts`/legacy middleware（host 级 alias 重定向由 provider 原生规则承担）；无 query 的根路径使用 `edgeone.json` exact redirect，R0 routing evidence 使用静态 headers；已知无 locale 的 stateful 路径使用 bounded same-origin 307 Route Handlers 原样保留 pathname/query 并 `no-store`；invalid locale 进入完整 zh-CN global 404 document；
 - 图片使用 `next/image`，仅配置必要远端域名；
 - `next typegen && tsc --noEmit` 是独立 typecheck；
 - Client boundary 通过 lint 和 bundle 检查防止 server-only 模块泄漏。
@@ -1066,7 +1072,7 @@ tiangong-lca-portal/
 - 使用 EdgeOne Makers Git integration 作为唯一发布者；
 - Production 绑定 Portal `main`；
 - feature/PR 只运行 GitHub/local gates，不创建独立 EdgeOne Preview；
-- 每个 PR 合并到 `main` 后自动部署到 `portal.tiangong.earth`，该 Production 域名同时承担 hosted TDD 与最终发布；
+- 每个 PR 合并到 `main` 后自动部署到 EdgeOne Production；**公开规范来源是 `https://www.tiangong.earth`**（`SITE_URL`），apex 与 `portal.tiangong.earth` 是它的永久重定向别名，由 provider 原生/受限 host 规则实现；该 Production 环境同时承担 hosted TDD 与最终发布；
 - TDD 阶段固定 `PORTAL_PUBLIC_INDEXING=disabled`，所有门通过后才以新 deployment 开启索引；
 - GitHub Actions 只做 lint、typecheck、test、build 和安全检查，不再次部署；
 - 每次部署使用不可变 commit SHA，回滚到上一成功 deployment；
@@ -1104,6 +1110,7 @@ EdgeOne 只配置 Production 环境变量：
 | 主色 | `PORTAL_LIGHT_PRIMARY`、`PORTAL_DARK_PRIMARY`、`PORTAL_BRAND_VERSION` |
 | Logo | `PORTAL_LIGHT_LOGO`、`PORTAL_DARK_LOGO`、`PORTAL_LOGO_MARK`、`PORTAL_FAVICON` |
 | Logo metadata | `PORTAL_LOGO_ALT_ZH/EN/DE/FR`、`PORTAL_LOGO_WIDTH/HEIGHT`、可选 `PORTAL_BRAND_ASSET_ORIGIN` |
+| Social card | `PORTAL_SOCIAL_IMAGE`（默认 `/brand/social-card.png`）、`PORTAL_SOCIAL_WIDTH/HEIGHT`（默认 1200 × 630） |
 
 Supabase Edge Function 配置按项目分别保存；当前批准的例外仅共享底层 Upstash endpoint/token。EdgeOne Production 只调用 Supabase Main；本地/CI 使用 loopback fixture 或 persistent Dev 的独立凭据。用户批准不创建单独 EdgeOne Preview，R0 hosted probes 在 Production 域名、索引关闭状态下验证真实 Main signer/namespace，不部署可调用业务内核的临时替代凭据：
 

@@ -38,6 +38,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run static and unit gates
+        env:
+          SITE_URL: http://localhost:3000
         run: pnpm check
       - name: Audit vulnerabilities
         run: pnpm check:vulnerabilities
@@ -66,8 +68,25 @@ jobs:
 
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
+      # The checker is a generated public snapshot: the authoritative repository is private, so CI
+      # verifies the committed bytes against the manifest instead of checking it out.
+      - name: Verify the vendored shared SEO checker
+        run: python3 scripts/verify-vendored-seo.py
+
       - name: Production integration gates
+        env:
+          SEO_CHECKER_PATH: ${{ github.workspace }}/scripts/vendor/workspace-seo/check.py
+          PORTAL_SEO_EVIDENCE: "1"
+          BAIDU_SITE_VERIFICATION: ci-public-baidu-marker
         run: pnpm test:e2e
+
+      - name: Upload shared SEO checker report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: portal-seo-checker-report
+          path: test-results/**/seo-report.json
+          if-no-files-found: warn
 
   components:
     runs-on: ubuntu-latest

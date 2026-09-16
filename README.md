@@ -17,8 +17,8 @@ checkPaths:
   - docs/design-plan.md
   - package.json
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 6067b52beaa0ae348d0449a98b6996cafbe2c34b
-lastReviewedNote: "Reviewed for Portal #83 governance completion: the actual Storybook configuration regression file is covered by the existing component-workspace rule. Ordinary two-file versus explicit-WebGL serial behavior, isolated contexts, all quality checks and three CI jobs are retained. Independent source, configuration, experiment and full governance-reading reviews pass; final canonical and hosted qualification remain pending."
+lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
+lastReviewedNote: "Portal #85：README 记录 vendored 共享 SEO checker 快照的校验命令与更新政策（只按私有 workspace 的导出脚本更新，不手工编辑；摘要一致≠来源证明）。产品边界、技术形态与发布流程不变。"
 related:
   - docs/development.md
   - docs/ui-system.md
@@ -48,6 +48,15 @@ Next.js App Router 前后端同构，React Server Components 优先，部署到 
 - [开发指南](docs/development.md)：工具链与工作目录、按改动选择检查、Storybook/MCP、项目 skills 恢复与更新。
 - [UI 与组件规范](docs/ui-system.md)：视觉、共享控件、四语、无障碍和隔离场景要求。
 - [Agent 入口](AGENTS.md)：仓库边界、任务导航和 workspace 交付要求。
+
+常用本地校验与 vendored 资源：
+
+```bash
+pnpm check                               # 静态、单测、构建与体积门
+python3 scripts/verify-vendored-seo.py   # 校验共享 SEO checker 快照的字节与来源字段
+```
+
+`scripts/vendor/workspace-seo/` 是 `tiangong-lca/workspace`（私有库）导出的生成快照：只按导出脚本更新、绝不手工编辑；摘要一致只证明字节完整，来源证明由私有集成任务按 Git blob 完成。
 
 Storybook 展示真实基础组件与业务组合，支持语言、主题和视口切换。组件场景使用合成数据，开发工具独立于公众产品；新增或修改 UI 时按开发指南验证实际交互与呈现。
 

@@ -19,7 +19,12 @@
     "metadata": {
       "kind": "process",
       "names": [{ "language": "en", "value": "Electricity, medium voltage" }],
-      "generalComment": [{ "language": "en", "value": "Public process fixture" }],
+      "generalComment": [
+        {
+          "language": "en",
+          "value": "Public portal fixture process describing medium-voltage electricity supply from the TianGong LCA reference data set."
+        }
+      ],
       "referenceProduct": [{ "language": "en", "value": "Electricity" }],
       "functionalUnit": {
         "amount": "1",

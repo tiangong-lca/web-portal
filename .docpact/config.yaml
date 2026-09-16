@@ -385,6 +385,10 @@ rules:
         kind: public-data-test
       - path: tests/unit/catalog-sitemap.test.ts
         kind: sitemap-test
+      - path: tests/unit/dataset-json-ld.test.tsx
+        kind: public-data-test
+      - path: tests/unit/vendored-seo.test.ts
+        kind: vendored-tooling-test
       - path: tests/unit/browser-private-markers.test.ts
         kind: privacy-test
       - path: tests/integration/**

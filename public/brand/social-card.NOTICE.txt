@@ -1,0 +1,17 @@
+TianGong LCA Portal social card — public/brand/social-card.png
+
+Generated asset. Not hand-drawn, not fetched at runtime, and not produced by any build step.
+
+Source:      public/brand/logo.svg (this repository's own brand mark, unmodified)
+Recipe:      the SVG inlined into a fixed 1200x630 HTML page with a #FFFFFF background and the mark
+             rendered 440px and centred, captured with the repository's installed Playwright
+             Chromium at deviceScaleFactor 1 by a one-off offline script. No network access and no
+             font dependency beyond the SVG's own outlines, with a fixed viewport; browser-version changes can change raster encoding.
+Dimensions:  1200x630, matching the declared social-card size in src/config/brand.ts
+SHA-256:     11be665e843fe260bd7ba7dcc098218acbdc2fa50387de2e108b3287fbd0afdf
+Replacement: re-run the same recipe from the current logo.svg. Swapping in a different brand image is
+             a reviewed change: update the src/config/brand.ts defaults, or set PORTAL_SOCIAL_IMAGE /
+             PORTAL_SOCIAL_WIDTH / PORTAL_SOCIAL_HEIGHT for one deployment, and keep the declared
+             dimensions equal to the real PNG header —
+             tests/unit/brand-assets.test.ts fails when they disagree. The configuration also rejects
+             a remote social image that is not a credential-free HTTPS asset on PORTAL_BRAND_ASSET_ORIGIN.

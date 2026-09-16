@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 3fe5aaf6a84cc4d9dfb8d6f8e7bd0faa24d4d0ee
+lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #83: ordinary local Storybook retains a two-file cap, while CI and explicit WebGL stay serial after hosted parallel run 35021620020 failed seven frame/visibility assertions. Five actual configuration-resolution cases and the complete local pnpm check pass. Existing isolation, 30-second deadlines, retry policy, product assertions and optional WebGL skips remain unchanged. New serial hosted validation is pending; local speedup is not a CI or Windows promise."
+lastReviewedNote: "Reviewed for Portal #85 SEO Plan v2: `Dataset` JSON-LD now carries the public `generalComment` description with explicit missing/short/over-long handling (rich-result eligibility stays separate from indexability), the base sitemap lists all 32 canonical language URLs with reciprocal alternates and a same-content `x-default`, and page metadata shares the single `PORTAL_PUBLIC_INDEXING` gate with robots.txt. The new SEO regression suites are registered in the Docpact coverage map; public DTO/version, shard sitemap, CSP and permission boundaries are unchanged. Shared checker and production samples remain integration/release items."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

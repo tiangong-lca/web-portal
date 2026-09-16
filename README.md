@@ -17,8 +17,8 @@ checkPaths:
   - docs/design-plan.md
   - package.json
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 6067b52beaa0ae348d0449a98b6996cafbe2c34b
-lastReviewedNote: "Reviewed for Portal #83 governance completion: the actual Storybook configuration regression file is covered by the existing component-workspace rule. Ordinary two-file versus explicit-WebGL serial behavior, isolated contexts, all quality checks and three CI jobs are retained. Independent source, configuration, experiment and full governance-reading reviews pass; final canonical and hosted qualification remain pending."
+lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
+lastReviewedNote: "Reviewed for Portal #85 SEO Plan v2: `Dataset` JSON-LD now carries the public `generalComment` description with explicit missing/short/over-long handling (rich-result eligibility stays separate from indexability), the base sitemap lists all 32 canonical language URLs with reciprocal alternates and a same-content `x-default`, and page metadata shares the single `PORTAL_PUBLIC_INDEXING` gate with robots.txt. The new SEO regression suites are registered in the Docpact coverage map; public DTO/version, shard sitemap, CSP and permission boundaries are unchanged. Shared checker and production samples remain integration/release items."
 related:
   - docs/development.md
   - docs/ui-system.md

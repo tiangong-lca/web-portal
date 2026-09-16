@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-09-13
-lastReviewedCommit: 92e4b1f8550d90e3a245a8782ad273ba806d1324
-lastReviewedNote: "Portal #81: section 22.1 canonical repository updated to tiangong-lca/web-portal and the generated contract snapshot identity moved to tiangong-lca/database at the same reviewed source commit; product, delivery and hosted-release requirements unchanged."
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
+lastReviewedNote: "Portal #85 SEO Plan v2：Dataset JSON-LD 增加公开 generalComment 描述并明确缺失/过短/超长处理（展示资格与可索引性分离，不杜撰字段）；基础 sitemap 由 8 条中文 loc 展开为 8×4=32 条规范语言 URL，每条互指同一语言集合；深层 x-default 改为同内容默认语言页面，不再指向只做重定向的 `/`；页面 metadata 与 robots.txt 共用同一 PORTAL_PUBLIC_INDEXING 开关。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享检查与生产样本仍属集成与发布阶段的验证项。"
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -855,13 +855,16 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - `generateMetadata` 读取同一 server query，生成 title、description、canonical、Open Graph 与 alternates；
 - 每个公开版本输出 Schema.org `Dataset` JSON-LD；Database 目录输出 `DataCatalog`；
 - JSON-LD 只声明真实存在的 license、creator、spatialCoverage、temporalCoverage 和 distribution。
+- `Dataset.description` 取公开 `generalComment`（与页面可见文本、页面 metadata 同一来源），仅折叠排版空白；缺失或全空白时省略该字段，不填入 identifier、也不杜撰文本；超过 5,000 字符按词边界截断且不追加字符；短于 50 字符按原样输出。Google Dataset 的 50–5,000 字符要求只是展示资格，与页面是否可索引无关，不得为凑字段而增删内容。
 
 ### 11.2 索引控制
 
 - 可索引：首页、受控 Browse 目录、Process/Flow 精确版本、方法论、扩展阶段的 Database；
 - 不索引：任意 Search、Compare、Collections、Map 参数组合；
 - Facet URL 使用 `noindex,follow`，避免 query × filter 的无限索引空间；
-- zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`，根路径提供 `x-default`；
+- zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`；基础 sitemap 为 8 个静态路径 × 4 种语言输出 32 条各自独立的规范 `<url>`，每条互指同一语言集合；
+- `x-default` 指向同内容的默认语言页面（`/zh-CN/...`）；`/` 只重定向到 `/zh-CN`，因此不进入 sitemap，也不作为 `x-default`；
+- 页面 metadata 与 robots.txt 共用同一 `PORTAL_PUBLIC_INDEXING` 开关，两者必须一致：未启用时都不索引。需要排除的页面下发可被抓取的 `noindex`；robots `Disallow` 只是抓取控制，不是去索引手段；
 - Database sitemap manifest 仍固定返回 64 个 opaque source shard。Portal 将每个 source shard 按稳定位置取模切成 4 个公开 part，因此根级 `/catalog-{process|flow}-sitemap.xml` 各固定列出 256 项；唯一规范参数为 `?shard={0..63}&part={0..3}`，确保根文件作用域覆盖四种语言；
 - shard 数字只接受规范化 `0..63`，Portal 按 manifest 数组位置选择 opaque cursor 并原样调用 Database；cursor 不进入 URL、XML、响应或日志；
 - 每个 Database source shard 最多 4,096 个 identity；每个公开 part 最多 1,024 个 identity，并为 zh-CN/en/de/fr 各生成一条 `<url>`，每条均列出四个 reciprocal alternate，最终 UTF-8 XML 必须严格小于 5 MiB；4 个 part 的 union 必须无重复、无遗漏地还原 source shard；

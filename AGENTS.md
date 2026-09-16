@@ -17,8 +17,8 @@ checkPaths:
   - docs/ui-system.md
   - .docpact/config.yaml
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Portal #85：standing rule 记录 vendored 共享 SEO checker 快照的校验与更新政策（只用私有 workspace 的导出脚本更新、不手工编辑、摘要一致不等于来源证明）。仓库边界、任务路由与交付要求不变。"
+lastReviewedCommit: 44c0995983eaf4e3a238cd586d4247408bf92c33
+lastReviewedNote: "Reviewed for the Portal #87 artifact-regression follow-up: the new emitted-CSS font check joins the existing CI-invoked bundle surface, and the product-runtime contract registers its test as an emitted-asset trigger. No repository fact, branch rule, ownership boundary or command contract in this file changes."
 related:
   - docs/development.md
   - docs/ui-system.md

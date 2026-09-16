@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
+lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
+lastReviewedNote: "Reviewed for Portal #87: the 字体与密度 rules gain the ownership statement that makes the fix durable. Fontsource variable-font @font-face definitions are owned by src/app/globals.css alone, which every product layout and the Storybook preview already load, so component, feature and shell CSS must not import the packages again. The families, roles, sizes and density rules are unchanged."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
+lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
+lastReviewedNote: "Reviewed for Portal #87: the font paragraph now records where the definitions live and what they cost. Component, feature and shell CSS no longer import the Fontsource packages, so the emitted build carries one 98,365-byte font payload instead of five identical copies; the fontscope statement, the OFL notices and the licence check are unchanged. The homepage performance guard's readiness wait now targets the mounted cinematic hero (data-media=ready) rather than the unmounted lifecycle sculpture, with the same timeout, the same PORTAL_WEBGL_TESTS=1 opt-in and the same metrics."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

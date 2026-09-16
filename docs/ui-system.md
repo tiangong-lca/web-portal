@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 3fe5aaf6a84cc4d9dfb8d6f8e7bd0faa24d4d0ee
+lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #83: ordinary local Storybook retains a two-file cap, while CI and explicit WebGL stay serial after hosted parallel run 35021620020 failed seven frame/visibility assertions. Five actual configuration-resolution cases and the complete local pnpm check pass. Existing isolation, 30-second deadlines, retry policy, product assertions and optional WebGL skips remain unchanged. New serial hosted validation is pending; local speedup is not a CI or Windows promise."
+lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -102,13 +102,16 @@ Toggle 的选中态具有持续的边框、浅色背景和下划线；比较选�
 - `PORTAL_LOGO_MARK`，移动端/窄导航可选，默认复用当前主题 Logo；
 - `PORTAL_FAVICON`，默认 `/brand/favicon.ico`；
 - `PORTAL_LOGO_ALT_ZH` / `PORTAL_LOGO_ALT_EN`；
-- `PORTAL_LOGO_WIDTH` / `PORTAL_LOGO_HEIGHT`，默认按源文件 `170.08 × 170.08` 比例。
+- `PORTAL_LOGO_WIDTH` / `PORTAL_LOGO_HEIGHT`，默认按源文件 `170.08 × 170.08` 比例；
+- `PORTAL_SOCIAL_IMAGE`，链接预览用社交卡片，默认 `/brand/social-card.png`（仓库内由 `public/brand/logo.svg` 离线生成的 1200 × 630 PNG，见同目录 `.NOTICE.txt`）；
+- `PORTAL_SOCIAL_WIDTH` / `PORTAL_SOCIAL_HEIGHT`，默认 `1200` / `630`，必须与卡片实际像素一致（`tests/unit/brand-assets.test.ts` 会读取 PNG 头校验）。
 
 规则：
 
 - 首选同源 `/brand/**` 资产；允许远端时只接受 HTTPS 和 `PORTAL_BRAND_ASSET_ORIGIN` allowlist；
 - SVG 以 `<img>`/`next/image` 外部资源方式呈现，不把未受信 SVG inline 注入 DOM；
 - 必须声明 width/height 或 aspect ratio，避免 CLS；加载失败回退默认 Logo 与文本品牌名；
+- 社交卡片必须是位图（SVG 标记不被链接预览渲染）；同上受 `PORTAL_BRAND_ASSET_ORIGIN` 约束；
 - Light/Dark/System 切换同步选择对应 Logo；在 `<html>` 水合前用带 SRI 的同源外部主题脚本恢复 localStorage 偏好，System 模式使用 `prefers-color-scheme`，避免 Logo 与主题 hydration flash；
 - Header、移动导航、favicon、manifest icons、Open Graph image/brand metadata 使用同一 `BrandConfig`；
 - Alt 文本本地化；旁边已有可见品牌文字时纯图形 mark 使用 `alt=""`；

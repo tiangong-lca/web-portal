@@ -53,6 +53,9 @@ const rawBrandConfigSchema = z.object({
   altFr: z.string().trim().min(1).max(100).default("TianGong LCA"),
   width: z.coerce.number().positive().max(4096).default(170.08),
   height: z.coerce.number().positive().max(4096).default(170.08),
+  socialImage: z.string().trim().min(1).default("/brand/social-card.png"),
+  socialWidth: z.coerce.number().int().positive().max(4096).default(1200),
+  socialHeight: z.coerce.number().int().positive().max(4096).default(630),
   assetOrigin: optionalHttpsOriginSchema,
 });
 
@@ -72,6 +75,9 @@ export type BrandConfig = {
   };
   width: number;
   height: number;
+  socialImage: string;
+  socialWidth: number;
+  socialHeight: number;
   palette: {
     dark: BrandThemePalette;
     light: BrandThemePalette;
@@ -95,6 +101,9 @@ export type BrandEnvironment = Record<string, string | undefined> &
       | "PORTAL_LOGO_ALT_FR"
       | "PORTAL_LOGO_WIDTH"
       | "PORTAL_LOGO_HEIGHT"
+      | "PORTAL_SOCIAL_IMAGE"
+      | "PORTAL_SOCIAL_WIDTH"
+      | "PORTAL_SOCIAL_HEIGHT"
       | "PORTAL_BRAND_ASSET_ORIGIN",
       string | undefined
     >
@@ -148,6 +157,9 @@ export function readBrandConfig(environment: BrandEnvironment = process.env): Br
     altFr: environment.PORTAL_LOGO_ALT_FR,
     width: environment.PORTAL_LOGO_WIDTH,
     height: environment.PORTAL_LOGO_HEIGHT,
+    socialImage: environment.PORTAL_SOCIAL_IMAGE,
+    socialWidth: environment.PORTAL_SOCIAL_WIDTH,
+    socialHeight: environment.PORTAL_SOCIAL_HEIGHT,
     assetOrigin: environment.PORTAL_BRAND_ASSET_ORIGIN,
   });
 
@@ -173,6 +185,9 @@ export function readBrandConfig(environment: BrandEnvironment = process.env): Br
     },
     width: raw.width,
     height: raw.height,
+    socialImage: normalizeAssetReference(raw.socialImage, raw.assetOrigin),
+    socialWidth: raw.socialWidth,
+    socialHeight: raw.socialHeight,
     palette: {
       dark: darkPalette,
       light: lightPalette,

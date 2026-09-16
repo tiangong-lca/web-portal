@@ -107,9 +107,9 @@ export function localizedMetadata({
       images: [
         {
           alt: brandConfig.alt[locale],
-          height: brandConfig.height,
-          url: brandConfig.lightLogo,
-          width: brandConfig.width,
+          height: brandConfig.socialHeight,
+          url: brandConfig.socialImage,
+          width: brandConfig.socialWidth,
         },
       ],
       locale: openGraphLocales[locale],

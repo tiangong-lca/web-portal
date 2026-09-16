@@ -24,10 +24,12 @@ export const portalMetadata: Metadata = {
     description: "匿名搜索、理解、比较和引用公开生命周期评价数据。",
     images: [
       {
+        // A raster social card, not the SVG mark: link previews need a stable raster at the
+        // documented 1200x630 size, and the declared dimensions are checked against the asset.
         alt: brandConfig.alt["zh-CN"],
-        height: brandConfig.height,
-        url: brandConfig.lightLogo,
-        width: brandConfig.width,
+        height: brandConfig.socialHeight,
+        url: brandConfig.socialImage,
+        width: brandConfig.socialWidth,
       },
     ],
     siteName: "天工 LCA 数据门户",

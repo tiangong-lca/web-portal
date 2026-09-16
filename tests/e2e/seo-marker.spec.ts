@@ -23,5 +23,22 @@ test("publishes the configured verification marker on every locale home, and non
     const markers = page.locator('meta[name="baidu-site-verification"]');
     expect(await markers.count(), `${home} marker count`).toBe(marker ? 1 : 0);
     if (marker) await expect(markers).toHaveAttribute("content", marker);
+    // Locale metadata overrides root Open Graph fields; assert the rendered page
+    // retains the raster fallback rather than silently reverting to its SVG logo.
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      /\/brand\/social-card\.png$/,
+    );
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
+      "content",
+      "1200",
+    );
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
+      "content",
+      "630",
+    );
   }
+  const image = await page.request.get("/brand/social-card.png");
+  expect(image.status()).toBe(200);
+  expect(image.headers()["content-type"]).toContain("image/png");
 });

@@ -13,7 +13,7 @@ import { afterEach, describe, expect, it } from "vitest";
  */
 const script = resolve("scripts/check-font-payload-dedup.mjs");
 
-const fontFace = ({ family, range, weight }) =>
+const fontFace = ({ family, range, weight }: { family: string; range: string; weight: number }) =>
   `@font-face{font-family:${family};font-style:normal;font-weight:${weight};` +
   `src:url(/fonts/${family}-${weight}.woff2) format("woff2");unicode-range:${range};}`;
 

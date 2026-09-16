@@ -24,7 +24,7 @@ checkPaths:
   - edgeone.json
 lastReviewedAt: 2026-09-16
 lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Portal #85 SEO Plan v2（含 root 复核修订）：Dataset JSON-LD 仅在同时具备真实 name 与 50–5,000 Unicode 字符（按码点计数、不拆代理对）描述时输出；缺失、全空白、过短或无真实名称时不输出该 script，且不填充、不摘要、不用 identifier 顶替。超长按词边界截断，词边界结果短于 50 字符时退回按上限硬截断。索引开关全局优先：未启用时覆盖显式 index:true，页面仍可 index:false；robots Disallow 会阻止爬虫读取 noindex，metadata 只作纵深防御。基础 sitemap 为 8×4=32 条规范语言 URL，互指同一语言集合并输出同内容 x-default，深层不再回退到重定向根路径。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享检查、production 样本与 OG 复核仍属集成/发布阶段验证项。"
+lastReviewedNote: "Portal #85 SEO Plan v2（含 root 复核修订与域名收口）：Dataset JSON-LD 仅在同时具备真实 name 与 50–5,000 Unicode 字符描述时输出，缺失/过短/无名称一律不输出该 script 且不填充；索引开关全局优先（未启用时覆盖显式 index:true），robots Disallow 会阻止爬虫读取 noindex，metadata 只作纵深防御。基础 sitemap 为 8×4=32 条规范语言 URL，互指同一语言集合并输出同内容 x-default。公开规范来源收口为 `https://www.tiangong.earth`（`SITE_URL`）：apex 与 portal.tiangong.earth 是 provider 原生永久重定向别名，Portal 不部署 Next proxy/middleware，host 级 alias 由 provider 规则承担；本地与 CI fixture 保持 loopback 取值。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享 checker 的 CI 接入方式待 root 决策，production 样本与最终域名收口仍属发布阶段验证项。"
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -997,7 +997,7 @@ MVP 不引入重量级状态管理、客户端查询缓存、Chart 或 Map 依�
 - 多 root layout 的 unmatched URL 使用 Next `experimental.globalNotFound` 输出完整、带语言和 `noindex` 的 404 document；该 experimental 能力与 SRI 一并进入 R0 compatibility gate；
 - TypeScript 7 使用 Next 16 默认 TypeScript CLI 路径，并在 compatibility spike 验证；不为默认已启用的行为保留冗余 experimental 配置；
 - `next-env.d.ts` 由 `next dev/build/typegen` 生成并纳入 `tsconfig`，但不提交到 Git；
-- 不部署 Next `proxy.ts`/legacy middleware；无 query 的根路径使用 `edgeone.json` exact redirect，R0 routing evidence 使用静态 headers；已知无 locale 的 stateful 路径使用 bounded same-origin 307 Route Handlers 原样保留 pathname/query 并 `no-store`；invalid locale 进入完整 zh-CN global 404 document；
+- 不部署 Next `proxy.ts`/legacy middleware（host 级 alias 重定向由 provider 原生规则承担）；无 query 的根路径使用 `edgeone.json` exact redirect，R0 routing evidence 使用静态 headers；已知无 locale 的 stateful 路径使用 bounded same-origin 307 Route Handlers 原样保留 pathname/query 并 `no-store`；invalid locale 进入完整 zh-CN global 404 document；
 - 图片使用 `next/image`，仅配置必要远端域名；
 - `next typegen && tsc --noEmit` 是独立 typecheck；
 - Client boundary 通过 lint 和 bundle 检查防止 server-only 模块泄漏。
@@ -1069,7 +1069,7 @@ tiangong-lca-portal/
 - 使用 EdgeOne Makers Git integration 作为唯一发布者；
 - Production 绑定 Portal `main`；
 - feature/PR 只运行 GitHub/local gates，不创建独立 EdgeOne Preview；
-- 每个 PR 合并到 `main` 后自动部署到 `portal.tiangong.earth`，该 Production 域名同时承担 hosted TDD 与最终发布；
+- 每个 PR 合并到 `main` 后自动部署到 EdgeOne Production；**公开规范来源是 `https://www.tiangong.earth`**（`SITE_URL`），apex 与 `portal.tiangong.earth` 是它的永久重定向别名，由 provider 原生/受限 host 规则实现；该 Production 环境同时承担 hosted TDD 与最终发布；
 - TDD 阶段固定 `PORTAL_PUBLIC_INDEXING=disabled`，所有门通过后才以新 deployment 开启索引；
 - GitHub Actions 只做 lint、typecheck、test、build 和安全检查，不再次部署；
 - 每次部署使用不可变 commit SHA，回滚到上一成功 deployment；

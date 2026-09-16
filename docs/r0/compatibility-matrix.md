@@ -20,9 +20,9 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
-lastReviewedAt: 2026-09-09
-lastReviewedCommit: 49e50d0344574798411f3584534488eb3fcbd03e
-lastReviewedNote: "Reviewed for Portal #71: the production homepage adds same-origin model and renderer-worker assets under the existing performance CSP. The ISR/Flight contract and strict-profile disposition are unchanged; historical hosted receipts do not qualify this new homepage, which requires exact-deployment validation before release."
+lastReviewedAt: 2026-09-16
+lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
+lastReviewedNote: "Portal #85 SEO Plan v2（含 root 复核修订与域名收口）：Dataset JSON-LD 仅在同时具备真实 name 与 50–5,000 Unicode 字符描述时输出，缺失/过短/无名称一律不输出该 script 且不填充；索引开关全局优先（未启用时覆盖显式 index:true），robots Disallow 会阻止爬虫读取 noindex，metadata 只作纵深防御。基础 sitemap 为 8×4=32 条规范语言 URL，互指同一语言集合并输出同内容 x-default。公开规范来源收口为 `https://www.tiangong.earth`（`SITE_URL`）：apex 与 portal.tiangong.earth 是 provider 原生永久重定向别名，Portal 不部署 Next proxy/middleware，host 级 alias 由 provider 规则承担；本地与 CI fixture 保持 loopback 取值。公共 DTO/版本、分片 sitemap、缓存、CSP 与权限边界不变；共享 checker 的 CI 接入方式待 root 决策，production 样本与最终域名收口仍属发布阶段验证项。"
 related:
   - ../design-plan.md
   - ../../AGENTS.md
@@ -31,7 +31,7 @@ related:
 
 # Portal R0 Compatibility Matrix
 
-R0 exit requires the exact selected Portal `main` commit and EdgeOne Production deployment on `portal.tiangong.earth` to pass every non-excepted row below. The table retains the exact historical platform-qualification receipts, including public indexing and the cacheable enforcing performance CSP at `bf97795512480dc00f680521cbf36aeab113ecfe`. A real 404/noindex/unchanged-URL EdgeOne generic raw document for unknown first segments remains the accepted platform disposition. New Portal #48 release acceptance must verify the final Main marker, four-language user workflows, public-data boundaries, cache/headers and the controlled lexical payload/latency checks; historical receipts are not a substitute for that exact rollout.
+R0 exit requires the exact selected Portal `main` commit and EdgeOne Production deployment on `portal.tiangong.earth` to pass every non-excepted row below. The table retains the exact historical platform-qualification receipts, including public indexing and the cacheable enforcing performance CSP at `bf97795512480dc00f680521cbf36aeab113ecfe`. A real 404/noindex/unchanged-URL EdgeOne generic raw document for unknown first segments remains the accepted platform disposition. New Portal #48 release acceptance must verify the final Main marker on the canonical public origin `https://www.tiangong.earth` (with apex and `portal.tiangong.earth` redirecting to it), four-language user workflows, public-data boundaries, cache/headers and the controlled lexical payload/latency checks; historical receipts are not a substitute for that exact rollout.
 
 | Capability | Local production evidence | EdgeOne main/Production evidence | Gate |
 | --- | --- | --- | --- |

@@ -3,7 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { defaultLocale, localePath, locales } from "@/i18n/routing";
-import { defaultLanguagePath, localizedMetadata, publicIndexingEnabled } from "@/lib/seo";
+import {
+  absolutePortalUrl,
+  defaultLanguagePath,
+  localizedMetadata,
+  publicIndexingEnabled,
+} from "@/lib/seo";
 
 const siteOrigin = "https://portal.example";
 
@@ -151,5 +156,37 @@ describe("base sitemap", () => {
     expect(browse?.priority).toBe(0.7);
     expect(team?.changeFrequency).toBe("monthly");
     expect(team?.priority).toBe(0.5);
+  });
+});
+
+describe("public origin guidance", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("publishes the canonical www origin in production metadata and sitemaps", () => {
+    vi.stubEnv("SITE_URL", "https://www.tiangong.earth");
+    vi.stubEnv("PORTAL_PUBLIC_INDEXING", "enabled");
+
+    const entries = sitemap();
+    expect(entries).not.toHaveLength(0);
+    for (const entry of entries) {
+      expect(entry.url.startsWith("https://www.tiangong.earth/")).toBe(true);
+      for (const alternate of Object.values(entry.alternates?.languages ?? {})) {
+        expect(String(alternate).startsWith("https://www.tiangong.earth/")).toBe(true);
+      }
+    }
+
+    expect(absolutePortalUrl("/zh-CN")).toBe("https://www.tiangong.earth/zh-CN");
+    expect(robots().sitemap?.[0]).toBe("https://www.tiangong.earth/sitemap.xml");
+  });
+
+  it("keeps the loopback fixture origin usable for local and CI runs", () => {
+    vi.stubEnv("SITE_URL", "http://localhost:3000");
+
+    expect(sitemap()[0]?.url.startsWith("http://localhost:3000/")).toBe(true);
+    expect(absolutePortalUrl("/en")).toBe("http://localhost:3000/en");
+    vi.stubEnv("PORTAL_PUBLIC_INDEXING", "disabled");
+    expect(robots().rules).toEqual({ disallow: "/", userAgent: "*" });
   });
 });

@@ -191,10 +191,7 @@ The update command verifies the new installation before writing the lock. Commit
 
 ## Documentation ownership and checks
 
-Keep provider-issued site ownership files byte-identical to the downloaded proof. The canonical
-www Baidu file in `public/baidu_verify_codeva-TdxNc4b0Uq.html` has one exact `.prettierignore`
-entry so formatting does not alter its contents. Verify its production URL returns the file
-directly with status 200; verification acceptance is a separate provider-side check.
+Keep provider-issued site ownership files byte-identical to the downloaded proof. The canonical www Baidu file in `public/baidu_verify_codeva-TdxNc4b0Uq.html` has one exact `.prettierignore` entry so formatting does not alter its contents. Verify its production URL returns the file directly with status 200; verification acceptance is a separate provider-side check.
 
 | Source | Owns |
 | --- | --- |

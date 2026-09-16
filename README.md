@@ -52,7 +52,7 @@ Next.js App Router 前后端同构，React Server Components 优先，部署到 
 常用本地校验与 vendored 资源：
 
 ```bash
-pnpm check                               # 静态、单测、构建与体积门
+pnpm check                               # 静态、单测、构建、体积与产物字体去重门
 python3 scripts/verify-vendored-seo.py   # 校验共享 SEO checker 快照的字节与来源字段
 ```
 

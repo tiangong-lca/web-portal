@@ -1,6 +1,4 @@
 import type { ReactNode } from "react";
-import "@fontsource-variable/source-sans-3";
-import "@fontsource-variable/noto-sans-sc";
 import "./section-eyebrow.css";
 
 export type SectionEyebrowProps = {

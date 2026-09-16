@@ -11,8 +11,6 @@ import type { PublicCatalogSummary } from "@/server/contracts/portal";
 import { SectionEyebrow } from "./section-eyebrow";
 import { ScrollCinematicHero } from "./scroll-cinematic-hero";
 
-import "@fontsource-variable/source-sans-3";
-import "@fontsource-variable/noto-sans-sc";
 import "./brand-home.css";
 
 export type BrandHomeProps = {

@@ -1,6 +1,3 @@
-@import "@fontsource-variable/source-sans-3";
-@import "@fontsource-variable/noto-sans-sc";
-
 .team-page {
   --team-line: color-mix(in oklch, var(--foreground) 13%, transparent);
   --team-soft: color-mix(in oklch, var(--primary-subtle) 52%, var(--background));

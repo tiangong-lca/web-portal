@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
+lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
+lastReviewedNote: "Reviewed for Portal #87: the 字体与密度 rules gain the ownership statement that makes the fix durable. Fontsource variable-font @font-face definitions are owned by src/app/globals.css alone, which every product layout and the Storybook preview already load, so component, feature and shell CSS must not import the packages again. The families, roles, sizes and density rules are unchanged."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -124,7 +124,8 @@ Toggle 的选中态具有持续的边框、浅色背景和下划线；比较选�
 - UUID、版本、数值：`IBM Plex Mono`，启用 tabular numerals；
 - 正文 14px 起，主要结果行触达高度不低于 44px；
 - 8px 布局网格，6px 基础圆角，细边框优先于阴影；
-- 字体从站点自身提供或使用可靠系统回退，不依赖运行时访问 Google Fonts。
+- 字体从站点自身提供或使用可靠系统回退，不依赖运行时访问 Google Fonts；
+- `@font-face` 定义由 `src/app/globals.css` 单独拥有：产品布局与 Storybook 预览都经它加载，`src/features/**`、`src/components/**` 与 shell CSS 不再各自 `@import` fontsource 包——否则同一批 108 个 `@font-face` 会在每个入口 CSS 中重复（见 `docs/development.md`）。
 
 ## shadcn/ui
 

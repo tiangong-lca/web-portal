@@ -17,8 +17,8 @@ checkPaths:
   - docs/design-plan.md
   - package.json
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 188c6f127c59bc768d7d6b00d2224d8f8b3f6c5e
-lastReviewedNote: "Portal #85：README 记录 vendored 共享 SEO checker 快照的校验命令与更新政策（只按私有 workspace 的导出脚本更新，不手工编辑；摘要一致≠来源证明）。产品边界、技术形态与发布流程不变。"
+lastReviewedCommit: 44c0995983eaf4e3a238cd586d4247408bf92c33
+lastReviewedNote: "Reviewed for the Portal #87 artifact-regression follow-up: pnpm check now also refuses duplicated emitted font payloads, so its chain comment names that gate. No setup step, command, environment statement or publication rule changes."
 related:
   - docs/development.md
   - docs/ui-system.md
@@ -52,7 +52,7 @@ Next.js App Router 前后端同构，React Server Components 优先，部署到 
 常用本地校验与 vendored 资源：
 
 ```bash
-pnpm check                               # 静态、单测、构建与体积门
+pnpm check                               # 静态、单测、构建、体积与产物字体去重门
 python3 scripts/verify-vendored-seo.py   # 校验共享 SEO checker 快照的字节与来源字段
 ```
 

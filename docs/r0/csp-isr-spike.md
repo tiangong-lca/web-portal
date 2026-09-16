@@ -21,8 +21,8 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
 lastReviewedAt: 2026-09-16
-lastReviewedCommit: 82994ae06b36a11e5c376c060411800f21a89f46
-lastReviewedNote: "Reviewed for Portal #85 final asset/performance delta: shared BrandConfig owns the1200x630 PNG social fallback, including locale metadata overrides. Homepage retains its existing artwork and decoded buffers but loads only the first frame before scroll; at most two neighbors warm after scroll settles, and reduced motion does not preload more frames. Four focused Storybook stories and11 production-browser checks pass, including real frame requests, PNG metadata and the shared SEO checker. CSP, ISR, public DTO and auth boundaries are unchanged; exact hosted performance and alias rollout remain pending."
+lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
+lastReviewedNote: "Reviewed for Portal #87: the strict-profile finding is unchanged. Font @font-face rules load only same-origin font files, so font-src 'self' still covers them and no inline style or script is added; the strict no-inline profile remains a future Next/EdgeOne recheck item exactly as recorded."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

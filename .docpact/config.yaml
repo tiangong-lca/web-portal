@@ -391,6 +391,8 @@ rules:
         kind: vendored-tooling-test
       - path: tests/unit/browser-private-markers.test.ts
         kind: privacy-test
+      - path: tests/unit/font-payload-dedup.test.ts
+        kind: emitted-asset-test
       - path: tests/integration/**
         kind: integration-test
       - path: tests/fixtures/**

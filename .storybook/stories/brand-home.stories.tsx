@@ -251,13 +251,20 @@ export const CinematicPrototype: Story = {
     await expect(
       [...ambientBuffers].filter((buffer) => buffer.getAttribute("data-visible") === "true"),
     ).toHaveLength(1);
-    await expect(
-      [...ambientBuffers].find((buffer) => buffer.getAttribute("data-visible") === "true"),
-    ).toHaveAttribute(
-      "src",
-      [...frameBuffers]
-        .find((buffer) => buffer.getAttribute("data-visible") === "true")
-        ?.getAttribute("src"),
+    await waitFor(
+      () => {
+        const visibleForeground = [...frameBuffers].find(
+          (buffer) => buffer.getAttribute("data-visible") === "true",
+        );
+        const visibleAmbient = [...ambientBuffers].find(
+          (buffer) => buffer.getAttribute("data-visible") === "true",
+        );
+        return expect(visibleAmbient).toHaveAttribute(
+          "src",
+          visibleForeground?.getAttribute("src"),
+        );
+      },
+      { timeout: 5000 },
     );
     await waitFor(() => expect(hero).toHaveAttribute("data-media", "ready"), { timeout: 3000 });
     window.scrollTo({ top: 0, behavior: "auto" });

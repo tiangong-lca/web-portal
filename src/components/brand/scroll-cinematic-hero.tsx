@@ -150,6 +150,7 @@ export function ScrollCinematicHero({
     const prefetchConcurrency = compactViewport || constrainedNetwork ? 1 : 2;
     const frameCache = new Map<number, HTMLImageElement>();
     const inFlightFrames = new Map<number, Promise<HTMLImageElement | null>>();
+    const activePreloads = new Set<HTMLImageElement>();
     const prefetchQueue: number[] = [];
     const queuedFrames = new Set<number>();
     let activeForeground: 0 | 1 = 0;
@@ -235,6 +236,7 @@ export function ScrollCinematicHero({
       if (existing) return existing;
 
       const preload = new Image();
+      activePreloads.add(preload);
       const pending = waitForDecodedImage(preload, frameSource(imageNumber), "low")
         .then((loaded) => {
           if (!loaded || disposed) return null;
@@ -246,6 +248,7 @@ export function ScrollCinematicHero({
       inFlightFrames.set(imageNumber, pending);
       void pending.then(() => {
         if (inFlightFrames.get(imageNumber) === pending) inFlightFrames.delete(imageNumber);
+        activePreloads.delete(preload);
       });
       return pending;
     };
@@ -415,6 +418,12 @@ export function ScrollCinematicHero({
       if (frame) window.cancelAnimationFrame(frame);
       if (settleTimer) window.clearTimeout(settleTimer);
       clearQueuedPrefetch();
+      for (const preload of activePreloads) {
+        preload.onload = null;
+        preload.onerror = null;
+        preload.removeAttribute("src");
+      }
+      activePreloads.clear();
       for (const preload of frameCache.values()) {
         preload.onload = null;
         preload.onerror = null;

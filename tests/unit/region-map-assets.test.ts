@@ -279,7 +279,7 @@ describe("region map regeneration", () => {
 
     expect(result.stderr || result.stdout).toContain("Region-map assets verified");
     expect(result.status).toBe(0);
-  });
+  }, 190_000); // The offline 29-layer build has its own 180-second child-process bound.
 });
 
 describe("Database vocabulary and map layer compatibility", () => {

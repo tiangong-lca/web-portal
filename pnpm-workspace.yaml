@@ -9,6 +9,11 @@ allowBuilds:
   # Storybook generates its worker explicitly in its own static directory.
   msw: false
 overrides:
+  # This offline pipeline supports GeoJSON only. Omit the lazily loaded
+  # GeoPackage plugin and its obsolete image reader / native SQLite stack.
+  "mapshaper>@ngageoint/geopackage": "-"
+  # GHSA-7q85-xj36-vmfc: Mapshaper still declares the older ZIP-reader range.
+  mapshaper>adm-zip: 0.6.1
   # Storybook uses Vite 8's native path resolution, so tsconfck and its optional
   # TypeScript 5 compiler peer are unused. Portal retains TypeScript 7.
   tsconfck@3.1.6>typescript: "-"

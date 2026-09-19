@@ -1,0 +1,1260 @@
+{
+  "schemaVersion": "portal.region-map-coverage.v1",
+  "note": "Full audit trail for the region-map pipeline: every dictionary code inside a mapped container, every source shape that received no node, every dropped ring and every source receipt. The browser manifest carries only counts.",
+  "layers": [
+    {
+      "layer": "world",
+      "source": "world-map-units-50m",
+      "shapes": 265,
+      "mapped": 261,
+      "projection": "robinson",
+      "simplify": "20%",
+      "sharesChinaSpace": false,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "ne50m:SOL",
+          "name": "Somaliland",
+          "reason": "no source-asserted ISO alpha-2 code present in the location dictionary"
+        },
+        {
+          "boundaryId": "ne50m:KOS",
+          "name": "Kosovo",
+          "reason": "no source-asserted ISO alpha-2 code present in the location dictionary"
+        },
+        {
+          "boundaryId": "ne50m:CYN",
+          "name": "Turkish Republic of Northern Cyprus",
+          "reason": "no source-asserted ISO alpha-2 code present in the location dictionary"
+        },
+        {
+          "boundaryId": "ne50m:KAS",
+          "name": "Siachen Glacier",
+          "reason": "no source-asserted ISO alpha-2 code present in the location dictionary"
+        }
+      ],
+      "unshapedCodes": [
+        {
+          "nodeId": "geo:bv",
+          "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
+        },
+        {
+          "nodeId": "geo:gi",
+          "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
+        },
+        {
+          "nodeId": "geo:um",
+          "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
+        }
+      ]
+    },
+    {
+      "layer": "geo:cn",
+      "source": "china-province-100000-full",
+      "shapes": 35,
+      "mapped": 31,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": false,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "cnprov:710000",
+          "name": "台湾省",
+          "adchar": null,
+          "reason": "no CN-* dictionary province code carries the exact name \"台湾省\""
+        },
+        {
+          "boundaryId": "cnprov:810000",
+          "name": "香港特别行政区",
+          "adchar": null,
+          "reason": "no CN-* dictionary province code carries the exact name \"香港特别行政区\""
+        },
+        {
+          "boundaryId": "cnprov:820000",
+          "name": "澳门特别行政区",
+          "adchar": null,
+          "reason": "no CN-* dictionary province code carries the exact name \"澳门特别行政区\""
+        },
+        {
+          "boundaryId": "cnprov:100000_JD",
+          "name": "",
+          "adchar": "JD",
+          "reason": "nine-dash line inset: not an administrative region, kept as decoration with nodeId null"
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-he",
+      "source": "datav-130000",
+      "shapes": 11,
+      "mapped": 11,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-sx",
+      "source": "datav-140000",
+      "shapes": 11,
+      "mapped": 11,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-nm",
+      "source": "datav-150000",
+      "shapes": 12,
+      "mapped": 11,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-nm-cfs",
+          "reason": "no exact boundary named \"赤峰（乌兰哈达）市\" in CN-NM"
+        }
+      ],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:150400",
+          "name": "赤峰市",
+          "reason": "no CN-NM-* dictionary code carries the exact name \"赤峰市\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-ln",
+      "source": "datav-210000",
+      "shapes": 14,
+      "mapped": 14,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-jl",
+      "source": "datav-220000",
+      "shapes": 9,
+      "mapped": 9,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-hl",
+      "source": "datav-230000",
+      "shapes": 13,
+      "mapped": 13,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-js",
+      "source": "datav-320000",
+      "shapes": 13,
+      "mapped": 13,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-zj",
+      "source": "datav-330000",
+      "shapes": 11,
+      "mapped": 11,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-ah",
+      "source": "datav-340000",
+      "shapes": 16,
+      "mapped": 16,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-ah-cah",
+          "reason": "no exact boundary named \"巢湖市\" in CN-AH"
+        }
+      ],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-fj",
+      "source": "datav-350000",
+      "shapes": 9,
+      "mapped": 9,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-jx",
+      "source": "datav-360000",
+      "shapes": 11,
+      "mapped": 11,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-sd",
+      "source": "datav-370000",
+      "shapes": 16,
+      "mapped": 16,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-sd-lws",
+          "reason": "no exact boundary named \"莱芜市\" in CN-SD"
+        }
+      ],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-ha",
+      "source": "datav-410000",
+      "shapes": 18,
+      "mapped": 17,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:419001",
+          "name": "济源市",
+          "reason": "no CN-HA-* dictionary code carries the exact name \"济源市\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-hb",
+      "source": "datav-420000",
+      "shapes": 17,
+      "mapped": 12,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-hb-xfn",
+          "reason": "no exact boundary named \"襄樊市\" in CN-HB"
+        }
+      ],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:420600",
+          "name": "襄阳市",
+          "reason": "no CN-HB-* dictionary code carries the exact name \"襄阳市\""
+        },
+        {
+          "boundaryId": "datav:429004",
+          "name": "仙桃市",
+          "reason": "no CN-HB-* dictionary code carries the exact name \"仙桃市\""
+        },
+        {
+          "boundaryId": "datav:429005",
+          "name": "潜江市",
+          "reason": "no CN-HB-* dictionary code carries the exact name \"潜江市\""
+        },
+        {
+          "boundaryId": "datav:429006",
+          "name": "天门市",
+          "reason": "no CN-HB-* dictionary code carries the exact name \"天门市\""
+        },
+        {
+          "boundaryId": "datav:429021",
+          "name": "神农架林区",
+          "reason": "no CN-HB-* dictionary code carries the exact name \"神农架林区\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-hn",
+      "source": "datav-430000",
+      "shapes": 14,
+      "mapped": 14,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-gd",
+      "source": "datav-440000",
+      "shapes": 21,
+      "mapped": 21,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-gx",
+      "source": "datav-450000",
+      "shapes": 14,
+      "mapped": 14,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-hi",
+      "source": "datav-460000",
+      "shapes": 19,
+      "mapped": 2,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:460300",
+          "name": "三沙市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"三沙市\""
+        },
+        {
+          "boundaryId": "datav:460400",
+          "name": "儋州市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"儋州市\""
+        },
+        {
+          "boundaryId": "datav:469001",
+          "name": "五指山市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"五指山市\""
+        },
+        {
+          "boundaryId": "datav:469002",
+          "name": "琼海市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"琼海市\""
+        },
+        {
+          "boundaryId": "datav:469005",
+          "name": "文昌市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"文昌市\""
+        },
+        {
+          "boundaryId": "datav:469006",
+          "name": "万宁市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"万宁市\""
+        },
+        {
+          "boundaryId": "datav:469007",
+          "name": "东方市",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"东方市\""
+        },
+        {
+          "boundaryId": "datav:469021",
+          "name": "定安县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"定安县\""
+        },
+        {
+          "boundaryId": "datav:469022",
+          "name": "屯昌县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"屯昌县\""
+        },
+        {
+          "boundaryId": "datav:469023",
+          "name": "澄迈县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"澄迈县\""
+        },
+        {
+          "boundaryId": "datav:469024",
+          "name": "临高县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"临高县\""
+        },
+        {
+          "boundaryId": "datav:469025",
+          "name": "白沙黎族自治县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"白沙黎族自治县\""
+        },
+        {
+          "boundaryId": "datav:469026",
+          "name": "昌江黎族自治县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"昌江黎族自治县\""
+        },
+        {
+          "boundaryId": "datav:469027",
+          "name": "乐东黎族自治县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"乐东黎族自治县\""
+        },
+        {
+          "boundaryId": "datav:469028",
+          "name": "陵水黎族自治县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"陵水黎族自治县\""
+        },
+        {
+          "boundaryId": "datav:469029",
+          "name": "保亭黎族苗族自治县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"保亭黎族苗族自治县\""
+        },
+        {
+          "boundaryId": "datav:469030",
+          "name": "琼中黎族苗族自治县",
+          "reason": "no CN-HI-* dictionary code carries the exact name \"琼中黎族苗族自治县\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-sc",
+      "source": "datav-510000",
+      "shapes": 21,
+      "mapped": 21,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-gz",
+      "source": "datav-520000",
+      "shapes": 9,
+      "mapped": 7,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-gz-bjd",
+          "reason": "no exact boundary named \"毕节地区\" in CN-GZ"
+        },
+        {
+          "nodeId": "geo:cn-gz-trd",
+          "reason": "no exact boundary named \"铜仁地区\" in CN-GZ"
+        }
+      ],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:520500",
+          "name": "毕节市",
+          "reason": "no CN-GZ-* dictionary code carries the exact name \"毕节市\""
+        },
+        {
+          "boundaryId": "datav:520600",
+          "name": "铜仁市",
+          "reason": "no CN-GZ-* dictionary code carries the exact name \"铜仁市\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-yn",
+      "source": "datav-530000",
+      "shapes": 16,
+      "mapped": 16,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-xz",
+      "source": "datav-540000",
+      "shapes": 7,
+      "mapped": 2,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-xz-nad",
+          "reason": "no exact boundary named \"那曲地区\" in CN-XZ"
+        },
+        {
+          "nodeId": "geo:cn-xz-nyd",
+          "reason": "no exact boundary named \"林芝地区\" in CN-XZ"
+        },
+        {
+          "nodeId": "geo:cn-xz-qad",
+          "reason": "no exact boundary named \"昌都地区\" in CN-XZ"
+        },
+        {
+          "nodeId": "geo:cn-xz-snd",
+          "reason": "no exact boundary named \"山南地区\" in CN-XZ"
+        },
+        {
+          "nodeId": "geo:cn-xz-xid",
+          "reason": "no exact boundary named \"日喀则地区\" in CN-XZ"
+        }
+      ],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:540200",
+          "name": "日喀则市",
+          "reason": "no CN-XZ-* dictionary code carries the exact name \"日喀则市\""
+        },
+        {
+          "boundaryId": "datav:540300",
+          "name": "昌都市",
+          "reason": "no CN-XZ-* dictionary code carries the exact name \"昌都市\""
+        },
+        {
+          "boundaryId": "datav:540400",
+          "name": "林芝市",
+          "reason": "no CN-XZ-* dictionary code carries the exact name \"林芝市\""
+        },
+        {
+          "boundaryId": "datav:540500",
+          "name": "山南市",
+          "reason": "no CN-XZ-* dictionary code carries the exact name \"山南市\""
+        },
+        {
+          "boundaryId": "datav:540600",
+          "name": "那曲市",
+          "reason": "no CN-XZ-* dictionary code carries the exact name \"那曲市\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-sn",
+      "source": "datav-610000",
+      "shapes": 10,
+      "mapped": 10,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-gs",
+      "source": "datav-620000",
+      "shapes": 14,
+      "mapped": 14,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-qh",
+      "source": "datav-630000",
+      "shapes": 8,
+      "mapped": 7,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-qh-hdd",
+          "reason": "no exact boundary named \"海东地区\" in CN-QH"
+        }
+      ],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:630200",
+          "name": "海东市",
+          "reason": "no CN-QH-* dictionary code carries the exact name \"海东市\""
+        }
+      ],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-nx",
+      "source": "datav-640000",
+      "shapes": 5,
+      "mapped": 5,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [],
+      "unresolvedShapes": [],
+      "unshapedCodes": []
+    },
+    {
+      "layer": "geo:cn-xj",
+      "source": "datav-650000",
+      "shapes": 24,
+      "mapped": 10,
+      "projection": "webmercator",
+      "simplify": "50%",
+      "sharesChinaSpace": true,
+      "unresolvedCodes": [
+        {
+          "nodeId": "geo:cn-xj-hmd",
+          "reason": "no exact boundary named \"哈密（库木勒）地区\" in CN-XJ"
+        },
+        {
+          "nodeId": "geo:cn-xj-ksi",
+          "reason": "no exact boundary named \"喀什（喀什噶尔）地区\" in CN-XJ"
+        },
+        {
+          "nodeId": "geo:cn-xj-tcd",
+          "reason": "no exact boundary named \"塔城（绰乔克）地区\" in CN-XJ"
+        },
+        {
+          "nodeId": "geo:cn-xj-tud",
+          "reason": "no exact boundary named \"吐鲁番地区\" in CN-XJ"
+        }
+      ],
+      "unresolvedShapes": [
+        {
+          "boundaryId": "datav:650400",
+          "name": "吐鲁番市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"吐鲁番市\""
+        },
+        {
+          "boundaryId": "datav:650500",
+          "name": "哈密市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"哈密市\""
+        },
+        {
+          "boundaryId": "datav:653100",
+          "name": "喀什地区",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"喀什地区\""
+        },
+        {
+          "boundaryId": "datav:654200",
+          "name": "塔城地区",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"塔城地区\""
+        },
+        {
+          "boundaryId": "datav:659001",
+          "name": "石河子市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"石河子市\""
+        },
+        {
+          "boundaryId": "datav:659002",
+          "name": "阿拉尔市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"阿拉尔市\""
+        },
+        {
+          "boundaryId": "datav:659003",
+          "name": "图木舒克市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"图木舒克市\""
+        },
+        {
+          "boundaryId": "datav:659004",
+          "name": "五家渠市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"五家渠市\""
+        },
+        {
+          "boundaryId": "datav:659005",
+          "name": "北屯市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"北屯市\""
+        },
+        {
+          "boundaryId": "datav:659006",
+          "name": "铁门关市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"铁门关市\""
+        },
+        {
+          "boundaryId": "datav:659007",
+          "name": "双河市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"双河市\""
+        },
+        {
+          "boundaryId": "datav:659008",
+          "name": "可克达拉市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"可克达拉市\""
+        },
+        {
+          "boundaryId": "datav:659009",
+          "name": "昆玉市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"昆玉市\""
+        },
+        {
+          "boundaryId": "datav:659010",
+          "name": "胡杨河市",
+          "reason": "no CN-XJ-* dictionary code carries the exact name \"胡杨河市\""
+        }
+      ],
+      "unshapedCodes": []
+    }
+  ],
+  "droppedRings": [
+    {
+      "layer": "geo:cn",
+      "boundaryId": "cnprov:430000",
+      "rings": 1
+    },
+    {
+      "layer": "geo:cn-hn",
+      "boundaryId": "datav:431200",
+      "rings": 1
+    }
+  ],
+  "unmapped": [
+    {
+      "layer": "world",
+      "nodeId": "geo:bv",
+      "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
+    },
+    {
+      "layer": "geo:cn-ah",
+      "nodeId": "geo:cn-ah-cah",
+      "reason": "no exact boundary named \"巢湖市\" in CN-AH"
+    },
+    {
+      "layer": "geo:cn-gz",
+      "nodeId": "geo:cn-gz-bjd",
+      "reason": "no exact boundary named \"毕节地区\" in CN-GZ"
+    },
+    {
+      "layer": "geo:cn-gz",
+      "nodeId": "geo:cn-gz-trd",
+      "reason": "no exact boundary named \"铜仁地区\" in CN-GZ"
+    },
+    {
+      "layer": "geo:cn-hb",
+      "nodeId": "geo:cn-hb-xfn",
+      "reason": "no exact boundary named \"襄樊市\" in CN-HB"
+    },
+    {
+      "layer": "geo:cn-nm",
+      "nodeId": "geo:cn-nm-cfs",
+      "reason": "no exact boundary named \"赤峰（乌兰哈达）市\" in CN-NM"
+    },
+    {
+      "layer": "geo:cn-qh",
+      "nodeId": "geo:cn-qh-hdd",
+      "reason": "no exact boundary named \"海东地区\" in CN-QH"
+    },
+    {
+      "layer": "geo:cn-sd",
+      "nodeId": "geo:cn-sd-lws",
+      "reason": "no exact boundary named \"莱芜市\" in CN-SD"
+    },
+    {
+      "layer": "geo:cn-xj",
+      "nodeId": "geo:cn-xj-hmd",
+      "reason": "no exact boundary named \"哈密（库木勒）地区\" in CN-XJ"
+    },
+    {
+      "layer": "geo:cn-xj",
+      "nodeId": "geo:cn-xj-ksi",
+      "reason": "no exact boundary named \"喀什（喀什噶尔）地区\" in CN-XJ"
+    },
+    {
+      "layer": "geo:cn-xj",
+      "nodeId": "geo:cn-xj-tcd",
+      "reason": "no exact boundary named \"塔城（绰乔克）地区\" in CN-XJ"
+    },
+    {
+      "layer": "geo:cn-xj",
+      "nodeId": "geo:cn-xj-tud",
+      "reason": "no exact boundary named \"吐鲁番地区\" in CN-XJ"
+    },
+    {
+      "layer": "geo:cn-xz",
+      "nodeId": "geo:cn-xz-nad",
+      "reason": "no exact boundary named \"那曲地区\" in CN-XZ"
+    },
+    {
+      "layer": "geo:cn-xz",
+      "nodeId": "geo:cn-xz-nyd",
+      "reason": "no exact boundary named \"林芝地区\" in CN-XZ"
+    },
+    {
+      "layer": "geo:cn-xz",
+      "nodeId": "geo:cn-xz-qad",
+      "reason": "no exact boundary named \"昌都地区\" in CN-XZ"
+    },
+    {
+      "layer": "geo:cn-xz",
+      "nodeId": "geo:cn-xz-snd",
+      "reason": "no exact boundary named \"山南地区\" in CN-XZ"
+    },
+    {
+      "layer": "geo:cn-xz",
+      "nodeId": "geo:cn-xz-xid",
+      "reason": "no exact boundary named \"日喀则地区\" in CN-XZ"
+    },
+    {
+      "layer": "world",
+      "nodeId": "geo:gi",
+      "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
+    },
+    {
+      "layer": "world",
+      "nodeId": "geo:um",
+      "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
+    }
+  ],
+  "sources": [
+    {
+      "id": "china-province-100000-full",
+      "kind": "platform-geojson",
+      "url": "https://raw.githubusercontent.com/tiangong-lca/platform/6c5d02f5cad6a864e290d16b3ce6d3a62c91247b/public/maps/china-province-100000-full.geojson",
+      "sourceCommit": "6c5d02f5cad6a864e290d16b3ce6d3a62c91247b",
+      "sourceCommitDate": "2026-05-20",
+      "upstream": "Aliyun DataV.GeoAtlas province-level boundaries for 100000, vendored by tiangong-lca/platform",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"province\" / acroutes fields; the trailing feature carries adchar=\"JD\" (nine-dash line).",
+      "license": "platformVendored",
+      "features": 35,
+      "rawBytes": 582522,
+      "gzipBytes": 197008,
+      "sha256": "99adfeded5223848bbe37a0a12f8023e11ee12161c7800521c27db42fdeac275"
+    },
+    {
+      "id": "datav-130000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/130000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 130000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 11,
+      "rawBytes": 73454,
+      "gzipBytes": 23996,
+      "sha256": "c7e8f6d81bf815b309e081b17325f73134bfa6929332e1c135398e82216f70f7"
+    },
+    {
+      "id": "datav-140000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/140000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 140000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 11,
+      "rawBytes": 60906,
+      "gzipBytes": 18180,
+      "sha256": "5da8144cc2d3a6ab6be40a63fd2ed099a33f1deae8e727214542e73f410ff607"
+    },
+    {
+      "id": "datav-150000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/150000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 150000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 12,
+      "rawBytes": 79281,
+      "gzipBytes": 27183,
+      "sha256": "9a4a3b95d903b064c8e815b78d4f80f391b4bdafd3b52dabd854755457385660"
+    },
+    {
+      "id": "datav-210000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/210000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 210000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 14,
+      "rawBytes": 161469,
+      "gzipBytes": 52767,
+      "sha256": "679ec739045413f4de0898a9d6a7957f6ffc551809f3f52c786a30d6242b02c5"
+    },
+    {
+      "id": "datav-220000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/220000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 220000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 9,
+      "rawBytes": 147299,
+      "gzipBytes": 48504,
+      "sha256": "828be8771e676322a81f560611821230d66e1e1dca87308efd7865b27423e605"
+    },
+    {
+      "id": "datav-230000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/230000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 230000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 13,
+      "rawBytes": 146797,
+      "gzipBytes": 50607,
+      "sha256": "f8d3bdbee4068811237efd23fe349a4c6e3bc99334079f9746f19e7df5ea4854"
+    },
+    {
+      "id": "datav-320000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/320000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 320000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 13,
+      "rawBytes": 97545,
+      "gzipBytes": 30125,
+      "sha256": "6af17f07a3c83bad7d4d552efdd7f59ba8f7574363d1a686f59bc1d0f91733e7"
+    },
+    {
+      "id": "datav-330000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/330000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 330000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 11,
+      "rawBytes": 120401,
+      "gzipBytes": 40333,
+      "sha256": "f87241d47687264861aa619b8dc37ffeb61a2be5d6018a8c01ec0ce0acb5cb38"
+    },
+    {
+      "id": "datav-340000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/340000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 340000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 16,
+      "rawBytes": 127323,
+      "gzipBytes": 40742,
+      "sha256": "7ca3290e0458f34086df4d61fa9804e2c624d55dfe5f8f6a841844b5dcd43207"
+    },
+    {
+      "id": "datav-350000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/350000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 350000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 9,
+      "rawBytes": 114243,
+      "gzipBytes": 36535,
+      "sha256": "0c749acd0048a5042a5ee701ddd5a87c17ff91afb9b728d23b7253799135b58f"
+    },
+    {
+      "id": "datav-360000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/360000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 360000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 11,
+      "rawBytes": 121694,
+      "gzipBytes": 40343,
+      "sha256": "ee9696faaca6e644fb0f1aebfc0bd800beb938dd2eb1737fcb8b244072405d9e"
+    },
+    {
+      "id": "datav-370000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/370000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 370000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 16,
+      "rawBytes": 167872,
+      "gzipBytes": 55532,
+      "sha256": "04d600e257db17869aa7fabcfcd6a87a7236791a7f02dd891636f5f58da0133f"
+    },
+    {
+      "id": "datav-410000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/410000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 410000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 18,
+      "rawBytes": 153774,
+      "gzipBytes": 48640,
+      "sha256": "34119256db754324763c8484122d71524818c9cec974207bd27a9aafe2d8ad63"
+    },
+    {
+      "id": "datav-420000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/420000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 420000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 17,
+      "rawBytes": 155792,
+      "gzipBytes": 51104,
+      "sha256": "0acb559fcfe2ab2c5d2707c2477e60facdf4328ad89b8ab7d9126c5166675502"
+    },
+    {
+      "id": "datav-430000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/430000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 430000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 14,
+      "rawBytes": 175676,
+      "gzipBytes": 56160,
+      "sha256": "091cb4e77e2bc73fb37c8a9b3b174db9b2008db5f544a7156f5a8ad34e77dd66"
+    },
+    {
+      "id": "datav-440000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/440000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 440000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 21,
+      "rawBytes": 192961,
+      "gzipBytes": 63999,
+      "sha256": "209ad617a296b154c4fd0828180b2a9ab2b270044990ab34e72a344ce913c8c7"
+    },
+    {
+      "id": "datav-450000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/450000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 450000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 14,
+      "rawBytes": 167980,
+      "gzipBytes": 55105,
+      "sha256": "5bdcaa8808d78065be4a496718b449c5b97d1ef27900bbfcd2407f69c5f6c041"
+    },
+    {
+      "id": "datav-460000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/460000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 460000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 19,
+      "rawBytes": 34123,
+      "gzipBytes": 9839,
+      "sha256": "ae44b392cf32ff7f7df5466ca16fa7f1b70b9fb9c36f00f54d6f142d011c65e4"
+    },
+    {
+      "id": "datav-510000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/510000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 510000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 21,
+      "rawBytes": 164814,
+      "gzipBytes": 51709,
+      "sha256": "e8e3a3820d97ca3453c18c6335703f4e4f93df95ba394a1259eebab59e7072b1"
+    },
+    {
+      "id": "datav-520000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/520000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 520000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 9,
+      "rawBytes": 130185,
+      "gzipBytes": 43189,
+      "sha256": "3336ddee76a8d33a5841f928c764ec4e4bb33988ec59d08efc75000251af1cf6"
+    },
+    {
+      "id": "datav-530000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/530000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 530000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 16,
+      "rawBytes": 122596,
+      "gzipBytes": 40565,
+      "sha256": "c11c7adf7581fc53e965bf0fd2b3217213f118c59ebddf4cab929c51ee00aa6e"
+    },
+    {
+      "id": "datav-540000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/540000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 540000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 7,
+      "rawBytes": 134516,
+      "gzipBytes": 48748,
+      "sha256": "ba95ab3f6b9183942c183d66d1258ac710dcdf9cb49c51f79915532379747c81"
+    },
+    {
+      "id": "datav-610000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/610000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 610000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 10,
+      "rawBytes": 71735,
+      "gzipBytes": 21872,
+      "sha256": "969ca94cc865bf3a37c22e30d7c0125196fd22175f7c212953185f7c67921682"
+    },
+    {
+      "id": "datav-620000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/620000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 620000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 14,
+      "rawBytes": 105622,
+      "gzipBytes": 34246,
+      "sha256": "5252d2ce49a7b6f721d5ca9404a2960b428fab09b6f62256fe62db0218d1123e"
+    },
+    {
+      "id": "datav-630000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/630000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 630000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 8,
+      "rawBytes": 97941,
+      "gzipBytes": 31644,
+      "sha256": "42caf689c3c37630aa725bac2351153bac00fb626a01fbe5f141c3a279706936"
+    },
+    {
+      "id": "datav-640000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/640000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 640000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 5,
+      "rawBytes": 49533,
+      "gzipBytes": 15230,
+      "sha256": "99e03114c3f7dff3fad5b87a88ddf2fb08687d117c62bf999236191ca29d78f9"
+    },
+    {
+      "id": "datav-650000",
+      "kind": "datav-geojson",
+      "url": "https://geo.datav.aliyun.com/areas_v3/bound/650000_full.json",
+      "sourceCommit": null,
+      "sourceCommitDate": null,
+      "upstream": "Aliyun DataV.GeoAtlas prefecture boundaries for 650000",
+      "upstreamEvidence": "Per-feature adcode / name / level=\"city\" / parent.adcode fields.",
+      "license": "datavGeoAtlas",
+      "features": 24,
+      "rawBytes": 119226,
+      "gzipBytes": 38311,
+      "sha256": "587b5069eddcad4b5a2f784380351f756f0ba955211721091b85a6528ae74745"
+    },
+    {
+      "id": "world-map-units-50m",
+      "kind": "platform-geojson",
+      "url": "https://raw.githubusercontent.com/tiangong-lca/platform/297f09843d0974efea6cfa9fba69a998b9f4159d/public/maps/world-map-units-50m.geojson",
+      "sourceCommit": "297f09843d0974efea6cfa9fba69a998b9f4159d",
+      "sourceCommitDate": "2026-06-08",
+      "upstream": "Natural Earth Admin-0 map units (1:50m)",
+      "upstreamEvidence": "featurecla=\"Admin-0 map unit\" plus scalerank / NE_ID / WIKIDATAID / NAME_<lang> fields; upstream release number is not asserted because the file carries no version field.",
+      "license": "naturalEarth",
+      "features": 265,
+      "rawBytes": 3179420,
+      "gzipBytes": 1038309,
+      "sha256": "b8d421aca6e9e08e8cdf09cc26af111cc3e0deba4fe915611d58ade71e8a4db0"
+    }
+  ],
+  "licenses": {
+    "datavGeoAtlas": {
+      "id": "aliyun-datav-geoatlas",
+      "name": "Aliyun DataV.GeoAtlas administrative boundaries",
+      "termsUrl": "https://help.aliyun.com/zh/datav/datav-7-0/user-guide/datav-geoatlas-widgets/",
+      "terms": "Provider-published administrative boundary service. The provider states no separate data licence on the tool page; boundaries are used here as an unrelicensed upstream reference and this entry is flagged for review in the handoff report."
+    },
+    "naturalEarth": {
+      "id": "natural-earth-public-domain",
+      "name": "Natural Earth",
+      "termsUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "terms": "Public domain. Natural Earth states that no permission is needed to use the data."
+    },
+    "platformVendored": {
+      "id": "tiangong-lca-platform-vendored",
+      "name": "tiangong-lca/platform public/maps snapshot",
+      "termsUrl": "https://github.com/tiangong-lca/platform",
+      "terms": "Repository-internal snapshot. The Portal records the exact commit and byte hash and re-derives nothing from a sibling checkout path at runtime."
+    }
+  }
+}

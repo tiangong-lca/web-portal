@@ -6,6 +6,7 @@ import { isPortalLocale } from "@/i18n/routing";
 import { localizedMetadata } from "@/lib/seo";
 import type { PublicCatalogSummary } from "@/server/contracts/portal";
 import { getPublicCatalogSummary } from "@/server/data/catalog";
+import { getPublicNavigation } from "@/server/data/navigation";
 import { PortalDataError } from "@/server/data/supabase-rpc";
 
 export const revalidate = 300;
@@ -31,6 +32,18 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!isPortalLocale(locale)) notFound();
   setRequestLocale(locale);
-  const summary = await readCatalogSummary();
-  return <BrandHome locale={locale} summary={summary} />;
+  const [summary, navigation] = await Promise.all([
+    readCatalogSummary(),
+    getPublicNavigation({
+      kind: "all",
+      query: "",
+      filters: {},
+      dimension: "classification",
+      limit: 1,
+    }).catch((error: unknown) => {
+      if (error instanceof PortalDataError) return null;
+      throw error;
+    }),
+  ]);
+  return <BrandHome locale={locale} summary={summary} counts={navigation?.totals ?? null} />;
 }

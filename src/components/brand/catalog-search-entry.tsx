@@ -16,14 +16,17 @@ export async function CatalogSearchEntry({
   locale,
   number,
   kind = "process",
+  counts,
 }: {
   locale: PortalLocale;
   number?: string;
   kind?: "process" | "flow";
+  counts?: { process: number; flow: number } | null;
 }) {
   const t = await getTranslations({ locale, namespace: "BrandHome" });
   const common = await getTranslations({ locale, namespace: "Common" });
   const catalog = await getTranslations({ locale, namespace: "Home" });
+  const navigation = await getTranslations({ locale, namespace: "Navigation" });
   const Heading = number ? "h2" : "h1";
   const dimensions = [
     ["process", "browseProcess", "browseProcessDescription", Database],
@@ -71,12 +74,20 @@ export async function CatalogSearchEntry({
           <Link
             href={`${localePath(locale, "search")}?v=1&explore=${dimension}`}
             scroll={false}
+            prefetch={false}
             key={dimension}
             className="brand-catalog-link"
           >
             <Icon aria-hidden="true" />
             <span>
               <strong>{catalog(label)}</strong>
+              {(dimension === "process" || dimension === "flow") && (
+                <span>
+                  {counts
+                    ? navigation("versions", { count: counts[dimension] })
+                    : navigation("countUnavailable")}
+                </span>
+              )}
               <span>{catalog(description)}</span>
             </span>
             {number ? <ArrowUpRight aria-hidden="true" /> : <ChevronDown aria-hidden="true" />}

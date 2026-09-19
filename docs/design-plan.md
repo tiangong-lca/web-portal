@@ -989,7 +989,7 @@ Cache key 必须包含 locale、kind、id、version、public capability、public
 
 安装版本与包管理器以 [package.json](../package.json)、[pnpm-lock.yaml](../pnpm-lock.yaml) 和 [.node-version](../.node-version) 为准；[开发指南](development.md#setup-and-repository-roots)说明工具链验证。新增或升级依赖前，通过官方资料确认最新稳定且兼容的版本，依赖使用 exact pin。构建 Node 与托管 SSR 的兼容要求分别由工具链配置和[部署要求](#17-edgeone-makers-部署)约束。
 
-MVP 不引入重量级状态管理、客户端查询缓存、Chart 或 Map 依赖。Server Components、URL、React state 与 localStorage 已覆盖主要需求；LCIA 图形先用可访问的轻量 SVG/CSS，地图依赖留到扩展阶段。
+MVP 不引入重量级状态管理、客户端查询缓存、Chart 或 Map 依赖。Server Components、URL、React state 与 localStorage 已覆盖主要需求；LCIA 图形采用可访问的轻量 SVG/CSS，扩展地区浏览使用离线生成的 SVG 路径，不引入浏览器地图库。
 
 ### 15.2 Next 配置
 
@@ -1460,7 +1460,17 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 | Metadata only        | 元数据公开，但数值能力未授权或不存在                             |
 | Search assistance    | 仅用于帮助召回记录的查询解释；不是数据集事实                     |
 
-## 25. 官方参考
+## 25. 层级目录与地区地图
+
+分类导航和地图使用 Database `portal_navigation_v1` 的单层公开版本聚合，查询、父节点、筛选和分页均在服务端校验。Search/Facets V3 独立接纳分类/地区节点及 direct/subtree 范围，V2 与 Hybrid 的既有输入合同保留。首页原有 summary 仍统计去重数据集；新入口计数显示匹配的公开版本，二者不得互换。节点身份带词表路径，分类与地区父子关系来自绑定精确源版本的静态词表；生成的 Database 合同快照不得手改。
+
+导航响应最多 64 KiB；每次请求一个有界层并保留续页，不再把现有 facet 的前 100 项当成完整目录。公开 navigation/search/facets 数据缓存 30 秒，动态搜索页面不缓存；相同导航请求额外通过 React request cache 去重。所有导航链接关闭自动预取。
+
+地图原始数据、映射规则与生成器位于 `scripts/maps/`，仅散列命名的派生层在 `public/maps/` 对外提供。每层最多 150 KiB gzip，地图交互新增 JavaScript 最多 30 KiB gzip，并继续满足首页 120 KiB、搜索 250 KiB 上限。`pnpm check:maps` 离线重建并核对源摘要、所有层和 manifest；构建工具 mapshaper 仅作为精确锁定的开发依赖，生产浏览器不加载它。
+
+地区列表始终提供等价原生链接。地图只承载有明确行政边界映射的节点；跨区、历史范围、未知和歧义编码保持可浏览且保留原码，不根据相似名称强配边界，不分摊国家级数据到省市。名称、层级、边界的收据分别维护，来源语言回退必须显式标注。
+
+## 26. 官方参考
 
 - [Next.js App Router 与 ISR](https://nextjs.org/docs/app/building-your-application/data-fetching/incremental-static-regeneration)
 - [Tailwind CSS v4 Next.js 安装](https://tailwindcss.com/docs/installation/framework-guides/nextjs)

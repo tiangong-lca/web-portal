@@ -12,17 +12,20 @@ export function CatalogFacetResults({
   locale,
   input,
   emptyLabel,
+  moreLabel,
 }: {
   dimension: string;
   facets: Awaited<ReturnType<typeof getPublicFacets>> | null;
   locale: PortalLocale;
   input: PortalSearchUrlInput;
   emptyLabel: string;
+  moreLabel?: string;
 }) {
   const ids = dimension === "region" ? ["region", "geography"] : ["source", "database"];
   const group = facets?.groups.find((g) => ids.some((id) => g.id.toLowerCase().includes(id)));
   return (
     <div className="catalog-explore-facets">
+      {group?.hasMore && moreLabel && <output>{moreLabel}</output>}
       {group?.values.length ? (
         group.values.map((value) => (
           <Link key={value.value} href={facetHref(locale, input, group.id, value.value)!}>

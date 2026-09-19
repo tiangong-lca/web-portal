@@ -29,11 +29,6 @@ function isDimension(value: string): value is Dimension {
   return dimensions.some((dimension) => dimension === value);
 }
 
-function safeCursor(value: string | string[] | undefined): string | null {
-  const candidate = Array.isArray(value) ? value[0] : value;
-  return candidate && /^[A-Za-z0-9_-]{1,4096}$/.test(candidate) ? candidate : null;
-}
-
 export function generateStaticParams() {
   return dimensions.map((dimension) => ({ dimension }));
 }
@@ -43,7 +38,7 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ dimension: string; locale: string }>;
-  searchParams: Promise<{ cursor?: string | string[] }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<Metadata> {
   const { dimension, locale } = await params;
   if (!isPortalLocale(locale) || !isDimension(dimension)) return {};
@@ -52,7 +47,7 @@ export async function generateMetadata({
     description: t(
       dimension === "process" || dimension === "flow" ? "catalogDescription" : "description",
     ),
-    index: !safeCursor((await searchParams).cursor),
+    index: Object.keys(await searchParams).length === 0,
     locale,
     path: `browse/${dimension}`,
     title: t(`${dimension}Title`),
@@ -64,17 +59,21 @@ export default async function BrowsePage({
   searchParams,
 }: {
   params: Promise<{ dimension: string; locale: string }>;
-  searchParams: Promise<{ cursor?: string | string[] }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { dimension, locale } = await params;
   if (!isPortalLocale(locale) || !isDimension(dimension)) notFound();
   setRequestLocale(locale);
-  if (["process", "flow"].includes(dimension)) {
+  if (["process", "flow", "region"].includes(dimension)) {
     return (
       <SearchPage
         params={Promise.resolve({ locale })}
-        browseKind={dimension as "process" | "flow"}
-        searchParams={Promise.resolve({ ...(await searchParams), v: "1", kind: dimension })}
+        browseKind={dimension === "flow" ? "flow" : "process"}
+        searchParams={Promise.resolve({
+          ...(await searchParams),
+          v: "1",
+          ...(dimension === "region" ? { explore: "region" } : { kind: dimension }),
+        })}
       />
     );
   }

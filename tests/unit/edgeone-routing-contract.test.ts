@@ -22,6 +22,10 @@ describe("EdgeOne native routing contract", () => {
     ]);
     expect(configuration.headers).toEqual([
       {
+        source: "/maps/*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
         source: "/r0-compat",
         headers: [{ key: "X-Portal-Routing", value: "edgeone-native-v1" }],
       },

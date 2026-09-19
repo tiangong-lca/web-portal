@@ -8,7 +8,9 @@ export function CatalogKindSwitch({
   labels,
   hrefs,
   onChange,
+  counts,
 }: {
+  counts?: { process: string; flow: string };
   value: string;
   label: string;
   labels: { process: string; flow: string; region?: string; source?: string };
@@ -22,8 +24,13 @@ export function CatalogKindSwitch({
         .map((kind) =>
           hrefs ? (
             <Button asChild key={kind} variant="ghost">
-              <Link href={hrefs[kind]!} aria-current={value === kind ? "page" : undefined}>
+              <Link
+                prefetch={false}
+                href={hrefs[kind]!}
+                aria-current={value === kind ? "page" : undefined}
+              >
                 {labels[kind]}
+                {counts && (kind === "process" || kind === "flow") ? ` (${counts[kind]})` : ""}
               </Link>
             </Button>
           ) : (

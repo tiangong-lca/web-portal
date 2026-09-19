@@ -18,6 +18,14 @@ const allowedLicenses = new Set([
 ]);
 
 const packageScopedLicenses = new Map([
+  // Reviewed license texts of the pinned, build-only Mapshaper dependency graph.
+  ["(MIT OR WTFPL)", [/^expand-template$/]],
+  ["(MIT OR Apache-2.0)", [/^JSONStream$/]],
+  ["(MIT AND Zlib)", [/^pako$/]],
+  ["(MIT OR Apache2)", [/^pause-stream$/]],
+  ["(BSD-2-Clause OR MIT OR Apache-2.0)", [/^rc$/]],
+  ["Unlicense", [/^robust-predicates$/]],
+  ["MIT AND BSD-3-Clause", [/^zstddec$/]],
   ["LGPL-3.0-or-later", [/^@img\/sharp-libvips-/]],
   // Unmodified reference fonts; their notices ship in Storybook's static directory.
   ["OFL-1.1", [/^@fontsource-variable\/(?:source-sans-3|noto-sans-sc)$/]],

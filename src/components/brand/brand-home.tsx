@@ -16,6 +16,7 @@ import "./brand-home.css";
 export type BrandHomeProps = {
   locale: PortalLocale;
   summary: PublicCatalogSummary | null;
+  counts?: { process: number; flow: number } | null;
   /** Optional isolated-review replacement for the production first-screen hero. */
   hero?: ReactNode;
 };
@@ -24,7 +25,7 @@ export type BrandHomeProps = {
  * The public brand entrance, with server-rendered search, catalog and product navigation.
  * @import import { BrandHome } from "@/components/brand/brand-home";
  */
-export async function BrandHome({ locale, summary, hero }: BrandHomeProps) {
+export async function BrandHome({ locale, summary, hero, counts }: BrandHomeProps) {
   const [t, catalog] = await Promise.all([
     getTranslations({ locale, namespace: "BrandHome" }),
     getTranslations({ locale, namespace: "Home" }),
@@ -62,7 +63,7 @@ export async function BrandHome({ locale, summary, hero }: BrandHomeProps) {
         aria-labelledby="explore-title"
       >
         <div className="brand-container">
-          {await CatalogSearchEntry({ locale, number: "02" })}
+          {await CatalogSearchEntry({ locale, number: "02", counts })}
 
           <div className="brand-catalog-summary" aria-label={catalog("scaleTitle")}>
             <div>

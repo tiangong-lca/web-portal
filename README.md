@@ -16,8 +16,8 @@ checkPaths:
   - AGENTS.md
   - docs/design-plan.md
   - package.json
-lastReviewedAt: 2026-09-16
-lastReviewedCommit: 44c0995983eaf4e3a238cd586d4247408bf92c33
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 8d438a861a063f46d46d524abcef737d15dc7ea7
 lastReviewedNote: "Reviewed for the Portal #87 artifact-regression follow-up: pnpm check now also refuses duplicated emitted font payloads, so its chain comment names that gate. No setup step, command, environment statement or publication rule changes."
 related:
   - docs/development.md

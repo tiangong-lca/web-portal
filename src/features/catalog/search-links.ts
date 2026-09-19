@@ -1,4 +1,4 @@
-import type { PortalSearchUrlInput } from "@/server/contracts/input";
+import type { BrowseSearchInput as PortalSearchUrlInput } from "@/server/contracts/navigation";
 import { localePath, type PortalLocale } from "@/i18n/routing";
 
 const pageTrailParameter = "pageTrail";
@@ -62,6 +62,10 @@ export function searchParameters(
     access: input.filters.accessLevel,
     geo: input.filters.geography,
     classification: input.filters.classification,
+    classNode: input.filters.classificationNodeId,
+    classScope: input.filters.classificationScope,
+    geoNode: input.filters.geographyNodeId,
+    geoScope: input.filters.geographyScope,
     yearFrom: input.filters.referenceYearFrom,
     yearTo: input.filters.referenceYearTo,
     subtype: input.filters.processSubtype,
@@ -114,12 +118,20 @@ export function facetHref(
   if (group === "kind" || group === "objecttype") {
     if (value !== "process" && value !== "flow") return null;
     p.set("kind", value);
+    if (value !== input.kind) {
+      p.delete("classNode");
+      p.delete("classScope");
+      p.delete("classification");
+    }
     if (value === "flow") p.delete("subtype");
   } else if (group.includes("access")) {
     if (value !== "open" && value !== "metadata_only") return null;
     p.set("access", value);
-  } else if (group.includes("geography") || group.includes("region")) p.set("geo", value);
-  else if (group.includes("year")) {
+  } else if (group.includes("geography") || group.includes("region")) {
+    p.set("geo", value);
+    p.delete("geoNode");
+    p.delete("geoScope");
+  } else if (group.includes("year")) {
     if (!/^\d{1,4}$/u.test(value)) return null;
     p.set("yearFrom", value);
     p.set("yearTo", value);

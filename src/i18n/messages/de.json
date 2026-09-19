@@ -641,6 +641,8 @@
     "classApplied": "Kategorie",
     "noMap": "Für diesen Bereich gibt es keine Verwaltungskarte. Nutzen Sie die Liste.",
     "skipMap": "Karte überspringen und Regionenliste nutzen",
-    "partialRegions": "Diese Ersatzliste ist unvollständig. Grenzen Sie die Filter ein, um weitere Regionen zu finden."
+    "partialRegions": "Diese Ersatzliste ist unvollständig. Grenzen Sie die Filter ein, um weitere Regionen zu finden.",
+    "ambiguousRegion": "Dieser Quellcode umfasst mehrere Städte. Die bestätigte Provinz bleibt erhalten; keine einzelne Stadtgrenze wird zugeordnet.",
+    "unmappedRegion": "Die räumliche Ausdehnung ist unbestätigt. Der Quellcode bleibt ohne zugeordnete Kartengrenze erhalten."
   }
 }

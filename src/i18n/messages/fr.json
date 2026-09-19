@@ -641,6 +641,8 @@
     "classApplied": "Catégorie",
     "noMap": "Ce périmètre ne dispose pas de carte administrative. Utilisez la liste.",
     "skipMap": "Passer la carte et parcourir la liste des régions",
-    "partialRegions": "Cette liste de secours est incomplète. Affinez les filtres pour trouver d’autres régions."
+    "partialRegions": "Cette liste de secours est incomplète. Affinez les filtres pour trouver d’autres régions.",
+    "ambiguousRegion": "Ce code source couvre plusieurs villes. La province vérifiée est conservée ; aucune limite de ville unique n’est attribuée.",
+    "unmappedRegion": "L’étendue n’est pas confirmée. Le code source est conservé sans limite cartographique attribuée."
   }
 }

@@ -60,6 +60,11 @@ export async function navigationView(
         nodeId: node.nodeId,
         code: node.code === "ALL" || node.code === "~" ? "" : node.code,
         label: label(node),
+        ...(geographic && node.code.toUpperCase() === "CN-AH-ZX"
+          ? { description: t("ambiguousRegion") }
+          : geographic && node.nodeId.startsWith("geo:~")
+            ? { description: t("unmappedRegion") }
+            : {}),
         count: scope === "direct" ? node.directCount : node.count,
         countText: (scope === "direct" ? node.directCount : node.count).toLocaleString(locale),
         countLabel: t("versions", { count: scope === "direct" ? node.directCount : node.count }),

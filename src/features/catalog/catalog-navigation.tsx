@@ -8,6 +8,7 @@ export type NavigationEntry = {
   nodeId: string;
   label: string;
   code: string;
+  description?: string;
   count: number;
   countLabel: string;
   countText?: string;
@@ -107,6 +108,9 @@ export function CatalogNavigation({
                   {entry.label}
                   {entry.code && entry.code !== entry.label && (
                     <span className="text-muted-foreground text-xs">{entry.code}</span>
+                  )}
+                  {entry.description && (
+                    <span className="text-muted-foreground text-xs">{entry.description}</span>
                   )}
                 </span>
                 <span className="catalog-navigation-count" title={entry.countLabel}>

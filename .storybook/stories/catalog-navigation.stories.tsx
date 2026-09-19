@@ -177,3 +177,48 @@ export const MapFailure: Story = {
     await expect(canvas.getByRole("navigation", { name: t.path })).toBeVisible();
   },
 };
+
+export const UnmappedLocations: Story = {
+  globals: { locale: "zh-CN" },
+  render: (args, { globals }) => {
+    const locale = storyLocale(globals);
+    const t = dictionaries[locale].Navigation;
+    return (
+      <div className="max-w-xl p-6">
+        <CatalogNavigation
+          {...args}
+          title={t.geography}
+          countDescription={t.counts}
+          breadcrumbLabel={t.path}
+          breadcrumbs={[
+            {
+              label: geographyName("CN", locale)!,
+              href: `/${locale}/search?explore=region&geoNode=geo:cn`,
+            },
+          ]}
+          currentLabel={geographyName("CN-AH", locale)}
+          entries={[
+            {
+              nodeId: "geo:~example",
+              code: "CN-AH-ZX",
+              label: "CN-AH-ZX",
+              description: t.ambiguousRegion,
+              count: 2,
+              countLabel: t.versions.replace("{count}", "2"),
+              hasChildren: false,
+              href: `/${locale}/search?geo=CN-AH-ZX`,
+            },
+          ]}
+        />
+      </div>
+    );
+  },
+  play: async ({ canvas, globals }) => {
+    const t = dictionaries[storyLocale(globals)].Navigation;
+    await expect(canvas.getByText(t.ambiguousRegion)).toBeVisible();
+    await expect(canvas.getByRole("link", { name: /CN-AH-ZX/ })).toHaveAttribute(
+      "href",
+      "/zh-CN/search?geo=CN-AH-ZX",
+    );
+  },
+};

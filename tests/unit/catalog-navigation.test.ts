@@ -135,3 +135,71 @@ describe("hierarchical catalog navigation", () => {
     );
   });
 });
+
+describe("unknown classification navigation", () => {
+  it("selects raw-group containers without filtering by their synthetic code", () => {
+    for (const taxonomy of ["isic", "cpc", "elementary"]) {
+      const input = parsePortalBrowseUrl({
+        kind: taxonomy === "isic" ? "process" : "flow",
+        q: "water",
+        classification: "previous",
+        geoNode: "geo:cn",
+        cursor: "old-result-page",
+        navCursor: "old-navigation-page",
+      });
+      const nodeId = `class:${taxonomy}:~raw`;
+      const url = new URL(
+        navigationHref("en", input, "classification", nodeId, {
+          code: "~",
+          results: true,
+        }),
+        "https://portal.test",
+      );
+      expect(url.searchParams.get("classNode")).toBe(nodeId);
+      expect(url.searchParams.get("classification")).toBeNull();
+      expect(url.searchParams.get("geoNode")).toBe("geo:cn");
+      expect(url.searchParams.get("q")).toBe("water");
+      expect(url.searchParams.get("cursor")).toBeNull();
+      expect(url.searchParams.get("navCursor")).toBeNull();
+    }
+  });
+  it("keeps an authored code alongside an opaque raw classification leaf", () => {
+    const input = parsePortalBrowseUrl({ kind: "flow", classification: "~" });
+    const url = new URL(
+      navigationHref("en", input, "classification", "class:elementary:~a1b2", {
+        code: "Raw code 42",
+        results: true,
+      }),
+      "https://portal.test",
+    );
+    expect(url.searchParams.get("classNode")).toBe("class:elementary:~a1b2");
+    expect(url.searchParams.get("classification")).toBe("Raw code 42");
+  });
+});
+
+it("repairs old virtual-container bookmarks without changing genuine tilde filters", () => {
+  const repaired = parsePortalBrowseUrl({
+    kind: "flow",
+    classNode: "class:elementary:~raw",
+    classification: "~",
+    geoNode: "geo:cn",
+    q: "water",
+    cursor: "old-result-page",
+  });
+  expect(repaired.filters).toEqual({
+    classificationNodeId: "class:elementary:~raw",
+    geographyNodeId: "geo:cn",
+  });
+  expect(repaired.query).toBe("water");
+  expect(repaired.cursor).toBeNull();
+  for (const classNode of [undefined, "class:elementary:~a1b2"]) {
+    const original = parsePortalBrowseUrl({
+      kind: "flow",
+      classNode,
+      classification: "~",
+      cursor: "old-result-page",
+    });
+    expect(original.filters.classification).toBe("~");
+    expect(original.cursor).toBe("old-result-page");
+  }
+});

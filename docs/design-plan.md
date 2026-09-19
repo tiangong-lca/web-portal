@@ -1470,6 +1470,8 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 
 地区列表始终提供等价原生链接。地图只承载有明确行政边界映射的节点；跨区、历史范围、未知和歧义编码保持可浏览且保留原码，不根据相似名称强配边界，不分摊国家级数据到省市。名称、层级、边界的收据分别维护，来源语言回退必须显式标注。
 
+未知分类的虚拟分组（例如 `class:elementary:~raw`）仅通过节点条件筛选，其内部 `~` 占位符不得进入旧版精确分类筛选。只有实际原始叶节点才在 URL 中同时保留原始编码；切换到分组仍清除旧分类条件和分页游标，并保留其他浏览维度。旧版界面生成的“虚拟分组节点 + `classification=~`”组合在 URL 解析时仅移除该合成条件并重置结果游标；独立的 `~` 精确筛选和真实原始叶节点保持原语义。
+
 ## 26. 官方参考
 
 - [Next.js App Router 与 ISR](https://nextjs.org/docs/app/building-your-application/data-fetching/incremental-static-regeneration)

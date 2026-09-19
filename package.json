@@ -45,9 +45,10 @@
     "check:licenses": "node scripts/check-dependency-licenses.mjs",
     "check:vulnerabilities": "pnpm audit --audit-level high",
     "check:supply-chain": "pnpm check:licenses && pnpm check:vulnerabilities",
-    "check": "pnpm check:toolchain && pnpm check:brand && pnpm check:database-contracts && pnpm check:licenses && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:bundle-budget && pnpm check:bundle && pnpm check:fonts",
+    "check": "pnpm check:toolchain && pnpm check:brand && pnpm check:database-contracts && pnpm check:licenses && pnpm check:maps && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:bundle-budget && pnpm check:bundle && pnpm check:fonts",
     "skills:install": "node scripts/install-skills.mjs",
-    "skills:update": "node scripts/install-skills.mjs --update"
+    "skills:update": "node scripts/install-skills.mjs --update",
+    "check:maps": "node scripts/maps/build-region-maps.mjs --check"
   },
   "dependencies": {
     "class-variance-authority": "0.7.1",
@@ -91,6 +92,7 @@
     "@vitest/browser-playwright": "4.1.11",
     "@vitest/coverage-v8": "4.1.11",
     "jsdom": "30.0.1",
+    "mapshaper": "0.7.61",
     "msw": "2.15.0",
     "msw-storybook-addon": "3.0.0",
     "oxlint": "1.80.0",

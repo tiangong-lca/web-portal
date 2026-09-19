@@ -16,8 +16,8 @@ checkPaths:
   - docs/development.md
   - docs/ui-system.md
   - .docpact/config.yaml
-lastReviewedAt: 2026-09-16
-lastReviewedCommit: 44c0995983eaf4e3a238cd586d4247408bf92c33
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 8d438a861a063f46d46d524abcef737d15dc7ea7
 lastReviewedNote: "Reviewed for the Portal #87 artifact-regression follow-up: the new emitted-CSS font check joins the existing CI-invoked bundle surface, and the product-runtime contract registers its test as an emitted-asset trigger. No repository fact, branch rule, ownership boundary or command contract in this file changes."
 related:
   - docs/development.md

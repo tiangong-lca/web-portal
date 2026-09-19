@@ -262,6 +262,10 @@ rules:
         kind: ui-behavior
       - path: tests/unit/brand-*.test.ts
         kind: brand-check
+      - path: tests/unit/navigation-geography.test.ts
+        kind: dictionary-check
+      - path: tests/unit/region-map-assets.test.ts
+        kind: public-asset-check
       - path: tests/unit/i18n-locales.test.ts
         kind: dictionary-check
       - path: tests/e2e/accessibility.spec.ts
@@ -382,6 +386,8 @@ rules:
       - path: scripts/portal-r1-fixture-server.ts
         kind: public-data-fixture
       - path: tests/unit/portal-*.test.ts
+        kind: public-data-test
+      - path: tests/unit/catalog-navigation.test.ts
         kind: public-data-test
       - path: tests/unit/catalog-sitemap.test.ts
         kind: sitemap-test

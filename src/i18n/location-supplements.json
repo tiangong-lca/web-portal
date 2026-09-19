@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "portal.location-supplements.v1",
+  "displayOnly": true,
+  "entries": {
+    "ROW": {
+      "names": {
+        "en": "Rest of World",
+        "zh-CN": "世界其他地区",
+        "de": "Rest der Welt",
+        "fr": "Reste du monde"
+      },
+      "source": {
+        "repository": "tiangong-lca/tidas-spec",
+        "commit": "fce9050aeb72103c9fb8ab1d264f22b0af22cb63",
+        "paths": [
+          "assets/tidas/schemas/tidas_locations_category.json",
+          "assets/tidas/schemas_zh/tidas_locations_category.json"
+        ],
+        "note": "Residual region, not equivalent to GLO. German and French display translations are Portal-owned."
+      }
+    },
+    "CN-AH-AQ": {
+      "aliasOf": "CN-AH-AQG",
+      "source": {
+        "checkedAt": "2026-09-19",
+        "query": "https://www.tiangong.earth/zh-CN/search?v=1&kind=process&geo=cn-ah-aq",
+        "example": "https://www.tiangong.earth/zh-CN/process/0def92cb-b20d-4466-94d6-80bbce3cefbd%4001.01.000",
+        "note": "The public record names Anhui Anqing in its description and technology text. Reviewed as a display alias only; neither filter identity nor geometry is merged. Ambiguous CN-AH-ZX is deliberately absent."
+      }
+    }
+  }
+}

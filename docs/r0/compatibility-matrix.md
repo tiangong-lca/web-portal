@@ -20,8 +20,8 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
-lastReviewedAt: 2026-09-16
-lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 91aa406d3735b9d7d5e62eec8ac571be6ca37a24
 lastReviewedNote: "Reviewed for Portal #87: no capability row changes. Deduplicating the font definitions alters no runtime, routing, caching, CSP, image or fallback capability in this matrix, and the existing hosted measurements are historical evidence rather than a current budget. Font payload reduction is recorded in the development guide."
 related:
   - ../design-plan.md
@@ -101,3 +101,7 @@ Portal #33 retested a `dynamicParams=true` application candidate. It branded nes
 - [EdgeOne `edgeone.json` redirects and headers](https://pages.edgeone.ai/document/edgeone-json)
 - [EdgeOne Build Guide](https://pages.edgeone.ai/document/build-guide)
 - [EdgeOne Cloud Functions](https://pages.edgeone.ai/document/cloud-functions)
+
+## Portal #97 hierarchical navigation proof
+
+The controlled local production fixture passes 69 browser checks (three explicitly disabled optional profiles), including native-link navigation with JavaScript disabled, world/China/province/city drill-down, exact-version detail return, mobile fallback, four locales, map failure, cache headers and existing Hybrid behavior. Unit/integration validation passes 315 tests with the optional credentialed live probe skipped. Content-hashed map JSON is immutable; dynamic filtered HTML remains no-store, and public navigation RPCs use the existing 30-second cache. Home and ordinary search do not fetch maps; only the visible region layer is loaded. These are local receipts, not an EdgeOne deployment or a hosted search-latency claim.

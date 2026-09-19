@@ -17,6 +17,10 @@ const contractNames = [
   "portal.public-exchange-page.v1",
   "portal.public-facets.v1",
   "portal.public-facets.v2",
+  "portal.public-navigation.v1",
+  "portal.public-navigation-input.v1",
+  "portal.public-search-input.v3",
+  "portal.public-facet-input.v3",
   "portal.public-hybrid-candidate-page.v1",
   "portal.public-hybrid-candidate-page.v2",
   "portal.public-search-page.v1",
@@ -27,10 +31,14 @@ const contractNames = [
   "portal.public-version-page.v1",
   "portal.published-lcia-page.v1",
 ];
-const sourcePaths = contractNames.flatMap((name) => [
-  `contracts/portal/${name}.schema.json`,
-  `contracts/portal/generated/${name}.d.ts`,
-]);
+const sourcePaths = [
+  ...contractNames.flatMap((name) => [
+    `contracts/portal/${name}.schema.json`,
+    `contracts/portal/generated/${name}.d.ts`,
+  ]),
+  "contracts/portal/navigation-vocabulary.json",
+  "contracts/portal/navigation-vocabulary.receipt.json",
+];
 
 function fail(message) {
   throw new Error(message);

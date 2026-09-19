@@ -1,0 +1,2160 @@
+{
+  "sourceSha256": "d1943ec886f918748fabbc309a12e37790816baaae80512d9ce17327a6de8094",
+  "supplementsSha256": "1e913cc06bb12c06196640b0d1d0cfa0d716c3cbeb431f13ff30a2789979e8e4",
+  "names": {
+    "~": {
+      "de": "Nicht zugeordnete Standorte",
+      "en": "Unmapped locations",
+      "fr": "Localisations non mappées",
+      "zh-CN": "未映射地区"
+    },
+    "AB-SC-CN": {
+      "de": "Autonomer Bezirk Aba der Tibeter und Qiang, Provinz Sichuan, China",
+      "en": "Aba(Ngawa)Zangzu Qiangzu Zizhizhou,Sichuan Sheng,China",
+      "fr": "Préfecture autonome tibétaine et qiang d'Aba (Ngawa), Sichuan, Chine",
+      "zh-CN": "中国,四川省,阿坝藏族羌族自治州"
+    },
+    "AH-CN": {
+      "de": "Provinz Anhui, China",
+      "en": "Anhui Sheng,China",
+      "fr": "Anhui, Chine",
+      "zh-CN": "中国,安徽省"
+    },
+    "AK-SAX-CN": {
+      "de": "Ankang, Provinz Shaanxi, China",
+      "en": "Ankang Shi,Shaanxi Sheng,China",
+      "fr": "Ankang, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,安康市"
+    },
+    "AK-XJ-CN": {
+      "zh-CN": "塔城地区"
+    },
+    "AKS-XJ-CN": {
+      "de": "Bezirk Aksu, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Aksu Diqu,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture d’Aksu, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,阿克苏地区"
+    },
+    "ALSM-NMG-CN": {
+      "de": "Bund Alxa, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Alxa Meng,Nei Mongol Zizhiqu,China",
+      "fr": "Ligue d'Alxa, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,阿拉善盟"
+    },
+    "ALT-XJ-CN": {
+      "de": "Bezirk Altay, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Altay Diqu,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture d’Altay, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,阿勒泰地区"
+    },
+    "AQ-AH-CN": {
+      "de": "Stadt Anqing, Provinz Anhui, China",
+      "en": "Anqing Shi,Anhui Sheng,China",
+      "fr": "Anqing, Anhui, Chine",
+      "zh-CN": "中国,安徽省,安庆市"
+    },
+    "AS-GZ-CN": {
+      "de": "Anshun, Provinz Guizhou, China",
+      "en": "Anshun Shi,Guizhou Sheng,China",
+      "fr": "Anshun, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,安顺市"
+    },
+    "AS-LN-CN": {
+      "de": "Stadt Anshan, Provinz Liaoning, China",
+      "en": "Anshan Shi,Liaoning Sheng,China",
+      "fr": "Anshan, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,鞍山市"
+    },
+    "AY-HEN-CN": {
+      "de": "Anyang Shi, Provinz Henan, China",
+      "en": "Anyang Shi,Henan Sheng,China",
+      "fr": "Anyang, Henan, Chine",
+      "zh-CN": "中国,河南省,安阳市"
+    },
+    "BB-AH-CN": {
+      "de": "Stadt Bengbu, Provinz Anhui, China",
+      "en": "Bengbu Shi,Anhui Sheng,China",
+      "fr": "Bengbu, Anhui, Chine",
+      "zh-CN": "中国,安徽省,蚌埠市"
+    },
+    "BC-JL-CN": {
+      "de": "Stadt Baicheng, Provinz Jilin, China",
+      "en": "Baicheng Shi,Jilin Sheng,China",
+      "fr": "Baicheng, Jilin, Chine",
+      "zh-CN": "中国,吉林省,白城市"
+    },
+    "BD-HEB-CN": {
+      "de": "Baoding Shi, Hebei-Provinz, China",
+      "en": "Baoding Shi,Hebei Sheng,China",
+      "fr": "Baoding, Hebei, Chine",
+      "zh-CN": "中国,河北省,保定市"
+    },
+    "BG-XJ-CN": {
+      "zh-CN": "巴音郭楞自治州"
+    },
+    "BH-GXZ-CN": {
+      "de": "Beihai, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Beihai Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Beihai, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,北海市"
+    },
+    "BJ-CN": {
+      "de": "Beijing Shi, China",
+      "en": "Beijing Shi,China",
+      "fr": "Pékin, Chine",
+      "zh-CN": "中国,北京市"
+    },
+    "BJ-GZ-CN": {
+      "de": "Bezirk Bijie, Provinz Guizhou, China",
+      "en": "Bijie Diqu,Guizhou Sheng,China",
+      "fr": "District de Bijie, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,毕节地区"
+    },
+    "BJ-SAX-CN": {
+      "de": "Baoji, Provinz Shaanxi, China",
+      "en": "Baoji Shi,Shaanxi Sheng,China",
+      "fr": "Baoji, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,宝鸡市"
+    },
+    "BL-XJ-CN": {
+      "zh-CN": "博尔塔拉自治州"
+    },
+    "BS-GX-CN": {
+      "de": "Bose, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Bose Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Bose, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,百色市"
+    },
+    "BS-JL-CN": {
+      "de": "Stadt Baishan, Provinz Jilin, China",
+      "en": "Baishan Shi,Jilin Sheng,China",
+      "fr": "Baishan, Jilin, Chine",
+      "zh-CN": "中国,吉林省,白山市"
+    },
+    "BS-YN-CN": {
+      "de": "Baoshan, Provinz Yunnan, China",
+      "en": "Baoshan Shi,Yunnan Sheng,China",
+      "fr": "Baoshan, Yunnan, Chine",
+      "zh-CN": "中国,云南省,保山市"
+    },
+    "BT-NMG-CN": {
+      "de": "Stadt Baotou, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Baotou Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Baotou, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,包头市"
+    },
+    "BX-LN-CN": {
+      "de": "Stadt Benxi, Provinz Liaoning, China",
+      "en": "Benxi Shi,Liaoning Sheng,China",
+      "fr": "Benxi, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,本溪市"
+    },
+    "BY-GS-CN": {
+      "de": "Stadt Baiyin, Provinz Gansu, China",
+      "en": "Baiyin Shi,Gansu Sheng,China",
+      "fr": "Baiyin, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,白银市"
+    },
+    "BYNE-NMG-CN": {
+      "de": "Stadt Bayannur, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Bayannur Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Bayannur, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,巴彦淖尔市"
+    },
+    "BZ-AH-CN": {
+      "de": "Bozhou Shi, Provinz Anhui, China",
+      "en": "Bozhou Shi,Anhui Sheng,China",
+      "fr": "Bozhou, Anhui, Chine",
+      "zh-CN": "中国,安徽省,亳州市"
+    },
+    "BZ-SC-CN": {
+      "de": "Bazhong, Provinz Sichuan, China",
+      "en": "Bazhong Shi,Sichuan Sheng,China",
+      "fr": "Bazhong, Sichuan, Chine",
+      "zh-CN": "中国,四川省,巴中市"
+    },
+    "BZ-SD-CN": {
+      "de": "Binzhou Shi, Provinz Shandong, China",
+      "en": "Binzhou Shi,Shandong Sheng,China",
+      "fr": "Binzhou, Shandong, Chine",
+      "zh-CN": "中国,山东省,滨州市"
+    },
+    "CC-JL-CN": {
+      "de": "Stadt Changchun, Provinz Jilin, China",
+      "en": "Changchun Shi,Jilin Sheng,China",
+      "fr": "Changchun, Jilin, Chine",
+      "zh-CN": "中国,吉林省,长春市"
+    },
+    "CD-HEB-CN": {
+      "de": "Chengde Shi, Hebei-Provinz, China",
+      "en": "Chengde Shi,Hebei Sheng,China",
+      "fr": "Chengde, Hebei, Chine",
+      "zh-CN": "中国,河北省,承德市"
+    },
+    "CD-HUN-CN": {
+      "de": "Changde Shi, Provinz Hunan, China",
+      "en": "Changde Shi,Hunan Sheng,China",
+      "fr": "Changde, Hunan, Chine",
+      "zh-CN": "中国,湖南省,常德市"
+    },
+    "CD-SC-CN": {
+      "de": "Chengdu, Provinz Sichuan, China",
+      "en": "Chengdu Shi,Sichuan Sheng,China",
+      "fr": "Chengdu, Sichuan, Chine",
+      "zh-CN": "中国,四川省,成都市"
+    },
+    "CD-XZ-CN": {
+      "de": "Bezirk Qamdo, Autonomes Gebiet Tibet, China",
+      "en": "Qamdo Diqu,Xizang Zizhiqu,China",
+      "fr": "District de Qamdo, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,昌都地区"
+    },
+    "CF-NMG-CN": {
+      "de": "Stadt Chifeng (Ulanhad), Autonomes Gebiet Innere Mongolei, China",
+      "en": "Chifeng(Ulanhad)Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Chifeng (Ulanhad), Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,赤峰（乌兰哈达）市"
+    },
+    "CHIZ-AH-CN": {
+      "de": "Chizhou Shi, Provinz Anhui, China",
+      "en": "Chizhou Shi,Anhui Sheng,China",
+      "fr": "Chizhou, Anhui, Chine",
+      "zh-CN": "中国,安徽省,池州市"
+    },
+    "CHUZ-AH-CN": {
+      "de": "Stadt Chuzhou, Provinz Anhui, China",
+      "en": "Chuzhou Shi,Anhui Sheng,China",
+      "fr": "Chuzhou, Anhui, Chine",
+      "zh-CN": "中国,安徽省,滁州市"
+    },
+    "CJ-XJ-CN": {
+      "de": "Autonomer Bezirk Changji der Hui, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Changji Huizu Zizhizhou,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture autonome hui de Changji, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,昌吉回族自治州"
+    },
+    "CN-AH-AQ": {
+      "en": "Anqing Shi,Anhui Sheng,China",
+      "zh-CN": "中国,安徽省,安庆市",
+      "de": "Stadt Anqing, Provinz Anhui, China",
+      "fr": "Anqing, Anhui, Chine"
+    },
+    "CQ-CN": {
+      "de": "Chongqing, China",
+      "en": "Chongqing Shi,China",
+      "fr": "Chongqing, Chine",
+      "zh-CN": "中国,重庆市"
+    },
+    "CS-HUN-CN": {
+      "de": "Changsha Shi, Provinz Hunan, China",
+      "en": "Changsha Shi,Hunan Sheng,China",
+      "fr": "Changsha, Hunan, Chine",
+      "zh-CN": "中国,湖南省,长沙市"
+    },
+    "CX-YN-CN": {
+      "de": "Autonomer Bezirk Chuxiong der Yi, Provinz Yunnan, China",
+      "en": "Chuxiong Yizu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome yi de Chuxiong, Yunnan, Chine",
+      "zh-CN": "中国,云南省,楚雄彝族自治州"
+    },
+    "CY-LN-CN": {
+      "de": "Stadt Chaoyang, Provinz Liaoning, China",
+      "en": "Chaoyang Shi,Liaoning Sheng,China",
+      "fr": "Chaoyang, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,朝阳市"
+    },
+    "CZ-GD-CN": {
+      "de": "Chaozhou, Provinz Guangdong, China",
+      "en": "Chaozhou Shi,Guangdong Sheng,China",
+      "fr": "Chaozhou, Guangdong, Chine",
+      "zh-CN": "中国,广东省,潮州市"
+    },
+    "CZ-GX-CN": {
+      "de": "Chongzuo, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Chongzuo Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Chongzuo, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,崇左市"
+    },
+    "CZ-HEB-CN": {
+      "de": "Cangzhou Shi, Hebei-Provinz, China",
+      "en": "Cangzhou Shi,Hebei Sheng,China",
+      "fr": "Cangzhou, Hebei, Chine",
+      "zh-CN": "中国,河北省,沧州市"
+    },
+    "CZ-HUN-CN": {
+      "de": "Chenzhou Shi, Provinz Hunan, China",
+      "en": "Chenzhou Shi,Hunan Sheng,China",
+      "fr": "Chenzhou, Hunan, Chine",
+      "zh-CN": "中国,湖南省,郴州市"
+    },
+    "CZ-JS-CN": {
+      "de": "Stadt Changzhou, Provinz Jiangsu, China",
+      "en": "Changzhou Shi,Jiangsu Sheng,China",
+      "fr": "Changzhou, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,常州市"
+    },
+    "CZ-SX-CN": {
+      "de": "Changzhi Shi, Shanxi-Provinz, China",
+      "en": "Changzhi Shi,Shanxi Sheng,China",
+      "fr": "Changzhi, Shanxi, Chine",
+      "zh-CN": "中国,山西省,长治市"
+    },
+    "DD-LN-CN": {
+      "de": "Stadt Dandong, Provinz Liaoning, China",
+      "en": "Dandong Shi,Liaoning Sheng,China",
+      "fr": "Dandong, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,丹东市"
+    },
+    "DG-GD-CN": {
+      "de": "Dongguan, Provinz Guangdong, China",
+      "en": "Dongguan Shi,Guangdong Sheng,China",
+      "fr": "Dongguan, Guangdong, Chine",
+      "zh-CN": "中国,广东省,东莞市"
+    },
+    "DH-YN-CN": {
+      "de": "Autonomer Bezirk Dehong der Dai und Jingpo, Provinz Yunnan, China",
+      "en": "Dehong Daizu Jingpozu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome dai et jingpo de Dehong, Yunnan, Chine",
+      "zh-CN": "中国,云南省,德宏傣族景颇族自治州"
+    },
+    "DL-LN-CN": {
+      "de": "Stadt Dalian, Provinz Liaoning, China",
+      "en": "Dalian Shi,Liaoning Sheng,China",
+      "fr": "Dalian, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,大连市"
+    },
+    "DL-YN-CN": {
+      "de": "Autonomer Bezirk Dali der Bai, Provinz Yunnan, China",
+      "en": "Dali Baizu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome bai de Dali, Yunnan, Chine",
+      "zh-CN": "中国,云南省,大理白族自治州"
+    },
+    "DQ-HLJ-CN": {
+      "de": "Stadt Daqing, Provinz Heilongjiang, China",
+      "en": "Daqing Shi,Heilongjiang Sheng,China",
+      "fr": "Daqing, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,大庆市"
+    },
+    "DQ-YN-CN": {
+      "de": "Autonomer Bezirk Deqên der Tibeter, Provinz Yunnan, China",
+      "en": "Deqên Zangzu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome tibétaine de Deqên, Yunnan, Chine",
+      "zh-CN": "中国,云南省,迪庆藏族自治州"
+    },
+    "DT-SX-CN": {
+      "de": "Datong Shi, Shanxi-Provinz, China",
+      "en": "Datong Shi,Shanxi Sheng,China",
+      "fr": "Datong, Shanxi, Chine",
+      "zh-CN": "中国,山西省,大同市"
+    },
+    "DX-GS-CN": {
+      "de": "Stadt Dingxi, Provinz Gansu, China",
+      "en": "Dingxi Shi,Gansu Sheng,China",
+      "fr": "Dingxi, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,定西市"
+    },
+    "DXAL-HLJ-CN": {
+      "de": "Bezirk Da Hinggan Ling, Provinz Heilongjiang, China",
+      "en": "Da Hinggan Ling Diqu,Heilongjiang Sheng,China",
+      "fr": "Région de Da Hinggan Ling, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,大兴安岭地区"
+    },
+    "DY-SC-CN": {
+      "de": "Deyang, Provinz Sichuan, China",
+      "en": "Deyang Shi,Sichuan Sheng,China",
+      "fr": "Deyang, Sichuan, Chine",
+      "zh-CN": "中国,四川省,德阳市"
+    },
+    "DY-SD-CN": {
+      "de": "Dongying Sh, Provinz Shandong, China",
+      "en": "Dongying Sh,Shandong Sheng,China",
+      "fr": "Dongying, Shandong, Chine",
+      "zh-CN": "中国,山东省,东营市"
+    },
+    "DZ-HAIN-CN": {
+      "zh-CN": "詹州"
+    },
+    "DZ-SC-CN": {
+      "de": "Dazhou, Provinz Sichuan, China",
+      "en": "Dazhou Shi,Sichuan Sheng,China",
+      "fr": "Dazhou, Sichuan, Chine",
+      "zh-CN": "中国,四川省,达州市"
+    },
+    "DZ-SD-CN": {
+      "de": "Dezhou Shi, Provinz Shandong, China",
+      "en": "Dezhou Shi,Shandong Sheng,China",
+      "fr": "Dezhou, Shandong, Chine",
+      "zh-CN": "中国,山东省,德州市"
+    },
+    "EEDS-NMG-CN": {
+      "de": "Stadt Ordos, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Ordos Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Ordos, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,鄂尔多斯市"
+    },
+    "ES-HUB-CN": {
+      "de": "Autonomer Bezirk Enshi der Tujia und Miao, Provinz Hubei, China",
+      "en": "Enshi Tujiazu Miaozu Zizhizhou,Hubei Sheng,China",
+      "fr": "Préfecture autonome tujia et miao d'Enshi, Hubei, Chine",
+      "zh-CN": "中国,湖北省,恩施土家族苗族自治州"
+    },
+    "EZ-HUB-CN": {
+      "de": "Ezhou Sli, Provinz Hubei, China",
+      "en": "Ezhou Sli,Hubei Sheng,China",
+      "fr": "Ezhou, Hubei, Chine",
+      "zh-CN": "中国,湖北省,鄂州市"
+    },
+    "FCG-GX-CN": {
+      "de": "Fangchenggang, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Fangchenggang Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Fangchenggang, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,防城港市"
+    },
+    "FJ-CN": {
+      "de": "Provinz Fujian, China",
+      "en": "Fujian Sheng,China",
+      "fr": "Fujian, Chine",
+      "zh-CN": "中国,福建省"
+    },
+    "FS-GD-CN": {
+      "de": "Foshan Shi, Provinz Guangdong, China",
+      "en": "Foshan Shi,Guangdong Sheng,China",
+      "fr": "Foshan, Guangdong, Chine",
+      "zh-CN": "中国,广东省,佛山市"
+    },
+    "FS-LN-CN": {
+      "de": "Stadt Fushun, Provinz Liaoning, China",
+      "en": "Fushun Shi,Liaoning Sheng,China",
+      "fr": "Fushun, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,抚顺市"
+    },
+    "FX-LN-CN": {
+      "de": "Stadt Fuxin, Provinz Liaoning, China",
+      "en": "Fuxin Shi,Liaoning Sheng,China",
+      "fr": "Fuxin, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,阜新市"
+    },
+    "FY-AH-CN": {
+      "de": "Stadt Fuyang, Provinz Anhui, China",
+      "en": "Fuyang Shi,Anhui Sheng,China",
+      "fr": "Fuyang, Anhui, Chine",
+      "zh-CN": "中国,安徽省,阜阳市"
+    },
+    "FZ-FJ-CN": {
+      "de": "Fuzhou Shi, Provinz Fujian, China",
+      "en": "Fuzhou Shi,Fujian Sheng,China",
+      "fr": "Fuzhou, Fujian, Chine",
+      "zh-CN": "中国,福建省,福州市"
+    },
+    "FZ-JX-CN": {
+      "de": "Fuzhou Shi, Provinz Jiangxi, China",
+      "en": "Fuzhou Shi,Jiangxi Sheng,China",
+      "fr": "Fuzhou, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,抚州市"
+    },
+    "GA-SC-CN": {
+      "de": "Guang'an, Provinz Sichuan, China",
+      "en": "Guang'an Shi,Sichuan Sheng,China",
+      "fr": "Guang'an, Sichuan, Chine",
+      "zh-CN": "中国,四川省,广安市"
+    },
+    "GD-CN": {
+      "de": "Provinz Guangdong, China",
+      "en": "Guangdong Sheng,China",
+      "fr": "Guangdong, Chine",
+      "zh-CN": "中国,广东省"
+    },
+    "GG-GX-CN": {
+      "de": "Guigang, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Guigang Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Guigang, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,贵港市"
+    },
+    "GL-GXZ-CN": {
+      "de": "Guilin, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Guilin Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Guilin, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,桂林市"
+    },
+    "GNZ-GS-CN": {
+      "de": "Autonomer Bezirk Gannan der Tibeter, Provinz Gansu, China",
+      "en": "Gannan Zangzu Zizhizhou,Gansu Sheng,China",
+      "fr": "Préfecture autonome tibétaine de Gannan, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,甘南藏族自治州"
+    },
+    "GS-CN": {
+      "de": "Provinz Gansu, China",
+      "en": "Gansu Sheng,China",
+      "fr": "Gansu, Chine",
+      "zh-CN": "中国,甘肃省"
+    },
+    "GX-CN": {
+      "de": "Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区"
+    },
+    "GY-GZ-CN": {
+      "de": "Guiyang, Provinz Guizhou, China",
+      "en": "Guiyang Shi,Guizhou Sheng,China",
+      "fr": "Guiyang, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,贵阳市"
+    },
+    "GY-NX-CN": {
+      "de": "Stadt Guyuan, Autonomes Gebiet Ningxia der Hui, China",
+      "en": "Guyuan Shi,Ningxia Huizu Zizhiqu,China",
+      "fr": "Guyuan, région autonome hui du Ningxia, Chine",
+      "zh-CN": "中国,宁夏回族自治区,固原市"
+    },
+    "GY-SC-CN": {
+      "de": "Guangyuan, Provinz Sichuan, China",
+      "en": "Guangyuan Shi,Sichuan Sheng,China",
+      "fr": "Guangyuan, Sichuan, Chine",
+      "zh-CN": "中国,四川省,广元市"
+    },
+    "GZ-CN": {
+      "de": "Provinz Guizhou, China",
+      "en": "Guizhou Sheng,China",
+      "fr": "Guizhou, Chine",
+      "zh-CN": "中国,贵州省"
+    },
+    "GZ-GD-CN": {
+      "de": "Guangzhou Shi, Provinz Guangdong, China",
+      "en": "Guangzhou Shi,Guangdong Sheng,China",
+      "fr": "Guangzhou, Guangdong, Chine",
+      "zh-CN": "中国,广东省,广州市"
+    },
+    "GZ-JX-CN": {
+      "de": "Ganzhou Shi, Provinz Jiangxi, China",
+      "en": "Ganzhou Shi,Jiangxi Sheng,China",
+      "fr": "Ganzhou, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,赣州市"
+    },
+    "GZ-SC-CN": {
+      "de": "Autonomer Bezirk Garzê der Tibeter, Provinz Sichuan, China",
+      "en": "Garzê Zangzu Zizhizhou,Sichuan Sheng,China",
+      "fr": "Préfecture autonome tibétaine de Garzê, Sichuan, Chine",
+      "zh-CN": "中国,四川省,甘孜藏族自治州"
+    },
+    "HA-JS-CN": {
+      "de": "Stadt Huai'an, Provinz Jiangsu, China",
+      "en": "Huai'an Shi,Jiangsu Sheng,China",
+      "fr": "Huai'an, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,淮安市"
+    },
+    "HAIN-CN": {
+      "de": "Provinz Hainan, China",
+      "en": "Hainan Sheng,China",
+      "fr": "Hainan, Chine",
+      "zh-CN": "中国,海南省"
+    },
+    "HAZ-ZJ-CN": {
+      "de": "Stadt Hangzhou, Provinz Zhejiang, China",
+      "en": "Hangzhou Shi,Zhejiang Sheng,China",
+      "fr": "Hangzhou, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,杭州市"
+    },
+    "HB-AH-CN": {
+      "de": "Stadt Huaibei, Provinz Anhui, China",
+      "en": "Huaibei Shi,Anhui Sheng,China",
+      "fr": "Huaibei, Anhui, Chine",
+      "zh-CN": "中国,安徽省,淮北市"
+    },
+    "HB-HEN-CN": {
+      "de": "Hebi Shi, Provinz Henan, China",
+      "en": "Hebi Shi,Henan Sheng,China",
+      "fr": "Hebi, Henan, Chine",
+      "zh-CN": "中国,河南省,鹤壁市"
+    },
+    "HBZZ-QH-CN": {
+      "de": "Autonomer Bezirk Haibei der Tibeter, Provinz Qinghai, China",
+      "en": "Haibei Zangzu Zizhizhou,Qinghai Sheng,China",
+      "fr": "Préfecture autonome tibétaine de Haibei, Qinghai, Chine",
+      "zh-CN": "中国,青海省,海北藏族自治州"
+    },
+    "HC-GX-CN": {
+      "de": "Hechi, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Hechi Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Hechi, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,河池市"
+    },
+    "HD-HEB-CN": {
+      "de": "Handan Shi, Hebei-Provinz, China",
+      "en": "Handan Shi,Hebei Sheng,China",
+      "fr": "Handan, Hebei, Chine",
+      "zh-CN": "中国,河北省,邯郸市"
+    },
+    "HD-QH-CN": {
+      "de": "Bezirk Haidong, Provinz Qinghai, China",
+      "en": "Haidong Diqu,Qinghai Sheng,China",
+      "fr": "Préfecture de Haidong, Qinghai, Chine",
+      "zh-CN": "中国,青海省,海东地区"
+    },
+    "HEB-CN": {
+      "de": "Hebei-Provinz, China",
+      "en": "Hebei Sheng,China",
+      "fr": "Hebei, Chine",
+      "zh-CN": "中国,河北省"
+    },
+    "HEN-CN": {
+      "de": "Provinz Henan, China",
+      "en": "Henan Sheng,China",
+      "fr": "Henan, Chine",
+      "zh-CN": "中国,河南省"
+    },
+    "HF-AH-CN": {
+      "de": "Stadt Hefei, Provinz Anhui, China",
+      "en": "Hefei Sh,Anhui Sheng,China",
+      "fr": "Hefei, Anhui, Chine",
+      "zh-CN": "中国,安徽省,合肥市"
+    },
+    "HG-HLJ-CN": {
+      "de": "Stadt Hegang, Provinz Heilongjiang, China",
+      "en": "Hegang Shi,Heilongjiang Sheng,China",
+      "fr": "Hegang, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,鹤岗市"
+    },
+    "HG-HUB-CN": {
+      "de": "Huanggang Shi, Provinz Hubei, China",
+      "en": "Huanggang Shi,Hubei Sheng,China",
+      "fr": "Huanggang, Hubei, Chine",
+      "zh-CN": "中国,湖北省,黄冈市"
+    },
+    "HH-HLJ-CN": {
+      "de": "Stadt Heihe, Provinz Heilongjiang, China",
+      "en": "Heihe Shi,Heilongjiang Sheng,China",
+      "fr": "Heihe, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,黑河市"
+    },
+    "HH-HUN-CN": {
+      "de": "Huaihua Shi, Provinz Hunan, China",
+      "en": "Huaihua Shi,Hunan Sheng,China",
+      "fr": "Huaihua, Hunan, Chine",
+      "zh-CN": "中国,湖南省,怀化市"
+    },
+    "HH-YN-CN": {
+      "de": "Autonomer Bezirk Honghe der Hani und Yi, Provinz Yunnan, China",
+      "en": "Honghe Hanizu Yizu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome hani et yi de Honghe, Yunnan, Chine",
+      "zh-CN": "中国,云南省,红河哈尼族彝族自治州"
+    },
+    "HHT-NMG-CN": {
+      "de": "Stadt Hohhot, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Hohhot Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Hohhot, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,呼和浩特市"
+    },
+    "HK-HAIN-CN": {
+      "de": "Haikou, Provinz Hainan, China",
+      "en": "Haikou Shi,Hainan Sheng,China",
+      "fr": "Haikou, Hainan, Chine",
+      "zh-CN": "中国,海南省,海口市"
+    },
+    "HLBE-NMG-CN": {
+      "de": "Stadt Hulun Buir, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Hulun Buir Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Hulun Buir, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,呼伦贝尔市"
+    },
+    "HLD-LN-CN": {
+      "de": "Stadt Huludao, Provinz Liaoning, China",
+      "en": "Huludao Shi,Liaoning Sheng,China",
+      "fr": "Huludao, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,葫芦岛市"
+    },
+    "HLJ-CN": {
+      "de": "Provinz Heilongjiang, China",
+      "en": "Heilongjiang Sheng,China",
+      "fr": "Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省"
+    },
+    "HM-XJ-CN": {
+      "de": "Bezirk Hami (Kumul), Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Hami(Kumul)Diqu,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture de Hami (Kumul), région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,哈密（库木勒）地区"
+    },
+    "HN-AH-CN": {
+      "de": "Stadt Huainan, Provinz Anhui, China",
+      "en": "Huainan Shi,Anhui Sheng,China",
+      "fr": "Huainan, Anhui, Chine",
+      "zh-CN": "中国,安徽省,淮南市"
+    },
+    "HNZZ-QH-CN": {
+      "de": "Autonomer Bezirk Huangnan der Tibeter, Provinz Qinghai, China",
+      "en": "Huangnan Zangzu Zizhizhou,Qinghai Sheng,China",
+      "fr": "Préfecture autonome tibétaine de Huangnan, Qinghai, Chine",
+      "zh-CN": "中国,青海省,黄南藏族自治州"
+    },
+    "HRB-HLJ-CN": {
+      "de": "Stadt Harbin, Provinz Heilongjiang, China",
+      "en": "Harbin Shi,Heilongjiang Sheng,China",
+      "fr": "Harbin, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,哈尔滨市"
+    },
+    "HS-AH-CN": {
+      "de": "Stadt Huangshan, Provinz Anhui, China",
+      "en": "Huangshan Shi,Anhui Sheng,China",
+      "fr": "Huangshan, Anhui, Chine",
+      "zh-CN": "中国,安徽省,黄山市"
+    },
+    "HS-HEB-CN": {
+      "de": "Hengshui Shi, Hebei-Provinz, China",
+      "en": "Hengshui Shi,Hebei Sheng,China",
+      "fr": "Hengshui, Hebei, Chine",
+      "zh-CN": "中国,河北省,衡水市"
+    },
+    "HS-HUB-CN": {
+      "de": "Huangshi Shi, Provinz Hubei, China",
+      "en": "Huangshi Shi,Hubei Sheng,China",
+      "fr": "Huangshi, Hubei, Chine",
+      "zh-CN": "中国,湖北省,黄石市"
+    },
+    "HT-XJ-CN": {
+      "de": "Bezirk Hotan, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Hotan Diqu,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture de Hotan, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,和田地区"
+    },
+    "HUB-CN": {
+      "de": "Provinz Hubei, China",
+      "en": "Hubei Sheng,China",
+      "fr": "Hubei, Chine",
+      "zh-CN": "中国,湖北省"
+    },
+    "HUN-CN": {
+      "de": "Provinz Hunan, China",
+      "en": "Hunan Sheng,China",
+      "fr": "Hunan, Chine",
+      "zh-CN": "中国,湖南省"
+    },
+    "HUZ-ZJ-CN": {
+      "de": "Stadt Huzhou, Provinz Zhejiang, China",
+      "en": "Huzhou Shi,Zhejiang Sheng,China",
+      "fr": "Huzhou, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,湖州市"
+    },
+    "HY-GD-CN": {
+      "de": "Heyuan, Provinz Guangdong, China",
+      "en": "Heyuan Shi,Guangdong Sheng,China",
+      "fr": "Heyuan, Guangdong, Chine",
+      "zh-CN": "中国,广东省,河源市"
+    },
+    "HY-HUN-CN": {
+      "de": "Hengyang Shi, Provinz Hunan, China",
+      "en": "Hengyang Shi,Hunan Sheng,China",
+      "fr": "Hengyang, Hunan, Chine",
+      "zh-CN": "中国,湖南省,衡阳市"
+    },
+    "HZ-GD-CN": {
+      "de": "Huizhou, Provinz Guangdong, China",
+      "en": "Huizhou Shi,Guangdong Sheng,China",
+      "fr": "Huizhou, Guangdong, Chine",
+      "zh-CN": "中国,广东省,惠州市"
+    },
+    "HZ-GX-CN": {
+      "de": "Hezhou, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Hezhou Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Hezhou, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,贺州市"
+    },
+    "HZ-SAX-CN": {
+      "de": "Hanzhong, Provinz Shaanxi, China",
+      "en": "Hanzhong Shi,Shaanxi Sheng,China",
+      "fr": "Hanzhong, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,汉中市"
+    },
+    "HZ-SD-CN": {
+      "de": "Heze Shi, Provinz Shandong, China",
+      "en": "Heze Shi,Shandong Sheng,China",
+      "fr": "Heze, Shandong, Chine",
+      "zh-CN": "中国,山东省,菏泽市"
+    },
+    "IL-XJ-CN": {
+      "de": "Autonomer Bezirk Ili der Kasachen, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Ili Kazak Zizhizhou,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture autonome kazakhe d’Ili, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,伊犁哈萨克自治州"
+    },
+    "JA-JX-CN": {
+      "de": "Ji'an Shi, Provinz Jiangxi, China",
+      "en": "Ji'an Shi,Jiangxi Sheng,China",
+      "fr": "Ji'an, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,吉安市"
+    },
+    "JC-GS-CN": {
+      "de": "Stadt Jinchang, Provinz Gansu, China",
+      "en": "Jinchang Shi,Gansu Sheng,China",
+      "fr": "Jinchang, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,金昌市"
+    },
+    "JC-SX-CN": {
+      "de": "Jincheng Shi, Shanxi-Provinz, China",
+      "en": "Jincheng Shi,Shanxi Sheng,China",
+      "fr": "Jincheng, Shanxi, Chine",
+      "zh-CN": "中国,山西省,晋城市"
+    },
+    "JDZ-JX-CN": {
+      "de": "Jingdezhen Shi, Provinz Jiangxi, China",
+      "en": "Jingdezhen Shi,Jiangxi Sheng,China",
+      "fr": "Jingdezhen, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,景德镇市"
+    },
+    "JH-ZJ-CN": {
+      "de": "Stadt Jinhua, Provinz Zhejiang, China",
+      "en": "Jinhua Shi,Zhejiang Sheng,China",
+      "fr": "Jinhua, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,金华市"
+    },
+    "JJ-JX-CN": {
+      "de": "Jiujiang Shi, Provinz Jiangxi, China",
+      "en": "Jiujiang Shi,Jiangxi Sheng,China",
+      "fr": "Jiujiang, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,九江市"
+    },
+    "JL-CN": {
+      "de": "Provinz Jilin, China",
+      "en": "Jilin Sheng,China",
+      "fr": "Jilin, Chine",
+      "zh-CN": "中国,吉林省"
+    },
+    "JL-JL-CN": {
+      "de": "Stadt Jilin, Provinz Jilin, China",
+      "en": "Jilin Shi,Jilin Sheng,China",
+      "fr": "Jilin, Jilin, Chine",
+      "zh-CN": "中国,吉林省,吉林市"
+    },
+    "JM-GD-CN": {
+      "de": "Jiangmen Shi, Provinz Guangdong, China",
+      "en": "Jiangmen Shi,Guangdong Sheng,China",
+      "fr": "Jiangmen, Guangdong, Chine",
+      "zh-CN": "中国,广东省,江门市"
+    },
+    "JM-HUB-CN": {
+      "de": "Jingmen Shi, Provinz Hubei, China",
+      "en": "Jingmen Shi,Hubei Sheng,China",
+      "fr": "Jingmen, Hubei, Chine",
+      "zh-CN": "中国,湖北省,荆门市"
+    },
+    "JMS-HLJ-CN": {
+      "de": "Stadt Jiamusi, Provinz Heilongjiang, China",
+      "en": "Jiamusi Shi,Heilongjiang Sheng,China",
+      "fr": "Jiamusi, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,佳木斯市"
+    },
+    "JNA-SD-CN": {
+      "de": "Jinan Shi, Provinz Shandong, China",
+      "en": "Jinan Shi,Shandong Sheng,China",
+      "fr": "Jinan, Shandong, Chine",
+      "zh-CN": "中国,山东省,济南市"
+    },
+    "JNI-SD-CN": {
+      "de": "Jining Shi, Provinz Shandong, China",
+      "en": "Jining Shi,Shandong Sheng,China",
+      "fr": "Jining, Shandong, Chine",
+      "zh-CN": "中国,山东省,济宁市"
+    },
+    "JQ-GS-CN": {
+      "de": "Stadt Jiuquan, Provinz Gansu, China",
+      "en": "Jiuquan Shi,Gansu Sheng,China",
+      "fr": "Jiuquan, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,酒泉市"
+    },
+    "JS-CN": {
+      "de": "Provinz Jiangsu, China",
+      "en": "Jiangsu Sheng,China",
+      "fr": "Jiangsu, Chine",
+      "zh-CN": "中国,江苏省"
+    },
+    "JX-CN": {
+      "de": "Provinz Jiangxi, China",
+      "en": "Jiangxi Sheng,China",
+      "fr": "Jiangxi, Chine",
+      "zh-CN": "中国,江西省"
+    },
+    "JX-HLJ-CN": {
+      "de": "Stadt Jixi, Provinz Heilongjiang, China",
+      "en": "Jixi Shi,Heilongjiang Sheng,China",
+      "fr": "Jixi, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,鸡西市"
+    },
+    "JX-ZJ-CN": {
+      "de": "Stadt Jiaxing, Provinz Zhejiang, China",
+      "en": "Jiaxing Shi,Zhejiang Sheng,China",
+      "fr": "Jiaxing, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,嘉兴市"
+    },
+    "JY-GD-CN": {
+      "de": "Jieyang, Provinz Guangdong, China",
+      "en": "Jieyang Shi,Guangdong Sheng,China",
+      "fr": "Jieyang, Guangdong, Chine",
+      "zh-CN": "中国,广东省,揭阳市"
+    },
+    "JYG-GS-CN": {
+      "de": "Stadt Jiayuguan, Provinz Gansu, China",
+      "en": "Jiayuguan Shi,Gansu Sheng,China",
+      "fr": "Jiayuguan, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,嘉峪关市"
+    },
+    "JZ-HEN-CN": {
+      "de": "Jiaozuo Shi, Provinz Henan, China",
+      "en": "Jiaozuo Shi,Henan Sheng,China",
+      "fr": "Jiaozuo, Henan, Chine",
+      "zh-CN": "中国,河南省,焦作市"
+    },
+    "JZ-HUB-CN": {
+      "de": "Jingzhou Shi, Provinz Hubei, China",
+      "en": "Jingzhou Shi,Hubei Sheng,China",
+      "fr": "Jingzhou, Hubei, Chine",
+      "zh-CN": "中国,湖北省,荆州市"
+    },
+    "JZ-LN-CN": {
+      "de": "Stadt Jinzhou, Provinz Liaoning, China",
+      "en": "Jinzhou Shi,Liaoning Sheng,China",
+      "fr": "Jinzhou, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,锦州市"
+    },
+    "JZ-SX-CN": {
+      "de": "Stadt Jinzhong, Provinz Shanxi, China",
+      "en": "Jinzhong Shi,Shanxi Sheng,China",
+      "fr": "Jinzhong, Shanxi, Chine",
+      "zh-CN": "中国,山西省,晋中市"
+    },
+    "KF-HEN-CN": {
+      "de": "Kaifeng Shi, Provinz Henan, China",
+      "en": "Kaifeng Shi,Henan Sheng,China",
+      "fr": "Kaifeng, Henan, Chine",
+      "zh-CN": "中国,河南省,开封市"
+    },
+    "KM-XJ-CN": {
+      "de": "Stadt Karamay, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Karamay Shi,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Karamay, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,克拉玛依市"
+    },
+    "KM-YN-CN": {
+      "de": "Kunming, Provinz Yunnan, China",
+      "en": "Kunming Shi,Yunnan Sheng,China",
+      "fr": "Kunming, Yunnan, Chine",
+      "zh-CN": "中国,云南省,昆明市"
+    },
+    "KS-XJ-CN": {
+      "zh-CN": "喀什地区"
+    },
+    "KZ-XJ-CN": {
+      "de": "Autonomer Bezirk Kizilsu der Kirgisen, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Kizilsu Kirgiz Zizhizhou,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture autonome kirghize de Kizilsu, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,克孜勒苏柯尔克孜自治州"
+    },
+    "LA-AH-CN": {
+      "de": "Stadt Lu'an, Provinz Anhui, China",
+      "en": "Lu'an Shi,Anhui Sheng,China",
+      "fr": "Lu'an, Anhui, Chine",
+      "zh-CN": "中国,安徽省,六安市"
+    },
+    "LB-GX-CN": {
+      "de": "Laibin, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Laibin Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Laibin, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,来宾市"
+    },
+    "LC-SD-CN": {
+      "de": "Liaocheng Shi, Provinz Shandong, China",
+      "en": "Liaocheng Shi,Shandong Sheng,China",
+      "fr": "Liaocheng, Shandong, Chine",
+      "zh-CN": "中国,山东省,聊城市"
+    },
+    "LC-YN-CN": {
+      "de": "Lincang, Provinz Yunnan, China",
+      "en": "Lincang Shi,Yunnan Sheng,China",
+      "fr": "Lincang, Yunnan, Chine",
+      "zh-CN": "中国,云南省,临沧市"
+    },
+    "LD-HUN-CN": {
+      "de": "Loudi Shi, Provinz Hunan, China",
+      "en": "Loudi Shi,Hunan Sheng,China",
+      "fr": "Loudi, Hunan, Chine",
+      "zh-CN": "中国,湖南省,娄底市"
+    },
+    "LES-SC-CN": {
+      "de": "Leshan, Provinz Sichuan, China",
+      "en": "Leshan Shi,Sichuan Sheng,China",
+      "fr": "Leshan, Sichuan, Chine",
+      "zh-CN": "中国,四川省,乐山市"
+    },
+    "LF-HEB-CN": {
+      "de": "Langfang Shi, Hebei-Provinz, China",
+      "en": "Langfang Shi,Hebei Sheng,China",
+      "fr": "Langfang, Hebei, Chine",
+      "zh-CN": "中国,河北省,廊坊市"
+    },
+    "LF-SX-CN": {
+      "de": "Stadt Linfen, Provinz Shanxi, China",
+      "en": "Linfen Shi,Shanxi Sheng,China",
+      "fr": "Linfen, Shanxi, Chine",
+      "zh-CN": "中国,山西省,临汾市"
+    },
+    "LH-HEN-CN": {
+      "de": "Luohe Shi, Provinz Henan, China",
+      "en": "Luohe Shi,Henan Sheng,China",
+      "fr": "Luohe, Henan, Chine",
+      "zh-CN": "中国,河南省,漯河市"
+    },
+    "LIS-SC-CN": {
+      "de": "Autonomer Bezirk Liangshan der Yi, Provinz Sichuan, China",
+      "en": "Liangshan Yizu Zizhizhou,Sichuan Sheng,China",
+      "fr": "Préfecture autonome yi de Liangshan, Sichuan, Chine",
+      "zh-CN": "中国,四川省,凉山彝族自治州"
+    },
+    "LJ-YN-CN": {
+      "de": "Lijiang, Provinz Yunnan, China",
+      "en": "Lijiang Shi,Yunnan Sheng,China",
+      "fr": "Lijiang, Yunnan, Chine",
+      "zh-CN": "中国,云南省,丽江市"
+    },
+    "LK-XZ-CN": {
+      "de": "Bezirk Shannan, Autonomes Gebiet Tibet, China",
+      "en": "Shannan Diqu,Xizang Zizhiqu,China",
+      "fr": "District de Shannan, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,山南地区"
+    },
+    "LL-SX-CN": {
+      "de": "Stadt Lüliang, Provinz Shanxi, China",
+      "en": "Lüliang Shi,Shanxi Sheng,China",
+      "fr": "Lüliang, Shanxi, Chine",
+      "zh-CN": "中国,山西省,吕梁市"
+    },
+    "LN-CN": {
+      "de": "Provinz Liaoning, China",
+      "en": "Liaoning Sheng,China",
+      "fr": "Liaoning, Chine",
+      "zh-CN": "中国,辽宁省"
+    },
+    "LN-GS-CN": {
+      "de": "Stadt Longnan, Provinz Gansu, China",
+      "en": "Longnan Shi,Gansu Sheng,China",
+      "fr": "Longnan, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,陇南市"
+    },
+    "LPS-GZ-CN": {
+      "de": "Lupanshui, Provinz Guizhou, China",
+      "en": "Lupanshui Shi,Guizhou Sheng,China",
+      "fr": "Lupanshui, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,六盘水市"
+    },
+    "LS-XZ-CN": {
+      "de": "Lhasa, Autonomes Gebiet Tibet, China",
+      "en": "Lhasa Shi,Xizang Zizhiqu,China",
+      "fr": "Lhassa, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,拉萨市"
+    },
+    "LS-ZJ-CN": {
+      "de": "Stadt Lishui, Provinz Zhejiang, China",
+      "en": "Lishui Shi,Zhejiang Sheng,China",
+      "fr": "Lishui, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,丽水市"
+    },
+    "LXZ-GS-CN": {
+      "de": "Autonomer Bezirk Linxia der Hui, Provinz Gansu, China",
+      "en": "Linxia Huizu Zizhizhou,Gansu Sheng,China",
+      "fr": "Préfecture autonome hui de Linxia, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,临夏回族自治州"
+    },
+    "LY-FJ-CN": {
+      "de": "Longyan Shi, Provinz Fujian, China",
+      "en": "Longyan Shi,Fujian Sheng,China",
+      "fr": "Longyan, Fujian, Chine",
+      "zh-CN": "中国,福建省,龙岩市"
+    },
+    "LY-HEN-CN": {
+      "de": "Luoyang Shi, Provinz Henan, China",
+      "en": "Luoyang Shi,Henan Sheng,China",
+      "fr": "Luoyang, Henan, Chine",
+      "zh-CN": "中国,河南省,洛阳市"
+    },
+    "LY-JL-CN": {
+      "de": "Stadt Liaoyuan, Provinz Jilin, China",
+      "en": "Liaoyuan Shi,Jilin Sheng,China",
+      "fr": "Liaoyuan, Jilin, Chine",
+      "zh-CN": "中国,吉林省,辽源市"
+    },
+    "LY-LN-CN": {
+      "de": "Stadt Liaoyang, Provinz Liaoning, China",
+      "en": "Liaoyang Shi,Liaoning Sheng,China",
+      "fr": "Liaoyang, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,辽阳市"
+    },
+    "LY-SD-CN": {
+      "de": "Linyi Shi, Provinz Shandong, China",
+      "en": "Linyi Shi,Shandong Sheng,China",
+      "fr": "Linyi, Shandong, Chine",
+      "zh-CN": "中国,山东省,临沂市"
+    },
+    "LYG-JS-CN": {
+      "de": "Stadt Lianyungang, Provinz Jiangsu, China",
+      "en": "Lianyungang Shi,Jiangsu Sheng,China",
+      "fr": "Lianyungang, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,连云港市"
+    },
+    "LZ-GS-CN": {
+      "de": "Stadt Lanzhou, Provinz Gansu, China",
+      "en": "Lanzhou Shi,Gansu Sheng,China",
+      "fr": "Lanzhou, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,兰州市"
+    },
+    "LZ-GXZ-CN": {
+      "de": "Liuzhou, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Liuzhou Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Liuzhou, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,柳州市"
+    },
+    "LZ-SC-CN": {
+      "de": "Luzhou, Provinz Sichuan, China",
+      "en": "Luzhou Sh,Sichuan Sheng,China",
+      "fr": "Luzhou, Sichuan, Chine",
+      "zh-CN": "中国,四川省,泸州市"
+    },
+    "MAS-AH-CN": {
+      "de": "Stadt Ma'anshan, Provinz Anhui, China",
+      "en": "Ma'anshan Shi,Anhui Sheng,China",
+      "fr": "Ma'anshan, Anhui, Chine",
+      "zh-CN": "中国,安徽省,马鞍山市"
+    },
+    "MDJ-HLJ-CN": {
+      "de": "Stadt Mudanjiang, Provinz Heilongjiang, China",
+      "en": "Mudanjiang Shi,Heilongjiang Sheng,China",
+      "fr": "Mudanjiang, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,牡丹江市"
+    },
+    "MM-GD-CN": {
+      "de": "Maoming Shi, Provinz Guangdong, China",
+      "en": "Maoming Shi,Guangdong Sheng,China",
+      "fr": "Maoming, Guangdong, Chine",
+      "zh-CN": "中国,广东省,茂名市"
+    },
+    "MS-SC-CN": {
+      "de": "Meishan, Provinz Sichuan, China",
+      "en": "Meishan Shi,Sichuan Sheng,China",
+      "fr": "Meishan, Sichuan, Chine",
+      "zh-CN": "中国,四川省,眉山市"
+    },
+    "MY-SC-CN": {
+      "de": "Mianyang, Provinz Sichuan, China",
+      "en": "Mianyang Shi,Sichuan Sheng,China",
+      "fr": "Mianyang, Sichuan, Chine",
+      "zh-CN": "中国,四川省,绵阳市"
+    },
+    "MZ-GD-CN": {
+      "de": "Meizhou, Provinz Guangdong, China",
+      "en": "Meizhou Shi,Guangdong Sheng,China",
+      "fr": "Meizhou, Guangdong, Chine",
+      "zh-CN": "中国,广东省,梅州市"
+    },
+    "NB-ZJ-CN": {
+      "de": "Stadt Ningbo, Provinz Zhejiang, China",
+      "en": "Ningbo Shi,Zhejiang Sheng,China",
+      "fr": "Ningbo, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,宁波市"
+    },
+    "NC-JX-CN": {
+      "de": "Nanchang Shi, Provinz Jiangxi, China",
+      "en": "Nanchang Shi,Jiangxi Sheng,China",
+      "fr": "Nanchang, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,南昌市"
+    },
+    "NC-SC-CN": {
+      "de": "Nanchong, Provinz Sichuan, China",
+      "en": "Nanchong Shi,Sichuan Sheng,China",
+      "fr": "Nanchong, Sichuan, Chine",
+      "zh-CN": "中国,四川省,南充市"
+    },
+    "ND-FJ-CN": {
+      "de": "Ningde Shi, Provinz Fujian, China",
+      "en": "Ningde Shi,Fujian Sheng,China",
+      "fr": "Ningde, Fujian, Chine",
+      "zh-CN": "中国,福建省,宁德市"
+    },
+    "NG-XZ-CN": {
+      "de": "Bezirk Ngari, Autonomes Gebiet Tibet, China",
+      "en": "Ngari Diqu,Xizang Zizhiqu,China",
+      "fr": "District de Ngari, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,阿里地区"
+    },
+    "NJ-JS-CN": {
+      "de": "Stadt Nanjing, Provinz Jiangsu, China",
+      "en": "Nanjing Shi,Jiangsu Sheng,China",
+      "fr": "Nankin, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,南京市"
+    },
+    "NJ-SC-CN": {
+      "de": "Neijiang, Provinz Sichuan, China",
+      "en": "Neijiang Shi,Sichuan Sheng,China",
+      "fr": "Neijiang, Sichuan, Chine",
+      "zh-CN": "中国,四川省,内江市"
+    },
+    "NJ-YN-CN": {
+      "de": "Autonomer Bezirk Nujiang der Lisu, Provinz Yunnan, China",
+      "en": "Nujiang Lisuzu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome lisu de Nujiang, Yunnan, Chine",
+      "zh-CN": "中国,云南省,怒江傈僳族自治州"
+    },
+    "NK-XZ-CN": {
+      "de": "Bezirk Nagqu, Autonomes Gebiet Tibet, China",
+      "en": "Nagqu Diqu,Xizang Zizhiqu,China",
+      "fr": "District de Nagqu, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,那曲地区"
+    },
+    "NMG-CN": {
+      "de": "Autonomes Gebiet Innere Mongolei, China",
+      "en": "Nei Mongol Zizhiqu,China",
+      "fr": "Région autonome de Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区"
+    },
+    "NN-GXZ-CN": {
+      "de": "Nanning, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Nanning Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Nanning, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,南宁市"
+    },
+    "NP-FJ-CN": {
+      "de": "Nanping Shi, Provinz Fujian, China",
+      "en": "Nanping Shi,Fujian Sheng,China",
+      "fr": "Nanping, Fujian, Chine",
+      "zh-CN": "中国,福建省,南平市"
+    },
+    "NT-JS-CN": {
+      "de": "Stadt Nantong, Provinz Jiangsu, China",
+      "en": "Nantong Shi,Jiangsu Sheng,China",
+      "fr": "Nantong, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,南通市"
+    },
+    "NX-CN": {
+      "de": "Autonomes Gebiet Ningxia der Hui, China",
+      "en": "Ningxia Huizu Zizhiqu,China",
+      "fr": "Région autonome hui du Ningxia, Chine",
+      "zh-CN": "中国,宁夏回族自治区"
+    },
+    "NY-HEN-CN": {
+      "de": "Nanyang Shi, Provinz Henan, China",
+      "en": "Nanyang Shi,Henan Sheng,China",
+      "fr": "Nanyang, Henan, Chine",
+      "zh-CN": "中国,河南省,南阳市"
+    },
+    "NY-XZ-CN": {
+      "de": "Bezirk Nyingchi, Autonomes Gebiet Tibet, China",
+      "en": "Nyingchi Diqu,Xizang Zizhiqu,China",
+      "fr": "District de Nyingchi, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,林芝地区"
+    },
+    "PDS-HEN-CN": {
+      "de": "Pingdingshan Shi, Provinz Henan, China",
+      "en": "Pingdingshan Shi,Henan Sheng,China",
+      "fr": "Pingdingshan, Henan, Chine",
+      "zh-CN": "中国,河南省,平顶山市"
+    },
+    "PE-YN-CN": {
+      "de": "Pu'er, Provinz Yunnan, China",
+      "en": "Pu'er Shi,Yunnan Sheng,China",
+      "fr": "Pu'er, Yunnan, Chine",
+      "zh-CN": "中国,云南省,普洱市"
+    },
+    "PJ-LN-CN": {
+      "de": "Stadt Panjin, Provinz Liaoning, China",
+      "en": "Panjin Shi,Liaoning Sheng,China",
+      "fr": "Panjin, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,盘锦市"
+    },
+    "PL-GS-CN": {
+      "de": "Stadt Pingliang, Provinz Gansu, China",
+      "en": "Pingliang Shi,Gansu Sheng,China",
+      "fr": "Pingliang, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,平凉市"
+    },
+    "PT-FJ-CN": {
+      "de": "Putian Shi, Provinz Fujian, China",
+      "en": "Putian Shi,Fujian Sheng,China",
+      "fr": "Putian, Fujian, Chine",
+      "zh-CN": "中国,福建省,莆田市"
+    },
+    "PX-JX-CN": {
+      "de": "Pingxiang Shi, Provinz Jiangxi, China",
+      "en": "Pingxiang Shi,Jiangxi Sheng,China",
+      "fr": "Pingxiang, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,萍乡市"
+    },
+    "PY-HEN-CN": {
+      "de": "Puyang Shi, Provinz Henan, China",
+      "en": "Puyang Shi,Henan Sheng,China",
+      "fr": "Puyang, Henan, Chine",
+      "zh-CN": "中国,河南省,濮阳市"
+    },
+    "PZH-SC-CN": {
+      "de": "Panzhihua, Provinz Sichuan, China",
+      "en": "Panzhihua Shi,Sichuan Sheng,China",
+      "fr": "Panzhihua, Sichuan, Chine",
+      "zh-CN": "中国,四川省,攀枝花市"
+    },
+    "QD-SD-CN": {
+      "de": "Qingdao Shi, Provinz Shandong, China",
+      "en": "Qingdao Shi,Shandong Sheng,China",
+      "fr": "Qingdao, Shandong, Chine",
+      "zh-CN": "中国,山东省,青岛市"
+    },
+    "QDN-GZ-CN": {
+      "de": "Autonomer Bezirk Qiandongnan der Miao und Dong, Provinz Guizhou, China",
+      "en": "Qiandongnan Miaozu Dongzu Zizhizhou,Guizhou Sheng,China",
+      "fr": "Préfecture autonome miao et dong de Qiandongnan, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,黔东南苗族侗族自治州"
+    },
+    "QH-CN": {
+      "de": "Provinz Qinghai, China",
+      "en": "Qinghai Sheng,China",
+      "fr": "Qinghai, Chine",
+      "zh-CN": "中国,青海省"
+    },
+    "QHD-HEB-CN": {
+      "de": "Qinhuangdao Shi, Hebei-Provinz, China",
+      "en": "Qinhuangdao Shi,Hebei Sheng,China",
+      "fr": "Qinhuangdao, Hebei, Chine",
+      "zh-CN": "中国,河北省,秦皇岛市"
+    },
+    "QJ-YN-CN": {
+      "de": "Qujing, Provinz Yunnan, China",
+      "en": "Qujing Shi,Yunnan Sheng,China",
+      "fr": "Qujing, Yunnan, Chine",
+      "zh-CN": "中国,云南省,曲靖市"
+    },
+    "QN-GZ-CN": {
+      "de": "Autonomer Bezirk Qiannan der Buyei und Miao, Provinz Guizhou, China",
+      "en": "Qiannan Buyeizu Miaozu Zizhizhou,Guizhou Sheng,China",
+      "fr": "Préfecture autonome bouyei et miao de Qiannan, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,黔南布依族苗族自治州"
+    },
+    "QQHE-HLJ-CN": {
+      "de": "Stadt Qiqihar, Provinz Heilongjiang, China",
+      "en": "Qiqihar Shi,Heilongjiang Sheng,China",
+      "fr": "Qiqihar, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,齐齐哈尔市"
+    },
+    "QTH-HLJ-CN": {
+      "de": "Stadt Qitaihe, Provinz Heilongjiang, China",
+      "en": "Qitaihe Shi,Heilongjiang Sheng,China",
+      "fr": "Qitaihe, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,七台河市"
+    },
+    "QTX-NX-CN": {
+      "zh-CN": "青铜峡"
+    },
+    "QXN-GZ-CN": {
+      "de": "Autonomer Bezirk Qianxinan der Buyi und Miao, Provinz Guizhou, China",
+      "en": "Qianxinan Buycizu Miaozu Zizhizhou,Guizhou Sheng,China",
+      "fr": "Préfecture autonome bouyei et miao de Qianxinan, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,黔西南布依族苗族自治州"
+    },
+    "QY-GD-CN": {
+      "de": "Qingyuan, Provinz Guangdong, China",
+      "en": "Qingyuan Shi,Guangdong Sheng,China",
+      "fr": "Qingyuan, Guangdong, Chine",
+      "zh-CN": "中国,广东省,清远市"
+    },
+    "QY-GS-CN": {
+      "de": "Stadt Qingyang, Provinz Gansu, China",
+      "en": "Qingyang Shi,Gansu Sheng,China",
+      "fr": "Qingyang, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,庆阳市"
+    },
+    "QZ-FJ-CN": {
+      "de": "Quanzhou Shi, Provinz Fujian, China",
+      "en": "Quanzhou Shi,Fujian Sheng,China",
+      "fr": "Quanzhou, Fujian, Chine",
+      "zh-CN": "中国,福建省,泉州市"
+    },
+    "QZ-GX-CN": {
+      "de": "Qinzhou, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Qinzhou Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Qinzhou, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,钦州市"
+    },
+    "QZ-ZJ-CN": {
+      "de": "Stadt Quzhou, Provinz Zhejiang, China",
+      "en": "Quzhou Shi,Zhejiang Sheng,China",
+      "fr": "Quzhou, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,衢州市"
+    },
+    "ROW": {
+      "en": "Rest of World",
+      "zh-CN": "世界其他地区",
+      "de": "Rest der Welt",
+      "fr": "Reste du monde"
+    },
+    "RZ-SD-CN": {
+      "de": "Rizhao Shi, Provinz Shandong, China",
+      "en": "Rizhao Shi,Shandong Sheng,China",
+      "fr": "Rizhao, Shandong, Chine",
+      "zh-CN": "中国,山东省,日照市"
+    },
+    "SAX-CN": {
+      "de": "Provinz Shaanxi, China",
+      "en": "Shaanxi Sheng,China",
+      "fr": "Shaanxi, Chine",
+      "zh-CN": "中国,陕西省"
+    },
+    "SC-CN": {
+      "de": "Provinz Sichuan, China",
+      "en": "Sichuan Sheng,China",
+      "fr": "Sichuan, Chine",
+      "zh-CN": "中国,四川省"
+    },
+    "SD-CN": {
+      "de": "Provinz Shandong, China",
+      "en": "Shandong Sheng,China",
+      "fr": "Shandong, Chine",
+      "zh-CN": "中国,山东省"
+    },
+    "SG-GD-CN": {
+      "de": "Shaoguan Shi, Provinz Guangdong, China",
+      "en": "Shaoguan Shi,Guangdong Sheng,China",
+      "fr": "Shaoguan, Guangdong, Chine",
+      "zh-CN": "中国,广东省,韶关市"
+    },
+    "SG-XZ-CN": {
+      "de": "Bezirk Xigaze, Autonomes Gebiet Tibet, China",
+      "en": "Xigaze Diqu,Xizang Zizhiqu,China",
+      "fr": "District de Xigaze, région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区,日喀则地区"
+    },
+    "SH-CN": {
+      "de": "Stadt Shanghai, China",
+      "en": "Shanghai Shi,China",
+      "fr": "Shanghai, Chine",
+      "zh-CN": "中国,上海市"
+    },
+    "SH-HLJ-CN": {
+      "de": "Stadt Suihua, Provinz Heilongjiang, China",
+      "en": "Suihua Shi,Heilongjiang Sheng,China",
+      "fr": "Suihua, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,绥化市"
+    },
+    "SJZ-HEB-CN": {
+      "de": "Shijiazhuang Shi, Hebei-Provinz, China",
+      "en": "Shijiazhuang Shi,Hebei Sheng,China",
+      "fr": "Shijiazhuang, Hebei, Chine",
+      "zh-CN": "中国,河北省,石家庄市"
+    },
+    "SL-SAX-CN": {
+      "de": "Shangluo, Provinz Shaanxi, China",
+      "en": "Shangluo Shi,Shaanxi Sheng,China",
+      "fr": "Shangluo, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,商洛市"
+    },
+    "SM-FJ-CN": {
+      "de": "Sanming Shi, Provinz Fujian, China",
+      "en": "Sanming Shi,Fujian Sheng,China",
+      "fr": "Sanming, Fujian, Chine",
+      "zh-CN": "中国,福建省,三明市"
+    },
+    "SMX-HEN-CN": {
+      "de": "Sanmenxia Shi, Provinz Henan, China",
+      "en": "Sanmenxia Shi,Henan Sheng,China",
+      "fr": "Sanmenxia, Henan, Chine",
+      "zh-CN": "中国,河南省,三门峡市"
+    },
+    "SN-SC-CN": {
+      "de": "Suining, Provinz Sichuan, China",
+      "en": "Suining Shi,Sichuan Sheng,China",
+      "fr": "Suining, Sichuan, Chine",
+      "zh-CN": "中国,四川省,遂宁市"
+    },
+    "SP-JL-CN": {
+      "de": "Stadt Siping, Provinz Jilin, China",
+      "en": "Siping Shi,Jilin Sheng,China",
+      "fr": "Siping, Jilin, Chine",
+      "zh-CN": "中国,吉林省,四平市"
+    },
+    "SQ-HEN-CN": {
+      "de": "Shangqiu Shi, Provinz Henan, China",
+      "en": "Shangqiu Shi,Henan Sheng,China",
+      "fr": "Shangqiu, Henan, Chine",
+      "zh-CN": "中国,河南省,商丘市"
+    },
+    "SQ-JS-CN": {
+      "de": "Stadt Suqian, Provinz Jiangsu, China",
+      "en": "Suqian Shi,Jiangsu Sheng,China",
+      "fr": "Suqian, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,宿迁市"
+    },
+    "SR-JX-CN": {
+      "de": "Shangrao Shi, Provinz Jiangxi, China",
+      "en": "Shangrao Shi,Jiangxi Sheng,China",
+      "fr": "Shangrao, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,上饶市"
+    },
+    "SS-HAIN-CN": {
+      "zh-CN": "三沙"
+    },
+    "ST-GD-CN": {
+      "de": "Shantou Shi, Provinz Guangdong, China",
+      "en": "Shantou Shi,Guangdong Sheng,China",
+      "fr": "Shantou, Guangdong, Chine",
+      "zh-CN": "中国,广东省,汕头市"
+    },
+    "SW-GD-CN": {
+      "de": "Shanwei, Provinz Guangdong, China",
+      "en": "Shanwei Shi,Guangdong Sheng,China",
+      "fr": "Shanwei, Guangdong, Chine",
+      "zh-CN": "中国,广东省,汕尾市"
+    },
+    "SX-CN": {
+      "de": "Shanxi-Provinz, China",
+      "en": "Shanxi Sheng,China",
+      "fr": "Shanxi, Chine",
+      "zh-CN": "中国,山西省"
+    },
+    "SX-ZJ-CN": {
+      "de": "Stadt Shaoxing, Provinz Zhejiang, China",
+      "en": "Shaoxing Shi,Zhejiang Sheng,China",
+      "fr": "Shaoxing, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,绍兴市"
+    },
+    "SY-HAIN-CN": {
+      "de": "Sanva, Provinz Hainan, China",
+      "en": "Sanva Shi,Hainan Sheng,China",
+      "fr": "Sanva, Hainan, Chine",
+      "zh-CN": "中国,海南省,三亚市"
+    },
+    "SY-HUB-CN": {
+      "de": "Shiyan Shi, Provinz Hubei, China",
+      "en": "Shiyan Shi,Hubei Sheng,China",
+      "fr": "Shiyan, Hubei, Chine",
+      "zh-CN": "中国,湖北省,十堰市"
+    },
+    "SY-HUN-CN": {
+      "de": "Shaoyang Shi, Provinz Hunan, China",
+      "en": "Shaoyang Shi,Hunan Sheng,China",
+      "fr": "Shaoyang, Hunan, Chine",
+      "zh-CN": "中国,湖南省,邵阳市"
+    },
+    "SY-JL-CN": {
+      "de": "Stadt Songyuan, Provinz Jilin, China",
+      "en": "Songyuan Shi,Jilin Sheng,China",
+      "fr": "Songyuan, Jilin, Chine",
+      "zh-CN": "中国,吉林省,松原市"
+    },
+    "SY-LN-CN": {
+      "de": "Stadt Shenyang, Provinz Liaoning, China",
+      "en": "Shenyang Shi,Liaoning Sheng,China",
+      "fr": "Shenyang, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,沈阳市"
+    },
+    "SYS-HLJ-CN": {
+      "de": "Stadt Shuangyashan, Provinz Heilongjiang, China",
+      "en": "Shuangyashan Shi,Heilongjiang Sheng,China",
+      "fr": "Shuangyashan, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,双鸭山市"
+    },
+    "SZ-AH-CN": {
+      "de": "Stadt Suzhou, Provinz Anhui, China",
+      "en": "Suzhou Shi,Anhui Sheng,China",
+      "fr": "Suzhou, Anhui, Chine",
+      "zh-CN": "中国,安徽省,宿州市"
+    },
+    "SZ-GD-CN": {
+      "de": "Shenzhen Shi, Provinz Guangdong, China",
+      "en": "Shenzhen Shi,Guangdong Sheng,China",
+      "fr": "Shenzhen, Guangdong, Chine",
+      "zh-CN": "中国,广东省,深圳市"
+    },
+    "SZ-HUB-CN": {
+      "de": "Suizhou Shi, Provinz Hubei, China",
+      "en": "Suizhou Shi,Hubei Sheng,China",
+      "fr": "Suizhou, Hubei, Chine",
+      "zh-CN": "中国,湖北省,随州市"
+    },
+    "SZ-JS-CN": {
+      "de": "Stadt Suzhou, Provinz Jiangsu, China",
+      "en": "Suzhou Shi,Jiangsu Sheng,China",
+      "fr": "Suzhou, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,苏州市"
+    },
+    "SZ-SX-CN": {
+      "de": "Stadt Shuozhou, Provinz Shanxi, China",
+      "en": "Shuozhou Shi,Shanxi Sheng,China",
+      "fr": "Shuozhou, Shanxi, Chine",
+      "zh-CN": "中国,山西省,朔州市"
+    },
+    "TA-SD-CN": {
+      "de": "Tai'an Shi, Provinz Shandong, China",
+      "en": "Tai'an Shi,Shandong Sheng,China",
+      "fr": "Tai'an, Shandong, Chine",
+      "zh-CN": "中国,山东省,泰安市"
+    },
+    "TC-SAX-CN": {
+      "de": "Tongchuan, Provinz Shaanxi, China",
+      "en": "Tongchuan Shi,Shaanxi Sheng,China",
+      "fr": "Tongchuan, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,铜川市"
+    },
+    "TH-JL-CN": {
+      "de": "Stadt Tonghua, Provinz Jilin, China",
+      "en": "Tonghua Shi,Jilin Sheng,China",
+      "fr": "Tonghua, Jilin, Chine",
+      "zh-CN": "中国,吉林省,通化市"
+    },
+    "TJ-CN": {
+      "de": "Tianjin Shi, China",
+      "en": "Tianjin Shi,China",
+      "fr": "Tianjin, Chine",
+      "zh-CN": "中国,天津市"
+    },
+    "TL-AH-CN": {
+      "de": "Stadt Tongling, Provinz Anhui, China",
+      "en": "Tongling Shi,Anhui Sheng,China",
+      "fr": "Tongling, Anhui, Chine",
+      "zh-CN": "中国,安徽省,铜陵市"
+    },
+    "TL-LN-CN": {
+      "de": "Stadt Tieling, Provinz Liaoning, China",
+      "en": "Tieling Shi,Liaoning Sheng,China",
+      "fr": "Tieling, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,铁岭市"
+    },
+    "TL-NMG-CN": {
+      "de": "Stadt Tongliao, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Tongliao Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Tongliao, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,通辽市"
+    },
+    "TP-XJ-CN": {
+      "de": "Bezirk Turpan, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Turpan Diqu,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Préfecture de Turpan, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,吐鲁番地区"
+    },
+    "TR-GZ-CN": {
+      "de": "Bezirk Tongren, Provinz Guizhou, China",
+      "en": "Tongren Diqu,Guizhou Sheng,China",
+      "fr": "District de Tongren, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,铜仁地区"
+    },
+    "TS-GS-CN": {
+      "de": "Stadt Tianshui, Provinz Gansu, China",
+      "en": "Tianshui Shi,Gansu Sheng,China",
+      "fr": "Tianshui, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,天水市"
+    },
+    "TS-HEB-CN": {
+      "de": "Tangshan Shi, Hebei-Provinz, China",
+      "en": "Tangshan Shi,Hebei Sheng,China",
+      "fr": "Tangshan, Hebei, Chine",
+      "zh-CN": "中国,河北省,唐山市"
+    },
+    "TY-SX-CN": {
+      "de": "Taiyuan Shi, Shanxi-Provinz, China",
+      "en": "Taiyuan Shi,Shanxi Sheng,China",
+      "fr": "Taiyuan, Shanxi, Chine",
+      "zh-CN": "中国,山西省,太原市"
+    },
+    "TZ-JS-CN": {
+      "de": "Stadt Taizhou, Provinz Jiangsu, China",
+      "en": "Taizhou Shi,Jiangsu Sheng,China",
+      "fr": "Taizhou, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,泰州市"
+    },
+    "TZ-ZJ-CN": {
+      "de": "Stadt Taizhou, Provinz Zhejiang, China",
+      "en": "Taizhou Shi,Zhejiang Sheng,China",
+      "fr": "Taizhou, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,台州市"
+    },
+    "UR-XJ-CN": {
+      "de": "Stadt Urümqi, Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Urümqi  Shi,Xinjiang Uygur Zizhiqu,China",
+      "fr": "Ürümqi, région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区,乌鲁木齐市"
+    },
+    "WF-SD-CN": {
+      "de": "Weifang Shi, Provinz Shandong, China",
+      "en": "Weifang Shi,Shandong Sheng,China",
+      "fr": "Weifang, Shandong, Chine",
+      "zh-CN": "中国,山东省,潍坊市"
+    },
+    "WH-AH-CN": {
+      "de": "Stadt Wuhu, Provinz Anhui, China",
+      "en": "Wuhu Shi,Anhui Sheng,China",
+      "fr": "Wuhu, Anhui, Chine",
+      "zh-CN": "中国,安徽省,芜湖市"
+    },
+    "WH-HUB-CN": {
+      "de": "Wuhan Shi, Provinz Hubei, China",
+      "en": "Wuhan Shi,Hubei Sheng,China",
+      "fr": "Wuhan, Hubei, Chine",
+      "zh-CN": "中国,湖北省,武汉市"
+    },
+    "WH-NMG-CN": {
+      "de": "Stadt Wuhai, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Wuhai Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Wuhai, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,乌海市"
+    },
+    "WH-SD-CN": {
+      "de": "Weihai Shi, Provinz Shandong, China",
+      "en": "Weihai Shi,Shandong Sheng,China",
+      "fr": "Weihai, Shandong, Chine",
+      "zh-CN": "中国,山东省,威海市"
+    },
+    "WLCB-NMG-CN": {
+      "de": "Stadt Ulanqab, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Ulanqab Shi,Nei Mongol Zizhiqu,China",
+      "fr": "Ulanqab, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,乌兰察布市"
+    },
+    "WN-SAX-CN": {
+      "de": "Weinan, Provinz Shaanxi, China",
+      "en": "Weinan Shi,Shaanxi Sheng,China",
+      "fr": "Weinan, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,渭南市"
+    },
+    "WS-YN-CN": {
+      "de": "Autonomer Bezirk Wenshan der Zhuang und Miao, Provinz Yunnan, China",
+      "en": "Wenshan Zhuangzu Miaozu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome zhuang et miao de Wenshan, Yunnan, Chine",
+      "zh-CN": "中国,云南省,文山壮族苗族自治州"
+    },
+    "WW-GS-CN": {
+      "de": "Stadt Wuwei, Provinz Gansu, China",
+      "en": "Wuwei Shi,Gansu Sheng,China",
+      "fr": "Wuwei, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,武威市"
+    },
+    "WX-JS-CN": {
+      "de": "Stadt Wuxi, Provinz Jiangsu, China",
+      "en": "Wuxi Shi,Jiangsu Sheng,China",
+      "fr": "Wuxi, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,无锡市"
+    },
+    "WZ-GXZ-CN": {
+      "de": "Wuzhou, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Wuzhou Sh,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Wuzhou, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,梧州市"
+    },
+    "WZ-NX-CN": {
+      "de": "Stadt Wuzhong, Autonomes Gebiet Ningxia der Hui, China",
+      "en": "Wuzhong Shi,Ningxia Huizu Zizhiqu,China",
+      "fr": "Wuzhong, région autonome hui du Ningxia, Chine",
+      "zh-CN": "中国,宁夏回族自治区,吴忠市"
+    },
+    "WZ-ZJ-CN": {
+      "de": "Stadt Wenzhou, Provinz Zhejiang, China",
+      "en": "Wenzhou Shi,Zhejiang Sheng,China",
+      "fr": "Wenzhou, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,温州市"
+    },
+    "XA-SAX-CN": {
+      "de": "Xi'an, Provinz Shaanxi, China",
+      "en": "Xi'an Shi,Shaanxi Sheng,China",
+      "fr": "Xi'an, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,西安市"
+    },
+    "XAM-NMG-CN": {
+      "de": "Bund Hinggan, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Hinggan Meng,Nei Mongol Zizhiqu,China",
+      "fr": "Ligue de Hinggan, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,兴安盟"
+    },
+    "XC-AH-CN": {
+      "de": "Xuancheng Shi, Provinz Anhui, China",
+      "en": "Xuancheng Shi,Anhui Sheng,China",
+      "fr": "Xuancheng, Anhui, Chine",
+      "zh-CN": "中国,安徽省,宣城市"
+    },
+    "XC-HEN-CN": {
+      "de": "Xuchang Shi, Provinz Henan, China",
+      "en": "Xuchang Shi,Henan Sheng,China",
+      "fr": "Xuchang, Henan, Chine",
+      "zh-CN": "中国,河南省,许昌市"
+    },
+    "XG-HUB-CN": {
+      "de": "Xiaogan Shi, Provinz Hubei, China",
+      "en": "Xiaogan Shi,Hubei Sheng,China",
+      "fr": "Xiaogan, Hubei, Chine",
+      "zh-CN": "中国,湖北省,孝感市"
+    },
+    "XJ-CN": {
+      "de": "Autonomes Gebiet Xinjiang der Uiguren, China",
+      "en": "Xinjiang Uygur Zizhiqu,China",
+      "fr": "Région autonome ouïghoure du Xinjiang, Chine",
+      "zh-CN": "中国,新疆维吾尔自治区"
+    },
+    "XLGLM-NMG-CN": {
+      "de": "Bund Xilin Gol, Autonomes Gebiet Innere Mongolei, China",
+      "en": "Xilin Gol Meng,Nei Mongol Zizhiqu,China",
+      "fr": "Ligue de Xilin Gol, Mongolie-Intérieure, Chine",
+      "zh-CN": "中国,内蒙古自治区,锡林郭勒盟"
+    },
+    "XM-FJ-CN": {
+      "de": "Xiamen Shi, Provinz Fujian, China",
+      "en": "Xiamen Shi,Fujian Sheng,China",
+      "fr": "Xiamen, Fujian, Chine",
+      "zh-CN": "中国,福建省,厦门市"
+    },
+    "XN-HUB-CN": {
+      "de": "Xianning Shi, Provinz Hubei, China",
+      "en": "Xianning Shi,Hubei Sheng,China",
+      "fr": "Xianning, Hubei, Chine",
+      "zh-CN": "中国,湖北省,咸宁市"
+    },
+    "XN-QH-CN": {
+      "de": "Stadt Xining, Provinz Qinghai, China",
+      "en": "Xining Shi,Qinghai Sheng,China",
+      "fr": "Xining, Qinghai, Chine",
+      "zh-CN": "中国,青海省,西宁市"
+    },
+    "XSB-YN-CN": {
+      "de": "Autonomer Bezirk Xishuangbanna der Dai, Provinz Yunnan, China",
+      "en": "Xishuangbanna Daizu Zizhizhou,Yunnan Sheng,China",
+      "fr": "Préfecture autonome dai de Xishuangbanna, Yunnan, Chine",
+      "zh-CN": "中国,云南省,西双版纳傣族自治州"
+    },
+    "XT-HEB-CN": {
+      "de": "Xingtai Shi, Hebei-Provinz, China",
+      "en": "Xingtai Shi,Hebei Sheng,China",
+      "fr": "Xingtai, Hebei, Chine",
+      "zh-CN": "中国,河北省,邢台市"
+    },
+    "XT-HUN-CN": {
+      "de": "Xiangtan Shi, Provinz Hunan, China",
+      "en": "Xiangtan Shi,Hunan Sheng,China",
+      "fr": "Xiangtan, Hunan, Chine",
+      "zh-CN": "中国,湖南省,湘潭市"
+    },
+    "XX-HEN-CN": {
+      "de": "Xinxiang Shi, Provinz Henan, China",
+      "en": "Xinxiang Shi,Henan Sheng,China",
+      "fr": "Xinxiang, Henan, Chine",
+      "zh-CN": "中国,河南省,新乡市"
+    },
+    "XX-HUN-CN": {
+      "de": "Autonomer Bezirk Xiangxi der Tujia und Miao, Provinz Hunan, China",
+      "en": "Xiangxi Tujiazu Miaozu Zizhizhou,Hunan Sheng,China",
+      "fr": "Préfecture autonome tujia et miao de Xiangxi, Hunan, Chine",
+      "zh-CN": "中国,湖南省,湘西土家族苗族自治州"
+    },
+    "XY-HEN-CN": {
+      "de": "Xinyang Shi, Provinz Henan, China",
+      "en": "Xinyang Shi,Henan Sheng,China",
+      "fr": "Xinyang, Henan, Chine",
+      "zh-CN": "中国,河南省,信阳市"
+    },
+    "XY-HUB-CN": {
+      "zh-CN": "襄阳"
+    },
+    "XY-JX-CN": {
+      "de": "Xinyu Shi, Provinz Jiangxi, China",
+      "en": "Xinyu Shi,Jiangxi Sheng,China",
+      "fr": "Xinyu, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,新余市"
+    },
+    "XY-SAX-CN": {
+      "de": "Xianyang, Provinz Shaanxi, China",
+      "en": "Xianyang Shi,Shaanxi Sheng,China",
+      "fr": "Xianyang, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,咸阳市"
+    },
+    "XZ-CN": {
+      "de": "Autonomes Gebiet Tibet, China",
+      "en": "Xizang Zizhiqu,China",
+      "fr": "Région autonome du Tibet, Chine",
+      "zh-CN": "中国,西藏自治区"
+    },
+    "XZ-JS-CN": {
+      "de": "Stadt Xuzhou, Provinz Jiangsu, China",
+      "en": "Xuzhou Shi,Jiangsu Sheng,China",
+      "fr": "Xuzhou, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,徐州市"
+    },
+    "XZ-SX-CN": {
+      "de": "Stadt Xinzhou, Provinz Shanxi, China",
+      "en": "Xinzhou Shi,Shanxi Sheng,China",
+      "fr": "Xinzhou, Shanxi, Chine",
+      "zh-CN": "中国,山西省,忻州市"
+    },
+    "YA-SAX-CN": {
+      "de": "Yan'an, Provinz Shaanxi, China",
+      "en": "Yan'an Shi,Shaanxi Sheng,China",
+      "fr": "Yan'an, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,延安市"
+    },
+    "YA-SC-CN": {
+      "de": "Ya'an, Provinz Sichuan, China",
+      "en": "Ya'an Shi,Sichuan Sheng,China",
+      "fr": "Ya'an, Sichuan, Chine",
+      "zh-CN": "中国,四川省,雅安市"
+    },
+    "YB-JL-CN": {
+      "de": "Autonomer Bezirk Yanbian der Koreaner, Provinz Jilin, China",
+      "en": "Yanbian Chosenzu Zizhizhou,Jilin Sheng,China",
+      "fr": "Préfecture autonome coréenne de Yanbian, Jilin, Chine",
+      "zh-CN": "中国,吉林省,延边朝鲜族自治州"
+    },
+    "YB-SC-CN": {
+      "de": "Yibin, Provinz Sichuan, China",
+      "en": "Yibin Shi,Sichuan Sheng,China",
+      "fr": "Yibin, Sichuan, Chine",
+      "zh-CN": "中国,四川省,宜宾市"
+    },
+    "YC-HLJ-CN": {
+      "de": "Stadt Yichun, Provinz Heilongjiang, China",
+      "en": "Yichun Shi,Heilongjiang Sheng,China",
+      "fr": "Yichun, Heilongjiang, Chine",
+      "zh-CN": "中国,黑龙江省,伊春市"
+    },
+    "YC-HUB-CN": {
+      "de": "Yichang Shi, Provinz Hubei, China",
+      "en": "Yichang Shi,Hubei Sheng,China",
+      "fr": "Yichang, Hubei, Chine",
+      "zh-CN": "中国,湖北省,宜昌市"
+    },
+    "YC-JS-CN": {
+      "de": "Stadt Yancheng, Provinz Jiangsu, China",
+      "en": "Yancheng Shi,Jiangsu Sheng,China",
+      "fr": "Yancheng, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,盐城市"
+    },
+    "YC-JX-CN": {
+      "de": "Yichun Shi, Provinz Jiangxi, China",
+      "en": "Yichun Shi,Jiangxi Sheng,China",
+      "fr": "Yichun, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,宜春市"
+    },
+    "YC-NX-CN": {
+      "de": "Stadt Yinchuan, Autonomes Gebiet Ningxia der Hui, China",
+      "en": "Yinchuan Shi,Ningxia Huizu Zizhiqu,China",
+      "fr": "Yinchuan, région autonome hui du Ningxia, Chine",
+      "zh-CN": "中国,宁夏回族自治区,银川市"
+    },
+    "YC-SX-CN": {
+      "de": "Stadt Yuncheng, Provinz Shanxi, China",
+      "en": "Yuncheng Shi,Shanxi Sheng,China",
+      "fr": "Yuncheng, Shanxi, Chine",
+      "zh-CN": "中国,山西省,运城市"
+    },
+    "YF-GD-CN": {
+      "de": "Yunfu, Provinz Guangdong, China",
+      "en": "Yunfu Shi,Guangdong Sheng,China",
+      "fr": "Yunfu, Guangdong, Chine",
+      "zh-CN": "中国,广东省,云浮市"
+    },
+    "YIY-HUN-CN": {
+      "de": "Yiyang Shi, Provinz Hunan, China",
+      "en": "Yiyang Shi,Hunan Sheng,China",
+      "fr": "Yiyang, Hunan, Chine",
+      "zh-CN": "中国,湖南省,益阳市"
+    },
+    "YJ-GD-CN": {
+      "de": "Yangjiang, Provinz Guangdong, China",
+      "en": "Yangjiang Shi,Guangdong Sheng,China",
+      "fr": "Yangjiang, Guangdong, Chine",
+      "zh-CN": "中国,广东省,阳江市"
+    },
+    "YK-LN-CN": {
+      "de": "Stadt Yingkou, Provinz Liaoning, China",
+      "en": "Yingkou Shi,Liaoning Sheng,China",
+      "fr": "Yingkou, Liaoning, Chine",
+      "zh-CN": "中国,辽宁省,营口市"
+    },
+    "YL-GX-CN": {
+      "de": "Yulin, Autonomes Gebiet Guangxi der Zhuang, China",
+      "en": "Yulin Shi,Guangxi Zhuangzu Zizhiqu,China",
+      "fr": "Yulin, région autonome zhuang du Guangxi, Chine",
+      "zh-CN": "中国,广西壮族自治区,玉林市"
+    },
+    "YL-SAX-CN": {
+      "de": "Yulin, Provinz Shaanxi, China",
+      "en": "Yulin Shi,Shaanxi Sheng,China",
+      "fr": "Yulin, Shaanxi, Chine",
+      "zh-CN": "中国,陕西省,榆林市"
+    },
+    "YN-CN": {
+      "de": "Provinz Yunnan, China",
+      "en": "Yunnan Sheng,China",
+      "fr": "Yunnan, Chine",
+      "zh-CN": "中国,云南省"
+    },
+    "YQ-SX-CN": {
+      "de": "Yangquan Shi, Shanxi-Provinz, China",
+      "en": "Yangquan Shi,Shanxi Sheng,China",
+      "fr": "Yangquan, Shanxi, Chine",
+      "zh-CN": "中国,山西省,阳泉市"
+    },
+    "YT-JX-CN": {
+      "de": "Yingtan Shi, Provinz Jiangxi, China",
+      "en": "Yingtan Shi,Jiangxi Sheng,China",
+      "fr": "Yingtan, Jiangxi, Chine",
+      "zh-CN": "中国,江西省,鹰潭市"
+    },
+    "YT-SD-CN": {
+      "de": "Yantai Shi, Provinz Shandong, China",
+      "en": "Yantai Shi,Shandong Sheng,China",
+      "fr": "Yantai, Shandong, Chine",
+      "zh-CN": "中国,山东省,烟台市"
+    },
+    "YUY-HUN-CN": {
+      "de": "Yueyang Shi, Provinz Hunan, China",
+      "en": "Yueyang Shi,Hunan Sheng,China",
+      "fr": "Yueyang, Hunan, Chine",
+      "zh-CN": "中国,湖南省,岳阳市"
+    },
+    "YX-YN-CN": {
+      "de": "Yuxi, Provinz Yunnan, China",
+      "en": "Yuxi Shi,Yunnan Sheng,China",
+      "fr": "Yuxi, Yunnan, Chine",
+      "zh-CN": "中国,云南省,玉溪市"
+    },
+    "YZ-HUN-CN": {
+      "de": "Yongzhou Shi, Provinz Hunan, China",
+      "en": "Yongzhou Shi,Hunan Sheng,China",
+      "fr": "Yongzhou, Hunan, Chine",
+      "zh-CN": "中国,湖南省,永州市"
+    },
+    "YZ-JS-CN": {
+      "de": "Stadt Yangzhou, Provinz Jiangsu, China",
+      "en": "Yangzhou Shi,Jiangsu Sheng,China",
+      "fr": "Yangzhou, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,扬州市"
+    },
+    "ZB-SD-CN": {
+      "de": "Zibo Shi, Provinz Shandong, China",
+      "en": "Zibo Shi,Shandong Sheng,China",
+      "fr": "Zibo, Shandong, Chine",
+      "zh-CN": "中国,山东省,淄博市"
+    },
+    "ZG-SC-CN": {
+      "de": "Zigong, Provinz Sichuan, China",
+      "en": "Zigong Shi,Sichuan Sheng,China",
+      "fr": "Zigong, Sichuan, Chine",
+      "zh-CN": "中国,四川省,自贡市"
+    },
+    "ZH-GD-CN": {
+      "de": "Zhuhai Shi, Provinz Guangdong, China",
+      "en": "Zhuhai Shi,Guangdong Sheng,China",
+      "fr": "Zhuhai, Guangdong, Chine",
+      "zh-CN": "中国,广东省,珠海市"
+    },
+    "ZJ-CN": {
+      "de": "Provinz Zhejiang, China",
+      "en": "Zhejiang Sheng,China",
+      "fr": "Zhejiang, Chine",
+      "zh-CN": "中国,浙江省"
+    },
+    "ZJ-GD-CN": {
+      "de": "Zhanjiang Shi, Provinz Guangdong, China",
+      "en": "Zhanjiang Shi,Guangdong Sheng,China",
+      "fr": "Zhanjiang, Guangdong, Chine",
+      "zh-CN": "中国,广东省,湛江市"
+    },
+    "ZJ-JS-CN": {
+      "de": "Stadt Zhenjiang, Provinz Jiangsu, China",
+      "en": "Zhenjiang Shi,Jiangsu Sheng,China",
+      "fr": "Zhenjiang, Jiangsu, Chine",
+      "zh-CN": "中国,江苏省,镇江市"
+    },
+    "ZJJ-HUN-CN": {
+      "de": "Zhangjiajie Shi, Provinz Hunan, China",
+      "en": "Zhangjiajie Shi,Hunan Sheng,China",
+      "fr": "Zhangjiajie, Hunan, Chine",
+      "zh-CN": "中国,湖南省,张家界市"
+    },
+    "ZJK-HEB-CN": {
+      "de": "Zhangjiakou Shi, Hebei-Provinz, China",
+      "en": "Zhangjiakou Shi,Hebei Sheng,China",
+      "fr": "Zhangjiakou, Hebei, Chine",
+      "zh-CN": "中国,河北省,张家口市"
+    },
+    "ZK-HEN-CN": {
+      "de": "Zhoukou Shi, Provinz Henan, China",
+      "en": "Zhoukou Shi,Henan Sheng,China",
+      "fr": "Zhoukou, Henan, Chine",
+      "zh-CN": "中国,河南省,周口市"
+    },
+    "ZMD-HEN-CN": {
+      "de": "Zhumadian Shi, Provinz Henan, China",
+      "en": "Zhumadian Shi,Henan Sheng,China",
+      "fr": "Zhumadian, Henan, Chine",
+      "zh-CN": "中国,河南省,驻马店市"
+    },
+    "ZQ-GD-CN": {
+      "de": "Zhaoqing, Provinz Guangdong, China",
+      "en": "Zhaoqing Shi,Guangdong Sheng,China",
+      "fr": "Zhaoqing, Guangdong, Chine",
+      "zh-CN": "中国,广东省,肇庆市"
+    },
+    "ZS-GD-CN": {
+      "de": "Zhongshan, Provinz Guangdong, China",
+      "en": "Zhongshan Shi,Guangdong Sheng,China",
+      "fr": "Zhongshan, Guangdong, Chine",
+      "zh-CN": "中国,广东省,中山市"
+    },
+    "ZS-ZJ-CN": {
+      "de": "Stadt Zhoushan, Provinz Zhejiang, China",
+      "en": "Zhoushan Shi,Zhejiang Sheng,China",
+      "fr": "Zhoushan, Zhejiang, Chine",
+      "zh-CN": "中国,浙江省,舟山市"
+    },
+    "ZT-YN-CN": {
+      "de": "Zhaotong, Provinz Yunnan, China",
+      "en": "Zhaotong Shi,Yunnan Sheng,China",
+      "fr": "Zhaotong, Yunnan, Chine",
+      "zh-CN": "中国,云南省,昭通市"
+    },
+    "ZW-NX-CN": {
+      "de": "Stadt Zhongwei, Autonomes Gebiet Ningxia der Hui, China",
+      "en": "Zhongwei Shi,Ningxia Huizu Zizhiqu,China",
+      "fr": "Zhongwei, région autonome hui du Ningxia, Chine",
+      "zh-CN": "中国,宁夏回族自治区,中卫市"
+    },
+    "ZY-GS-CN": {
+      "de": "Stadt Zhangye, Provinz Gansu, China",
+      "en": "Zhangye Shi,Gansu Sheng,China",
+      "fr": "Zhangye, Gansu, Chine",
+      "zh-CN": "中国,甘肃省,张掖市"
+    },
+    "ZY-GZ-CN": {
+      "de": "Zunyi, Provinz Guizhou, China",
+      "en": "Zunyi Shi,Guizhou Sheng,China",
+      "fr": "Zunyi, Guizhou, Chine",
+      "zh-CN": "中国,贵州省,遵义市"
+    },
+    "ZY-SC-CN": {
+      "de": "Ziyang, Provinz Sichuan, China",
+      "en": "Ziyang Shi,Sichuan Sheng,China",
+      "fr": "Ziyang, Sichuan, Chine",
+      "zh-CN": "中国,四川省,资阳市"
+    },
+    "ZZ-FJ-CN": {
+      "de": "Zhangzhou Shi, Provinz Fujian, China",
+      "en": "Zhangzhou Shi,Fujian Sheng,China",
+      "fr": "Zhangzhou, Fujian, Chine",
+      "zh-CN": "中国,福建省,漳州市"
+    },
+    "ZZ-HEN-CN": {
+      "de": "Zhengzhou Shi, Provinz Henan, China",
+      "en": "Zhengzhou Shi,Henan Sheng,China",
+      "fr": "Zhengzhou, Henan, Chine",
+      "zh-CN": "中国,河南省,郑州市"
+    },
+    "ZZ-HUN-CN": {
+      "de": "Zhuzhou Shi, Provinz Hunan, China",
+      "en": "Zhuzhou Shi,Hunan Sheng,China",
+      "fr": "Zhuzhou, Hunan, Chine",
+      "zh-CN": "中国,湖南省,株洲市"
+    },
+    "ZZ-SD-CN": {
+      "de": "Zaozhuang Shi, Provinz Shandong, China",
+      "en": "Zaozhuang Shi,Shandong Sheng,China",
+      "fr": "Zaozhuang, Shandong, Chine",
+      "zh-CN": "中国,山东省,枣庄市"
+    }
+  }
+}

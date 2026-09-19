@@ -4,6 +4,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import type { AddressInfo } from "node:net";
 import { pathToFileURL } from "node:url";
 
+import { navigationFixture, filterNavigationFixture } from "./portal-navigation-fixture";
 import catalogFixture from "../tests/fixtures/portal/catalog-v1.json";
 import environmentFixture from "../tests/fixtures/portal/r1-environments.json";
 
@@ -269,6 +270,12 @@ function sitemapShardResponse(arguments_: Record<string, unknown>) {
 
 function rpcPayload(name: string, arguments_: Record<string, unknown>): unknown {
   switch (name) {
+    case "portal_navigation_v1":
+      return navigationFixture(arguments_);
+    case "portal_search_processes_v3":
+      return filterNavigationFixture(processSearchResponse(), arguments_);
+    case "portal_search_flows_v3":
+      return filterNavigationFixture(flowSearchResponse(), arguments_);
     case "portal_search_processes_v2":
       return processSearchResponse();
     case "portal_search_flows_v2":
@@ -315,6 +322,7 @@ function rpcPayload(name: string, arguments_: Record<string, unknown>): unknown 
         arguments_.p_process_version === catalogFixture.datasetProcess.key.version
         ? catalogFixture.exchanges
         : null;
+    case "portal_facets_v3":
     case "portal_facets_v2":
       return {
         ...catalogFixture.facets,

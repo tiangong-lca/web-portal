@@ -1,7 +1,12 @@
 import locationNames from "./locations.generated.json";
+import supplementaryNames from "./navigation-locations.generated.json";
 import type { PortalLocale } from "./routing";
 
 const names: Record<string, Partial<Record<PortalLocale, string>>> = locationNames;
+const supplementary: Record<
+  string,
+  Partial<Record<PortalLocale, string>>
+> = supplementaryNames.names;
 
 /** This is a display lookup, never a filter-code or geography-precision rewrite. */
 export function geographyName(
@@ -10,7 +15,9 @@ export function geographyName(
 ): string | undefined {
   if (!code?.trim() || code.trim().toUpperCase() === "NULL") return undefined;
   const key = code.trim().toUpperCase();
-  return Object.hasOwn(names, key) ? names[key]?.[locale] : undefined;
+  if (Object.hasOwn(names, key)) return names[key]?.[locale];
+  const extra = Object.hasOwn(supplementary, key) ? supplementary[key] : undefined;
+  return extra?.[locale] ?? (extra?.en && locale !== "en" ? `${extra.en} [en]` : undefined);
 }
 
 export function formatGeographyCode(
@@ -19,5 +26,10 @@ export function formatGeographyCode(
 ): string | undefined {
   if (!code?.trim() || code.trim().toUpperCase() === "NULL") return undefined;
   const name = geographyName(code, locale);
-  return name ? `${name} (${code.trim().toUpperCase()})` : code;
+  if (name) return `${name} (${code.trim().toUpperCase()})`;
+  // A known parent helps locate an unresolved Chinese code without inventing a city name.
+  // This is display context only: filters and authored geography remain unchanged.
+  const parentCode = /^(CN-[A-Z]{2})-[A-Z0-9-]+$/u.exec(code.trim().toUpperCase())?.[1];
+  const parent = parentCode ? geographyName(parentCode, locale) : undefined;
+  return parent ? `${parent} · ${code.trim().toUpperCase()}` : code;
 }

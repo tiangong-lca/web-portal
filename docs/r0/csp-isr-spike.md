@@ -20,9 +20,9 @@ checkPaths:
   - edgeone.json
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
-lastReviewedAt: 2026-09-16
-lastReviewedCommit: ff1908d15d3295c656778c6a93a25ec3b148b405
-lastReviewedNote: "Reviewed for Portal #87: the strict-profile finding is unchanged. Font @font-face rules load only same-origin font files, so font-src 'self' still covers them and no inline style or script is added; the strict no-inline profile remains a future Next/EdgeOne recheck item exactly as recorded."
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 91aa406d3735b9d7d5e62eec8ac571be6ca37a24
+lastReviewedNote: "Reviewed for Portal #97: same-origin hashed map JSON, native SVG links and the no-JavaScript navigation fallback remain compatible with the existing performance CSP. No policy is weakened and the strict-profile finding is unchanged. Historical note for Portal #87: the strict-profile finding is unchanged. Font @font-face rules load only same-origin font files, so font-src 'self' still covers them and no inline style or script is added; the strict no-inline profile remains a future Next/EdgeOne recheck item exactly as recorded."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

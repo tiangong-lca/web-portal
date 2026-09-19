@@ -22,7 +22,7 @@ const meta = {
     CatalogSearchInput,
     SearchResults,
   },
-  args: { locale: "zh-CN" },
+  args: { locale: "zh-CN", counts: { process: 17299, flow: 83012 } },
   parameters: { pageLayout: true },
   play: async ({ args, canvasElement }) => {
     if (args.number) {
@@ -51,6 +51,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Homepage: Story = { args: { number: "02" } };
 export const InitialSearch: Story = {};
+export const CountsUnavailable: Story = { args: { counts: null } };
 export const Dark: Story = { args: { number: "02" }, globals: { theme: "dark" } };
 export const MobileGerman: Story = {
   args: { number: "02" },

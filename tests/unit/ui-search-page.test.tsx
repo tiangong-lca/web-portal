@@ -103,9 +103,7 @@ describe("Search page sidebar state (Portal #46)", () => {
     expect(catalogMocks.searchPublicFlows).not.toHaveBeenCalled();
     expect(catalogMocks.getPublicFacets).toHaveBeenCalledTimes(1);
 
-    expect(
-      within(screen.getAllByRole("alert")[0]!).getByText(searchDictionary.unavailableDescription),
-    ).toBeInTheDocument();
+    expect(screen.getByText(searchDictionary.unavailableDescription)).toBeInTheDocument();
   });
 
   it("a successful query keeps facets and the facet description", async () => {

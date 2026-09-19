@@ -1,7 +1,7 @@
 {
   "schemaVersion": "portal.database-contract-snapshot.v1",
   "sourceRepository": "tiangong-lca/database",
-  "sourceCommit": "521741a064f402c9b674583ef69a5947d1b5885f",
+  "sourceCommit": "623acc63b977f50ccf26bc23e291b967c2270157",
   "files": [
     {
       "path": "portal.common-types.v1.schema.json",
@@ -98,6 +98,54 @@
       "sourcePath": "contracts/portal/generated/portal.public-facets.v2.d.ts",
       "bytes": 1604,
       "sha256": "4c39c26fb549f9a57f5090097d6bb0676c2b8056db9aed8c6dafbd18d526e754"
+    },
+    {
+      "path": "portal.public-navigation.v1.schema.json",
+      "sourcePath": "contracts/portal/portal.public-navigation.v1.schema.json",
+      "bytes": 12771,
+      "sha256": "d34e9a3c79f73bba6c38ff93b52c50d9e972139f43b101ff5650735c7d4ff1eb"
+    },
+    {
+      "path": "generated/portal.public-navigation.v1.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-navigation.v1.d.ts",
+      "bytes": 8479,
+      "sha256": "c9bad4c387d9df9b74e9f18c77e5a6f4b922eb8e1d18dcaddb0a5a2e32c47480"
+    },
+    {
+      "path": "portal.public-navigation-input.v1.schema.json",
+      "sourcePath": "contracts/portal/portal.public-navigation-input.v1.schema.json",
+      "bytes": 1585,
+      "sha256": "d0383aa1e1d8a7d7b805b280bad7c7c74b686eb1fc9d7a48873f450e7863eed3"
+    },
+    {
+      "path": "generated/portal.public-navigation-input.v1.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-navigation-input.v1.d.ts",
+      "bytes": 2093,
+      "sha256": "63c1227db384dfeea2871d469f833839dd8018ea0ef7461d38336712586f0dd9"
+    },
+    {
+      "path": "portal.public-search-input.v3.schema.json",
+      "sourcePath": "contracts/portal/portal.public-search-input.v3.schema.json",
+      "bytes": 3179,
+      "sha256": "6f19618b7c8b25d515b6f9e05a0d6cb50561e4c35fa772031f81c261e0583694"
+    },
+    {
+      "path": "generated/portal.public-search-input.v3.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-search-input.v3.d.ts",
+      "bytes": 2171,
+      "sha256": "66e92b2934407128248aa432fed14e5ecd0e14ea3bb2921b050a4fec084b8c81"
+    },
+    {
+      "path": "portal.public-facet-input.v3.schema.json",
+      "sourcePath": "contracts/portal/portal.public-facet-input.v3.schema.json",
+      "bytes": 1023,
+      "sha256": "51f523a31831cdac01f5fdc037260a8ef64d684bb9b346d2b5d321fc9a257827"
+    },
+    {
+      "path": "generated/portal.public-facet-input.v3.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-facet-input.v3.d.ts",
+      "bytes": 1869,
+      "sha256": "c9ed88cb3ebc3a8a89ae14630a2adb403224d3bf57c326dc1cea1017bbec0f2c"
     },
     {
       "path": "portal.public-hybrid-candidate-page.v1.schema.json",
@@ -206,6 +254,18 @@
       "sourcePath": "contracts/portal/generated/portal.published-lcia-page.v1.d.ts",
       "bytes": 3521,
       "sha256": "48b7009287787fbde4fd2f5327d12d55278328398ddf056fa5f48ff732995b13"
+    },
+    {
+      "path": "navigation-vocabulary.json",
+      "sourcePath": "contracts/portal/navigation-vocabulary.json",
+      "bytes": 3976238,
+      "sha256": "d1943ec886f918748fabbc309a12e37790816baaae80512d9ce17327a6de8094"
+    },
+    {
+      "path": "navigation-vocabulary.receipt.json",
+      "sourcePath": "contracts/portal/navigation-vocabulary.receipt.json",
+      "bytes": 9728,
+      "sha256": "98f6aaa0d80e571218d818a8a17eb4b9d3bc8aa574e656d27affd60eb23251c2"
     }
   ]
 }

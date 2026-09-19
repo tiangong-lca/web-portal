@@ -40,6 +40,57 @@ function variant({
   } as PublicDatasetEnvelope;
 }
 
+/** The attribution, terms and source fields an attribution case needs to set. */
+type AttributionOverrides = {
+  comment?: LocalizedText;
+  names?: LocalizedText;
+  providerName?: LocalizedText;
+  owner?: PublicDatasetEnvelope["metadata"]["administration"]["owner"];
+  generator?: PublicDatasetEnvelope["metadata"]["administration"]["dataGenerator"];
+  accessRestrictions?: LocalizedText;
+  licenseType?: string | null;
+  licenseId?: string | null;
+  licenseUrl?: string | null;
+};
+
+/**
+ * The base record with only the supplied fields replaced. Attribution cases must not be able to
+ * pass by changing an unrelated field, and a `null` override is a real value here, not "unchanged".
+ */
+function attributed(
+  overrides: AttributionOverrides = {},
+  base: PublicDatasetEnvelope = processDataset,
+): PublicDatasetEnvelope {
+  const metadata = base.metadata;
+  return {
+    ...base,
+    metadata: {
+      ...metadata,
+      generalComment: overrides.comment ?? metadata.generalComment,
+      names: overrides.names ?? metadata.names,
+      administration: {
+        ...metadata.administration,
+        owner: overrides.owner ?? metadata.administration.owner,
+        dataGenerator: overrides.generator ?? metadata.administration.dataGenerator,
+        accessRestrictions:
+          overrides.accessRestrictions ?? metadata.administration.accessRestrictions,
+        licenseType:
+          overrides.licenseType === undefined
+            ? metadata.administration.licenseType
+            : overrides.licenseType,
+      },
+      source: {
+        ...metadata.source,
+        providerName: overrides.providerName ?? metadata.source.providerName,
+        licenseId:
+          overrides.licenseId === undefined ? metadata.source.licenseId : overrides.licenseId,
+        licenseUrl:
+          overrides.licenseUrl === undefined ? metadata.source.licenseUrl : overrides.licenseUrl,
+      },
+    },
+  } as PublicDatasetEnvelope;
+}
+
 function render(
   dataset: PublicDatasetEnvelope,
   locale: "zh-CN" | "en" | "de" | "fr" = "en",
@@ -234,5 +285,93 @@ describe("page metadata stays independent of Dataset eligibility", () => {
 
     expect(render(hostile)).not.toContain("</script><script>alert(1)");
     expect(structuredData(hostile).description).toContain("</script><script>alert(1)</script>");
+  });
+});
+
+describe("attribution stays within what the record carries", () => {
+  /** The complete TIDAS `common:licenseType` vocabulary: access and use categories, not licenses. */
+  const declaredUseTerms = [
+    "Free of charge for all users and uses",
+    "Free of charge for some user types or use types",
+    "Free of charge for members only",
+    "License fee",
+    "Other",
+  ];
+
+  it("never derives a creator from the ownership reference", () => {
+    const owner = {
+      id: null,
+      version: null,
+      name: [{ language: "en", value: "TianGong LCA data team" }],
+    };
+    const process = attributed({ owner, providerName: [{ language: "en", value: "TianGong" }] });
+    const processLd = structuredData(process);
+
+    expect("creator" in processLd).toBe(false);
+    expect(JSON.stringify(processLd)).not.toContain("TianGong LCA data team");
+
+    // The Flow base carries no ownership name of its own, so the leak has to be supplied here.
+    const flow = attributed(
+      {
+        comment: [{ language: "en", value: eligibleComment }],
+        owner,
+        providerName: [{ language: "en", value: "JRC" }],
+      },
+      flowDataset,
+    );
+    const flowLd = structuredData(flow);
+
+    expect("creator" in flowLd).toBe(false);
+    expect(JSON.stringify(flowLd)).not.toContain("JRC");
+  });
+
+  it("does not emit a creator while the generator reference carries no entity type", () => {
+    const references = [
+      { id: null, version: null },
+      { id: "22222222-2222-2222-2222-222222222222", version: "01.00.000" },
+    ];
+    // A person, an organisation and a database network are deliberately indistinguishable here: no
+    // name may be turned into a type, and the name must not leak into another field either.
+    for (const name of ["JRC", "Jane Doe", "ACME GmbH", "ecoinvent network"]) {
+      for (const reference of references) {
+        const ld = structuredData(
+          attributed({ generator: { ...reference, name: [{ language: "en", value: name }] } }),
+        );
+
+        expect("creator" in ld).toBe(false);
+        expect(JSON.stringify(ld)).not.toContain(name);
+      }
+    }
+  });
+
+  it("never turns a declared access or use category into a license", () => {
+    for (const terms of declaredUseTerms) {
+      const ld = structuredData(
+        attributed({ licenseType: terms, licenseId: terms, licenseUrl: null }),
+      );
+
+      expect(Object.keys(ld).filter((key) => /licen/iu.test(key))).toEqual([]);
+      expect(JSON.stringify(ld)).not.toMatch(/creativecommons|CC0|CC-BY/iu);
+    }
+  });
+
+  it("keeps a license only from an authored public license URL", () => {
+    expect(structuredData(processDataset).license).toBe("https://example.com/license");
+    // An identifier alone never becomes a license, even when it reads like a real license name.
+    expect("license" in structuredData(attributed({ licenseUrl: null }))).toBe(false);
+  });
+
+  it("adds no injection surface from attribution, generator or restriction text", () => {
+    const hostile = "</script><script>alert(1)</script>";
+    const dataset = attributed({
+      providerName: [{ language: "en", value: hostile }],
+      owner: { id: null, version: null, name: [{ language: "en", value: hostile }] },
+      generator: { id: null, version: null, name: [{ language: "en", value: hostile }] },
+      accessRestrictions: [{ language: "en", value: hostile }],
+    });
+    const markup = render(dataset);
+
+    expect(markup).not.toContain("</script><script>alert(1)");
+    expect(JSON.stringify(structuredData(dataset))).not.toContain("alert(1)");
   });
 });

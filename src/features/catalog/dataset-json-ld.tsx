@@ -69,15 +69,19 @@ export function DatasetJsonLd({
   if (!eligibility.eligible) return null;
 
   const metadata = dataset.metadata;
-  const provider = localizedText(metadata.source.providerName, locale);
+  // providerName describes ownership, not authorship. Even the explicit generator reference
+  // has no Person/Organization type in the public DTO. Keep attribution visible as labeled
+  // text on the page, but omit creator until both role and entity type are supported facts.
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Dataset",
     dateModified: dataset.modifiedAt,
-    ...(provider ? { creator: { "@type": "Organization", name: provider } } : {}),
     description: eligibility.description,
     identifier: `${dataset.key.id}@${dataset.key.version}`,
     inLanguage: locale,
+    // A license is only an authored, publicly resolvable license URI. The declared license type
+    // category (including its free-of-charge values), the copyright flag and the visibility
+    // capabilities describe access and use terms, not a license, and never fill this field.
     ...(metadata.source.licenseUrl ? { license: metadata.source.licenseUrl } : {}),
     name: localizedText(metadata.names, locale),
     ...(metadata.kind === "process" && metadata.referenceYear !== null

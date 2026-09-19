@@ -42,6 +42,12 @@ const meta = {
       const kind = parameters.flow ? "flow" : "process";
       const record = parameters.missing ? undefined : detailRecord(locale, kind);
       if (record && parameters.noCitation) record.citation = undefined;
+      if (record && parameters.attribution) {
+        record.dataGenerator = "Example research group";
+        record.dataOwner = "Example data owner";
+        record.accessRestrictions = "Research use only; contact the owner for other uses. [en]";
+        record.licenseUrl = undefined;
+      }
       return {
         header: await DetailHeader({
           locale,
@@ -290,4 +296,21 @@ export const CitationMissingText: Story = {
 export const CitationDark: Story = {
   ...CitationExpanded,
   globals: { locale: "fr", theme: "dark" },
+};
+
+export const DeclaredAttribution: Story = {
+  parameters: { attribution: true },
+  play: async ({ canvas, globals }) => {
+    const m = dictionaries[storyLocale(globals)].Detail;
+    await expect(canvas.getByText(m.dataGenerator)).toBeVisible();
+    await expect(canvas.getByText("Example research group")).toBeVisible();
+    await expect(canvas.getByText(m.dataOwner)).toBeVisible();
+    await expect(canvas.getByText("Example data owner")).toBeVisible();
+    await expect(canvas.getByText(m.accessRestrictions)).toBeVisible();
+    await expect(canvas.queryByRole("link", { name: m.viewLicense })).not.toBeInTheDocument();
+  },
+};
+export const DeclaredAttributionMobileGerman: Story = {
+  ...DeclaredAttribution,
+  globals: { ...mobileGlobals, locale: "de" },
 };

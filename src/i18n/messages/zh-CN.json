@@ -302,7 +302,11 @@
     "versionCopied": "版本标识已复制",
     "copyFailed": "复制失败，可选中下方文字手动复制。",
     "exchangeContext": "标识与展示依据",
-    "lciaContext": "数据集与方法版本"
+    "lciaContext": "数据集与方法版本",
+    "dataGenerator": "数据生成方",
+    "dataOwner": "数据所有权方",
+    "licenseType": "声明的许可类型",
+    "accessRestrictions": "访问与使用限制"
   },
   "Compare": {
     "title": "比较过程数据集",

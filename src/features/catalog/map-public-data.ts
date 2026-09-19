@@ -196,7 +196,11 @@ export function mapDataset(
         .join("; ") || undefined,
     description: localizedText(metadata.generalComment, locale),
     evidence: localizePublicEvidence(dataset.capabilities.reasonCodes, locale),
-    license: metadata.source.licenseId ?? metadata.administration.licenseType ?? undefined,
+    // Preserve the declared category; source.licenseId currently echoes it but is not a license.
+    licenseType: metadata.administration.licenseType ?? undefined,
+    dataGenerator: localizedText(metadata.administration.dataGenerator.name, locale),
+    dataOwner: localizedText(metadata.administration.owner.name, locale),
+    accessRestrictions: localizedText(metadata.administration.accessRestrictions, locale),
     licenseUrl:
       metadata.source.licenseUrl && /^https?:\/\//iu.test(metadata.source.licenseUrl)
         ? metadata.source.licenseUrl

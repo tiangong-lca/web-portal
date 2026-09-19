@@ -302,7 +302,11 @@
     "versionCopied": "Identifiant de version copié",
     "copyFailed": "La copie a échoué. Sélectionnez le texte ci-dessous pour le copier manuellement.",
     "exchangeContext": "Identifiants et contexte d’affichage",
-    "lciaContext": "Versions du jeu de données et de la méthode"
+    "lciaContext": "Versions du jeu de données et de la méthode",
+    "dataGenerator": "Générateur des données",
+    "dataOwner": "Propriétaire du jeu de données",
+    "licenseType": "Type de licence déclaré",
+    "accessRestrictions": "Restrictions d’accès et d’utilisation"
   },
   "Compare": {
     "title": "Comparer des jeux de données de processus",

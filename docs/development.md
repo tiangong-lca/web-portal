@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-18
-lastReviewedCommit: 21c74e3b0f1316cc77fd345e85c3e81cd3dac7c5
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 08d4d08fef2d9fc4ab5ec641299dc2a1a176546f
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #89: publish the exact 32-byte Baidu-issued ownership file at the canonical www static path; its one exact formatter exclusion preserves provider bytes. No brand, UI, typography, language, canonical, sitemap or runtime routing rule changes. Original file and repository copy have SHA2560538ecc07f8ce0b7d4114344a95b9f30676e33eb84d0db93634ec648369a57f9. Required CI and hosted file/provider verification remain pending."
+lastReviewedNote: "Reviewed for Portal #95 against 08d4d08: public generator, owner and declared use terms stay distinct; untyped authors and absent license URLs are not invented. Existing four-locale, capability, runtime and delivery boundaries remain unchanged. Local static/build, 292 tests and 65 browser checks pass; source delivery and production verification remain pending."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

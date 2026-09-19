@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-09-18
-lastReviewedCommit: 21c74e3b0f1316cc77fd345e85c3e81cd3dac7c5
-lastReviewedNote: "Reviewed for Portal #87: no plan change. Section 13.5 delegates font and density to the UI specification, which now records the single @font-face owner, and section 18.1's budgets are untouched and still met (home first-view JavaScript 78,285 of 122,880 gzip bytes). The work removes duplicated CSS bytes only."
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 08d4d08fef2d9fc4ab5ec641299dc2a1a176546f
+lastReviewedNote: "Reviewed for Portal #95 against 08d4d08: public generator, owner and declared use terms stay distinct; untyped authors and absent license URLs are not invented. Existing four-locale, capability, runtime and delivery boundaries remain unchanged. Local static/build, 292 tests and 65 browser checks pass; source delivery and production verification remain pending."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -854,7 +854,8 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - 关闭 JavaScript 后仍能完成 identifier/lexical 搜索提交、翻页、详情阅读和 tab 跳转；Hybrid 明确不属于无 JS 基线；
 - `generateMetadata` 读取同一 server query，生成 title、description、canonical、Open Graph 与 alternates；
 - 每个公开版本输出 Schema.org `Dataset` JSON-LD；Database 目录输出 `DataCatalog`；
-- JSON-LD 只声明真实存在的 license、creator、spatialCoverage、temporalCoverage 和 distribution。
+- JSON-LD 只声明真实存在的 license、spatialCoverage、temporalCoverage 和 distribution。当前公开 DTO 的 providerName 来自数据所有权方，dataGenerator 命名引用也不携带 Person/Organization 类型；因此当前不输出 creator，不能把所有权方、录入者或平台运营方推断成作者，也不猜实体类型。将来输出 creator 必须先有明确的创建角色与实体类型契约。
+- 详情页按原始公开字段分别展示非空的数据生成方、数据所有权方与访问/使用限制；声明的许可类型取 administration.licenseType，保持原文，不把 source.licenseId 的字段名视为正式许可证事实。数据名称沿用既有来源语言回退标记。JSON-LD license 与“查看许可”链接只取明确提供的 source.licenseUrl；免费类别、公开能力或仓库软件许可证都不能替代它。未知信息继续缺省，Google 可选字段提示不作为补造数据的理由。
 - `Dataset.description` 取公开 `generalComment`（与页面可见文本、页面 metadata 同一来源），仅折叠排版空白。只有同时具备真实 `name` 与 50–5,000 **Unicode 字符**（按码点计数，不拆分代理对）的描述时才输出该 JSON-LD；缺失、全空白、过短或没有真实名称时不输出该 script，也不得用 identifier、填充文本或摘要凑合。超长按词边界截断，但若词边界会使结果短于 50 字符则退回按上限硬截断（不追加字符）。展示资格与页面是否可索引相互独立：缺少合法描述不改变页面的 robots 指令、canonical 或 metadata description。
 
 ### 11.2 索引控制

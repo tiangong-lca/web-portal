@@ -151,5 +151,14 @@ export function parsePortalBrowseUrl(
   }
   const result = browseSearchInputSchema.safeParse({ ...base, filters });
   if (!result.success) throw new PortalInputError();
+  // Repair the exact virtual-container tuple emitted by the first hierarchy UI.
+  // A genuine raw leaf (or a standalone legacy filter) may still author "~".
+  if (
+    result.data.filters.classification === "~" &&
+    result.data.filters.classificationNodeId?.endsWith(":~raw")
+  ) {
+    delete result.data.filters.classification;
+    result.data.cursor = null;
+  }
   return result.data;
 }

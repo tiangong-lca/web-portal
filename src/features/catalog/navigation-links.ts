@@ -19,7 +19,8 @@ export function navigationHref(
   if (nodeId) {
     parameters.set(nodeKey, nodeId);
     parameters.set(scopeKey, options.scope ?? "subtree");
-    if (nodeId.includes(":~") && options.code)
+    // Virtual raw-group parents use a synthetic code, not an authored filter.
+    if (nodeId.includes(":~") && !nodeId.endsWith(":~raw") && options.code)
       parameters.set(geographic ? "geo" : "classification", options.code);
   }
   if (!options.results && geographic) parameters.set("explore", "region");

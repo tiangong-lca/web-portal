@@ -302,7 +302,11 @@
     "versionCopied": "Versionskennung kopiert",
     "copyFailed": "Kopieren fehlgeschlagen. Markieren Sie den folgenden Text, um ihn manuell zu kopieren.",
     "exchangeContext": "Kennungen und Darstellungskontext",
-    "lciaContext": "Datensatz- und Methodenversionen"
+    "lciaContext": "Datensatz- und Methodenversionen",
+    "dataGenerator": "Datenersteller",
+    "dataOwner": "Datensatzeigentümer",
+    "licenseType": "Angegebener Lizenztyp",
+    "accessRestrictions": "Zugangs- und Nutzungsbeschränkungen"
   },
   "Compare": {
     "title": "Prozessdatensätze vergleichen",

@@ -302,7 +302,11 @@
     "versionCopied": "Version ID copied",
     "copyFailed": "Copy failed. Select the text below to copy it manually.",
     "exchangeContext": "Identifiers and display context",
-    "lciaContext": "Dataset and method versions"
+    "lciaContext": "Dataset and method versions",
+    "dataGenerator": "Data generator",
+    "dataOwner": "Dataset owner",
+    "licenseType": "Declared license type",
+    "accessRestrictions": "Access and use restrictions"
   },
   "Compare": {
     "title": "Compare Process datasets",

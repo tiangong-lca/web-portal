@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-18
-lastReviewedCommit: 21c74e3b0f1316cc77fd345e85c3e81cd3dac7c5
+lastReviewedAt: 2026-09-19
+lastReviewedCommit: 08d4d08fef2d9fc4ab5ec641299dc2a1a176546f
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #89: publish the exact 32-byte Baidu-issued ownership file at the canonical www static path; its one exact formatter exclusion preserves provider bytes. No brand, UI, typography, language, canonical, sitemap or runtime routing rule changes. Original file and repository copy have SHA2560538ecc07f8ce0b7d4114344a95b9f30676e33eb84d0db93634ec648369a57f9. Required CI and hosted file/provider verification remain pending."
+lastReviewedNote: "Reviewed for Portal #95 against 08d4d08: public generator, owner and declared use terms stay distinct; untyped authors and absent license URLs are not invented. Existing four-locale, capability, runtime and delivery boundaries remain unchanged. Local static/build, 292 tests and 65 browser checks pass; source delivery and production verification remain pending."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -262,7 +262,7 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 
 正式 `DetailHeader` 使用 28px 桌面标题和 24px 手机标题，长名称自然换行；种类、独立版本和显式公开能力组成紧凑身份行。顶部只保留一个引用按钮，点击打开居中弹窗，正文中不再重复引用折叠入口。弹窗包含引用正文、精确标识及复制操作，支持 Escape 和关闭按钮，关闭后焦点返回顶部入口；既有 `#citation` 链接在客户端就绪后打开同一弹窗，关闭时清除该 hash。桌面操作按内容宽度排列，手机触控目标至少 44px；复制失败保留可手动复制的内容。详情子页面继续使用原生链接。
 
-正式 `OverviewPanel` 首先展示使用背景：Process 的参考产品、功能单位、地区和参考年；Flow 的 CAS、类型和参考流属性。说明与技术正文在阅读列，来源、许可和证据在侧栏，窄屏按阅读顺序堆叠。仅展示已提供的原始名称与说明，缺失字段不从其他类型推断。
+正式 `OverviewPanel` 首先展示使用背景：Process 的参考产品、功能单位、地区和参考年；Flow 的 CAS、类型和参考流属性。说明与技术正文在阅读列，来源、数据生成方、数据所有权方、声明的许可类型、访问与使用限制和证据在侧栏（生成方、所有权方、访问限制仅非空时显示），窄屏按阅读顺序堆叠。仅展示已提供的原始名称与说明，缺失字段不从其他类型推断。
 
 样板的候选清单保留完整名称、精确版本、地区/时间/单位和独立移除操作；空态提供返回目录入口。核对面板桌面按字段对齐，窄屏先列候选名称与版本，再按字段展示带稳定候选序号的值。核对中的版本使用中性辅助文字，保留 `v` 前缀和原始字符串；UUID 作为独立字段与其他值对齐展示，不再增加单独的标识折叠区。字段对齐不作科学可比性结论。打开面板时焦点位于标题并保持顶部阅读起点。稳定空态、多条记录、浅深主题、长本地化文字及移除/打开详情的交互分别保留场景。
 

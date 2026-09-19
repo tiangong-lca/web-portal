@@ -13,7 +13,7 @@ export function detailRecord(
   return {
     ...catalogItems(locale)[kind === "process" ? 0 : 2]!,
     classifications: "C · 35.11 · Storybook fixture",
-    license: "CC BY 4.0 · Storybook fixture",
+    licenseType: "Free of charge for all users and uses",
     licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
     citation: `${sampleNames[locale][kind === "process" ? 0 : 2]} · Storybook · ${refs[kind === "process" ? 0 : 2]}`,
     ...(kind === "flow"

@@ -39,7 +39,10 @@ export async function OverviewPanel({
   ];
   const evidence = [
     [t("sourceDatabase"), record?.source],
-    [t("license"), record?.license],
+    ...(record?.dataGenerator ? [[t("dataGenerator"), record.dataGenerator]] : []),
+    ...(record?.dataOwner ? [[t("dataOwner"), record.dataOwner]] : []),
+    [t("licenseType"), record?.licenseType],
+    ...(record?.accessRestrictions ? [[t("accessRestrictions"), record.accessRestrictions]] : []),
     [t("availability"), record?.evidence],
   ];
   return (

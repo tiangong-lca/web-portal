@@ -38,7 +38,10 @@ export type DatasetDetailViewModel = CatalogResultViewModel & {
   synonyms?: string;
   geographyDescription?: string;
   referenceFlowPropertyRef?: string;
-  license?: string;
+  licenseType?: string;
+  dataGenerator?: string;
+  dataOwner?: string;
+  accessRestrictions?: string;
   licenseUrl?: string;
   citation?: string;
   canonicalUrl?: string;

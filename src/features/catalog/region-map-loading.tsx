@@ -10,9 +10,7 @@ export function RegionMapLoading({ whole = false }: { whole?: boolean }) {
   const t = useTranslations("Navigation");
   return (
     <div className={whole ? "region-maplibre-placeholder" : "region-maplibre-scene"}>
-      <output className="region-maplibre-status">
-        {t("mapLoading")}
-      </output>
+      <output className="region-maplibre-status">{t("mapLoading")}</output>
     </div>
   );
 }

@@ -10,6 +10,7 @@ const meta = {
   component: MapLibreExplorer,
   subcomponents: { MapScene, Button },
   tags: ["!autodocs"],
+  globals: { viewport: { value: "desktop", isRotated: false } },
   parameters: { layout: "fullscreen", pageLayout: true },
   args: { initialLevel: "world", initialMode: "globe", unavailable: false },
   render: (args, { globals }) => (
@@ -102,7 +103,7 @@ export const WorldToCity: Story = {
   },
 };
 export const Mobile: Story = {
-  args: { initialLevel: "geo:cn" },
+  args: { initialLevel: "geo:cn", initialMode: undefined },
   globals: { ...mobileGlobals, locale: "zh-CN" },
   play: async ({ canvas, canvasElement, userEvent }) => {
     await expect(canvasElement.querySelector(".globe-prototype")).toHaveAttribute(

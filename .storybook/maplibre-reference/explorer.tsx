@@ -35,7 +35,7 @@ export function MapLibreExplorer({
   locale = "zh-CN",
   dark = false,
   initialLevel = "world",
-  initialMode = "globe",
+  initialMode,
   unavailable = false,
   reducedMotion = false,
 }: {
@@ -55,8 +55,9 @@ export function MapLibreExplorer({
         ? ["world", "geo:cn"]
         : ["world", "geo:cn", initialLevel],
   );
-  const [mode, setMode] = useState<MapMode>(() =>
-    typeof window !== "undefined" && window.innerWidth < 640 ? "list" : initialMode,
+  const [mode, setMode] = useState<MapMode>(
+    () =>
+      initialMode ?? (typeof window !== "undefined" && window.innerWidth < 640 ? "list" : "globe"),
   );
   const [selected, setSelected] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);

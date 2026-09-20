@@ -9,7 +9,7 @@
  * This is the production promotion of the reviewed Storybook prototype. It emits
  * two things the Portal serves itself:
  *
- *   public/maps/gl/<layer>.<sha16>.geojson        EPSG:4326 boundary layers
+ *   public/maps/gl/<layer>.<sha16>.json        EPSG:4326 boundary layers
  *   public/maps/gl/maplibre-gl-worker.<sha16>.js one self-contained worker
  *   public/maps/gl/maplibre-NOTICE.<sha16>.txt    third-party license notices
  *   src/features/catalog/region-maplibre-manifest.generated.json
@@ -561,7 +561,8 @@ async function build() {
       evidence.gzip.push({ layer: layerKey, gzipBytes });
       assets.set(layerKey, {
         bytes,
-        fileName: `${layerKey.replace(/:/gu, "-")}.${sha256.slice(0, 16)}.geojson`,
+        // Standard JSON MIME enables EdgeOne gzip; the content remains GeoJSON.
+        fileName: `${layerKey.replace(/:/gu, "-")}.${sha256.slice(0, 16)}.json`,
         sha256,
       });
     }

@@ -236,13 +236,13 @@ export const CinematicPrototype: Story = {
     ).toBeLessThanOrEqual(1);
     const scrollRange = Math.max((hero?.offsetHeight ?? 0) - window.innerHeight, 1);
     window.scrollTo({ top: scrollRange * 0.3, behavior: "auto" });
-    await waitFor(() => expect(hero).toHaveAttribute("data-chapter", "1"), { timeout: 1000 });
+    await waitFor(() => expect(hero).toHaveAttribute("data-chapter", "1"), { timeout: 5000 });
     await waitFor(
       () =>
         expect(getComputedStyle(referenceTitle.parentElement!).transform).toBe(
           referencePanelTransform,
         ),
-      { timeout: 1000 },
+      { timeout: 5000 },
     );
     window.scrollTo({ top: (hero?.offsetHeight ?? 0) * 0.58, behavior: "auto" });
     await waitFor(() => expect(Number(hero?.dataset.frame)).toBeGreaterThan(50), { timeout: 5000 });

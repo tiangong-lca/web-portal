@@ -21,8 +21,8 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
 lastReviewedAt: 2026-09-21
-lastReviewedCommit: 76f03640ad6b00e434e969a6414996932ff12f85
-lastReviewedNote: "Reviewed for Portal #115: serving the exact worker bytes as .js corrects hosted MIME inference without relaxing CSP. The strict no-inline research disposition is unchanged; actual hosted qualification remains in the delivery receipt."
+lastReviewedCommit: c8c3ece4d5da9687014cdf411adcc9c99193806f
+lastReviewedNote: "Reviewed for Portal #117: byte-identical GeoJSON now uses standard .json asset URLs so EdgeOne applies HTTP compression. Geometry, UI behavior, data contracts and CSP directives remain unchanged."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

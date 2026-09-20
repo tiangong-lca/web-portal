@@ -29,6 +29,9 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     const { mergeConfig } = await import("vite");
     return mergeConfig(config, {
+      // staticDirs owns both asset roots. Vite's second copy races the same output
+      // directory on CI (EEXIST for storybook-static/maps).
+      publicDir: false,
       optimizeDeps: {
         include: [
           "three",

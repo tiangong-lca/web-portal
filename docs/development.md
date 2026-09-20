@@ -87,6 +87,8 @@ pnpm test:storybook
 
 Reuse a running server only after confirming it serves this Portal checkout. The repository script binds loopback port 6006 and fails if that exact port is occupied. Keep a server used for the delivered review available for the user. Static output is `storybook-static/`; it does not provide the development/test MCP endpoint or become an EdgeOne artifact.
 
+Storybook's `staticDirs` owns copying and serving both `.storybook/public` and production `public` assets. Its Vite configuration sets `publicDir: false` to prevent a second copier racing those same output directories during a static build. Keep map layers, font notices and the MSW worker reachable through the declared static roots.
+
 Once the server is running, connect the local agent:
 
 ```bash

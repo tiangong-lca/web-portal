@@ -108,6 +108,9 @@ importers:
       "@types/culori":
         specifier: 4.0.1
         version: 4.0.1
+      "@types/geojson":
+        specifier: 7946.0.16
+        version: 7946.0.16
       "@types/node":
         specifier: 24.13.3
         version: 24.13.3
@@ -132,9 +135,12 @@ importers:
       jsdom:
         specifier: 30.0.1
         version: 30.0.1
+      maplibre-gl:
+        specifier: 6.10.0
+        version: 6.10.0
       mapshaper:
         specifier: 0.7.61
-        version: 0.7.61(@types/geojson@7946.0.8)
+        version: 0.7.61(@types/geojson@7946.0.16)
       msw:
         specifier: 2.15.0
         version: 2.15.0(@types/node@24.13.3)(typescript@7.0.2)
@@ -1233,6 +1239,62 @@ packages:
     resolution:
       {
         integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==,
+      }
+
+  "@mapbox/jsonlint-lines-primitives@2.0.3":
+    resolution:
+      {
+        integrity: sha512-0SElaV0uMxEnxzBhhX9WTuPyUeMsAN/SS0i16tjuba4/mio63MG9khjC1a0JAiPGXAwvwm4UfHJURCN7nyudQg==,
+      }
+    engines: { node: ">= 22" }
+
+  "@mapbox/point-geometry@1.1.0":
+    resolution:
+      {
+        integrity: sha512-YGcBz1cg4ATXDCM/71L9xveh4dynfGmcLDqufR+nQQy3fKwsAZsWd/x4621/6uJaeB9mwOHE6hPeDgXz9uViUQ==,
+      }
+
+  "@mapbox/tiny-sdf@2.2.0":
+    resolution:
+      {
+        integrity: sha512-LVL4wgI9YAum5V+LNVQO6QgFBPw7/MIIY4XJPNsPDMrjEwcE+JfKk1LuIl8GnF197ejVdC9QdPaxrx5gfgdGXg==,
+      }
+
+  "@mapbox/unitbezier@1.0.0":
+    resolution:
+      {
+        integrity: sha512-fqd515fjBmANKGGsQ286E2Wvj/XvDFpGzwJxq4CI6jMQue6Oy04uCKp+JWKF00xRTmk6cEu1jPJ9p3xqH8YWqQ==,
+      }
+
+  "@mapbox/vector-tile@3.0.0":
+    resolution:
+      {
+        integrity: sha512-Qf10S1uIHMk20ri/IVBnpS+esUEkVaR5Hftmz88jTInrpmWgPGJfPe3LVjjlE77trLx8tH6qjTG7uWH9hIq/0Q==,
+      }
+
+  "@maplibre/geojson-vt@6.1.1":
+    resolution:
+      {
+        integrity: sha512-FVMOcmSP/yqol45t7StApEyTL5/vmqBCuFhH9n+fFuINenhaX+YgHHIt1yJ86S8kln3uJLcMvmEU2cfn6E2eCQ==,
+      }
+
+  "@maplibre/maplibre-gl-style-spec@26.4.4":
+    resolution:
+      {
+        integrity: sha512-hG4RZR4PBd/+6A3ODdZ3AnQRF106ZQk1y3bhwDg8bH/A4Oz2tnRUJVVWs9BZa6gXZ1d3UKe89C+Mm+olGBELvA==,
+      }
+    hasBin: true
+
+  "@maplibre/mlt@1.3.0":
+    resolution:
+      {
+        integrity: sha512-7M2O7ABM80Oi8XPkfkrjKB8mOBIxGoVgkA52Mu4RMWoBvvMdagQ522+WxVYujZsMpqIr3BpzrTbXrm4k8lCzCQ==,
+      }
+
+  "@maplibre/vt-pbf@4.3.2":
+    resolution:
+      {
+        integrity: sha512-j6p0AdjvAR19Z3XaCysle7A4ZSo08tYOzxD0Y9NQylwPAkwJJeYub5b2eVucdeDh7erhv69DahoLOevDRERRUw==,
       }
 
   "@mdx-js/react@3.1.1":
@@ -3848,10 +3910,10 @@ packages:
         integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==,
       }
 
-  "@types/geojson@7946.0.8":
+  "@types/geojson@7946.0.16":
     resolution:
       {
-        integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==,
+        integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==,
       }
 
   "@types/mdx@2.0.14":
@@ -4434,6 +4496,12 @@ packages:
     resolution:
       {
         integrity: sha512-RKshQI1R3YQ+n9YJz2QQ147P66ELpa1FQEg20Dk8oW9t2KgLbpDLLp9aGZ7y8WHSshDknG0bknqGw5/tyCs5tw==,
+      }
+
+  bidi-js@1.1.0:
+    resolution:
+      {
+        integrity: sha512-fX1Onk0tdVPC7obPWB5EbJ1z7NVhLq4m2xZLq2YXBkxzMXIGRpNMU88n0EPgWseKl12J7zXs7qrDxPK4sRs2fg==,
       }
 
   bindings@1.5.0:
@@ -5507,6 +5575,12 @@ packages:
         integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==,
       }
 
+  gl-matrix@3.4.4:
+    resolution:
+      {
+        integrity: sha512-latSnyDNt/8zYUB6VIJ6PCh2jBjJX6gnDsoCZ7LyW7GkqrD51EWwa9qCoGixj8YqBtETQK/xY7OmpTF8xz1DdQ==,
+      }
+
   glob-parent@5.1.2:
     resolution:
       {
@@ -6026,6 +6100,12 @@ packages:
         integrity: sha512-fQhoXdcvc3V28x7C7BMs4P5+kNlgUURe2jmUT1T//oBRMDrqy1QPelJimwZGo7Hg9VPV3EQV5Bnq4hbFy2vetA==,
       }
 
+  json-stringify-pretty-compact@4.0.0:
+    resolution:
+      {
+        integrity: sha512-3CNZ2DnrpByG9Nqj6Xo8vqbjT4F6N+tb4Gb28ESAZjYZ5yqvmc56J+/kuIwkaAMOyblTQhUW7PxMkUb8Q36N3Q==,
+      }
+
   json5@2.2.3:
     resolution:
       {
@@ -6050,6 +6130,12 @@ packages:
     resolution:
       {
         integrity: sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==,
+      }
+
+  kdbush@4.1.0:
+    resolution:
+      {
+        integrity: sha512-e9vurzrXJQrFX6ckpHP3bvj5l+9CnYzkxDNnNQ1h2QTqdWsUAJgXiKdGNcOa1EY85dU8KbQ+z/FdQdB7P+9yfQ==,
       }
 
   keygrip@1.1.0:
@@ -6384,6 +6470,13 @@ packages:
       }
     engines: { node: ">=10" }
 
+  maplibre-gl@6.10.0:
+    resolution:
+      {
+        integrity: sha512-pZIJ1/rsB1jDjT3eBTfMaeSY45lRKdCuZtqXqTnkUrn0UJO9IwtbywT5ym3/cz57MGEELwAwQSYjB/Fj9TlktQ==,
+      }
+    engines: { node: ">=16.14.0", npm: ">=8.1.0" }
+
   mapshaper@0.7.61:
     resolution:
       {
@@ -6595,6 +6688,12 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  murmurhash-js@1.0.0:
+    resolution:
+      {
+        integrity: sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==,
+      }
 
   mute-stream@3.0.0:
     resolution:
@@ -7084,6 +7183,12 @@ packages:
         integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==,
       }
     engines: { node: ^10 || ^12 || >=14 }
+
+  potpack@2.1.0:
+    resolution:
+      {
+        integrity: sha512-pcaShQc1Shq0y+E7GqJqvZj8DTthWV1KeHGdi0Z6IAin2Oi3JnLCOfwnCo84qc+HAp52wT9nK9H7FAJp5a44GQ==,
+      }
 
   powershell-utils@0.1.0:
     resolution:
@@ -7990,6 +8095,12 @@ packages:
     resolution:
       {
         integrity: sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==,
+      }
+
+  tinyqueue@3.0.0:
+    resolution:
+      {
+        integrity: sha512-gRa9gwYU3ECmQYv3lslts5hxuIa90veaEcxDYuu3QGOIAEM2mOZkVHp48ANJuu1CURtRdHKUBY5Lm1tHV+sD4g==,
       }
 
   tinyrainbow@2.0.0:
@@ -9231,6 +9342,43 @@ snapshots:
     dependencies:
       "@jridgewell/resolve-uri": 3.1.2
       "@jridgewell/sourcemap-codec": 1.5.5
+
+  "@mapbox/jsonlint-lines-primitives@2.0.3": {}
+
+  "@mapbox/point-geometry@1.1.0": {}
+
+  "@mapbox/tiny-sdf@2.2.0": {}
+
+  "@mapbox/unitbezier@1.0.0": {}
+
+  "@mapbox/vector-tile@3.0.0":
+    dependencies:
+      "@mapbox/point-geometry": 1.1.0
+      "@types/geojson": 7946.0.16
+      pbf: 5.1.2
+
+  "@maplibre/geojson-vt@6.1.1":
+    dependencies:
+      kdbush: 4.1.0
+
+  "@maplibre/maplibre-gl-style-spec@26.4.4":
+    dependencies:
+      "@mapbox/jsonlint-lines-primitives": 2.0.3
+      "@mapbox/unitbezier": 1.0.0
+      json-stringify-pretty-compact: 4.0.0
+      minimist: 1.2.8
+      quickselect: 3.0.0
+      tinyqueue: 3.0.0
+
+  "@maplibre/mlt@1.3.0":
+    dependencies:
+      "@mapbox/point-geometry": 1.1.0
+
+  "@maplibre/vt-pbf@4.3.2":
+    dependencies:
+      "@mapbox/point-geometry": 1.1.0
+      "@types/geojson": 7946.0.16
+      pbf: 5.1.2
 
   "@mdx-js/react@3.1.1(@types/react@19.2.18)(react@19.2.8)":
     dependencies:
@@ -10759,9 +10907,9 @@ snapshots:
       esm-env: 1.2.2
       tmcp: 1.20.0(typescript@7.0.2)
 
-  "@tmcw/togeojson@5.8.1(@types/geojson@7946.0.8)":
+  "@tmcw/togeojson@5.8.1(@types/geojson@7946.0.16)":
     dependencies:
-      "@types/geojson": 7946.0.8
+      "@types/geojson": 7946.0.16
 
   "@ts-morph/common@0.27.0":
     dependencies:
@@ -10812,7 +10960,7 @@ snapshots:
 
   "@types/estree@1.0.9": {}
 
-  "@types/geojson@7946.0.8": {}
+  "@types/geojson@7946.0.16": {}
 
   "@types/mdx@2.0.14": {}
 
@@ -11124,6 +11272,10 @@ snapshots:
     dependencies:
       require-from-string: 2.0.2
 
+  bidi-js@1.1.0:
+    dependencies:
+      require-from-string: 2.0.2
+
   bindings@1.5.0:
     dependencies:
       file-uri-to-path: 1.0.0
@@ -11411,8 +11563,7 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
-  earcut@3.2.3:
-    optional: true
+  earcut@3.2.3: {}
 
   ee-first@1.1.1: {}
 
@@ -11753,6 +11904,8 @@ snapshots:
   github-from-package@0.0.0:
     optional: true
 
+  gl-matrix@3.4.4: {}
+
   glob-parent@5.1.2:
     dependencies:
       is-glob: 4.0.3
@@ -11992,6 +12145,8 @@ snapshots:
 
   json-schema-typed@8.0.2: {}
 
+  json-stringify-pretty-compact@4.0.0: {}
+
   json5@2.2.3: {}
 
   jsonc-parser@3.3.1: {}
@@ -12003,6 +12158,8 @@ snapshots:
       graceful-fs: 4.2.11
 
   kdbush@3.0.0: {}
+
+  kdbush@4.1.0: {}
 
   keygrip@1.1.0:
     dependencies:
@@ -12158,11 +12315,32 @@ snapshots:
     dependencies:
       semver: 7.8.5
 
-  mapshaper@0.7.61(@types/geojson@7946.0.8):
+  maplibre-gl@6.10.0:
+    dependencies:
+      "@mapbox/point-geometry": 1.1.0
+      "@mapbox/tiny-sdf": 2.2.0
+      "@mapbox/unitbezier": 1.0.0
+      "@mapbox/vector-tile": 3.0.0
+      "@maplibre/geojson-vt": 6.1.1
+      "@maplibre/maplibre-gl-style-spec": 26.4.4
+      "@maplibre/mlt": 1.3.0
+      "@maplibre/vt-pbf": 4.3.2
+      "@types/geojson": 7946.0.16
+      bidi-js: 1.1.0
+      earcut: 3.2.3
+      gl-matrix: 3.4.4
+      kdbush: 4.1.0
+      murmurhash-js: 1.0.0
+      pbf: 5.1.2
+      potpack: 2.1.0
+      quickselect: 3.0.0
+      tinyqueue: 3.0.0
+
+  mapshaper@0.7.61(@types/geojson@7946.0.16):
     dependencies:
       "@bokuweb/zstd-wasm": 0.0.27
       "@placemarkio/tokml": 0.3.9
-      "@tmcw/togeojson": 5.8.1(@types/geojson@7946.0.8)
+      "@tmcw/togeojson": 5.8.1(@types/geojson@7946.0.16)
       "@xmldom/xmldom": 0.8.15
       adm-zip: 0.6.1
       commander: 14.0.3
@@ -12305,6 +12483,8 @@ snapshots:
       typescript: 7.0.2
     transitivePeerDependencies:
       - "@types/node"
+
+  murmurhash-js@1.0.0: {}
 
   mute-stream@3.0.0: {}
 
@@ -12611,7 +12791,6 @@ snapshots:
   pbf@5.1.2:
     dependencies:
       resolve-protobuf-schema: 2.1.0
-    optional: true
 
   picocolors@1.1.1: {}
 
@@ -12653,6 +12832,8 @@ snapshots:
       nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  potpack@2.1.0: {}
 
   powershell-utils@0.1.0: {}
 
@@ -12703,8 +12884,7 @@ snapshots:
       kleur: 3.0.3
       sisteransi: 1.0.5
 
-  protocol-buffers-schema@3.6.1:
-    optional: true
+  protocol-buffers-schema@3.6.1: {}
 
   proxy-addr@2.0.7:
     dependencies:
@@ -12728,8 +12908,7 @@ snapshots:
 
   quick-lru@6.1.2: {}
 
-  quickselect@3.0.0:
-    optional: true
+  quickselect@3.0.0: {}
 
   radix-ui@1.6.7(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
@@ -12903,7 +13082,6 @@ snapshots:
   resolve-protobuf-schema@2.1.0:
     dependencies:
       protocol-buffers-schema: 3.6.1
-    optional: true
 
   resolve@1.22.12:
     dependencies:
@@ -13316,6 +13494,8 @@ snapshots:
       picomatch: 4.0.7
 
   tinyqueue@2.0.3: {}
+
+  tinyqueue@3.0.0: {}
 
   tinyrainbow@2.0.0: {}
 

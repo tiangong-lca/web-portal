@@ -20,7 +20,8 @@ const allowedLicenses = new Set([
 const packageScopedLicenses = new Map([
   // Reviewed license texts of the pinned, build-only Mapshaper dependency graph.
   ["(MIT OR WTFPL)", [/^expand-template$/]],
-  ["(MIT OR Apache-2.0)", [/^JSONStream$/]],
+  // @maplibre/mlt 1.3.0: reviewed dual-license text; prototype retains both notices.
+  ["(MIT OR Apache-2.0)", [/^JSONStream$/, /^@maplibre\/mlt$/]],
   ["(MIT AND Zlib)", [/^pako$/]],
   ["(MIT OR Apache2)", [/^pause-stream$/]],
   ["(BSD-2-Clause OR MIT OR Apache-2.0)", [/^rc$/]],

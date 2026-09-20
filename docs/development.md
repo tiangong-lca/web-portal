@@ -170,6 +170,22 @@ The sequence is sticky directly beneath the measured site header and its visible
 
 `Brand/Homepage` covers four languages, both themes, mobile and panoramic layouts, loading, reduced motion and missing summary. Keep the standalone lifecycle sculpture stories working as an independent visual study; they no longer describe the production route. Verify the actual frame requests, image-transfer cost, accessibility, production browser behavior and the existing bundle/Core Web Vitals budgets. The homepage remains usable when animation is unavailable, and hosted performance/CSP evidence belongs to the exact deployed commit rather than a local Storybook pass.
 
+### MapLibre geography comparison prototype
+
+Portal #111 keeps the globe experiment entirely in `.storybook/maplibre-reference/` and `.storybook/stories/maplibre-explorer.stories.tsx`. `maplibre-gl` is an exact development dependency; neither its renderer nor its geometry enters a production route. The Vite worker uses MapLibre's separate worker entry through `?worker&url`. There is no MapTiler key, external tile request, terrain or lighting dependency. The reviewed BSD/MIT/Apache notices for MapLibre and its `@maplibre/mlt` dependency are retained in `NOTICE.txt` and copied into the Storybook output; the license-policy exception is scoped to that exact package name.
+
+`prepare:storybook` builds 29 GeoJSON layers into the ignored `.storybook/public/maplibre-reference/geometry/` directory. The offline generator verifies vendored Natural Earth / DataV GeoAtlas source receipts and joins every feature to the reviewed production `boundaryId` assignment. It retains Chinese interaction aliases and South China Sea supplements. Mapshaper keeps shapes in EPSG:4326; its simplification percentages match the production recipe, while projection and coordinate precision differ from the SVG path output. The committed manifest records exact source hashes, navigation contract identity, per-layer hashes, bounds and compressed sizes. Geometry is loaded by current level, with neutral world/China context retained in a component cache.
+
+```bash
+node .storybook/maplibre-reference/build-assets.mjs
+node .storybook/maplibre-reference/build-assets.mjs --check
+node .storybook/maplibre-reference/capture-counts.mjs
+```
+
+The final command verifies the committed real-count snapshot offline. To deliberately refresh it, run `node .storybook/maplibre-reference/capture-counts.mjs --capture`. Capture reads anonymous server-rendered navigation from `https://www.tiangong.earth` for process versions, follows every navigation page, and checks all non-virtual vocabulary children. It records request URLs, content hashes, deployment identity and capture time for the world, China and 27 province branches. This is a time-bounded snapshot of public responses, not a transactionally consistent live data feed. No credentials or raw dataset documents are collected. Review count changes and the new receipt before committing them.
+
+Use the normal Storybook AI test/review workflow for the globe, flat map, world-to-city journey, small regions, dark theme, mobile and unavailable-WebGL scenes. The story's `afterEach` waits for MapLibre's real idle receipt before Storybook freezes review thumbnails, including when play functions are disabled. Resizing uses the public synchronous `redraw()` method so a frozen preview keeps its rendered geometry. The first view is framed without animation; later user navigation retains the camera transition. The local prototype lifts the former 30 KiB map-interaction limit only for this experiment; production bundle budgets and the existing production renderer remain unchanged. MapTiler commercial terms and quota sizing need a separate decision if hosted tiles are proposed later.
+
 ## Project skills
 
 For component work, read `.agents/skills/storybook-stories/SKILL.md`. Restore the generated skills when missing or when their committed lock changes, rather than reinstalling for every component edit:

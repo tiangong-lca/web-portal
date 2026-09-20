@@ -266,6 +266,8 @@ rules:
         kind: dictionary-check
       - path: tests/unit/region-map-assets.test.ts
         kind: public-asset-check
+      - path: tests/unit/map-viewport.test.ts
+        kind: ui-behavior
       - path: tests/unit/i18n-locales.test.ts
         kind: dictionary-check
       - path: tests/e2e/accessibility.spec.ts

@@ -16,9 +16,9 @@ checkPaths:
   - AGENTS.md
   - docs/design-plan.md
   - package.json
-lastReviewedAt: 2026-09-19
-lastReviewedCommit: 8d438a861a063f46d46d524abcef737d15dc7ea7
-lastReviewedNote: "Reviewed for the Portal #87 artifact-regression follow-up: pnpm check now also refuses duplicated emitted font payloads, so its chain comment names that gate. No setup step, command, environment statement or publication rule changes."
+lastReviewedAt: 2026-09-20
+lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
+lastReviewedNote: "Reviewed for Portal #105: geographic context and continuous world-to-province zoom stay within anonymous discovery. Setup, commands, publication and source ownership remain unchanged."
 related:
   - docs/development.md
   - docs/ui-system.md

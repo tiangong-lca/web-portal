@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { expect } from "storybook/test";
+import { useState } from "react";
+import { expect, waitFor } from "storybook/test";
 import { http, HttpResponse } from "msw";
 import { CatalogResultsToolbar } from "@/features/catalog/catalog-results-toolbar";
 import { CatalogKindSwitch } from "@/features/catalog/catalog-kind-switch";
@@ -161,18 +162,24 @@ export const ChinaMap: Story = {
   render: (args, { globals, parameters }) => {
     const locale = storyLocale(globals);
     const t = dictionaries[locale].Navigation;
-    const entries = [
-      { code: "CN-AH", count: 142 },
-      { code: "CN-GD", count: 328 },
-      { code: "CN-SD", count: 211 },
-    ].map(({ code, count }) => ({
+    const provincial = parameters.mapLayer === "geo:cn-ah";
+    const layerKey = provincial ? "geo:cn-ah" : "geo:cn";
+    const entries = (
+      provincial
+        ? [{ code: "CN-AH-HFE", count: 142 }]
+        : [
+            { code: "CN-AH", count: 142 },
+            { code: "CN-GD", count: 328 },
+            { code: "CN-SD", count: 211 },
+          ]
+    ).map(({ code, count }) => ({
       nodeId: `geo:${code.toLowerCase()}`,
       code,
       count,
       label: geographyName(code, locale)!,
       countLabel: t.versions.replace("{count}", String(count)),
-      hasChildren: true,
-      href: `/${locale}/search?explore=region&geoNode=geo:${code.toLowerCase()}`,
+      hasChildren: !provincial,
+      href: `/${locale}/search?explore=${provincial ? "process" : "region"}&geoNode=geo:${code.toLowerCase()}`,
     }));
     return (
       <div className="mx-auto flex max-w-6xl flex-col gap-5 p-6">
@@ -221,7 +228,7 @@ export const ChinaMap: Story = {
         )}
 
         <RegionExplorer
-          mapUrl={mapManifest.layers["geo:cn"].url}
+          mapUrl={mapManifest.layers[layerKey].url}
           entries={entries}
           labels={{
             title: t.geography,
@@ -244,17 +251,27 @@ export const ChinaMap: Story = {
             title: t.geography,
             countDescription: t.counts,
             entries: entries,
-            breadcrumbs: [{ label: t.world, href: `/${locale}/search?explore=region` }],
+            breadcrumbs: [
+              { label: t.world, href: `/${locale}/search?explore=region` },
+              ...(provincial
+                ? [
+                    {
+                      label: geographyName("CN", locale)!,
+                      href: `/${locale}/search?explore=region&geoNode=geo:cn`,
+                    },
+                  ]
+                : []),
+            ],
             breadcrumbLabel: t.path,
-            currentLabel: geographyName("CN", locale),
+            currentLabel: geographyName(provincial ? "CN-AH" : "CN", locale),
             all: {
               label: t.all.replace("{count}", "681"),
-              href: `/${locale}/search?geoNode=geo:cn`,
+              href: `/${locale}/search?geoNode=${layerKey}`,
               active: true,
             },
             direct: {
               label: t.direct.replace("{count}", "12"),
-              href: `/${locale}/search?geoNode=geo:cn&geoScope=direct`,
+              href: `/${locale}/search?geoNode=${layerKey}&geoScope=direct`,
             },
             unavailableLabel: t.unavailable,
             emptyLabel: t.empty,
@@ -363,3 +380,78 @@ export const RegionControlsMobile: Story = {
   globals: { ...mobileGlobals, locale: "zh-CN" },
 };
 export const RegionControlsGerman: Story = { ...RegionControls, globals: { locale: "de" } };
+
+export const ProvinceBasemap: Story = { ...ChinaMap, parameters: { mapLayer: "geo:cn-ah" } };
+export const ProvinceBasemapDark: Story = {
+  ...ProvinceBasemap,
+  globals: { theme: "dark", locale: "fr" },
+};
+export const ChinaBasemapDark: Story = { ...ChinaMap, globals: { theme: "dark", locale: "zh-CN" } };
+
+export const ContinuousZoom: Story = {
+  globals: { locale: "zh-CN" },
+  render: function ZoomJourney(_args, { globals }) {
+    const [level, setLevel] = useState<"world" | "geo:cn" | "geo:cn-ah">("world");
+    const locale = storyLocale(globals);
+    const t = dictionaries[locale].Navigation;
+    const steps = [
+      { key: "world" as const, label: t.world },
+      { key: "geo:cn" as const, label: geographyName("CN", locale)! },
+      { key: "geo:cn-ah" as const, label: geographyName("CN-AH", locale)! },
+    ];
+    const code = level === "world" ? "CN" : level === "geo:cn" ? "CN-AH" : "CN-AH-HFE";
+    return (
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 p-6">
+        <div className="flex flex-wrap gap-2">
+          {steps.map((step) => (
+            <Button
+              key={step.key}
+              variant={level === step.key ? "default" : "outline"}
+              aria-pressed={level === step.key}
+              onClick={() => setLevel(step.key)}
+            >
+              {step.label}
+            </Button>
+          ))}
+        </div>
+        <RegionMap
+          url={mapManifest.layers[level].url}
+          title={t.geography}
+          loadingLabel={t.mapLoading}
+          unavailableLabel={t.mapUnavailable}
+          legend={t.mapLegend}
+          selectLabel={t.selectRegion}
+          exploreLabel={t.exploreRegion}
+          viewDataLabel={t.viewData}
+          clearLabel={t.clearSelection}
+          entries={[
+            {
+              nodeId: `geo:${code.toLowerCase()}`,
+              code,
+              label: geographyName(code, locale)!,
+              count: 142,
+              countLabel: t.versions.replace("{count}", "142"),
+              hasChildren: level !== "geo:cn-ah",
+              href: `/${locale}/search?explore=region&geoNode=geo:${code.toLowerCase()}`,
+            },
+          ]}
+        />
+      </div>
+    );
+  },
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    await expect(await canvas.findByRole("link", { name: /^中国:/ })).toBeVisible();
+    const svg = canvasElement.querySelector("svg")!;
+    const worldWindow = svg.getAttribute("viewBox");
+    await userEvent.click(canvas.getByRole("button", { name: /^中国$/ }));
+    await expect(await canvas.findByRole("link", { name: /安徽/ })).toBeVisible();
+    await waitFor(() => expect(svg).not.toHaveAttribute("data-camera-moving"));
+    await expect(canvasElement.querySelector("svg")).toBe(svg);
+    await expect(svg.getAttribute("viewBox")).not.toBe(worldWindow);
+    await userEvent.click(canvas.getByRole("button", { name: /安徽/ }));
+    await expect(await canvas.findByRole("link", { name: /合肥/ })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: /^世界$/ }));
+    await expect(await canvas.findByRole("link", { name: /^中国:/ })).toBeVisible();
+    await waitFor(() => expect(svg).toHaveAttribute("viewBox", worldWindow!));
+  },
+};

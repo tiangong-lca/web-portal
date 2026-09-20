@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 1c2233d0d99e26d3b5a9d40501ac23b3f66c1344
+lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #105: local map selection reveals only necessary scroll distance, respecting real header/tray bounds, focus and reduced motion. An impossible viewport does not trigger counterproductive scrolling; data, URL, asset and navigation contracts are unchanged."
+lastReviewedNote: "Reviewed for Portal #105: the offline map generator keeps deterministic hashed outputs, common projection and graded context simplification; current map, Storybook, browser and Docpact commands cover the change."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

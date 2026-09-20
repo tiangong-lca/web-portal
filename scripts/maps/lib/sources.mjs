@@ -117,9 +117,37 @@ export function sha256Hex(buffer) {
   return createHash("sha256").update(buffer).digest("hex");
 }
 
-/** Deterministic JSON: 2-space indent, trailing newline, stable key order. */
+/**
+ * Deterministic JSON, shaped like the repository formatter so generated assets
+ * can be committed without `pnpm format:check` disagreeing with them: objects
+ * break one key per line, an array of primitives stays on one line while it fits
+ * the 80-column print width, and everything else breaks like an object. Key
+ * order is insertion order, so rebuilding unchanged inputs reproduces the bytes.
+ */
 export function stableJson(value) {
-  return `${JSON.stringify(value, null, 2)}\n`;
+  return `${writeJson(value, "")}
+`;
+}
+
+function writeJson(value, indent) {
+  if (Array.isArray(value)) {
+    if (value.length === 0) return "[]";
+    if (value.every((item) => item === null || typeof item !== "object")) {
+      const inline = `[${value.map((item) => JSON.stringify(item)).join(", ")}]`;
+      if (indent.length + inline.length <= 80) return inline;
+    }
+    const inner = `${indent}  `;
+    return `[\n${value.map((item) => `${inner}${writeJson(item, inner)}`).join(",\n")}\n${indent}]`;
+  }
+  if (value !== null && typeof value === "object") {
+    const keys = Object.keys(value).filter((key) => value[key] !== undefined);
+    if (keys.length === 0) return "{}";
+    const inner = `${indent}  `;
+    return `{\n${keys
+      .map((key) => `${inner}${JSON.stringify(key)}: ${writeJson(value[key], inner)}`)
+      .join(",\n")}\n${indent}}`;
+  }
+  return JSON.stringify(value);
 }
 
 function readManifest(root) {

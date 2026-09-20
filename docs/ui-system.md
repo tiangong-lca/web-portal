@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 1c2233d0d99e26d3b5a9d40501ac23b3f66c1344
+lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #105: local map selection reveals only necessary scroll distance, respecting real header/tray bounds, focus and reduced motion. An impossible viewport does not trigger counterproductive scrolling; data, URL, asset and navigation contracts are unchanged."
+lastReviewedNote: "Reviewed for Portal #105: solid administrative contours, contextual basemaps, responsive framing, persistent loading and continuous geographic camera preserve keyboard access, four languages and reduced motion."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -292,4 +292,6 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 
 目录维度、筛选和排序组成完整工具栏，已应用条件紧接其下；工具栏位于分类和结果共同上方。地区路径作为上下文标题，范围切换与地图开关在桌面右侧同行，手机按组自然换行。分类栏避免重复标题，详情动作保持紧凑同排，核对和候选清单按选择/导入/分享的任务关系分组。阅读型页面保持自身内容分区。
 
-同源 Next 链接通过共享反馈组件显示局部等待标记，搜索、排序、筛选抽屉和核对导航使用 React transition 保留现有内容。约 150ms 后仍未完成才显示细进度条及四语礼貌播报；不遮挡页面、不使用虚假百分比。取消、完成、组件卸载均清除相应状态；减少动态效果时保留静态提示。地图选择本身是即时局部行为，明确下钻才启动导航反馈。中国及省市图在画布内保留 24–40px 响应式留白；世界图保留原构图和源几何。
+同源 Next 链接通过共享反馈组件显示局部等待标记，搜索、排序、筛选抽屉和核对导航使用 React transition 保留现有内容。约 150ms 后仍未完成才显示细进度条及四语礼貌播报；不遮挡页面、不使用虚假百分比。取消、完成、组件卸载均清除相应状态；减少动态效果时保留静态提示。地图选择本身是即时局部行为，明确下钻才启动导航反馈。中国及省市图在画布内保留 24–40px 响应式留白；世界图保留太平洋居中的完整轮廓。
+
+地图用淡海色、纸色陆地、细经纬网与行政线表达地理上下文，紫色深浅专门表达数量；所有行政轮廓使用实线，缺失映射不改变边界样式、不虚构数量。世界→中国→省份在同一投影坐标内连续放大，周边地理背景铺满可用画布，地区轮廓保持比例与呼吸空间。新层加载时旧几何可保留为无交互背景，但不把旧数量套在新层。缩放短暂隐藏数据操作，停稳后呈现；减少动态效果、窗口变化和页面隐藏时直接落到目标视野。

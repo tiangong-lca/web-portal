@@ -133,3 +133,39 @@ test("long localized controls reflow at a 200-percent desktop-equivalent width",
     }
   }
 });
+
+test("offline basemap provides context and keeps Taiwan's contour solid", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await mkdir("/tmp/portal105-visual", { recursive: true });
+  const layers = new Set<string>();
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.startsWith("/maps/")) layers.add(request.url());
+  });
+  await page.goto("/en/search?explore=region");
+  const context = page.locator(".catalog-map-current-context");
+  await expect(context.locator(".catalog-map-graticule")).toHaveAttribute("d", /^M/);
+  await expect(context.locator(".catalog-map-ocean")).toHaveAttribute("d", /^M/);
+  await page.locator(".catalog-region-map").screenshot({ path: "/tmp/portal105-visual/world.png" });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
+  await page.mouse.move(0, 0);
+  const taiwan = page.locator('[data-boundary-id="cnprov:710000"]');
+  await expect(taiwan).toBeVisible();
+  await expect(taiwan).toHaveCSS("stroke-dasharray", "none");
+  await expect(taiwan).toHaveAttribute("data-availability", "unknown");
+  const anhui = page.locator('[data-boundary-id="cnprov:340000"]');
+  expect(await taiwan.evaluate((el) => getComputedStyle(el).strokeWidth)).toBe(
+    await anhui.evaluate((el) => getComputedStyle(el).strokeWidth),
+  );
+  await expect(context.locator(".catalog-map-context-land")).toHaveAttribute("d", /^M/);
+  await page.locator(".catalog-region-map").screenshot({ path: "/tmp/portal105-visual/china.png" });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /Anhui/ }).click();
+  await expect(context.locator(".catalog-map-context-borders")).toHaveAttribute("d", /^M/);
+  await expect(context.locator(".catalog-map-context-borders")).toBeVisible();
+  await page.locator(".catalog-region-map").screenshot({ path: "/tmp/portal105-visual/anhui.png" });
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page
+    .locator(".catalog-region-map")
+    .screenshot({ path: "/tmp/portal105-visual/anhui-dark.png" });
+  expect(layers.size).toBe(3);
+});

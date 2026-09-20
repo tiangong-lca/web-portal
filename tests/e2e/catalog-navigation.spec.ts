@@ -57,6 +57,59 @@ test("region hierarchy remains usable without JavaScript", async ({ browser }) =
   await context.close();
 });
 
+test("keeps one geographic camera through world, China, province and Back", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/en/search?explore=region");
+  const svg = page.locator(".catalog-region-map svg");
+  await expect(svg).toHaveAttribute("data-coordinate-space", "pacific-robinson-v1");
+  const world = await svg.getAttribute("viewBox");
+  await svg.evaluate((element) => element.setAttribute("data-camera-probe", "persistent"));
+
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/maps/geo-cn.*.json", async (route) => {
+    await gate;
+    await route.continue();
+  });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
+  await expect(page).toHaveURL(/geoNode=geo%3Acn/);
+  await expect(page.locator(".catalog-region-map")).toHaveAttribute("aria-busy", "true");
+  await expect(svg).toHaveAttribute("data-camera-probe", "persistent");
+  // A previous geographic canvas survives, but its counts and links do not masquerade as China data.
+  await expect(svg.getByRole("link")).toHaveCount(0);
+  await expect(page.locator(".catalog-region-map-status")).toBeVisible();
+  release();
+  await expect(svg).toHaveAttribute("data-camera-moving", "true");
+  await expect(svg).not.toHaveAttribute("data-camera-moving");
+  const china = await svg.getAttribute("viewBox");
+  expect(china).not.toBe(world);
+  await expect(svg.getByRole("link", { name: /Anhui/ })).toBeVisible();
+
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /Anhui/ }).click();
+  await expect(svg).toHaveAttribute("data-camera-moving", "true");
+  await expect(svg).not.toHaveAttribute("data-camera-moving");
+  await expect(svg).toHaveAttribute("data-camera-probe", "persistent");
+  const province = await svg.getAttribute("viewBox");
+  expect(Number(province!.split(" ")[2])).toBeLessThan(Number(china!.split(" ")[2]));
+  const fitted = await svg.evaluate((element) => {
+    const box = (element as SVGSVGElement).viewBox.baseVal;
+    return { camera: box.width / box.height, canvas: element.clientWidth / element.clientHeight };
+  });
+  expect(fitted.camera).toBeCloseTo(fitted.canvas, 2);
+  await page.goBack();
+  await expect(svg).toHaveAttribute("viewBox", china!);
+  await page.goBack();
+  await expect(svg).toHaveAttribute("viewBox", world!);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
+  await expect(svg.getByRole("link", { name: /Anhui/ })).toBeVisible();
+  await expect(svg).not.toHaveAttribute("data-camera-moving");
+});
+
 test("loads only the visible map layer within the additional JavaScript budget", async ({
   browser,
 }) => {

@@ -59,9 +59,21 @@ const featureSchema = z.object({
   path: z.string().min(1),
 });
 
+const viewBoxSchema = z.string().regex(/^-?\d+ -?\d+ \d+ \d+$/);
+
 const layerFileSchema = z.object({
-  viewBox: z.string().regex(/^-?\d+ -?\d+ \d+ \d+$/),
+  coordinateSpace: z.string().min(1),
+  viewBox: viewBoxSchema,
   features: z.array(featureSchema).min(1),
+  basemap: z
+    .object({
+      viewBox: viewBoxSchema,
+      land: z.string(),
+      borders: z.string().optional(),
+      graticule: z.string(),
+      frame: z.string().optional(),
+    })
+    .optional(),
 });
 
 type Layer = z.infer<typeof layerFileSchema>;
@@ -87,6 +99,16 @@ function parsedLayer(layerKey: string) {
 
 function viewBox(layerKey: string) {
   const [minX, minY, width, height] = parsedLayer(layerKey).viewBox.split(" ").map(Number) as [
+    number,
+    number,
+    number,
+    number,
+  ];
+  return { minX, minY, width, height };
+}
+
+function viewBoxSize(value: string) {
+  const [minX, minY, width, height] = value.split(" ").map(Number) as [
     number,
     number,
     number,
@@ -391,5 +413,266 @@ describe("region map seam geometry", () => {
       "ne50m:BFA",
     ];
     expect(onBothEdges.filter((id) => slicedContinents.includes(id))).toStrictEqual([]);
+  });
+});
+
+/**
+ * Basemap acceptance. The basemap must be drawn in exactly the same coordinate
+ * space as its foreground — same projection, same fitted transform — because a
+ * mis-scaled context layer looks plausible while silently misplacing every
+ * neighbour. These checks therefore assert *relative* geometry that only holds
+ * when foreground and basemap agree, rather than restating numbers.
+ */
+/** The basemap's geometry fields — `viewBox` is a window, not a path. */
+const basemapFields = (layerKey: string) => {
+  const basemap = parsedLayer(layerKey).basemap;
+  if (!basemap) throw new Error(`${layerKey} has no basemap`);
+  return Object.entries(basemap).filter(
+    ([name, value]) => name !== "viewBox" && typeof value === "string" && value,
+  ) as [string, string][];
+};
+
+function boundsOf(path: string) {
+  const numbers = path.match(/-?\d+/g)!.map(Number);
+  let left = Infinity;
+  let top = Infinity;
+  let right = -Infinity;
+  let bottom = -Infinity;
+  for (let index = 0; index < numbers.length; index += 2) {
+    left = Math.min(left, numbers[index]!);
+    right = Math.max(right, numbers[index]!);
+    top = Math.min(top, numbers[index + 1]!);
+    bottom = Math.max(bottom, numbers[index + 1]!);
+  }
+  return { left, top, right, bottom };
+}
+
+describe("region map basemap", () => {
+  it("declares one shared coordinate space so the camera can be continuous", () => {
+    const spaces = new Set(layerKeys.map((layerKey) => parsedLayer(layerKey).coordinateSpace));
+    expect([...spaces]).toStrictEqual(["pacific-robinson-v1"]);
+  });
+
+  it("covers the whole canvas aspect range with its background window", () => {
+    const [minAspect, maxAspect] = [0.75, 4];
+    const wrong: string[] = [];
+    for (const layerKey of layerKeys) {
+      const layer = parsedLayer(layerKey);
+      const preferred = viewBox(layerKey);
+      const background = viewBoxSize(layer.basemap!.viewBox);
+      const contains =
+        background.minX <= preferred.minX &&
+        background.minY <= preferred.minY &&
+        background.minX + background.width >= preferred.minX + preferred.width &&
+        background.minY + background.height >= preferred.minY + preferred.height;
+      if (!contains) wrong.push(`${layerKey}: background does not contain the preferred window`);
+      if (layerKey === "world") {
+        // The world's background *is* the map; there is no wider context to cut,
+        // so the renderer letterboxes instead of asking for more.
+        if (layer.basemap!.viewBox !== layer.viewBox) wrong.push("world: background != viewBox");
+        continue;
+      }
+      if (background.width < preferred.height * maxAspect - 1) {
+        wrong.push(`${layerKey}: too narrow for a ${maxAspect}:1 canvas`);
+      }
+      if (background.height < preferred.width / minAspect - 1) {
+        wrong.push(`${layerKey}: too short for a ${minAspect}:1 canvas`);
+      }
+    }
+    expect(wrong).toStrictEqual([]);
+  });
+
+  it("nests every window inside its parent's, so zoom levels share one camera", () => {
+    const outOfOrder: string[] = [];
+    const world = viewBox("world");
+    const china = viewBox("geo:cn");
+    const inside = (child: ReturnType<typeof viewBox>, parent: ReturnType<typeof viewBox>) =>
+      child.minX >= parent.minX &&
+      child.minY >= parent.minY &&
+      child.minX + child.width <= parent.minX + parent.width &&
+      child.minY + child.height <= parent.minY + parent.height;
+    for (const layerKey of layerKeys) {
+      if (layerKey === "world") continue;
+      if (!inside(viewBox(layerKey), world)) outOfOrder.push(`${layerKey} outside world`);
+      if (layerKey === "geo:cn") continue;
+      if (!inside(viewBox(layerKey), china)) outOfOrder.push(`${layerKey} outside geo:cn`);
+    }
+    expect(outOfOrder).toStrictEqual([]);
+  });
+
+  it("draws every basemap field strictly inside the background window", () => {
+    const escaped: string[] = [];
+    for (const layerKey of layerKeys) {
+      const background = viewBoxSize(parsedLayer(layerKey).basemap!.viewBox);
+      for (const [field, path] of basemapFields(layerKey)) {
+        const bounds = boundsOf(path);
+        const inside =
+          bounds.left >= background.minX &&
+          bounds.top >= background.minY &&
+          bounds.right <= background.minX + background.width &&
+          bounds.bottom <= background.minY + background.height;
+        if (!inside) escaped.push(`${layerKey}.${field}: ${JSON.stringify(bounds)}`);
+      }
+    }
+    expect(escaped).toStrictEqual([]);
+  });
+
+  it("never draws a path around the globe: long context segments sit on the window edge", () => {
+    // An uncut seam would show up as one segment spanning most of the *world*,
+    // far wider than any legitimate piece of context. Clipped context does have
+    // long segments, but they run along the window border, and simplified
+    // context has straight chords, but they are a few percent of the world at
+    // most — both are distinguished by this threshold.
+    const world = viewBox("world");
+    const wrapped: string[] = [];
+    for (const layerKey of layerKeys) {
+      const background = viewBoxSize(parsedLayer(layerKey).basemap!.viewBox);
+      const right = background.minX + background.width;
+      const bottom = background.minY + background.height;
+      const nearEdge = Math.max(background.width, background.height) * 0.01;
+      for (const [field, path] of basemapFields(layerKey)) {
+        for (const subpath of path.split("M").slice(1)) {
+          const numbers = subpath.replace(/Z.*/s, "").match(/-?\d+/g)!.map(Number);
+          for (let index = 2; index < numbers.length; index += 2) {
+            const [fromX, fromY] = [numbers[index - 2]!, numbers[index - 1]!];
+            const [toX, toY] = [numbers[index]!, numbers[index + 1]!];
+            if (Math.abs(toX - fromX) <= world.width * 0.5) continue;
+            const onHorizontalEdge =
+              fromY === toY &&
+              (Math.abs(fromY - background.minY) <= nearEdge ||
+                Math.abs(fromY - bottom) <= nearEdge);
+            const onVerticalEdge =
+              fromX === toX &&
+              (Math.abs(fromX - background.minX) <= nearEdge ||
+                Math.abs(fromX - right) <= nearEdge);
+            if (!onHorizontalEdge && !onVerticalEdge) {
+              wrapped.push(`${layerKey}.${field}: ${fromX},${fromY} -> ${toX},${toY}`);
+            }
+          }
+        }
+      }
+    }
+    expect(wrapped).toStrictEqual([]);
+  });
+
+  it("pre-cuts the shared context wide enough for every declared background window", () => {
+    // The bug this pins: the context used to be pre-cut to a multiple of one
+    // layer's preferred window, so a wide background window was declared but its
+    // far neighbours had already been clipped away — invisible to a containment
+    // check, visible as a straight false coastline in the middle of the map.
+    const coverage = JSON.parse(
+      readFileSync(resolve("scripts/maps/coverage-report.json"), "utf8"),
+    ) as { contextWindow: string };
+    const context = viewBoxSize(coverage.contextWindow);
+    const escaped: string[] = [];
+    for (const layerKey of layerKeys) {
+      if (layerKey === "world") continue;
+      const background = viewBoxSize(parsedLayer(layerKey).basemap!.viewBox);
+      const inside =
+        background.minX >= context.minX &&
+        background.minY >= context.minY &&
+        background.minX + background.width <= context.minX + context.width &&
+        background.minY + background.height <= context.minY + context.height;
+      if (!inside) escaped.push(`${layerKey}: ${parsedLayer(layerKey).basemap!.viewBox}`);
+    }
+    expect(escaped).toStrictEqual([]);
+  });
+
+  it("fills the widest declared window with real neighbours, not a clipped edge", () => {
+    // The country layer declares the widest background of all (a 4:1 canvas).
+    // Before the pre-cut was widened its land covered only 56% of that window,
+    // leaving an empty band where Asia and Europe are.
+    const background = viewBoxSize(parsedLayer("geo:cn").basemap!.viewBox);
+    const land = boundsOf(parsedLayer("geo:cn").basemap!.land);
+    expect((land.right - land.left) / background.width).toBeGreaterThan(0.9);
+    expect(land.left).toBeLessThanOrEqual(background.minX + background.width * 0.05);
+    expect(land.right).toBeGreaterThanOrEqual(background.minX + background.width * 0.95);
+  });
+
+  it("encloses the foreground, proving basemap and foreground share one transform", () => {
+    const misaligned: string[] = [];
+    for (const layerKey of layerKeys) {
+      const space = viewBox(layerKey);
+      const foreground = boundsOf(
+        parsedLayer(layerKey)
+          .features.map((f) => f.path)
+          .join(""),
+      );
+      const context = ["land", "frame", "graticule"]
+        .flatMap((field) => basemapFields(layerKey).filter(([name]) => name === field))
+        .map(([, path]) => boundsOf(path));
+      if (context.length === 0) continue;
+      const enclosing = context.some(
+        (bounds) =>
+          bounds.left <= foreground.left + space.width * 0.02 &&
+          bounds.right >= foreground.right - space.width * 0.02 &&
+          bounds.top <= foreground.top + space.height * 0.02 &&
+          bounds.bottom >= foreground.bottom - space.height * 0.02,
+      );
+      if (!enclosing) misaligned.push(layerKey);
+    }
+    expect(misaligned).toStrictEqual([]);
+  });
+
+  it("keeps the world graticule on the same Pacific seam as the foreground", () => {
+    // Only the graticule is scanned for cross-map segments: the frame's pole
+    // edge is legitimately one full-width straight line, and the frame is
+    // covered instead by the containment check above (a frame built on the
+    // wrong seam collapses towards the centre and cannot enclose the land).
+    const space = viewBox("world");
+    const jumps: string[] = [];
+    const graticule = parsedLayer("world").basemap!.graticule;
+    for (const subpath of graticule.split("M").slice(1)) {
+      const numbers = subpath.replace(/Z.*/s, "").match(/-?\d+/g)!.map(Number);
+      for (let index = 2; index < numbers.length; index += 2) {
+        const jump = Math.abs(numbers[index]! - numbers[index - 2]!) / space.width;
+        if (jump > 0.25) jumps.push(`${(jump * 100).toFixed(0)}%`);
+      }
+    }
+    expect(jumps).toStrictEqual([]);
+  });
+
+  it("gives every regional layer neighbouring land, borders and a receipted grid", () => {
+    const missing: string[] = [];
+    for (const layerKey of layerKeys) {
+      const basemap = parsedLayer(layerKey).basemap;
+      if (!basemap) {
+        missing.push(`${layerKey}: no basemap`);
+        continue;
+      }
+      if (layerKey === "world") {
+        // The world's own foreground is the land, so it ships a frame instead.
+        if (!basemap.frame || basemap.land !== "") missing.push("world: frame/land");
+        continue;
+      }
+      if (!basemap.land) missing.push(`${layerKey}: no neighbouring land`);
+      if (!basemap.graticule) missing.push(`${layerKey}: no graticule`);
+      if (layerKey !== "geo:cn" && !basemap.borders) {
+        missing.push(`${layerKey}: no province borders`);
+      }
+    }
+    expect(missing).toStrictEqual([]);
+  });
+
+  it("uses the frozen graticule ladder, recorded per layer", () => {
+    const params = (
+      manifest as {
+        basemap?: { graticule?: { world?: number; regionalLadder?: number[] } };
+      }
+    ).basemap?.graticule;
+    expect(params?.world).toBe(30);
+    expect(params?.regionalLadder).toStrictEqual([10, 5, 2, 1]);
+
+    const coverage = JSON.parse(
+      readFileSync(resolve("scripts/maps/coverage-report.json"), "utf8"),
+    ) as { layers: { layer: string; graticuleInterval: number }[] };
+    const wrong = coverage.layers
+      .filter((entry) =>
+        entry.layer === "world"
+          ? entry.graticuleInterval !== params?.world
+          : !params?.regionalLadder?.includes(entry.graticuleInterval),
+      )
+      .map((entry) => `${entry.layer}: ${entry.graticuleInterval}`);
+    expect(wrong).toStrictEqual([]);
   });
 });

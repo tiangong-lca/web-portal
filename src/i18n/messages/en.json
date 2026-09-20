@@ -628,7 +628,7 @@
     "hideMap": "Hide map",
     "mapLoading": "Loading this map…",
     "mapUnavailable": "This map is unavailable. Browse the region list below.",
-    "mapLegend": "Shading shows matching public versions. Unmapped, historical and cross-region records remain available in the list. Unloaded regions are not zero counts.",
+    "mapLegend": "The light basemap provides geographic context, not data coverage. Purple shading shows matching public versions; unmapped, historical and cross-region data remain available in the list.",
     "isic": "Industry categories (ISIC)",
     "cpc": "Product categories (CPC)",
     "elementary": "Elementary flow categories",

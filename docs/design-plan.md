@@ -23,8 +23,8 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 1c2233d0d99e26d3b5a9d40501ac23b3f66c1344
-lastReviewedNote: "Reviewed for Portal #105: local map selection reveals only necessary scroll distance, respecting real header/tray bounds, focus and reduced motion. An impossible viewport does not trigger counterproductive scrolling; data, URL, asset and navigation contracts are unchanged."
+lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
+lastReviewedNote: "Reviewed for Portal #105: world, China and city layers share an offline Pacific Robinson frame; layered basemaps and cancellable camera motion preserve URL history, public counts and current-layer-only loading."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1476,7 +1476,9 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 
 地图悬停或聚焦可预览名称与公开版本数，选择后显示明确的下级/数据入口。地区到地区的链接通过 React transition 和现有 Next 路由原位切换，保留展开状态、已有画面及加载提示；不增加第二套数据 API、逐节点请求或批量预取。每次下钻保留筛选、重置游标并加入 URL 历史；返回/刷新仍由真实 URL 恢复。地图选择只驻留内存，真正下钻才改变 URL。手机地图仍默认收起，无 JavaScript 使用原生链接；减少动态效果时不播放淡化过渡。
 
-地区浏览的路径标题、公开版本计数和范围/地图操作组合为紧凑控制栏；已应用筛选跟随目录维度工具栏，避免分散的空行。国家和省市的 SVG 外层增加响应式内边距，世界图、viewBox、边界资产及计数合同不变。
+地区浏览的路径标题、公开版本计数和范围/地图操作组合为紧凑控制栏；已应用筛选跟随目录维度工具栏，避免分散的空行。国家和省市的 SVG 外层保留响应式内边距；海洋、周边陆地、经纬网和行政边界组成低强调底图，紫色单独表达公开版本数。台湾等行政轮廓统一使用实线，与是否存在对应数据节点无关。
+
+世界、中国与省内城市层统一使用离线 Pacific Robinson 投影和同一仿射坐标系。层资源分别记录前景推荐窗口及背景覆盖窗口，画布按实际宽高比扩大视野而不拉伸轮廓。世界保留完整投影外形；地区背景覆盖 0.75–4 的宽高比，并保留相邻地理范围。下钻与浏览器返回使用约 420ms 的 SVG viewBox 过渡，仅更新视野，不逐帧重绘 React 路径树。缩放期间保留已加载的地理背景，当前层数量和可点击边界在停稳后呈现；层加载失败仍保留列表。新导航、尺寸变化及卸载会取消旧动画，减少动态效果时直接定位。
 
 共享导航反馈仅消费 Next Link 的 pending 或实际 React transition/文件读取状态，不预取整层链接、不新增数据请求或运行时库。页面保留旧内容和可编辑查询；较长等待延迟 150ms 后出现细进度条和四语状态播报。筛选抽屉关闭后其父级仍保留导航状态；清单导入保留预览与确认流程。原先等待文档截图完成的搜索/目录入口过渡已撤下，避免慢请求下的画面冻结。
 

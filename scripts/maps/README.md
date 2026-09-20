@@ -19,7 +19,7 @@ node scripts/maps/build-region-maps.mjs --fetch
 
 | Path | Role |
 | --- | --- |
-| `public/maps/<layer>.<sha16>.json` | Browser asset. `{ viewBox, features: [{ boundaryId, nodeId, path }] }`. |
+| `public/maps/<layer>.<sha16>.json` | Browser asset. `{ coordinateSpace, viewBox, features: [{ boundaryId, nodeId, path }], basemap }`. |
 | `src/features/catalog/region-map-manifest.generated.json` | Browser manifest: layer URL/hash/gzip size, source receipts, licences, thresholds, counts. |
 | `scripts/maps/coverage-report.json` | Full audit trail: per-code reasons, shapes without a node, dropped rings, source receipts. Not bundled. |
 | `scripts/maps/sources/manifest.json` | Receipt for the vendored raw bytes. Not bundled. |
@@ -30,16 +30,54 @@ node scripts/maps/build-region-maps.mjs --fetch
 | Layer key | Contents | Projection |
 | --- | --- | --- |
 | `world` | 265 Natural Earth Admin-0 map units | `mapshaper -proj "+proj=robin +lon_0=150"` |
-| `geo:cn` | 31 province-level divisions + the nine-dash line inset | `mapshaper -proj webmercator` |
-| `geo:cn-xx` | The prefectures of province `xx` (27 provinces) | same space as `geo:cn` |
+| `geo:cn` | 31 province-level divisions + the nine-dash line inset | same projection and transform |
+| `geo:cn-xx` | The prefectures of province `xx` (27 provinces) | same projection and transform |
+
+**All 29 layers are windows into one map.** They share one projection _and_ one affine transform, declared as `coordinateSpace: "pacific-robinson-v1"` on every layer, so the world, each country and each province are consecutive zoom levels of the same picture: any layer's `viewBox` is literally a rectangle inside the world's. The renderer interpolates a camera between them and needs no projection, SDK or extra request at runtime.
 
 The world layer is Pacific-centred: Robinson with its central meridian at 150°E, so the seam falls at 30°W in the mid-Atlantic and Asia, Australia and the Americas all sit inside the frame. `180°` was rejected because there the seam runs through Greenwich and slices England, France, Spain and four West African countries across both map edges; at 150°E the only landmasses the seam touches are Greenland, South Georgia, the Azores and Antarctica.
 
 The seam is cut by the projection engine, not by shifting projected coordinates. `mapshaper -proj` splits every ring that crosses the projection's own seam and inserts the seam edge — Greenland goes from 17 to 19 parts — which a post-hoc translation cannot reproduce; a translated map draws each straddling feature as one ring crossing the whole frame. `tests/unit/region-map-assets.test.ts` rejects both that signature and any seam that would slice a populated continent.
 
-Every Chinese layer shares one projection **and one fitted coordinate space**: the largest dimension of the province layer is fitted to 80 000 integer units, and a province sublayer's `viewBox` is a literal window into that same space. A consumer can therefore zoom a province outline and swap in its prefecture layer without re-projecting or re-fitting, and the two agree pixel for pixel.
+The world's bounding box is fitted to `COORDINATE_UNITS` integer units, and every other layer is a window into that one space. The value is set by the smallest window the product shows: a city layer is roughly 1/300 of the world width, and 400 000 units still leaves it sub-pixel integer precision while every layer stays under the gzip budget.
 
 `nodeId` resolves a node to its layer without an index: `world` holds the two-letter codes, `geo:cn` holds `geo:cn-xx`, `geo:cn-xx` holds `geo:cn-xx-yyy`. Codes that have no drawable shape are listed in the manifest's `unmapped` array with the layer they would have appeared in. Codes outside those three families (regions such as `AFR`, economic groupings such as `EU-25`) are never mapped to a boundary.
+
+## Basemap
+
+Each layer carries an optional `basemap` with the faded geographic context behind its foreground. Every path is projected by the same pinned mapshaper release, with the same projection string and the same fitted transform as the layer's foreground, so a context vertex and a foreground vertex at the same longitude/latitude land on exactly the same coordinate.
+
+| Field | Meaning |
+| --- | --- |
+| `land` | Faded neighbouring landmass (Natural Earth). Empty on `world`, whose foreground _is_ the land. |
+| `borders` | The province outlines the foreground does not already draw. Omitted on `world` and `geo:cn`. |
+| `graticule` | Latitude/longitude grid. 30° on `world`, otherwise the finest rung of `[10, 5, 2, 1]` that still puts at least three lines in view; the interval used is recorded per layer in `coverage-report.json`. |
+| `frame` | `world` only: the projection's own silhouette, for an ocean neatline. |
+
+Context is re-derived from sources the layer already depends on — nothing is downloaded, and each layer ships only the part of that context inside its own window. Two details are load-bearing:
+
+- **The graticule stops at ±85° latitude**, so no grid line sits exactly on the pole edge; Robinson itself is finite at the poles, so context needs no polar cut.
+- **The frame cannot be a lon/lat polygon.** Both sides of a Pacific-centred seam are the _same_ meridian, so such a polygon is a 0.002° sliver that mapshaper collapses; the silhouette is built from one projected seam meridian mirrored about the central meridian.
+
+The world window is the **union of the foreground box and that silhouette**, plus two coordinate units of slack, and the graticule is cut to that window. The projection outline is therefore visible in full — the ocean neatline keeps its curved sides instead of being cut into straight vertical edges — and no basemap field overflows the viewBox it ships with.
+
+### `viewBox` and `basemap.viewBox`
+
+Each layer reports two windows:
+
+- **`viewBox`** — the preferred camera: the foreground box grown by `viewBoxExtension` (10%).
+- **`basemap.viewBox`** — the window the background actually covers: the smallest centred box containing the preferred window at **every canvas aspect ratio in `aspectRange` (0.75–4)**, i.e. `bgW = max(W, 4H)` and `bgH = max(H, W / 0.75)`. All background fields are clipped to it, so a canvas anywhere in that range is filled edge to edge instead of showing a narrow strip of land behind false open sea.
+
+`world` is the one exception: its background _is_ the map, so `basemap.viewBox === viewBox` and the renderer letterboxes rather than asking for context that does not exist.
+
+Background simplification is **graded** (`contextSimplify`), because a covered window can be several times the preferred one while the foreground must keep its scientific detail:
+
+| Layer | `contextSimplify` | Why |
+| --- | --- | --- |
+| `geo:cn` | `5%` | Its declared window is a 4:1 canvas, several times the country itself. |
+| `geo:cn-xx` | `35%` | Small windows do not need the extra compression, and at 5% coastlines triangulated and province borders became long straight chords. |
+
+Both `land` and `borders` use their layer's value. The shared context is pre-cut to the union of every declared background window (recorded as `contextWindow` in `coverage-report.json`), so a layer can never declare a window wider than the context it was cut from.
 
 ## Resolution rules
 
@@ -59,7 +97,7 @@ These are deliberate, and each one is recorded in `coverage-report.json`.
 
 In `geo:cn`: `cnprov:710000` 台湾省, `cnprov:810000` 香港特别行政区 and `cnprov:820000` 澳门特别行政区 are drawn but unassigned — the dictionary carries Hong Kong, Macao and Taiwan as top-level codes `HK`, `MO` and `TW` (named 香港/澳门/台湾), not as `CN-` subdivisions and not under the source's names, so neither the province rule nor the city rule matches them. `cnprov:100000_JD` is the nine-dash line inset: kept as decoration, and it must never receive a node.
 
-**Dropped rings (2).** Two sub-resolution islets (one in 湖南省, one in 怀化市) round to fewer than three integer points in the 80 000-unit space and cannot be filled. At 10 000 units five rings were lost, including Macao and the Vatican; 80 000 is the smallest tested space that loses none of the world's shapes.
+**Dropped rings (none).** A ring that rounds to fewer than three integer points cannot be filled, so it is dropped and recorded here. The shared 400 000-unit space loses no ring at all: the two sub-resolution islets that the previous 80 000-unit space lost (one in 湖南省, one in 怀化市) now survive, as does every small island in the world layer.
 
 ## Toolchain
 

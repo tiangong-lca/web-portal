@@ -1,5 +1,6 @@
 {
   "schemaVersion": "portal.region-map-coverage.v1",
+  "contextWindow": "-9229 8545 318612 112656",
   "note": "Full audit trail for the region-map pipeline: every dictionary code inside a mapped container, every source shape that received no node, every dropped ring and every source receipt. The browser manifest carries only counts.",
   "layers": [
     {
@@ -9,7 +10,8 @@
       "mapped": 261,
       "projection": "+proj=robin +lon_0=150",
       "simplify": "20%",
-      "sharesChinaSpace": false,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 30,
       "unresolvedCodes": [],
       "unresolvedShapes": [
         {
@@ -53,9 +55,10 @@
       "source": "china-province-100000-full",
       "shapes": 35,
       "mapped": 31,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": false,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 10,
       "unresolvedCodes": [],
       "unresolvedShapes": [
         {
@@ -90,9 +93,10 @@
       "source": "datav-130000",
       "shapes": 11,
       "mapped": 11,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -102,9 +106,10 @@
       "source": "datav-140000",
       "shapes": 11,
       "mapped": 11,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -114,9 +119,10 @@
       "source": "datav-150000",
       "shapes": 12,
       "mapped": 11,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 5,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-nm-cfs",
@@ -137,9 +143,10 @@
       "source": "datav-210000",
       "shapes": 14,
       "mapped": 14,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -149,9 +156,10 @@
       "source": "datav-220000",
       "shapes": 9,
       "mapped": 9,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -161,9 +169,10 @@
       "source": "datav-230000",
       "shapes": 13,
       "mapped": 13,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -173,9 +182,10 @@
       "source": "datav-320000",
       "shapes": 13,
       "mapped": 13,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -185,9 +195,10 @@
       "source": "datav-330000",
       "shapes": 11,
       "mapped": 11,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -197,9 +208,10 @@
       "source": "datav-340000",
       "shapes": 16,
       "mapped": 16,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-ah-cah",
@@ -214,9 +226,10 @@
       "source": "datav-350000",
       "shapes": 9,
       "mapped": 9,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -226,9 +239,10 @@
       "source": "datav-360000",
       "shapes": 11,
       "mapped": 11,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -238,9 +252,10 @@
       "source": "datav-370000",
       "shapes": 16,
       "mapped": 16,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-sd-lws",
@@ -255,9 +270,10 @@
       "source": "datav-410000",
       "shapes": 18,
       "mapped": 17,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [
         {
@@ -273,9 +289,10 @@
       "source": "datav-420000",
       "shapes": 17,
       "mapped": 12,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-hb-xfn",
@@ -316,9 +333,10 @@
       "source": "datav-430000",
       "shapes": 14,
       "mapped": 14,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -328,9 +346,10 @@
       "source": "datav-440000",
       "shapes": 21,
       "mapped": 21,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -340,9 +359,10 @@
       "source": "datav-450000",
       "shapes": 14,
       "mapped": 14,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -352,9 +372,10 @@
       "source": "datav-460000",
       "shapes": 19,
       "mapped": 2,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 5,
       "unresolvedCodes": [],
       "unresolvedShapes": [
         {
@@ -450,9 +471,10 @@
       "source": "datav-510000",
       "shapes": 21,
       "mapped": 21,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -462,9 +484,10 @@
       "source": "datav-520000",
       "shapes": 9,
       "mapped": 7,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-gz-bjd",
@@ -494,9 +517,10 @@
       "source": "datav-530000",
       "shapes": 16,
       "mapped": 16,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -506,9 +530,10 @@
       "source": "datav-540000",
       "shapes": 7,
       "mapped": 2,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 5,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-xz-nad",
@@ -565,9 +590,10 @@
       "source": "datav-610000",
       "shapes": 10,
       "mapped": 10,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -577,9 +603,10 @@
       "source": "datav-620000",
       "shapes": 14,
       "mapped": 14,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 5,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -589,9 +616,10 @@
       "source": "datav-630000",
       "shapes": 8,
       "mapped": 7,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 2,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-qh-hdd",
@@ -612,9 +640,10 @@
       "source": "datav-640000",
       "shapes": 5,
       "mapped": 5,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 1,
       "unresolvedCodes": [],
       "unresolvedShapes": [],
       "unshapedCodes": []
@@ -624,9 +653,10 @@
       "source": "datav-650000",
       "shapes": 24,
       "mapped": 10,
-      "projection": "webmercator",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
-      "sharesChinaSpace": true,
+      "sharesCoordinateSpace": true,
+      "graticuleInterval": 5,
       "unresolvedCodes": [
         {
           "nodeId": "geo:cn-xj-hmd",
@@ -720,18 +750,7 @@
       "unshapedCodes": []
     }
   ],
-  "droppedRings": [
-    {
-      "layer": "geo:cn",
-      "boundaryId": "cnprov:430000",
-      "rings": 1
-    },
-    {
-      "layer": "geo:cn-hn",
-      "boundaryId": "datav:431200",
-      "rings": 1
-    }
-  ],
+  "droppedRings": [],
   "unmapped": [
     {
       "layer": "world",

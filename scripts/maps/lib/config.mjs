@@ -23,36 +23,23 @@ export const LAYER_GZIP_BUDGET_BYTES = 150 * 1024;
  * The largest bounding-box dimension of a layer family is fitted to this many
  * integer coordinate units.
  *
- * The value is chosen from `scripts/maps/coverage-report.json`, not by taste: at
- * 10000 units the world layer loses five rings to integer rounding (Vatican
- * City, Tokelau, Macao, Ashmore and Cartier, and one Italian islet), while at
- * 80000 units no ring is lost at all and every layer still fits under the
- * gzip budget. Integer coordinates keep the path strings compact; a larger
- * space costs roughly a quarter more bytes and buys complete shape coverage.
+ * Every layer is a window into this one space, so the value is set by the
+ * smallest window the product shows: a city layer is roughly 1/300 of the world
+ * width, and at 400 000 units that still leaves sub-pixel integer precision
+ * there while every layer stays under the gzip budget. See
+ * `scripts/maps/coverage-report.json` for the measured outcome.
  */
-export const COORDINATE_UNITS = 80000;
+export const COORDINATE_UNITS = 400000;
 
 /**
- * Chinese administrative layers share one projection and one fitted coordinate
- * space, so a province sublayer's `viewBox` is a window into exactly the same
- * space as `geo:cn`. The UI can therefore zoom a province and swap in its city
- * layer without re-projecting or re-fitting.
- *
- * The world layer is Pacific-centred: Robinson with its central meridian at
- * 150°E, so the seam falls at 30°W in the mid-Atlantic and Asia, Australia and
- * the Americas all sit inside the frame. 150°E is chosen over 180° because at
- * 180° the seam runs through Greenwich and slices England, France, Spain and
- * four West African countries across both edges; at 150°E the seam touches Greenland, the Azores, South Georgia and Antarctica.
- *
- * The seam must be cut by the projection engine, never by shifting SVG
- * coordinates: `mapshaper -proj` splits any ring crossing the projection's own
- * seam and inserts the seam edge (Greenland goes from 17 to 19 parts), which a
- * post-hoc translation cannot reproduce.
+ * One projection and one affine transform for every layer, so the world, each
+ * country and each province are windows into the same map and the UI can
+ * interpolate a camera between them without reprojecting anything.
  */
-export const PROJECTIONS = {
-  world: "+proj=robin +lon_0=150",
-  china: "webmercator",
-};
+export const PROJECTION = "+proj=robin +lon_0=150";
+
+/** Marker the renderer uses to know it may treat every layer as one camera. */
+export const COORDINATE_SPACE = "pacific-robinson-v1";
 
 /**
  * Vertex-retention percentages handed to `mapshaper -simplify <p> keep-shapes`.
@@ -66,6 +53,47 @@ export const SIMPLIFY = {
   world: "20%",
   chinaProvince: "50%",
   chinaCity: "50%",
+};
+
+/**
+ * Basemap parameters: the faded geographic context drawn behind a layer's
+ * foreground. All of it is re-derived from sources the layer already depends
+ * on, projected by the same locked mapshaper release with the same projection
+ * string and fitted transform as the foreground, so basemap and foreground
+ * agree coordinate for coordinate.
+ */
+export const BASEMAP = {
+  /** Region windows grow by this fraction on each axis so neighbours are visible. */
+  viewBoxExtension: 0.1,
+  /**
+   * The world window is the union of the foreground box and the projection
+   * silhouette, plus this slack in coordinate units, so the whole Robinson
+   * outline is visible and a stroke on the edge is not clipped.
+   */
+  worldWindowSlack: 2,
+  /** Latitude the regional graticule stops at, so no grid line sits on the pole edge. */
+  graticuleLatitudeLimit: 85,
+  /**
+   * Canvas aspect ratios the background must cover. A layer's preferred window
+   * is grown into the smallest centred box that contains it at every ratio in
+   * this range, which is what `basemap.viewBox` reports.
+   */
+  aspectRange: [0.75, 4],
+  /**
+   * Context simplification, graded by how much of the world a layer's
+   * background window covers. The country layer declares a window several times
+   * its own size, so it is simplified hard to stay inside the byte budget; a
+   * city window is small, and 5% there visibly triangulated coastlines and
+   * turned province borders into long straight chords. Both land and borders
+   * use the value for their layer. Measured, not guessed — see
+   * coverage-report.json.
+   */
+  contextSimplify: { country: "5%", city: "35%" },
+  /**
+   * Graticule density. The world is fixed at 30°; regional windows choose the
+   * finest rung of the ladder that still yields `minimumLines` lines in view.
+   */
+  graticule: { world: 30, regionalLadder: [10, 5, 2, 1], minimumLines: 3 },
 };
 
 /** mapshaper writes projected coordinates rounded to this many metres. */

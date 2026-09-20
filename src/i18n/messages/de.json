@@ -628,7 +628,7 @@
     "hideMap": "Karte ausblenden",
     "mapLoading": "Diese Karte wird geladen…",
     "mapUnavailable": "Diese Karte ist nicht verfügbar. Nutzen Sie die Regionenliste unten.",
-    "mapLegend": "Die Schattierung zeigt passende öffentliche Versionen. Nicht zugeordnete, historische und überregionale Einträge bleiben in der Liste verfügbar. Nicht geladene Regionen bedeuten nicht null Treffer.",
+    "mapLegend": "Die helle Grundkarte dient der geografischen Orientierung und zeigt keine Datenabdeckung. Die violette Schattierung zeigt passende öffentliche Versionen; nicht verortete, historische und regionsübergreifende Daten bleiben in der Liste zugänglich.",
     "isic": "Wirtschaftszweige (ISIC)",
     "cpc": "Produktkategorien (CPC)",
     "elementary": "Elementarflusskategorien",

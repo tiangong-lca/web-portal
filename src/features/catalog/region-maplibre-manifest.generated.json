@@ -158,7 +158,7 @@
   ],
   "layers": {
     "world": {
-      "url": "/maps/gl/world.87fb27c744bc9039.geojson",
+      "url": "/maps/gl/world.87fb27c744bc9039.json",
       "sourceId": "world-map-units-50m",
       "nodeId": null,
       "code": null,
@@ -176,7 +176,7 @@
       }
     },
     "geo:cn": {
-      "url": "/maps/gl/geo-cn.859752ce706c3c2e.geojson",
+      "url": "/maps/gl/geo-cn.859752ce706c3c2e.json",
       "sourceId": "china-province-100000-full",
       "nodeId": "geo:cn",
       "code": "CN",
@@ -188,7 +188,7 @@
       "center": [104.29901, 28.47908]
     },
     "geo:cn-he": {
-      "url": "/maps/gl/geo-cn-he.1f51bbab258aa383.geojson",
+      "url": "/maps/gl/geo-cn-he.1f51bbab258aa383.json",
       "sourceId": "datav-130000",
       "nodeId": "geo:cn-he",
       "code": "CN-HE",
@@ -200,7 +200,7 @@
       "center": [116.66886, 39.3432]
     },
     "geo:cn-sx": {
-      "url": "/maps/gl/geo-cn-sx.da75adf4bb96cc87.geojson",
+      "url": "/maps/gl/geo-cn-sx.da75adf4bb96cc87.json",
       "sourceId": "datav-140000",
       "nodeId": "geo:cn-sx",
       "code": "CN-SX",
@@ -212,7 +212,7 @@
       "center": [112.39926, 37.6617]
     },
     "geo:cn-nm": {
-      "url": "/maps/gl/geo-cn-nm.bafa349b8cc27b3a.geojson",
+      "url": "/maps/gl/geo-cn-nm.bafa349b8cc27b3a.json",
       "sourceId": "datav-150000",
       "nodeId": "geo:cn-nm",
       "code": "CN-NM",
@@ -224,7 +224,7 @@
       "center": [111.62056, 45.37198]
     },
     "geo:cn-ln": {
-      "url": "/maps/gl/geo-cn-ln.e3234949bdc27cac.geojson",
+      "url": "/maps/gl/geo-cn-ln.e3234949bdc27cac.json",
       "sourceId": "datav-210000",
       "nodeId": "geo:cn-ln",
       "code": "CN-LN",
@@ -236,7 +236,7 @@
       "center": [122.31867, 41.10193]
     },
     "geo:cn-jl": {
-      "url": "/maps/gl/geo-cn-jl.79e5ad1b6c1414d5.geojson",
+      "url": "/maps/gl/geo-cn-jl.79e5ad1b6c1414d5.json",
       "sourceId": "datav-220000",
       "nodeId": "geo:cn-jl",
       "code": "CN-JL",
@@ -248,7 +248,7 @@
       "center": [126.48197, 43.58499]
     },
     "geo:cn-hl": {
-      "url": "/maps/gl/geo-cn-hl.d1f9a23dc8a8cc9d.geojson",
+      "url": "/maps/gl/geo-cn-hl.d1f9a23dc8a8cc9d.json",
       "sourceId": "datav-230000",
       "nodeId": "geo:cn-hl",
       "code": "CN-HL",
@@ -260,7 +260,7 @@
       "center": [128.13851, 48.4933]
     },
     "geo:cn-js": {
-      "url": "/maps/gl/geo-cn-js.3ed27ee1a841e2c2.geojson",
+      "url": "/maps/gl/geo-cn-js.3ed27ee1a841e2c2.json",
       "sourceId": "datav-320000",
       "nodeId": "geo:cn-js",
       "code": "CN-JS",
@@ -272,7 +272,7 @@
       "center": [119.1698, 32.94046]
     },
     "geo:cn-zj": {
-      "url": "/maps/gl/geo-cn-zj.07e9bf70d4d4baf7.geojson",
+      "url": "/maps/gl/geo-cn-zj.07e9bf70d4d4baf7.json",
       "sourceId": "datav-330000",
       "nodeId": "geo:cn-zj",
       "code": "CN-ZJ",
@@ -284,7 +284,7 @@
       "center": [120.43486, 29.15747]
     },
     "geo:cn-ah": {
-      "url": "/maps/gl/geo-cn-ah.9224853dfe1c8674.geojson",
+      "url": "/maps/gl/geo-cn-ah.9224853dfe1c8674.json",
       "sourceId": "datav-340000",
       "nodeId": "geo:cn-ah",
       "code": "CN-AH",
@@ -296,7 +296,7 @@
       "center": [117.26704, 32.02312]
     },
     "geo:cn-fj": {
-      "url": "/maps/gl/geo-cn-fj.fd9cd3d7b9720f64.geojson",
+      "url": "/maps/gl/geo-cn-fj.fd9cd3d7b9720f64.json",
       "sourceId": "datav-350000",
       "nodeId": "geo:cn-fj",
       "code": "CN-FJ",
@@ -308,7 +308,7 @@
       "center": [118.15865, 25.93052]
     },
     "geo:cn-jx": {
-      "url": "/maps/gl/geo-cn-jx.47191d5c2f0699de.geojson",
+      "url": "/maps/gl/geo-cn-jx.47191d5c2f0699de.json",
       "sourceId": "datav-360000",
       "nodeId": "geo:cn-jx",
       "code": "CN-JX",
@@ -320,7 +320,7 @@
       "center": [116.02675, 27.2877]
     },
     "geo:cn-sd": {
-      "url": "/maps/gl/geo-cn-sd.2da278dfcd450622.geojson",
+      "url": "/maps/gl/geo-cn-sd.2da278dfcd450622.json",
       "sourceId": "datav-370000",
       "nodeId": "geo:cn-sd",
       "code": "CN-SD",
@@ -332,7 +332,7 @@
       "center": [118.76753, 36.39053]
     },
     "geo:cn-ha": {
-      "url": "/maps/gl/geo-cn-ha.fc16e0de1f9b0bd0.geojson",
+      "url": "/maps/gl/geo-cn-ha.fc16e0de1f9b0bd0.json",
       "sourceId": "datav-410000",
       "nodeId": "geo:cn-ha",
       "code": "CN-HA",
@@ -344,7 +344,7 @@
       "center": [113.50427, 33.87499]
     },
     "geo:cn-hb": {
-      "url": "/maps/gl/geo-cn-hb.0bd8397d04d51908.geojson",
+      "url": "/maps/gl/geo-cn-hb.0bd8397d04d51908.json",
       "sourceId": "datav-420000",
       "nodeId": "geo:cn-hb",
       "code": "CN-HB",
@@ -356,7 +356,7 @@
       "center": [112.25108, 31.15181]
     },
     "geo:cn-hn": {
-      "url": "/maps/gl/geo-cn-hn.d4c60a9ae59a578c.geojson",
+      "url": "/maps/gl/geo-cn-hn.d4c60a9ae59a578c.json",
       "sourceId": "datav-430000",
       "nodeId": "geo:cn-hn",
       "code": "CN-HN",
@@ -368,7 +368,7 @@
       "center": [111.53196, 27.38127]
     },
     "geo:cn-gd": {
-      "url": "/maps/gl/geo-cn-gd.10a5170ebac5fb62.geojson",
+      "url": "/maps/gl/geo-cn-gd.10a5170ebac5fb62.json",
       "sourceId": "datav-440000",
       "nodeId": "geo:cn-gd",
       "code": "CN-GD",
@@ -380,7 +380,7 @@
       "center": [113.42394, 22.86292]
     },
     "geo:cn-gx": {
-      "url": "/maps/gl/geo-cn-gx.ff4ea863f49a2b48.geojson",
+      "url": "/maps/gl/geo-cn-gx.ff4ea863f49a2b48.json",
       "sourceId": "datav-450000",
       "nodeId": "geo:cn-gx",
       "code": "CN-GX",
@@ -392,7 +392,7 @@
       "center": [108.27285, 23.70005]
     },
     "geo:cn-hi": {
-      "url": "/maps/gl/geo-cn-hi.230bf8f279c6c7f8.geojson",
+      "url": "/maps/gl/geo-cn-hi.230bf8f279c6c7f8.json",
       "sourceId": "datav-460000",
       "nodeId": "geo:cn-hi",
       "code": "CN-HI",
@@ -404,7 +404,7 @@
       "center": [113.21348, 12.6045]
     },
     "geo:cn-sc": {
-      "url": "/maps/gl/geo-cn-sc.97b880ca1f126258.geojson",
+      "url": "/maps/gl/geo-cn-sc.97b880ca1f126258.json",
       "sourceId": "datav-510000",
       "nodeId": "geo:cn-sc",
       "code": "CN-SC",
@@ -416,7 +416,7 @@
       "center": [102.94415, 30.18092]
     },
     "geo:cn-gz": {
-      "url": "/maps/gl/geo-cn-gz.b29c9899fe8ea067.geojson",
+      "url": "/maps/gl/geo-cn-gz.b29c9899fe8ea067.json",
       "sourceId": "datav-520000",
       "nodeId": "geo:cn-gz",
       "code": "CN-GZ",
@@ -428,7 +428,7 @@
       "center": [106.5894, 26.91885]
     },
     "geo:cn-yn": {
-      "url": "/maps/gl/geo-cn-yn.4a54c5843b708e93.geojson",
+      "url": "/maps/gl/geo-cn-yn.4a54c5843b708e93.json",
       "sourceId": "datav-530000",
       "nodeId": "geo:cn-yn",
       "code": "CN-YN",
@@ -440,7 +440,7 @@
       "center": [101.8609, 25.18375]
     },
     "geo:cn-xz": {
-      "url": "/maps/gl/geo-cn-xz.67d13bf8322c86c8.geojson",
+      "url": "/maps/gl/geo-cn-xz.67d13bf8322c86c8.json",
       "sourceId": "datav-540000",
       "nodeId": "geo:cn-xz",
       "code": "CN-XZ",
@@ -452,7 +452,7 @@
       "center": [88.75589, 31.66853]
     },
     "geo:cn-sn": {
-      "url": "/maps/gl/geo-cn-sn.d46c3b2edad0d998.geojson",
+      "url": "/maps/gl/geo-cn-sn.d46c3b2edad0d998.json",
       "sourceId": "datav-610000",
       "nodeId": "geo:cn-sn",
       "code": "CN-SN",
@@ -464,7 +464,7 @@
       "center": [108.36033, 35.64612]
     },
     "geo:cn-gs": {
-      "url": "/maps/gl/geo-cn-gs.6a41df920244f817.geojson",
+      "url": "/maps/gl/geo-cn-gs.6a41df920244f817.json",
       "sourceId": "datav-620000",
       "nodeId": "geo:cn-gs",
       "code": "CN-GS",
@@ -476,7 +476,7 @@
       "center": [100.52623, 37.69464]
     },
     "geo:cn-qh": {
-      "url": "/maps/gl/geo-cn-qh.f5767468105bf22e.geojson",
+      "url": "/maps/gl/geo-cn-qh.f5767468105bf22e.json",
       "sourceId": "datav-630000",
       "nodeId": "geo:cn-qh",
       "code": "CN-QH",
@@ -488,7 +488,7 @@
       "center": [96.2269, 35.40366]
     },
     "geo:cn-nx": {
-      "url": "/maps/gl/geo-cn-nx.2886d5a8195d00e3.geojson",
+      "url": "/maps/gl/geo-cn-nx.2886d5a8195d00e3.json",
       "sourceId": "datav-640000",
       "nodeId": "geo:cn-nx",
       "code": "CN-NX",
@@ -500,7 +500,7 @@
       "center": [105.97325, 37.31196]
     },
     "geo:cn-xj": {
-      "url": "/maps/gl/geo-cn-xj.8d81caca63055f69.geojson",
+      "url": "/maps/gl/geo-cn-xj.8d81caca63055f69.json",
       "sourceId": "datav-650000",
       "nodeId": "geo:cn-xj",
       "code": "CN-XJ",

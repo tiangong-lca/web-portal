@@ -478,9 +478,7 @@ export const MobileChinese: Story = {
 export const MapFailure: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get(/\/maps\/gl\/.*\.geojson$/u, () => HttpResponse.json({}, { status: 503 })),
-      ],
+      handlers: [http.get(/\/maps\/gl\/.*\.json$/u, () => HttpResponse.json({}, { status: 503 }))],
     },
   },
   play: async ({ canvas, globals }) => {

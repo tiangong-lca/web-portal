@@ -183,7 +183,7 @@ test("offline map keeps geographic context through China and province views", as
   const layers = new Set<string>();
   page.on("request", (request) => {
     const path = new URL(request.url()).pathname;
-    if (path.startsWith("/maps/gl/") && path.endsWith(".geojson")) layers.add(path);
+    if (path.startsWith("/maps/gl/") && path.endsWith(".json")) layers.add(path);
   });
   await page.goto("/en/search?explore=region");
   const scene = page.locator(".region-maplibre-scene");

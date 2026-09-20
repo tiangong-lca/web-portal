@@ -268,6 +268,7 @@ test("mainland, Taiwan and South China Sea share real pointer, keyboard and navi
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/en/search?explore=region");
   await showFlatMap(page);
+  expect(WORLD.url).toMatch(/\.json$/u);
   const world = await geometry(page, WORLD.url);
 
   // The reviewed world layer answers one China entry through its mainland shape and five aliases:

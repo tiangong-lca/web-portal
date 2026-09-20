@@ -23,8 +23,8 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-09-21
-lastReviewedCommit: 76f03640ad6b00e434e969a6414996932ff12f85
-lastReviewedNote: "Reviewed for Portal #115: the same self-hosted MapLibre worker is served under .js to satisfy EdgeOne MIME delivery. Geometry, counts, UI interaction and CSP policy are unchanged."
+lastReviewedCommit: c8c3ece4d5da9687014cdf411adcc9c99193806f
+lastReviewedNote: "Reviewed for Portal #117: byte-identical GeoJSON now uses standard .json asset URLs so EdgeOne applies HTTP compression. Geometry, UI behavior, data contracts and CSP directives remain unchanged."
 related:
   - docs/ui-system.md
   - docs/development.md

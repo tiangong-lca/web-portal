@@ -263,14 +263,7 @@ export function MapScene(props: Props) {
         onReady(false);
       }
     });
-    // Storybook freezes animation callbacks in review thumbnails. Paint completed
-    // source work synchronously so the thumbnail contains the real map, not a loader.
-    map.on("sourcedata", (event) => {
-      if (event.isSourceLoaded)
-        queueMicrotask(() => {
-          if (!disposed) map.redraw();
-        });
-    });
+    // Resize must also repaint when a review thumbnail has frozen animation callbacks.
     const observer = new ResizeObserver(() => {
       map.resize();
       map.redraw();

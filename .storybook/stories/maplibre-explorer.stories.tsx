@@ -13,6 +13,16 @@ const meta = {
   globals: { viewport: { value: "desktop", isRotated: false } },
   parameters: { layout: "fullscreen", pageLayout: true },
   args: { initialLevel: "world", initialMode: "globe", unavailable: false },
+  // Review thumbnails disable play and freeze at `finished`. Wait for the actual
+  // map's idle receipt in this lifecycle hook, which also runs without play.
+  afterEach: async ({ canvasElement, args }) => {
+    if (args.unavailable || !canvasElement.querySelector(".globe-scene")) return;
+    await ready(canvasElement);
+    await waitFor(
+      () => expect(canvasElement.querySelector(".globe-scene")).not.toHaveAttribute("data-moving"),
+      { timeout: 5000 },
+    );
+  },
   render: (args, { globals }) => (
     <MapLibreExplorer {...args} locale={storyLocale(globals)} dark={globals.theme === "dark"} />
   ),

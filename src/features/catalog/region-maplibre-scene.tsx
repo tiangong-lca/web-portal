@@ -244,7 +244,9 @@ function worldZoom(globe: boolean, width: number, height: number) {
   if (!size) return globe ? GLOBE_FALLBACK_ZOOM : FLAT_FALLBACK_ZOOM;
   const worldSize = globe
     ? Math.PI * size * WORLD_MARGIN * Math.cos((WORLD_LATITUDE * Math.PI) / 180)
-    : size * WORLD_MARGIN;
+    : // A Mercator world spans the viewport width once; fitting its square to the shorter
+      // height would repeat several copies across a wide catalog canvas.
+      width;
   return Math.max(0, Math.log2(worldSize / TILE_SIZE));
 }
 

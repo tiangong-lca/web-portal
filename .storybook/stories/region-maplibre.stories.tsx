@@ -66,7 +66,17 @@ export const World: Story = {
     await expect(canvasElement.querySelector("canvas")).toBeVisible();
   },
 };
-export const FlatWorld: Story = { ...World, args: { globe: false } };
+export const FlatWorld: Story = {
+  ...World,
+  args: { globe: false },
+  play: async ({ canvasElement }) => {
+    await ready(canvasElement);
+    const host = canvasElement.querySelector<HTMLElement>(".region-maplibre-canvas")!;
+    const zoom = Number(host.dataset.cameraZoom);
+    await expect(Number.isFinite(zoom)).toBe(true);
+    await expect(host.clientWidth / (512 * 2 ** zoom)).toBeLessThanOrEqual(1.001);
+  },
+};
 export const Dark: Story = { ...World, globals: { theme: "dark", locale: "en" } };
 export const ChinaSmallTargets: Story = {
   args: { assets: regionMapAssets("geo:cn")! },

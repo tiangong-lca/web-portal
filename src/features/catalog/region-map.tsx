@@ -198,78 +198,99 @@ export function RegionMap({
   // An interactive SVG group contains links; fieldset is not a valid SVG replacement.
   /* oxlint-disable jsx-a11y/prefer-tag-over-role */
   return (
-    <figure className="catalog-region-map" aria-busy={!current && !failed}>
-      <div className="catalog-map-canvas" data-world={isWorld || undefined}>
-        {layer && (
-          <svg
-            ref={svg}
-            viewBox={layer.viewBox}
-            role="group"
-            aria-label={title}
-            data-coordinate-space={layer.coordinateSpace}
-            data-layer-url={state.url}
-          >
-            <g className="catalog-map-transition-context">{background(state.backdrop, true)}</g>
-            <g className="catalog-map-current-context">{background(layer)}</g>
-            <g className="catalog-map-data">
-              {layer.features.map((feature, index) => {
-                const entry = feature.nodeId ? byNode.get(feature.nodeId) : undefined;
-                const key = `${feature.boundaryId}:${index}`;
-                if (!entry)
+    <div className="catalog-region-map" aria-busy={!current && !failed}>
+      <figure className="catalog-map-figure">
+        <div className="catalog-map-canvas" data-world={isWorld || undefined}>
+          {layer && (
+            <svg
+              ref={svg}
+              viewBox={layer.viewBox}
+              role="group"
+              aria-label={title}
+              data-coordinate-space={layer.coordinateSpace}
+              data-layer-url={state.url}
+            >
+              <g className="catalog-map-transition-context">{background(state.backdrop, true)}</g>
+              <g className="catalog-map-current-context">{background(layer)}</g>
+              <g className="catalog-map-data">
+                {layer.features.map((feature, index) => {
+                  const entry = feature.nodeId ? byNode.get(feature.nodeId) : undefined;
+                  const key = `${feature.boundaryId}:${index}`;
+                  if (!entry)
+                    return (
+                      <path
+                        key={key}
+                        className="catalog-map-feature"
+                        data-boundary-id={feature.boundaryId}
+                        d={feature.path}
+                        data-availability="unknown"
+                        aria-hidden="true"
+                      />
+                    );
+                  const shade =
+                    entry.count === 0 ? 0 : Math.max(1, Math.ceil((entry.count / maximum) * 4));
                   return (
-                    <path
+                    <Link
                       key={key}
-                      className="catalog-map-feature"
-                      data-boundary-id={feature.boundaryId}
-                      d={feature.path}
-                      data-availability="unknown"
-                      aria-hidden="true"
-                    />
+                      href={entry.href}
+                      prefetch={false}
+                      aria-label={`${entry.label}: ${entry.countLabel}`}
+                      data-count={shade}
+                      data-selected={selected?.nodeId === entry.nodeId || undefined}
+                      onMouseEnter={() => setHovered(entry.nodeId)}
+                      onMouseLeave={() => setHovered(null)}
+                      onFocus={() => setHovered(entry.nodeId)}
+                      onBlur={() => setHovered(null)}
+                      onClick={(event) => {
+                        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+                          return;
+                        event.preventDefault();
+                        selectionTrigger.current = event.currentTarget;
+                        setSelection({ url, nodeId: entry.nodeId });
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") setSelection(null);
+                      }}
+                    >
+                      <title>
+                        {entry.label}: {entry.countLabel}
+                      </title>
+                      <path
+                        className="catalog-map-feature"
+                        data-boundary-id={feature.boundaryId}
+                        d={feature.path}
+                      />
+                    </Link>
                   );
-                const shade =
-                  entry.count === 0 ? 0 : Math.max(1, Math.ceil((entry.count / maximum) * 4));
-                return (
-                  <Link
-                    key={key}
-                    href={entry.href}
-                    prefetch={false}
-                    aria-label={`${entry.label}: ${entry.countLabel}`}
-                    data-count={shade}
-                    data-selected={selected?.nodeId === entry.nodeId || undefined}
-                    onMouseEnter={() => setHovered(entry.nodeId)}
-                    onMouseLeave={() => setHovered(null)}
-                    onFocus={() => setHovered(entry.nodeId)}
-                    onBlur={() => setHovered(null)}
-                    onClick={(event) => {
-                      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-                      event.preventDefault();
-                      selectionTrigger.current = event.currentTarget;
-                      setSelection({ url, nodeId: entry.nodeId });
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.key === "Escape") setSelection(null);
-                    }}
-                  >
-                    <title>
-                      {entry.label}: {entry.countLabel}
-                    </title>
-                    <path
-                      className="catalog-map-feature"
-                      data-boundary-id={feature.boundaryId}
-                      d={feature.path}
-                    />
-                  </Link>
-                );
-              })}
-            </g>
-          </svg>
-        )}
-        {!current && (
-          <output className="catalog-region-map-status" data-over-map={Boolean(layer) || undefined}>
-            {failed ? unavailableLabel : loadingLabel}
-          </output>
-        )}
-      </div>
+                })}
+              </g>
+            </svg>
+          )}
+          {!current && (
+            <output
+              className="catalog-region-map-status"
+              data-over-map={Boolean(layer) || undefined}
+            >
+              {failed ? unavailableLabel : loadingLabel}
+            </output>
+          )}
+        </div>
+        <figcaption className="catalog-map-caption">
+          <span>{legend}</span>
+          <span className="catalog-map-sources">
+            <a className="underline underline-offset-2" href="https://www.naturalearthdata.com/">
+              Natural Earth
+            </a>
+            {" · "}
+            <a
+              className="underline underline-offset-2"
+              href="https://datav.aliyun.com/portal/school/atlas/area_selector"
+            >
+              DataV GeoAtlas
+            </a>
+          </span>
+        </figcaption>
+      </figure>
       <div className="catalog-map-selection" aria-live="polite">
         <div className="catalog-map-selection-description">
           {preview ? (
@@ -303,21 +324,6 @@ export function RegionMap({
           </div>
         )}
       </div>
-      <figcaption className="text-muted-foreground flex flex-col gap-2 p-3 text-sm">
-        <span>{legend}</span>
-        <span className="text-xs">
-          <a className="underline underline-offset-2" href="https://www.naturalearthdata.com/">
-            Natural Earth
-          </a>
-          {" · "}
-          <a
-            className="underline underline-offset-2"
-            href="https://datav.aliyun.com/portal/school/atlas/area_selector"
-          >
-            DataV GeoAtlas
-          </a>
-        </span>
-      </figcaption>
-    </figure>
+    </div>
   );
 }

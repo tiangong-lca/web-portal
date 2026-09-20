@@ -142,7 +142,7 @@
   gap: 1rem;
   padding: 1rem;
   min-height: 88px;
-  border-block: 1px solid var(--border);
+  border-block-start: 1px solid var(--border);
   background: var(--background);
 }
 .catalog-map-selection-description {
@@ -254,6 +254,7 @@
 }
 .catalog-map-canvas:not([data-world]) {
   padding: clamp(24px, 3vw, 40px);
+  padding-bottom: 0.5rem;
 }
 .catalog-map-canvas:not([data-world]) svg,
 .catalog-map-canvas:not([data-world]) .catalog-region-map-status {
@@ -275,7 +276,7 @@
     margin-left: auto;
   }
   .catalog-map-canvas:not([data-world]) {
-    padding: 24px 16px;
+    padding: 24px 16px 0.5rem;
   }
 }
 @media (min-width: 1024px) {
@@ -349,6 +350,36 @@
 }
 .catalog-map-canvas[data-world] {
   background: var(--background);
+}
+.catalog-map-figure {
+  min-width: 0;
+  margin: 0;
+}
+.catalog-map-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.125rem 0.75rem;
+  padding: 0 1rem 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: end;
+}
+.catalog-map-caption > :first-child {
+  max-width: 100ch;
+}
+.catalog-map-sources {
+  white-space: nowrap;
+}
+.catalog-map-canvas[data-world] + .catalog-map-caption {
+  padding-top: 0.5rem;
+}
+@media (min-width: 768px) {
+  .catalog-map-caption {
+    padding-inline: clamp(24px, 3vw, 40px);
+  }
 }
 .catalog-map-canvas:not([data-world]) svg {
   background: var(--map-ocean);

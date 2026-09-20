@@ -34,13 +34,19 @@ for (const width of [1440, 390]) {
           expect(bar!.height).toBeLessThan(130);
           const controls = await page.locator(".catalog-navigation-actions").boundingBox();
           expect(controls!.x).toBeGreaterThan(bar!.x + 200);
-          const canvas = page.locator(".catalog-map-canvas");
+          const canvas = page.locator(".catalog-map-figure");
           const geometry = await page.locator(".catalog-region-map svg").boundingBox();
           const frame = await canvas.boundingBox();
           expect(geometry!.y - frame!.y).toBeGreaterThanOrEqual(24);
           expect(frame!.y + frame!.height - geometry!.y - geometry!.height).toBeGreaterThanOrEqual(
             24,
           );
+          const caption = page.locator(".catalog-map-caption");
+          await expect(caption).toHaveCSS("font-size", "12px");
+          const note = await caption.boundingBox();
+          const selection = await page.locator(".catalog-map-selection").boundingBox();
+          expect(note!.y).toBeGreaterThanOrEqual(geometry!.y + geometry!.height);
+          expect(note!.y + note!.height).toBeLessThanOrEqual(selection!.y);
         }
       }
       const path = `/tmp/portal103-visual/${name}-${width}.png`;

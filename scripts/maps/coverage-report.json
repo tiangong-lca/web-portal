@@ -7,7 +7,7 @@
       "source": "world-map-units-50m",
       "shapes": 265,
       "mapped": 261,
-      "projection": "robinson",
+      "projection": "+proj=robin +lon_0=150",
       "simplify": "20%",
       "sharesChinaSpace": false,
       "unresolvedCodes": [],

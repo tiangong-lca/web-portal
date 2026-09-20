@@ -1,5 +1,26 @@
 import { gzipSync } from "node:zlib";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+async function paintedPoint(shape: Locator) {
+  return shape.evaluate((element) => {
+    const path = element as SVGPathElement;
+    const box = path.getBoundingClientRect();
+    const matrix = path.getScreenCTM()!;
+    const candidates: { x: number; y: number }[] = [];
+    // Prefer visible land interiors, then contour points for tiny islands/line marks.
+    for (const x of [0.5, 0.25, 0.75])
+      for (const y of [0.5, 0.25, 0.75])
+        candidates.push({ x: box.x + box.width * x, y: box.y + box.height * y });
+    for (let i = 0; i < 80; i++) {
+      const position = path.getPointAtLength((path.getTotalLength() * (i + 0.5)) / 80);
+      const screen = new DOMPoint(position.x, position.y).matrixTransform(matrix);
+      candidates.push(screen);
+    }
+    const hit = candidates.find(({ x, y }) => document.elementFromPoint(x, y) === path);
+    if (!hit) throw new Error(`No painted pointer target for ${path.dataset.boundaryId}`);
+    return { x: hit.x, y: hit.y };
+  });
+}
 
 test("mainland, Taiwan and South China Sea share real pointer, keyboard and navigation behavior", async ({
   page,
@@ -11,31 +32,21 @@ test("mainland, Taiwan and South China Sea share real pointer, keyboard and navi
   const china = map.getByRole("link", { name: /^China:/ });
   await expect(china).toBeVisible();
   await expect(china).toHaveCount(1);
-  const ids = ["ne50m:CHN", "ne50m:TWN", "datav:460300", "cnprov:100000_JD"];
+  const ids = [
+    "ne50m:CHN",
+    "ne50m:TWN",
+    "ne50m:HKG",
+    "ne50m:MAC",
+    "datav:460300",
+    "cnprov:100000_JD",
+  ];
   for (const id of ids) {
     const shape = map.locator(`[data-boundary-id="${id}"]`);
     await expect(shape).toBeVisible();
     await shape.scrollIntoViewIfNeeded();
     // Tiny islands and broken cartographic marks have sea in their bounding-box center.
     // Hit an actual visible contour, not that empty center or a synthetic dispatched click.
-    const point = await shape.evaluate((element) => {
-      const path = element as SVGPathElement;
-      const box = path.getBoundingClientRect();
-      const matrix = path.getScreenCTM()!;
-      const candidates: { x: number; y: number }[] = [];
-      // Prefer visible land interiors, then contour points for tiny islands/line marks.
-      for (const x of [0.5, 0.25, 0.75])
-        for (const y of [0.5, 0.25, 0.75])
-          candidates.push({ x: box.x + box.width * x, y: box.y + box.height * y });
-      for (let i = 0; i < 80; i++) {
-        const position = path.getPointAtLength((path.getTotalLength() * (i + 0.5)) / 80);
-        const screen = new DOMPoint(position.x, position.y).matrixTransform(matrix);
-        candidates.push(screen);
-      }
-      const hit = candidates.find(({ x, y }) => document.elementFromPoint(x, y) === path);
-      if (!hit) throw new Error(`No painted pointer target for ${path.dataset.boundaryId}`);
-      return { x: hit.x, y: hit.y };
-    });
+    const point = await paintedPoint(shape);
     await page.mouse.move(point.x, point.y);
     await expect(
       page.locator(".catalog-map-selection-description strong"),
@@ -66,6 +77,79 @@ test("mainland, Taiwan and South China Sea share real pointer, keyboard and navi
   await page.goBack();
   await expect(china).toBeVisible();
   await expect(china).toHaveCount(1);
+});
+
+for (const width of [1440, 390]) {
+  test(`China drilldown selects Taiwan and other zero-count regions at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const layers = new Set<string>();
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname.startsWith("/maps/")) layers.add(request.url());
+    });
+    await page.goto("/en/search?explore=region&geoNode=geo:cn");
+    const show = page.getByRole("button", { name: "Show map", exact: true });
+    if (width < 768) await show.click();
+    const map = page.locator(".catalog-region-map svg");
+    const originalUrl = page.url();
+    for (const [boundary, node, name] of [
+      ["cnprov:540000", "geo:cn-xz", "Xizang"],
+      ["cnprov:810000", "geo:hk", "Hongkong"],
+      ["cnprov:820000", "geo:mo", "Macau"],
+      ["cnprov:710000", "geo:tw", "Taiwan"],
+    ] as const) {
+      const shape = map.locator(`[data-boundary-id="${boundary}"]`);
+      await expect(shape).toBeVisible();
+      const link = map.locator(`a[href*="${encodeURIComponent(node)}"]`);
+      await expect(link).toHaveCount(1);
+      await shape.scrollIntoViewIfNeeded();
+      const point = await paintedPoint(shape);
+      await page.mouse.move(point.x, point.y);
+      await expect(page.locator(".catalog-map-selection-description")).toContainText(name);
+      await expect(page.locator(".catalog-map-selection-description")).toContainText(
+        "0 public versions",
+      );
+      await page.mouse.click(point.x, point.y);
+      await expect(link).toHaveAttribute("data-selected", "true");
+      expect(page.url()).toBe(originalUrl);
+      await page.getByRole("button", { name: "Clear selection", exact: true }).click();
+      await expect(link).toBeFocused();
+    }
+    const taiwan = map.getByRole("link", { name: /^Taiwan Sheng,China:/ });
+    await taiwan.press("Enter");
+    await expect(taiwan).toHaveAttribute("data-selected", "true");
+    await page.getByRole("link", { name: "View data", exact: true }).click();
+    await expect(page).toHaveURL(/geoNode=geo%3Atw(?:&|$)/);
+    await expect(page).toHaveURL(/explore=process/);
+    await page.goBack();
+    await expect(page).toHaveURL(originalUrl);
+    // Returning from a result page remounts the explorer; mobile starts with its list.
+    if (width < 768) await page.getByRole("button", { name: "Show map", exact: true }).click();
+    await expect(taiwan).toBeVisible();
+    // Pointer previews did not fetch separate region counts or extra map layers.
+    expect(layers.size).toBe(1);
+  });
+}
+
+test("China zero-count administrative entries remain native links without JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("/en/search?explore=region&geoNode=geo:cn");
+    const zero = page.locator(".catalog-zero-regions");
+    await zero.locator("summary").click();
+    for (const name of [/Taiwan/, /Hongkong/, /Macau/, /Xizang/]) {
+      await expect(zero.getByRole("link", { name })).toBeVisible();
+    }
+    await zero.getByRole("link", { name: /Taiwan/ }).click();
+    await expect(page).toHaveURL(/geoNode=geo%3Atw(?:&|$)/);
+  } finally {
+    await context.close();
+  }
 });
 
 test("drills from world to a Chinese city and opens an exact public version", async ({ page }) => {

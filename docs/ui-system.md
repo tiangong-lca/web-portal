@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 386ef831bac1530b730b6cdec1df36dc62c0b9cd
+lastReviewedCommit: 292145751bcc9536e9977c34703d3ce8670fcd80
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #107: shared multipath links unify pointer and keyboard states; selection-only live announcements avoid hover noise while missing target counts remain unknown."
+lastReviewedNote: "Reviewed for Portal #109: exact Database hierarchy and GeoAtlas bindings make zero-count China regions selectable; existing URL, anonymous data, progressive enhancement, layout and loading contracts remain intact."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -301,3 +301,5 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 地图用淡海色、纸色陆地、细经纬网与行政线表达地理上下文，紫色深浅专门表达数量；所有行政轮廓使用实线，缺失映射不改变边界样式、不虚构数量。世界→中国→省份在同一投影坐标内连续放大，周边地理背景铺满可用画布，地区轮廓保持比例与呼吸空间。新层加载时旧几何可保留为无交互背景，但不把旧数量套在新层。缩放短暂隐藏数据操作，停稳后呈现；减少动态效果、窗口变化和页面隐藏时直接落到目标视野。
 
 图例与来源放在地图下沿、选择操作区之前，用 12px 次要文字靠右排列；手机自然换行。它们属于地图 figure 的原生 caption，来源链接保留键盘访问和可读对比度，不再占据操作区下方的独立大段。
+
+中国地图的可选区域以同一层导航响应为准。台湾、香港、澳门使用 Database 已审阅的 `TW/HK/MO` 子节点绑定，不按 `CN-` 前缀遗漏，也不因公开版本数为零禁用。世界层仍共用中国的悬停与选择入口；进入中国层后，每个地区使用自己的精确计数与原始节点链接。

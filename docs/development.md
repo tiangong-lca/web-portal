@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 386ef831bac1530b730b6cdec1df36dc62c0b9cd
+lastReviewedCommit: 292145751bcc9536e9977c34703d3ce8670fcd80
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #107: the offline asset pipeline receipts interaction aliases and exact supplementary paths; existing map, Storybook, browser and Docpact commands cover the change."
+lastReviewedNote: "Reviewed for Portal #109: exact Database hierarchy and GeoAtlas bindings make zero-count China regions selectable; existing URL, anonymous data, progressive enhancement, layout and loading contracts remain intact."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -269,3 +269,5 @@ Navigation and Search/Facets V3 changes additionally require the generated Datab
 Geographic explorer changes require the pending-navigation, history, mobile map persistence, map failure and no-JavaScript zero-region journeys in `tests/e2e/catalog-navigation.spec.ts`. The Pacific-centered world uses Robinson at 150°E with an offline projection seam at 30°W; geometry regression tests check orientation and seam rings, while `check:maps` verifies receipts and unchanged reproducible layers. Selection is local, and drilldown uses the existing RSC navigation with no bulk prefetch or extra data endpoint.
 
 The control-layout audit uses `tests/e2e/control-layout.spec.ts` for twelve page families at desktop/mobile widths, regional map insets, effective 200% reflow, slow links/search and feedback after a filter drawer closes. `ui-navigation-feedback.test.tsx` covers the 150ms delay, cancellation and concurrent/unmounted operations. Shared feedback uses Next's `useLinkStatus` and real transitions; keep native href/GET behavior and reduced-motion tests. Use the Storybook navigation-feedback and region-controls scenarios alongside detail, shortlist and comparison consumers for visual review.
+
+China administrative map changes also require the zero-count Taiwan/Hong Kong/Macao/Tibet pointer journeys at desktop and mobile widths, native Enter, result/Back, and no-JavaScript list entry checks. `China Zero Regions` and its mobile dark scenario cover the same boundaries in Storybook. Map generation verifies the exact Database vocabulary snapshot and unique GeoAtlas parent/adcode bindings before emitting geometry.

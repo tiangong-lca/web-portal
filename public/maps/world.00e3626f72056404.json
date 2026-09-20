@@ -512,7 +512,8 @@
     {
       "boundaryId": "ne50m:HKG",
       "nodeId": "geo:hk",
-      "path": "M157815 72447L158084 72729L158100 72409Z"
+      "path": "M157815 72447L158084 72729L158100 72409Z",
+      "navigationNodeId": "geo:cn"
     },
     {
       "boundaryId": "ne50m:HMD",
@@ -717,7 +718,8 @@
     {
       "boundaryId": "ne50m:MAC",
       "nodeId": "geo:mo",
-      "path": "M157186 72860L157244 72794L157206 72800Z"
+      "path": "M157186 72860L157244 72794L157206 72800Z",
+      "navigationNodeId": "geo:cn"
     },
     {
       "boundaryId": "ne50m:MAF",

@@ -184,6 +184,7 @@
 }
 
 .region-maplibre-placeholder {
+  position: relative;
   height: calc(clamp(380px, 45vw, 560px) + 140px);
   background: var(--muted);
   border-radius: var(--radius-lg);

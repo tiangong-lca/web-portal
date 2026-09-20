@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { isPortalLocale, defaultLocale } from "@/i18n/routing";
+import { RegionMapLoading } from "./region-map-loading";
 import type { RegionMapAssets } from "./region-maplibre-types";
 import "./region-maplibre.css";
 import {
@@ -26,7 +27,7 @@ import {
 
 const Map = dynamic(() => import("./region-maplibre").then((module) => module.RegionMapLibre), {
   ssr: false,
-  loading: () => <div className="region-maplibre-placeholder" aria-hidden="true" />,
+  loading: () => <RegionMapLoading whole />,
 });
 function subscribe(callback: () => void) {
   const query = window.matchMedia("(min-width: 768px)");

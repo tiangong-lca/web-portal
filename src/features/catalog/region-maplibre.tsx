@@ -17,12 +17,13 @@ import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import type { PortalLocale } from "@/i18n/routing";
 import type { NavigationEntry } from "./catalog-navigation";
 import type { RegionMapAssets } from "./region-maplibre-types";
+import { RegionMapLoading } from "./region-map-loading";
 import { MapInformation, type MapInformationLabels } from "./map-information";
 import "./region-maplibre.css";
 
 const Scene = dynamic(
   () => import("./region-maplibre-scene").then((module) => module.RegionMapScene),
-  { ssr: false },
+  { ssr: false, loading: () => <RegionMapLoading /> },
 );
 export type RegionMapLabels = {
   title: string;

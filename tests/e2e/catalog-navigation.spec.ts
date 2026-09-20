@@ -795,3 +795,39 @@ test("mobile reduced-motion map selection stays above the comparison tray", asyn
     await page.evaluate(() => document.activeElement?.closest(".region-maplibre") !== null),
   ).toBe(true);
 });
+
+test("lazy map modules keep a visible loading frame until the renderer arrives", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en/search?explore=region");
+  let release!: () => void;
+  let deferred = 0;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/_next/static/chunks/*.js", async (route) => {
+    const response = await route.fetch();
+    const body = await response.body();
+    // The small view module can render its frame while the large, lazily requested SDK waits.
+    if (body.byteLength > 300 * 1024) {
+      deferred++;
+      await gate;
+    }
+    await route.fulfill({ response, body });
+  });
+  try {
+    await page.getByRole("radio", { name: "Flat", exact: true }).click();
+    await expect.poll(() => deferred).toBeGreaterThan(0);
+    const frame = page.locator(".region-maplibre .region-maplibre-scene");
+    await expect(frame.getByRole("status")).toContainText(/Loading/i);
+    expect((await frame.boundingBox())!.height).toBeGreaterThanOrEqual(380);
+    await expect(page.locator(".region-maplibre canvas")).toHaveCount(0);
+  } finally {
+    release();
+  }
+  await expectLevel(page, "world");
+  expect(
+    (await page.locator(".region-maplibre-canvas").boundingBox())!.height,
+  ).toBeGreaterThanOrEqual(380);
+});

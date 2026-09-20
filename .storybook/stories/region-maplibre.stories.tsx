@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { expect, waitFor } from "storybook/test";
 import { RegionMapLibre } from "@/features/catalog/region-maplibre";
 import { RegionMapScene } from "@/features/catalog/region-maplibre-scene";
+import { RegionMapLoading } from "@/features/catalog/region-map-loading";
 import { MapInformation } from "@/features/catalog/map-information";
 import { RegionExplorer } from "@/features/catalog/region-explorer";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ async function ready(element: HTMLElement) {
 const meta = {
   title: "Catalog/Globe geography",
   component: RegionMapLibre,
-  subcomponents: { RegionMapScene, RegionExplorer, MapInformation, Button },
+  subcomponents: { RegionMapScene, RegionMapLoading, RegionExplorer, MapInformation, Button },
   globals: { viewport: { value: "desktop", isRotated: false } },
   args: {
     assets: regionMapAssets("world")!,
@@ -190,5 +191,18 @@ export const ContinuousLevels: Story = {
     await ready(canvasElement);
     await expect(camera.dataset.cameraZoom).toBe(before);
     await expect(canvasElement.querySelector("canvas")).toBe(original);
+  },
+};
+
+export const LoadingRenderer: Story = {
+  globals: { ...mobileGlobals, locale: "fr" },
+  render: () => <RegionMapLoading whole />,
+  play: async ({ canvas, canvasElement }) => {
+    await expect(canvas.getByRole("status")).toHaveTextContent(
+      dictionaries.fr.Navigation.mapLoading,
+    );
+    await expect(
+      canvasElement.querySelector(".region-maplibre-placeholder")!.getBoundingClientRect().height,
+    ).toBeGreaterThanOrEqual(380);
   },
 };

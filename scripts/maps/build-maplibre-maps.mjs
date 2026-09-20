@@ -140,7 +140,7 @@ function sourceDefinition(id) {
 /* ------------------------------------------------------------- geometry --- */
 
 /** Simplify one source in longitude/latitude space, without reprojecting it. */
-function simplifySource(mapshaper, sourceId, geojson, percent, precision, workDir) {
+function simplifySource(mapshaper, sourceId, geojson, percent, precision, workDir, planar = false) {
   const input = join(workDir, `${sourceId}.in.json`);
   const output = join(workDir, `${sourceId}.out.geojson`);
   writeFileSync(input, JSON.stringify(geojson));
@@ -151,6 +151,9 @@ function simplifySource(mapshaper, sourceId, geojson, percent, precision, workDi
       input,
       "-simplify",
       percent,
+      // The spherical world metric amplifies platform-dependent trigonometric rounding.
+      // Use the official planar metric for this overview; preserve reviewed China layers.
+      ...(planar ? ["planar"] : []),
       "keep-shapes",
       "-o",
       output,
@@ -447,6 +450,7 @@ async function build() {
           percentFor(entry.layer),
           precisionFor(entry.layer),
           workDir,
+          entry.layer === "world",
         );
       simplifiedBySource.set(entry.source, simplified);
 
@@ -575,7 +579,11 @@ async function build() {
         mapshaper: MAPSHAPER_VERSION,
         bundler: `vite@${worker.viteVersion}`,
         boundaryAssignment: "public/maps/*.json (the emitted SVG layers)",
-        note: "Production EPSG:4326 boundary layers and the bundled MapLibre worker. Built offline from the vendored region-map sources and the reviewed emitted node assignment. gzip length is validation output only and is deliberately not stored: it varies by a few bytes between Node/zlib builds, while raw bytes and hashes are canonical.",
+        simplificationPercent: SIMPLIFY_PERCENT,
+        planarLayers: ["world"],
+        outputPrecisionOption: PRECISION,
+        coordinateReferenceSystem: "EPSG:4326",
+        note: "Production EPSG:4326 boundary layers and the bundled MapLibre worker. Built offline from the vendored region-map sources and the reviewed emitted node assignment. gzip length is validation output only and is deliberately not stored: it varies between Node/zlib builds, while raw bytes and hashes are canonical.",
       },
       renderer: {
         name: RENDERER.name,

@@ -5,7 +5,18 @@
     "mapshaper": "0.7.61",
     "bundler": "vite@8.2.2",
     "boundaryAssignment": "public/maps/*.json (the emitted SVG layers)",
-    "note": "Production EPSG:4326 boundary layers and the bundled MapLibre worker. Built offline from the vendored region-map sources and the reviewed emitted node assignment. gzip length is validation output only and is deliberately not stored: it varies by a few bytes between Node/zlib builds, while raw bytes and hashes are canonical."
+    "simplificationPercent": {
+      "world": "20%",
+      "province": "50%",
+      "city": "50%"
+    },
+    "planarLayers": ["world"],
+    "outputPrecisionOption": {
+      "world": 0.001,
+      "china": 0.00001
+    },
+    "coordinateReferenceSystem": "EPSG:4326",
+    "note": "Production EPSG:4326 boundary layers and the bundled MapLibre worker. Built offline from the vendored region-map sources and the reviewed emitted node assignment. gzip length is validation output only and is deliberately not stored: it varies between Node/zlib builds, while raw bytes and hashes are canonical."
   },
   "renderer": {
     "name": "maplibre-gl",
@@ -147,13 +158,13 @@
   ],
   "layers": {
     "world": {
-      "url": "/maps/gl/world.931782e75b93c7c3.geojson",
+      "url": "/maps/gl/world.87fb27c744bc9039.geojson",
       "sourceId": "world-map-units-50m",
       "nodeId": null,
       "code": null,
       "parentNodeId": null,
-      "sha256": "931782e75b93c7c330ec0e66376a37a90bdb58774bdc021042c8b06bd512d81f",
-      "bytes": 416119,
+      "sha256": "87fb27c744bc90390c55bf322884cf68946c14259fe329662296ae461f724b5b",
+      "bytes": 407248,
       "features": 267,
       "bounds": [-180, -89.999, 180, 83.6],
       "center": [0, -3.1995],

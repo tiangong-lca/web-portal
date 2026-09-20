@@ -142,7 +142,7 @@
   gap: 1rem;
   padding: 1rem;
   min-height: 88px;
-  border-block: 1px solid var(--border);
+  border-block-start: 1px solid var(--border);
   background: var(--background);
 }
 .catalog-map-selection-description {
@@ -181,8 +181,8 @@
   fill: color-mix(in srgb, var(--primary) 20%, var(--background));
 }
 .catalog-region-map path[data-availability="unknown"] {
-  fill: var(--muted);
-  stroke-dasharray: 2 1;
+  fill: var(--map-land);
+  stroke-dasharray: none;
 }
 .catalog-region-map a[data-count="2"] path {
   fill: color-mix(in srgb, var(--primary) 40%, var(--background));
@@ -254,6 +254,7 @@
 }
 .catalog-map-canvas:not([data-world]) {
   padding: clamp(24px, 3vw, 40px);
+  padding-bottom: 0.5rem;
 }
 .catalog-map-canvas:not([data-world]) svg,
 .catalog-map-canvas:not([data-world]) .catalog-region-map-status {
@@ -275,7 +276,7 @@
     margin-left: auto;
   }
   .catalog-map-canvas:not([data-world]) {
-    padding: 24px 16px;
+    padding: 24px 16px 0.5rem;
   }
 }
 @media (min-width: 1024px) {
@@ -336,4 +337,114 @@
   .catalog-region-explorer .catalog-navigation-breadcrumbs h2 {
     overflow-wrap: anywhere;
   }
+}
+
+/* Cartographic context and public-data overlays have separate visual roles. */
+.catalog-region-map {
+  background: var(--background);
+  overflow: hidden;
+}
+.catalog-map-canvas {
+  position: relative;
+  background: var(--background);
+}
+.catalog-map-canvas[data-world] {
+  background: var(--background);
+}
+.catalog-map-figure {
+  min-width: 0;
+  margin: 0;
+}
+.catalog-map-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.125rem 0.75rem;
+  padding: 0 1rem 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: end;
+}
+.catalog-map-caption > :first-child {
+  max-width: 100ch;
+}
+.catalog-map-sources {
+  white-space: nowrap;
+}
+.catalog-map-canvas[data-world] + .catalog-map-caption {
+  padding-top: 0.5rem;
+}
+@media (min-width: 768px) {
+  .catalog-map-caption {
+    padding-inline: clamp(24px, 3vw, 40px);
+  }
+}
+.catalog-map-canvas:not([data-world]) svg {
+  background: var(--map-ocean);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 0.75);
+}
+.catalog-map-transition-context {
+  display: none;
+}
+[data-camera-moving] .catalog-map-transition-context {
+  display: inline;
+}
+[data-camera-moving] .catalog-map-current-context,
+[data-camera-moving] .catalog-map-data {
+  visibility: hidden;
+}
+.catalog-map-canvas .catalog-region-map-status[data-over-map] {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  height: auto;
+  min-height: 44px;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+.catalog-region-map .catalog-map-feature {
+  fill: var(--map-land);
+  stroke-dasharray: none;
+  stroke-linejoin: round;
+}
+.catalog-region-map path.catalog-map-ocean {
+  fill: var(--map-ocean);
+  stroke: var(--map-context-line);
+  stroke-width: 0.6px;
+}
+.catalog-region-map path.catalog-map-graticule {
+  fill: none;
+  stroke: var(--map-grid);
+  stroke-width: 0.5px;
+}
+.catalog-region-map path.catalog-map-context-land {
+  fill: var(--map-land);
+  stroke: var(--map-context-line);
+  stroke-width: 0.55px;
+}
+.catalog-region-map a[data-count="1"] .catalog-map-feature {
+  fill: color-mix(in srgb, var(--primary) 20%, var(--map-land));
+}
+.catalog-region-map a[data-count="2"] .catalog-map-feature {
+  fill: color-mix(in srgb, var(--primary) 40%, var(--map-land));
+}
+.catalog-region-map a[data-count="3"] .catalog-map-feature {
+  fill: color-mix(in srgb, var(--primary) 65%, var(--map-land));
+}
+.catalog-region-map a[data-count="4"] .catalog-map-feature {
+  fill: var(--primary);
+}
+
+.catalog-region-map path.catalog-map-context-borders {
+  fill: none;
+  stroke: var(--map-context-line);
+  stroke-width: 0.65px;
 }

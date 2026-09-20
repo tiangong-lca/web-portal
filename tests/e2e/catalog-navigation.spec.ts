@@ -57,6 +57,59 @@ test("region hierarchy remains usable without JavaScript", async ({ browser }) =
   await context.close();
 });
 
+test("keeps one geographic camera through world, China, province and Back", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/en/search?explore=region");
+  const svg = page.locator(".catalog-region-map svg");
+  await expect(svg).toHaveAttribute("data-coordinate-space", "pacific-robinson-v1");
+  const world = await svg.getAttribute("viewBox");
+  await svg.evaluate((element) => element.setAttribute("data-camera-probe", "persistent"));
+
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/maps/geo-cn.*.json", async (route) => {
+    await gate;
+    await route.continue();
+  });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
+  await expect(page).toHaveURL(/geoNode=geo%3Acn/);
+  await expect(page.locator(".catalog-region-map")).toHaveAttribute("aria-busy", "true");
+  await expect(svg).toHaveAttribute("data-camera-probe", "persistent");
+  // A previous geographic canvas survives, but its counts and links do not masquerade as China data.
+  await expect(svg.getByRole("link")).toHaveCount(0);
+  await expect(page.locator(".catalog-region-map-status")).toBeVisible();
+  release();
+  await expect(svg).toHaveAttribute("data-camera-moving", "true");
+  await expect(svg).not.toHaveAttribute("data-camera-moving");
+  const china = await svg.getAttribute("viewBox");
+  expect(china).not.toBe(world);
+  await expect(svg.getByRole("link", { name: /Anhui/ })).toBeVisible();
+
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /Anhui/ }).click();
+  await expect(svg).toHaveAttribute("data-camera-moving", "true");
+  await expect(svg).not.toHaveAttribute("data-camera-moving");
+  await expect(svg).toHaveAttribute("data-camera-probe", "persistent");
+  const province = await svg.getAttribute("viewBox");
+  expect(Number(province!.split(" ")[2])).toBeLessThan(Number(china!.split(" ")[2]));
+  const fitted = await svg.evaluate((element) => {
+    const box = (element as SVGSVGElement).viewBox.baseVal;
+    return { camera: box.width / box.height, canvas: element.clientWidth / element.clientHeight };
+  });
+  expect(fitted.camera).toBeCloseTo(fitted.canvas, 2);
+  await page.goBack();
+  await expect(svg).toHaveAttribute("viewBox", china!);
+  await page.goBack();
+  await expect(svg).toHaveAttribute("viewBox", world!);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
+  await expect(svg.getByRole("link", { name: /Anhui/ })).toBeVisible();
+  await expect(svg).not.toHaveAttribute("data-camera-moving");
+});
+
 test("loads only the visible map layer within the additional JavaScript budget", async ({
   browser,
 }) => {
@@ -98,6 +151,7 @@ test("loads only the visible map layer within the additional JavaScript budget",
 test("map previews locally, keeps the explorer during drilldown, and restores URL history", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/en/search?explore=region&kind=process");
   const explorer = page.locator(".catalog-region-explorer");
   const mapChina = page.locator(".catalog-region-map svg").getByRole("link", { name: /^China:/ });
@@ -107,6 +161,9 @@ test("map previews locally, keeps the explorer during drilldown, and restores UR
   await mapChina.focus();
   await mapChina.press("Enter");
   await expect(page.getByRole("link", { name: "Explore subregions", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Explore subregions", exact: true })).toBeInViewport({
+    ratio: 1,
+  });
   expect(page.url()).toBe(original);
   await expect(mapChina).toHaveAttribute("data-selected", "true");
   await explorer.evaluate((element) =>
@@ -218,4 +275,33 @@ test("a newer region choice wins while an earlier navigation is waiting", async 
   await expect(
     page.locator(".catalog-navigation-list").getByRole("link", { name: /Rest of World/ }),
   ).toBeVisible();
+});
+
+test("mobile reduced-motion map selection stays above the comparison tray", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 720 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en/search?kind=process");
+  await page.locator('input[type="checkbox"][name="ids"]').first().check();
+  await expect(page.locator("[data-compare-tray]")).toBeVisible();
+  await page
+    .locator(".catalog-kind-switch")
+    .getByRole("link", { name: "Region", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Show map", exact: true }).click();
+  const china = page.locator(".catalog-region-map svg").getByRole("link", { name: /^China:/ });
+  await china.click();
+  const action = page.getByRole("link", { name: "Explore subregions", exact: true });
+  await expect(action).toBeFocused();
+  await expect(action).toBeInViewport({ ratio: 1 });
+  const bounds = await action.boundingBox();
+  const tray = await page.locator("[data-compare-tray]").boundingBox();
+  const header = await page.locator("[data-portal-header]").boundingBox();
+  expect(bounds!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
+  expect(bounds!.y + bounds!.height).toBeLessThan(tray!.y);
+  await page
+    .locator(".catalog-map-selection")
+    .getByRole("button", { name: "Clear selection", exact: true })
+    .click();
+  await expect(china).toBeFocused();
+  await expect(china).toBeInViewport();
 });

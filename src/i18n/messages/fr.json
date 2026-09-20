@@ -628,7 +628,7 @@
     "hideMap": "Masquer la carte",
     "mapLoading": "Chargement de cette carte…",
     "mapUnavailable": "Cette carte est indisponible. Utilisez la liste des régions ci-dessous.",
-    "mapLegend": "La couleur indique le nombre de versions publiques correspondantes. Les entrées non localisées, historiques et multirégionales restent dans la liste. Une région non chargée ne signifie pas zéro résultat.",
+    "mapLegend": "Le fond clair donne un contexte géographique, sans indiquer la présence de données. Les nuances violettes représentent les versions publiques correspondantes ; les données non localisées, historiques ou multirégionales restent accessibles dans la liste.",
     "isic": "Catégories industrielles (ISIC)",
     "cpc": "Catégories de produits (CPC)",
     "elementary": "Catégories de flux élémentaires",

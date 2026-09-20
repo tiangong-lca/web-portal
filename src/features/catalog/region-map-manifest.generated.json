@@ -5,7 +5,7 @@
     "mapshaper": "0.7.61",
     "sourceRepository": "tiangong-lca/platform",
     "locationDictionary": "src/i18n/locations.generated.json",
-    "coordinateUnits": 80000,
+    "coordinateUnits": 400000,
     "nodeIdFormat": "geo:<lowercase location code>",
     "layerResolution": "a node is drawn in exactly one layer: `world` for a two-letter code, `geo:cn` for `geo:cn-xx`, `geo:cn-xx` for `geo:cn-xx-yyy`. Codes listed in `unmapped` have no drawable shape; codes outside those three families (regions, economic groupings) are never mapped to a boundary.",
     "boundaryIdFormat": {
@@ -17,159 +17,176 @@
   },
   "layers": {
     "world": {
-      "url": "/maps/world.2bb66ee8c46df1fa.json",
-      "sha256": "2bb66ee8c46df1fa10d0be80929cd0143a11a9aa4d346448ff89fb04390c240e",
-      "gzipBytes": 112112
+      "url": "/maps/world.38300507e97e5bc0.json",
+      "sha256": "38300507e97e5bc093f7ecd60c890c4d4633274b59100bb3170d52ba0879dfc9",
+      "gzipBytes": 136065
     },
     "geo:cn": {
-      "url": "/maps/geo-cn.ecc3b0c82addde97.json",
-      "sha256": "ecc3b0c82addde97e3a6edae4258178d1f133c495649b17284a92de5e99f8cb4",
-      "gzipBytes": 57337
+      "url": "/maps/geo-cn.bd2998c79efc75ba.json",
+      "sha256": "bd2998c79efc75bac51e8a60d7822ddf1eb6c5284719f27d0d317bc31c279ca5",
+      "gzipBytes": 88078
     },
     "geo:cn-he": {
-      "url": "/maps/geo-cn-he.4c6c104c219a8965.json",
-      "sha256": "4c6c104c219a8965b75b3239a2a80ae6293f306b4780d83f3399ad7f8ed5947e",
-      "gzipBytes": 7290
+      "url": "/maps/geo-cn-he.41bcf05abcc1fd8c.json",
+      "sha256": "41bcf05abcc1fd8c277f163fa2b3f095ad1fae27275e792db2173e46dfc70f1e",
+      "gzipBytes": 20396
     },
     "geo:cn-sx": {
-      "url": "/maps/geo-cn-sx.6d2ef03f4f520980.json",
-      "sha256": "6d2ef03f4f5209807388bda092eb8856e7c4615a32772b6c817f02a2295b1d68",
-      "gzipBytes": 5705
+      "url": "/maps/geo-cn-sx.c8f43aba113238c4.json",
+      "sha256": "c8f43aba113238c4087ffdd7a1d7455b8be8607cf19bcd73ec16288bc445e158",
+      "gzipBytes": 17088
     },
     "geo:cn-nm": {
-      "url": "/maps/geo-cn-nm.6e040c6dd49f0d84.json",
-      "sha256": "6e040c6dd49f0d84ce94a0b72c3dcc1ce570d1169ed19be8ece93648ac208fa5",
-      "gzipBytes": 8188
+      "url": "/maps/geo-cn-nm.b104054ef875c68a.json",
+      "sha256": "b104054ef875c68a08d1ae5a592a681f18ab4fc7729b7fecd865c54a1df8a655",
+      "gzipBytes": 60961
     },
     "geo:cn-ln": {
-      "url": "/maps/geo-cn-ln.a8a3c2618aa59915.json",
-      "sha256": "a8a3c2618aa59915cb0e2e37b3fadf8be83814af40ba3ebfaf81626d844aeb1c",
-      "gzipBytes": 14885
+      "url": "/maps/geo-cn-ln.39b2b099654b16a4.json",
+      "sha256": "39b2b099654b16a438084a8260ebbc29e74aa8616dc2924a41fd7597cb43be22",
+      "gzipBytes": 24986
     },
     "geo:cn-jl": {
-      "url": "/maps/geo-cn-jl.bedaae32b043f027.json",
-      "sha256": "bedaae32b043f0270d7da1fe1695d726a60a2f2c0e22f5dd66d6d8c2abab90fe",
-      "gzipBytes": 14079
+      "url": "/maps/geo-cn-jl.449a4c1e67d8d8fc.json",
+      "sha256": "449a4c1e67d8d8fc1069ebbbf5c88ff2055282d84b9bb18f5b5cd98fbdaa727b",
+      "gzipBytes": 26182
     },
     "geo:cn-hl": {
-      "url": "/maps/geo-cn-hl.eeb80b62c2d1d7ba.json",
-      "sha256": "eeb80b62c2d1d7bad8d78e54ca8a5ef233525e2da6fddcb8a1bfeba6e976e002",
-      "gzipBytes": 14075
+      "url": "/maps/geo-cn-hl.3f16f6d43b61c868.json",
+      "sha256": "3f16f6d43b61c868dc21e47e7213add749fdd97b0fc39d37f35c70dbfb80ccf9",
+      "gzipBytes": 29203
     },
     "geo:cn-js": {
-      "url": "/maps/geo-cn-js.1ad6820bd5029c9b.json",
-      "sha256": "1ad6820bd5029c9bce002bad70cd12e81e1aba97320670903193cc6c3fc0ae0b",
-      "gzipBytes": 8934
+      "url": "/maps/geo-cn-js.ddff1880e52a71e8.json",
+      "sha256": "ddff1880e52a71e86d263b14f49af62bc1fd1ec24615480224ff6c20243a4a63",
+      "gzipBytes": 18296
     },
     "geo:cn-zj": {
-      "url": "/maps/geo-cn-zj.5897451787a7c7cb.json",
-      "sha256": "5897451787a7c7cb30569bd531f04e567014bea27372e3522022d69cb0ee9350",
-      "gzipBytes": 10956
+      "url": "/maps/geo-cn-zj.4c5feaf1280312a8.json",
+      "sha256": "4c5feaf1280312a8f7328985971883f54457a1099ada0b31f941a389dd73bc10",
+      "gzipBytes": 18300
     },
     "geo:cn-ah": {
-      "url": "/maps/geo-cn-ah.c529d1ae4136638d.json",
-      "sha256": "c529d1ae4136638d0de01f3ab80290adebfceb256ae162000096deacff79b10a",
-      "gzipBytes": 11834
+      "url": "/maps/geo-cn-ah.d41871f21db6ad9a.json",
+      "sha256": "d41871f21db6ad9a854f8e1225ea644dee7bd15e3ff31f2850fb7c2404fee685",
+      "gzipBytes": 21897
     },
     "geo:cn-fj": {
-      "url": "/maps/geo-cn-fj.8da1d01eac46414e.json",
-      "sha256": "8da1d01eac46414e410ead2a40b03aedd577f655790dfc3ccf8cceddc1caf983",
-      "gzipBytes": 10507
+      "url": "/maps/geo-cn-fj.2bfd0aa3fbac273b.json",
+      "sha256": "2bfd0aa3fbac273b4ca5c46048c6ce5150baaaf399f1f59e2704637edfb1f641",
+      "gzipBytes": 18882
     },
     "geo:cn-jx": {
-      "url": "/maps/geo-cn-jx.43aa8e04a113270d.json",
-      "sha256": "43aa8e04a113270dbc610bb59606d63f66c2abd30f5d33c485caba21a80280b6",
-      "gzipBytes": 11200
+      "url": "/maps/geo-cn-jx.9479dcae3b6784c4.json",
+      "sha256": "9479dcae3b6784c4a4453c24f90b6118715efb7f9291f487bb73e12490be20f7",
+      "gzipBytes": 22346
     },
     "geo:cn-sd": {
-      "url": "/maps/geo-cn-sd.963063cd02ede2d0.json",
-      "sha256": "963063cd02ede2d0e4f9e423a2715b798f702c9b94f855419347a4a8d797eac3",
-      "gzipBytes": 15431
+      "url": "/maps/geo-cn-sd.333e9005ea484243.json",
+      "sha256": "333e9005ea484243e3fdc8c08b77540e904e95dfbffb5411669b04060d6469ee",
+      "gzipBytes": 27970
     },
     "geo:cn-ha": {
-      "url": "/maps/geo-cn-ha.0a98f305e25bea2e.json",
-      "sha256": "0a98f305e25bea2e84da6140a6dc896143170c380626f3d3ae633a36a2e05d03",
-      "gzipBytes": 14142
+      "url": "/maps/geo-cn-ha.3da9f74badef1586.json",
+      "sha256": "3da9f74badef15869406e8b15e87f0eceff2e6f7a1c53ae4e8eb03d228ee2efe",
+      "gzipBytes": 25724
     },
     "geo:cn-hb": {
-      "url": "/maps/geo-cn-hb.cd68d7aaa46e1653.json",
-      "sha256": "cd68d7aaa46e1653ea19de1fee9095beb059661d8283983773b68fb621b54500",
-      "gzipBytes": 14534
+      "url": "/maps/geo-cn-hb.46de6e26a763aa63.json",
+      "sha256": "46de6e26a763aa6327e73219acaa02b56a9d673adb22e08ba6bb2a35c0b66289",
+      "gzipBytes": 28557
     },
     "geo:cn-hn": {
-      "url": "/maps/geo-cn-hn.b73529b0d1a9facb.json",
-      "sha256": "b73529b0d1a9facb54ce9d8d44ef68de4b3ae16148ad76c2fcf4fef0cc0094e4",
-      "gzipBytes": 15971
+      "url": "/maps/geo-cn-hn.47e74d482800f216.json",
+      "sha256": "47e74d482800f21609c418a2b80c4e23745b42724fcdc39cedfd3543f72e8fb7",
+      "gzipBytes": 29453
     },
     "geo:cn-gd": {
-      "url": "/maps/geo-cn-gd.ff7771c5517fdf52.json",
-      "sha256": "ff7771c5517fdf52301bd135bde5153787a00ca7e8d3e4b24289329ff85a913e",
-      "gzipBytes": 17991
+      "url": "/maps/geo-cn-gd.9b0833e1e6a0e087.json",
+      "sha256": "9b0833e1e6a0e087ae18525dd73c44a33d01c7267d27196e00d2945265c215d0",
+      "gzipBytes": 30421
     },
     "geo:cn-gx": {
-      "url": "/maps/geo-cn-gx.6cf6b18d9a196661.json",
-      "sha256": "6cf6b18d9a19666171e38abf492603e095434a0a047659ffabc5ff7b4b029297",
-      "gzipBytes": 15852
+      "url": "/maps/geo-cn-gx.7c784b6551358c10.json",
+      "sha256": "7c784b6551358c10b7161c06068ade10a316dd6c0ab30c0bdf72c8167dc479ed",
+      "gzipBytes": 29907
     },
     "geo:cn-hi": {
-      "url": "/maps/geo-cn-hi.3077bc49d43c7400.json",
-      "sha256": "3077bc49d43c7400d51222bce8faf41f62c2d61bf77e6a66fdf8875c8a341192",
-      "gzipBytes": 2946
+      "url": "/maps/geo-cn-hi.c19e9e6bb68a08b2.json",
+      "sha256": "c19e9e6bb68a08b28fdba3376ff23f3207363044a7096415b66a1d131abf5ef4",
+      "gzipBytes": 16168
     },
     "geo:cn-sc": {
-      "url": "/maps/geo-cn-sc.ab636131804d43fd.json",
-      "sha256": "ab636131804d43fda6c0bc1b2b42344b891924a6099d0d1f9b02482a5b26f970",
-      "gzipBytes": 15519
+      "url": "/maps/geo-cn-sc.7f17cdc2cc553b4c.json",
+      "sha256": "7f17cdc2cc553b4c74df1ed6f162ec183350e19ec735a20354569ac336985070",
+      "gzipBytes": 43492
     },
     "geo:cn-gz": {
-      "url": "/maps/geo-cn-gz.ebcac7380f74e985.json",
-      "sha256": "ebcac7380f74e9857b469288c5023b78c3aa0a76a4c3367fc1a8436cb09fc1cd",
-      "gzipBytes": 12458
+      "url": "/maps/geo-cn-gz.b3d1764596f3ee27.json",
+      "sha256": "b3d1764596f3ee27ac199ee709b7dd52f40f517383b482f8cd1195e49eaf7c3f",
+      "gzipBytes": 24303
     },
     "geo:cn-yn": {
-      "url": "/maps/geo-cn-yn.6a1d20bfaab17312.json",
-      "sha256": "6a1d20bfaab173124bbf8022fb497ff7c1dd47647dec886905d755dd9764b1ec",
-      "gzipBytes": 11658
+      "url": "/maps/geo-cn-yn.c371071d13fa4272.json",
+      "sha256": "c371071d13fa42724244fae872eb0ae607a6fabb3372adba2fbd0d0097f4d056",
+      "gzipBytes": 32843
     },
     "geo:cn-xz": {
-      "url": "/maps/geo-cn-xz.900b4088832b7f62.json",
-      "sha256": "900b4088832b7f62dfb203d9aac72bf08916eb9978184ececd1540395830845f",
-      "gzipBytes": 13958
+      "url": "/maps/geo-cn-xz.c7b5b415136cd824.json",
+      "sha256": "c7b5b415136cd82406df67f939c9b7902539d344945f2811fd90efbcf29281b5",
+      "gzipBytes": 51588
     },
     "geo:cn-sn": {
-      "url": "/maps/geo-cn-sn.9ab4b050ef78861b.json",
-      "sha256": "9ab4b050ef78861b09a5251ecec6bf6fce9dd27513bee0010aa9d82a5dc57c80",
-      "gzipBytes": 6853
+      "url": "/maps/geo-cn-sn.e4b16cc3a1cf0081.json",
+      "sha256": "e4b16cc3a1cf0081a97b11fc9346718375b2e973765d0c2f8718cff5fb942141",
+      "gzipBytes": 24205
     },
     "geo:cn-gs": {
-      "url": "/maps/geo-cn-gs.fe9480bfe3e7a853.json",
-      "sha256": "fe9480bfe3e7a8538322b888c6883632e777189cbc080de0ad9bd77772386f90",
-      "gzipBytes": 10598
+      "url": "/maps/geo-cn-gs.d10a7807cbfe25ae.json",
+      "sha256": "d10a7807cbfe25aee37786468351459d786495e5d198174d950176aacf148487",
+      "gzipBytes": 47356
     },
     "geo:cn-qh": {
-      "url": "/maps/geo-cn-qh.8d771f8eba43a1f4.json",
-      "sha256": "8d771f8eba43a1f46e8397950f5290e923c3fd212477b707cde036c11675b461",
-      "gzipBytes": 10086
+      "url": "/maps/geo-cn-qh.a4b950d06833bb3f.json",
+      "sha256": "a4b950d06833bb3ffb272a98547d2dabdc479af22c7c5a829044727a33304cd4",
+      "gzipBytes": 37627
     },
     "geo:cn-nx": {
-      "url": "/maps/geo-cn-nx.c312ae299acefbee.json",
-      "sha256": "c312ae299acefbeefa43a85ad8a56cedefcc0904d153b632b28b5a32829c03f3",
-      "gzipBytes": 4818
+      "url": "/maps/geo-cn-nx.21159242c1d50ce8.json",
+      "sha256": "21159242c1d50ce873451650c0a50b6fc675062cfbed26c7c14b620350ddbfbb",
+      "gzipBytes": 11059
     },
     "geo:cn-xj": {
-      "url": "/maps/geo-cn-xj.a04e63795e8b29ab.json",
-      "sha256": "a04e63795e8b29abca8164341e39c54c916711034280883c3ec20039aad18a98",
-      "gzipBytes": 11853
+      "url": "/maps/geo-cn-xj.e0d0048acf0962a6.json",
+      "sha256": "e0d0048acf0962a60989db76236c120da5fc941e8d62ca9499d950b288fceddb",
+      "gzipBytes": 64007
     }
   },
-  "projection": {
-    "world": "+proj=robin +lon_0=150",
-    "china": "webmercator"
-  },
+  "projection": "+proj=robin +lon_0=150",
+  "coordinateSpace": "pacific-robinson-v1",
   "simplify": {
     "world": "20%",
     "chinaProvince": "50%",
     "chinaCity": "50%"
+  },
+  "basemap": {
+    "viewBoxExtension": 0.1,
+    "worldWindowSlack": 2,
+    "graticuleLatitudeLimit": 85,
+    "aspectRange": [0.75, 4],
+    "contextSimplify": {
+      "country": "5%",
+      "city": "35%"
+    },
+    "graticule": {
+      "world": 30,
+      "regionalLadder": [10, 5, 2, 1],
+      "minimumLines": 3
+    },
+    "fields": "viewBox, land, borders (province layers), graticule, frame (world)",
+    "viewBoxRule": "a layer's viewBox is its preferred camera (foreground box plus viewBoxExtension); basemap.viewBox is the smallest centred box containing it at every canvas aspect ratio in aspectRange, and every background field is clipped to that window, so the renderer never shows uncovered background between those ratios",
+    "worldWindow": "union of the foreground bounding box and the projection silhouette plus worldWindowSlack; the world's basemap.viewBox equals its viewBox because there is no wider context to cut, and the renderer letterboxes instead",
+    "note": "All 29 layers share one projection and one affine transform (coordinateSpace), so any layer's viewBox is a rectangle inside the world's and the camera can interpolate between them. Every basemap path is projected by the same mapshaper release and never overflows basemap.viewBox. Context is re-derived from sources the layer already depends on; no additional source is fetched or traversed at runtime."
   },
   "sources": [
     {
@@ -722,7 +739,7 @@
         "mapped": 10
       }
     ],
-    "droppedRings": 2,
+    "droppedRings": 0,
     "auditTrail": "scripts/maps/coverage-report.json",
     "sourceReceipts": "scripts/maps/sources/manifest.json",
     "note": "Counts only. Per-code reasons, shapes without a node and dropped rings live in the audit trail and the source receipts, not in the browser bundle."

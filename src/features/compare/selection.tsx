@@ -97,6 +97,7 @@ export function CompareSelectionProvider({
         <>
           <div aria-hidden="true" className="h-44 shrink-0" />
           <aside
+            data-compare-tray
             aria-label={labels.compare}
             className="bg-background fixed inset-x-0 bottom-0 z-30 border-t shadow-lg"
           >

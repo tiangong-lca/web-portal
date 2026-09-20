@@ -38,6 +38,10 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
+  --map-ocean: oklch(0.952 0.018 225);
+  --map-land: oklch(0.987 0.006 100);
+  --map-context-line: oklch(0.75 0.024 225);
+  --map-grid: oklch(0.84 0.021 225);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -75,6 +79,10 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: var(--brand-dark-ring);
+  --map-ocean: oklch(0.205 0.023 235);
+  --map-land: oklch(0.282 0.016 215);
+  --map-context-line: oklch(0.49 0.026 225);
+  --map-grid: oklch(0.36 0.027 230);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

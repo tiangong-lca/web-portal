@@ -19,8 +19,12 @@ export function* positions(geometry) {
   } else if (type === "MultiPolygon") {
     for (const polygon of coordinates)
       for (const ring of polygon) for (const point of ring) yield point;
+  } else if (type === "LineString") {
+    for (const point of coordinates) yield point;
+  } else if (type === "MultiLineString") {
+    for (const part of coordinates) for (const point of part) yield point;
   } else {
-    throw new Error(`Unsupported geometry type for a filled region: ${type}`);
+    throw new Error(`Unsupported geometry type for a projected layer: ${type}`);
   }
 }
 
@@ -131,15 +135,61 @@ export function projectedBounds(geometries, transform) {
  * instead of pushing the window past the edge of `geo:cn`.
  */
 export function windowViewBox(bounds, padding, space) {
-  const x = Math.max(0, bounds.x0 - padding);
-  const y = Math.max(0, bounds.y0 - padding);
-  const width = Math.min(space.width - x, Math.round(bounds.x1 - bounds.x0 + padding * 2));
-  const height = Math.min(space.height - y, Math.round(bounds.y1 - bounds.y0 + padding * 2));
+  const x = Math.max(space.minX, bounds.x0 - padding);
+  const y = Math.max(space.minY, bounds.y0 - padding);
+  const width = Math.min(
+    space.minX + space.width - x,
+    Math.round(bounds.x1 - bounds.x0 + padding * 2),
+  );
+  const height = Math.min(
+    space.minY + space.height - y,
+    Math.round(bounds.y1 - bounds.y0 + padding * 2),
+  );
   return `${x} ${y} ${width} ${height}`;
 }
 
-/** Integer width and height of a fitted viewBox string. */
+/** Origin, width and height of a viewBox string. */
 export function viewBoxSize(viewBox) {
-  const [, , width, height] = viewBox.split(" ").map(Number);
-  return { width, height };
+  const [minX, minY, width, height] = viewBox.split(" ").map(Number);
+  return { minX, minY, width, height };
+}
+
+/**
+ * Smallest viewBox covering both inputs, plus integer slack so a stroke on the
+ * edge is not clipped. Only the window changes; the transform does not.
+ */
+export function unionViewBox(left, right, slack = 0) {
+  const a = viewBoxSize(left);
+  const b = viewBoxSize(right);
+  const minX = Math.min(a.minX, b.minX) - slack;
+  const minY = Math.min(a.minY, b.minY) - slack;
+  const maxX = Math.max(a.minX + a.width, b.minX + b.width) + slack;
+  const maxY = Math.max(a.minY + a.height, b.minY + b.height) + slack;
+  return `${Math.round(minX)} ${Math.round(minY)} ${Math.round(maxX - minX)} ${Math.round(maxY - minY)}`;
+}
+
+/**
+ * A layer's preferred camera: the foreground box, grown by `ratio` on every
+ * side. Only the window moves — the transform, and therefore every coordinate
+ * in every layer, is untouched.
+ */
+export function paddedViewBox(bounds, ratio) {
+  const width = bounds.x1 - bounds.x0;
+  const height = bounds.y1 - bounds.y0;
+  return `${Math.round(bounds.x0 - width * ratio)} ${Math.round(bounds.y0 - height * ratio)} ${Math.round(width * (1 + ratio * 2))} ${Math.round(height * (1 + ratio * 2))}`;
+}
+
+/**
+ * The smallest centred box containing `viewBox` at every aspect ratio in
+ * `[min, max]`. A canvas narrower than the window forces height, a wider one
+ * forces width, so the union is decided by those two extremes. This is exactly
+ * the window a background must cover for the renderer never to show empty space.
+ */
+export function aspectCoverViewBox(viewBox, [min, max]) {
+  const { minX, minY, width, height } = viewBoxSize(viewBox);
+  const centreX = minX + width / 2;
+  const centreY = minY + height / 2;
+  const coveredWidth = Math.max(width, height * max);
+  const coveredHeight = Math.max(height, width / min);
+  return `${Math.round(centreX - coveredWidth / 2)} ${Math.round(centreY - coveredHeight / 2)} ${Math.round(coveredWidth)} ${Math.round(coveredHeight)}`;
 }

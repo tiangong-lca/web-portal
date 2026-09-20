@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
+lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #103: compact control grouping, responsive regional map insets and genuine delayed navigation feedback preserve four-locale, no-JavaScript, privacy, count and public-data boundaries. Twelve page families were visually audited; source delivery and final hosted readback remain tracked in the PR."
+lastReviewedNote: "Reviewed for Portal #105: the offline map generator keeps deterministic hashed outputs, common projection and graded context simplification; current map, Storybook, browser and Docpact commands cover the change."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -86,6 +86,8 @@ pnpm test:storybook
 ```
 
 Reuse a running server only after confirming it serves this Portal checkout. The repository script binds loopback port 6006 and fails if that exact port is occupied. Keep a server used for the delivered review available for the user. Static output is `storybook-static/`; it does not provide the development/test MCP endpoint or become an EdgeOne artifact.
+
+Storybook's `staticDirs` owns copying and serving both `.storybook/public` and production `public` assets. Its Vite configuration sets `publicDir: false` to prevent a second copier racing those same output directories during a static build. Keep map layers, font notices and the MSW worker reachable through the declared static roots.
 
 Once the server is running, connect the local agent:
 

@@ -25,15 +25,28 @@ import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 
 import {
+  BASEMAP,
   COORDINATE_UNITS,
   LAYER_GZIP_BUDGET_BYTES,
   LAYER_URL_PREFIX,
   MAPSHAPER_VERSION,
+  COORDINATE_SPACE,
   OUTPUT,
-  PROJECTIONS,
+  PROJECTION,
   SCHEMA_VERSION,
   SIMPLIFY,
 } from "./lib/config.mjs";
+import {
+  basemapPath,
+  clipToWindow,
+  graticuleGeoJson,
+  graticuleInterval,
+  pathViewBox,
+  seamGeoJson,
+  silhouettePath,
+  projectSource,
+  projectedClipBox,
+} from "./lib/basemap.mjs";
 import {
   createWorkDir,
   projectAndSimplify,
@@ -55,18 +68,19 @@ import {
   writeSourceManifest,
 } from "./lib/sources.mjs";
 import {
+  aspectCoverViewBox,
   boundingBox,
   featureToPath,
   fitTransform,
+  paddedViewBox,
+  positions,
   projectedBounds,
   viewBoxOf,
+  unionViewBox,
   viewBoxSize,
-  windowViewBox,
 } from "./lib/svg-path.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
-const CITY_VIEWBOX_PADDING_RATIO = 0.02;
-const CITY_VIEWBOX_PADDING_MIN = 20;
 const PROVINCE_CODE = /^CN-[A-Z]{2}$/;
 const CITY_CODE = /^CN-[A-Z]{2}-[A-Z0-9]+$/;
 const WORLD_CODE = /^[A-Z]{2}$/;
@@ -154,10 +168,124 @@ function assertPreservedFeatures(label, before, after) {
   }
 }
 
+/* -------------------------------------------------------------- basemap --- */
+
+/** Longitude/latitude extent of a source, used to pick a graticule density. */
+function lonLatSpan(geojson) {
+  let x0 = Infinity;
+  let y0 = Infinity;
+  let x1 = -Infinity;
+  let y1 = -Infinity;
+  for (const feature of geojson.features) {
+    for (const [lon, lat] of positions(feature.geometry)) {
+      if (lon < x0) x0 = lon;
+      if (lon > x1) x1 = lon;
+      if (lat < y0) y0 = lat;
+      if (lat > y1) y1 = lat;
+    }
+  }
+  return Math.max(x1 - x0, y1 - y0);
+}
+
+/**
+ * The context shared by every country and province layer: neighbouring Natural
+ * Earth land and the existing China province boundaries, projected once with the
+ * one global projection so each layer only cuts its own window out of them.
+ * Robinson is finite at the poles, so no polar cut is needed here.
+ */
+function sharedContext(sources, familyViewBox, transform, workDir) {
+  // `familyViewBox` is the union of every layer's declared background window, so
+  // a layer can never ask for context this pre-cut has already thrown away: the
+  // per-layer cut below is the one that decides what ships.
+  const family = projectedClipBox(familyViewBox, transform);
+  const land = projectSource(ROOT, sources.get("world-map-units-50m"), {
+    projection: PROJECTION,
+    workDir,
+    tag: "context-land",
+  });
+  return {
+    land: clipToWindow(ROOT, land, { clipBox: family, workDir, tag: "context-land-family" }),
+    provinces: clipToWindow(
+      ROOT,
+      projectSource(ROOT, sources.get("china-province-100000-full"), {
+        projection: PROJECTION,
+        workDir,
+        tag: "context-provinces",
+      }),
+      { clipBox: family, workDir, tag: "context-provinces-family" },
+    ),
+  };
+}
+
+/**
+ * Assemble one layer's basemap. Each field carries exactly one thing and never
+ * repeats another field's geometry: `land` is the faded neighbouring landmass,
+ * `borders` the boundaries the foreground does not already draw (the existing
+ * China province outlines), `graticule` the lat/lon grid, `frame` the
+ * projection outline. All of it is cut from the shared context for this layer's
+ * window and reduced with the layer's own transform — never a copy of another
+ * layer's geometry.
+ */
+function buildBasemap({
+  tag,
+  background,
+  transform,
+  interval,
+  context,
+  workDir,
+  borders,
+  simplify,
+}) {
+  const clipBox = projectedClipBox(background, transform);
+  const cut = (geojson, name, simplify) =>
+    basemapPath(
+      clipToWindow(ROOT, geojson, { clipBox, simplify, workDir, tag: `${tag}-${name}` }),
+      transform,
+    );
+  const basemap = {
+    land: context ? cut(context.land, "land", simplify) : "",
+    graticule: cut(
+      projectSource(ROOT, graticuleGeoJson(interval, BASEMAP.graticuleLatitudeLimit), {
+        projection: PROJECTION,
+        workDir,
+        tag: `${tag}-graticule`,
+      }),
+      "graticule",
+    ),
+  };
+  if (borders) basemap.borders = cut(context.provinces, "borders", simplify);
+  return { ...basemap, viewBox: background };
+}
+
+/** The world keeps its foreground as the land, so it needs no context polygons. */
+function worldFrame(transform, workDir) {
+  const centralMeridian = Number(/lon_0=(-?[\d.]+)/u.exec(PROJECTION)?.[1] ?? 0);
+  const seam = projectSource(ROOT, seamGeoJson(centralMeridian), {
+    projection: PROJECTION,
+    workDir,
+    tag: "world-seam",
+  });
+  return silhouettePath(seam.features[0].geometry.coordinates, transform);
+}
+
+/** The world grid, cut to the window the silhouette defines. */
+function worldGraticule(viewBox, transform, workDir) {
+  const clipBox = projectedClipBox(viewBox, transform);
+  const graticule = projectSource(ROOT, graticuleGeoJson(BASEMAP.graticule.world, 90), {
+    projection: PROJECTION,
+    workDir,
+    tag: "world-graticule",
+  });
+  return basemapPath(
+    clipToWindow(ROOT, graticule, { clipBox, workDir, tag: "world-graticule-clip" }),
+    transform,
+  );
+}
+
 /* ---------------------------------------------------------------- world --- */
 
 function buildWorld(source, vocabularyIndex, workDir, report) {
-  const projected = project(ROOT, source, PROJECTIONS.world, SIMPLIFY.world, workDir);
+  const projected = project(ROOT, source, PROJECTION, SIMPLIFY.world, workDir);
   const box = boundingBox(projected.features.map((feature) => feature.geometry));
   const transform = fitTransform(box, COORDINATE_UNITS);
   const ids = boundaryIds(projected.features, (feature) => feature.properties?.GU_A3, "ne50m");
@@ -195,8 +323,30 @@ function buildWorld(source, vocabularyIndex, workDir, report) {
     }));
 
   features.sort((a, b) => (a.boundaryId < b.boundaryId ? -1 : a.boundaryId > b.boundaryId ? 1 : 0));
+  // The window is the union of the foreground box and the projection silhouette,
+  // so the whole Robinson outline is visible and the ocean neatline is not cut
+  // into straight vertical edges. Only the window moves: the transform — and
+  // therefore every foreground path — is untouched.
+  const frame = worldFrame(transform, workDir);
+  const viewBox = unionViewBox(
+    viewBoxOf(box, transform),
+    pathViewBox(frame),
+    BASEMAP.worldWindowSlack,
+  );
   return {
-    layer: { viewBox: viewBoxOf(box, transform), features },
+    layer: {
+      coordinateSpace: COORDINATE_SPACE,
+      viewBox,
+      features,
+      // The world's background *is* the map: there is no larger window to cover,
+      // so the renderer letterboxes instead of asking for more context.
+      basemap: {
+        viewBox,
+        land: "",
+        graticule: worldGraticule(viewBox, transform, workDir),
+        frame,
+      },
+    },
     transform,
     unresolvedShapes,
     unshapedCodes,
@@ -205,10 +355,8 @@ function buildWorld(source, vocabularyIndex, workDir, report) {
 
 /* ---------------------------------------------------------------- china --- */
 
-function buildChinaLayer(provinceGeo, vocabularyIndex, workDir, report) {
-  const projected = project(ROOT, provinceGeo, PROJECTIONS.china, SIMPLIFY.chinaProvince, workDir);
-  const box = boundingBox(projected.features.map((feature) => feature.geometry));
-  const transform = fitTransform(box, COORDINATE_UNITS);
+function buildChinaLayer(provinceGeo, vocabularyIndex, transform, workDir, report) {
+  const projected = project(ROOT, provinceGeo, PROJECTION, SIMPLIFY.chinaProvince, workDir);
   const ids = boundaryIds(projected.features, (feature) => feature.properties?.adcode, "cnprov");
   const resolution = provinceResolution(projected.features, vocabularyIndex);
   const nodeIdByFeature = new Map();
@@ -239,15 +387,24 @@ function buildChinaLayer(provinceGeo, vocabularyIndex, workDir, report) {
   });
 
   features.sort((a, b) => (a.boundaryId < b.boundaryId ? -1 : a.boundaryId > b.boundaryId ? 1 : 0));
+  // Same projection and same transform as the world: this window is literally a
+  // rectangle inside the world window, which is what makes the camera continuous.
+  const viewBox = paddedViewBox(
+    projectedBounds(
+      projected.features.map((feature) => feature.geometry),
+      transform,
+    ),
+    BASEMAP.viewBoxExtension,
+  );
   return {
-    layer: { viewBox: viewBoxOf(box, transform), features },
+    layer: { coordinateSpace: COORDINATE_SPACE, viewBox, features },
     transform,
     unresolvedShapes,
   };
 }
 
-function buildCityLayer(source, provinceCode, vocabularyIndex, transform, space, workDir, report) {
-  const projected = project(ROOT, source, PROJECTIONS.china, SIMPLIFY.chinaCity, workDir);
+function buildCityLayer(source, provinceCode, vocabularyIndex, transform, workDir, report) {
+  const projected = project(ROOT, source, PROJECTION, SIMPLIFY.chinaCity, workDir);
   assertPreservedFeatures(provinceCode, source.features.length, projected.features.length);
   const codes = citiesOf(vocabularyIndex, provinceCode);
   const { byCode, unresolved } = resolveByName(
@@ -285,13 +442,13 @@ function buildCityLayer(source, provinceCode, vocabularyIndex, transform, space,
     projected.features.map((feature) => feature.geometry),
     transform,
   );
-  const padding = Math.max(
-    CITY_VIEWBOX_PADDING_MIN,
-    Math.round(Math.max(bounds.x1 - bounds.x0, bounds.y1 - bounds.y0) * CITY_VIEWBOX_PADDING_RATIO),
-  );
   return {
     layerKey,
-    layer: { viewBox: windowViewBox(bounds, padding, space), features },
+    layer: {
+      coordinateSpace: COORDINATE_SPACE,
+      viewBox: paddedViewBox(bounds, BASEMAP.viewBoxExtension),
+      features,
+    },
     unresolved,
     unresolvedShapes,
   };
@@ -307,15 +464,17 @@ function buildAssets(sources, plan, vocabularyIndex, workDir) {
     mapped: entry.layer.features.filter((feature) => feature.nodeId).length,
   });
 
+  // The world comes first: it fits the one transform every other layer reuses.
   const world = buildWorld(sources.get("world-map-units-50m"), vocabularyIndex, workDir, report);
   layers.world = world.layer;
   report.layers.push({
     layer: "world",
     source: "world-map-units-50m",
     ...stats(world),
-    projection: PROJECTIONS.world,
+    projection: PROJECTION,
     simplify: SIMPLIFY.world,
-    sharesChinaSpace: false,
+    sharesCoordinateSpace: true,
+    graticuleInterval: BASEMAP.graticule.world,
     unresolvedCodes: [],
     unresolvedShapes: world.unresolvedShapes,
     unshapedCodes: world.unshapedCodes,
@@ -324,54 +483,100 @@ function buildAssets(sources, plan, vocabularyIndex, workDir) {
   const china = buildChinaLayer(
     sources.get("china-province-100000-full"),
     vocabularyIndex,
+    world.transform,
     workDir,
     report,
   );
-  layers["geo:cn"] = china.layer;
-  report.layers.push({
-    layer: "geo:cn",
-    source: "china-province-100000-full",
-    ...stats(china),
-    projection: PROJECTIONS.china,
-    simplify: SIMPLIFY.chinaProvince,
-    sharesChinaSpace: false,
-    unresolvedCodes: plan.provinceResolution.unresolved,
-    unresolvedShapes: china.unresolvedShapes,
-    unshapedCodes: [],
-  });
-
   const provinceCodeByAdcode = new Map();
   for (const [code, adcode] of plan.provinceResolution.adcodeOf) {
     provinceCodeByAdcode.set(adcode, code);
   }
 
-  const chinaSpace = viewBoxSize(china.layer.viewBox);
-  for (const adcode of plan.adcodes) {
-    const provinceCode = provinceCodeByAdcode.get(adcode);
-    const built = buildCityLayer(
+  // Build every Chinese foreground first. The context pre-cut must cover every
+  // window any layer will ask for, so it is derived from the actual windows
+  // rather than from a guessed multiple of one of them: a guessed multiple is
+  // exactly what once clipped a far neighbour away inside a declared background.
+  const cityBuilds = plan.adcodes.map((adcode) => ({
+    adcode,
+    built: buildCityLayer(
       sources.get(datavSourceId(adcode)),
-      provinceCode,
+      provinceCodeByAdcode.get(adcode),
       vocabularyIndex,
-      china.transform,
-      chinaSpace,
+      world.transform,
       workDir,
       report,
+    ),
+  }));
+  const family = [china, ...cityBuilds.map(({ built }) => built)]
+    .map((built) => aspectCoverViewBox(built.layer.viewBox, BASEMAP.aspectRange))
+    .reduce((accumulated, background) => unionViewBox(accumulated, background, 0));
+  const contextWindow = unionViewBox(family, family, Math.round(viewBoxSize(family).width * 0.01));
+  const context = sharedContext(sources, contextWindow, world.transform, workDir);
+  const chinaInterval = graticuleInterval(
+    BASEMAP.graticule.regionalLadder,
+    lonLatSpan(sources.get("china-province-100000-full")),
+    BASEMAP.graticule.minimumLines,
+  );
+  layers["geo:cn"] = {
+    ...china.layer,
+    basemap: buildBasemap({
+      tag: "geo-cn",
+      background: aspectCoverViewBox(china.layer.viewBox, BASEMAP.aspectRange),
+      transform: world.transform,
+      interval: chinaInterval,
+      context,
+      workDir,
+      borders: false,
+      simplify: BASEMAP.contextSimplify.country,
+    }),
+  };
+  report.layers.push({
+    layer: "geo:cn",
+    source: "china-province-100000-full",
+    ...stats(china),
+    projection: PROJECTION,
+    simplify: SIMPLIFY.chinaProvince,
+    sharesCoordinateSpace: true,
+    graticuleInterval: chinaInterval,
+    unresolvedCodes: plan.provinceResolution.unresolved,
+    unresolvedShapes: china.unresolvedShapes,
+    unshapedCodes: [],
+  });
+
+  for (const { adcode, built } of cityBuilds) {
+    const cityInterval = graticuleInterval(
+      BASEMAP.graticule.regionalLadder,
+      lonLatSpan(sources.get(datavSourceId(adcode))),
+      BASEMAP.graticule.minimumLines,
     );
-    layers[built.layerKey] = built.layer;
+    layers[built.layerKey] = {
+      ...built.layer,
+      basemap: buildBasemap({
+        tag: built.layerKey.replace(/:/gu, "-"),
+        background: aspectCoverViewBox(built.layer.viewBox, BASEMAP.aspectRange),
+        transform: world.transform,
+        interval: cityInterval,
+        context,
+        workDir,
+        borders: true,
+        simplify: BASEMAP.contextSimplify.city,
+      }),
+    };
     report.layers.push({
       layer: built.layerKey,
       source: datavSourceId(adcode),
       ...stats(built),
-      projection: PROJECTIONS.china,
+      projection: PROJECTION,
       simplify: SIMPLIFY.chinaCity,
-      sharesChinaSpace: true,
+      sharesCoordinateSpace: true,
+      graticuleInterval: cityInterval,
       unresolvedCodes: built.unresolved,
       unresolvedShapes: built.unresolvedShapes,
       unshapedCodes: [],
     });
   }
 
-  return { layers, report };
+  return { layers, report, contextWindow };
 }
 
 function layerSlug(layerKey) {
@@ -456,8 +661,18 @@ function buildManifest(vendoredManifest, emitted, report, vocabularyIndex) {
       note: "Generated by the offline region-map pipeline. Do not edit by hand; rebuild it instead.",
     },
     layers,
-    projection: PROJECTIONS,
+    projection: PROJECTION,
+    coordinateSpace: COORDINATE_SPACE,
     simplify: SIMPLIFY,
+    basemap: {
+      ...BASEMAP,
+      fields: "viewBox, land, borders (province layers), graticule, frame (world)",
+      viewBoxRule:
+        "a layer's viewBox is its preferred camera (foreground box plus viewBoxExtension); basemap.viewBox is the smallest centred box containing it at every canvas aspect ratio in aspectRange, and every background field is clipped to that window, so the renderer never shows uncovered background between those ratios",
+      worldWindow:
+        "union of the foreground bounding box and the projection silhouette plus worldWindowSlack; the world's basemap.viewBox equals its viewBox because there is no wider context to cut, and the renderer letterboxes instead",
+      note: "All 29 layers share one projection and one affine transform (coordinateSpace), so any layer's viewBox is a rectangle inside the world's and the camera can interpolate between them. Every basemap path is projected by the same mapshaper release and never overflows basemap.viewBox. Context is re-derived from sources the layer already depends on; no additional source is fetched or traversed at runtime.",
+    },
     sources,
     licenses,
     coverage: {
@@ -537,6 +752,10 @@ async function main() {
   const manifestBody = stableJson(manifest);
   const coverageBody = stableJson({
     schemaVersion: "portal.region-map-coverage.v1",
+    // The window the shared context was pre-cut to. Every layer's declared
+    // background window must be inside it, or a far neighbour would be clipped
+    // away inside a window that claims to cover it.
+    contextWindow: built.contextWindow,
     note: "Full audit trail for the region-map pipeline: every dictionary code inside a mapped container, every source shape that received no node, every dropped ring and every source receipt. The browser manifest carries only counts.",
     layers: built.report.layers,
     droppedRings: built.report.droppedRings,

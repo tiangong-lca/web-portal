@@ -104,12 +104,15 @@ export const WorldToCity: Story = {
       "data-level",
       "geo:cn-ah",
     );
-    await waitFor(async () => {
-      const zoom = Number(
-        canvasElement.querySelector<HTMLElement>(".globe-scene-canvas")?.dataset.cameraZoom,
-      );
-      await expect(zoom).toBeGreaterThan(4); // Beyond the completed globe-to-Mercator transition.
-    });
+    await waitFor(
+      async () => {
+        const zoom = Number(
+          canvasElement.querySelector<HTMLElement>(".globe-scene-canvas")?.dataset.cameraZoom,
+        );
+        await expect(zoom).toBeGreaterThan(4); // Beyond the completed globe-to-Mercator transition.
+      },
+      { timeout: 10000 },
+    );
   },
 };
 export const Mobile: Story = {
@@ -162,10 +165,15 @@ export const KeyboardReducedMotion: Story = {
       "data-selected-node",
       "geo:mo",
     );
-    await waitFor(() =>
-      expect(
-        Number(canvasElement.querySelector<HTMLElement>(".globe-scene-canvas")?.dataset.cameraZoom),
-      ).toBeGreaterThan(8),
+    await waitFor(
+      () =>
+        expect(
+          Number(
+            canvasElement.querySelector<HTMLElement>(".globe-scene-canvas")?.dataset.cameraZoom,
+          ),
+        ).toBeGreaterThan(8),
+      // The receipt is emitted after real tile/render idle, including software WebGL in CI.
+      { timeout: 10000 },
     );
     await userEvent.click(canvas.getByRole("button", { name: "Auswahl aufheben" }));
     await expect(canvasElement.querySelector(".globe-prototype")).toHaveAttribute(

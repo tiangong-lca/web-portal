@@ -1,4 +1,6 @@
 "use client";
+import { useTransition } from "react";
+import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import { useRouter } from "next/navigation";
 import {
   Select,
@@ -18,15 +20,22 @@ export function CatalogSort({
   options: { value: string; label: string; href: string }[];
 }) {
   const router = useRouter();
+  const [pending, startTransition] = useTransition();
   return (
     <Select
       value={value}
       onValueChange={(next) => {
         const option = options.find((item) => item.value === next);
-        if (option) router.push(option.href);
+        if (option) startTransition(() => router.push(option.href));
       }}
     >
-      <SelectTrigger aria-label={label} className="catalog-sort">
+      <SelectTrigger
+        aria-label={label}
+        aria-busy={pending}
+        data-pending={pending || undefined}
+        className="catalog-sort portal-pending-control"
+      >
+        <PendingFeedback pending={pending} />
         <SelectValue>{options.find((option) => option.value === value)?.label}</SelectValue>
       </SelectTrigger>
       <SelectContent>

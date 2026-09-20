@@ -5,11 +5,12 @@ import { DatasetVersionTag } from "@/features/catalog/dataset-tags";
 import { CatalogCopyIdentity } from "@/features/catalog/catalog-copy-identity";
 
 import { DownloadIcon, EyeIcon, LinkIcon, PlusIcon, Trash2Icon, UploadIcon } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -97,6 +98,7 @@ export function CollectionsWorkspace({
   const [saveFailed, setSaveFailed] = useState(false);
   const [corrupt, setCorrupt] = useState<{ key: string; raw: string } | null>(null);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [pendingImport, setPendingImport] = useState<ImportPreview | null>(null);
   const [disclosure, setDisclosure] = useState<CollectionStateV2 | null>(null);
   const [page, setPage] = useState(0);
@@ -379,16 +381,21 @@ export function CollectionsWorkspace({
               {labels.export}
             </Button>
             <Button
-              disabled={!hydrated}
+              disabled={!hydrated || importing}
+              aria-busy={importing}
+              className="portal-pending-control"
+              data-pending={importing || undefined}
               onClick={() => fileInput.current?.click()}
               type="button"
               variant="outline"
             >
               <UploadIcon data-icon="inline-start" />
               {labels.import}
+              <PendingFeedback pending={importing} />
             </Button>
           </div>
           <input
+            disabled={importing}
             accept="application/json,.json"
             aria-label={labels.import}
             className="hidden"
@@ -402,12 +409,14 @@ export function CollectionsWorkspace({
                   setActionError(labels.importTooLarge);
                   return;
                 }
+                setImporting(true);
                 const imported = parseCollectionJsonV2(await file.text());
                 setPendingImport({ state: imported, source: "file", filename: file.name });
                 setActionError("");
               } catch {
                 setActionError(labels.error);
               } finally {
+                setImporting(false);
                 input.value = "";
               }
             }}

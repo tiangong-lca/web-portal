@@ -1,5 +1,6 @@
+import { KeywordSearchForm } from "@/features/catalog/keyword-search-form";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -156,27 +157,27 @@ export default async function ComparePage({
             </li>
           ))}
         </ul>
-        <div>
+        <div className="compare-member-actions">
+          <AddCompareVersion
+            ids={ids}
+            locale={locale}
+            labels={{
+              title: t("addVersion"),
+              hint: t("addVersionHint"),
+              invalid: t("invalidRef"),
+              add: t("addVersion"),
+            }}
+          />
           <Button asChild className="h-auto min-h-11 whitespace-normal" variant="outline">
             <Link href={localePath(locale, "search?kind=process")}>{t("continueSelecting")}</Link>
           </Button>
         </div>
-        <AddCompareVersion
-          ids={ids}
-          locale={locale}
-          labels={{
-            title: t("addVersion"),
-            hint: t("addVersionHint"),
-            invalid: t("invalidRef"),
-            add: t("addVersion"),
-          }}
-        />
       </section>
       {ids.length >= 2 ? (
         <section aria-label={t("impactCategory")}>
           {impactOptions.length > 0 ? (
             <search>
-              <form className="flex flex-col gap-2" method="get">
+              <KeywordSearchForm action={localePath(locale, "compare")}>
                 <input name="v" type="hidden" value="1" />
                 <input name="ids" type="hidden" value={ids.join(",")} />
                 <label className="font-medium" htmlFor="impact-category-id">
@@ -208,7 +209,7 @@ export default async function ComparePage({
                     {t("numericTitle")}
                   </Button>
                 </div>
-              </form>
+              </KeywordSearchForm>
               {moreImpacts ? (
                 <p className="text-muted-foreground mt-2 text-sm">{t("moreImpactOptions")}</p>
               ) : null}

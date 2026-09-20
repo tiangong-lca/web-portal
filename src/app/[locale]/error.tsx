@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { isPortalLocale, localePath } from "@/i18n/routing";
 
 import { Button } from "@/components/ui/button";

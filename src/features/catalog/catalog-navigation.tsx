@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import type { ReactNode } from "react";
 import { ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,8 +31,10 @@ export type CatalogNavigationProps = {
   unavailable?: boolean;
   compact?: boolean;
   visual?: ReactNode;
+  actions?: ReactNode;
   zeroCountLabel?: string;
   headingLabel?: string;
+  pathAsHeading?: boolean;
 };
 
 /** One server-renderable level of the public catalog; every node remains a native link.
@@ -53,8 +55,10 @@ export function CatalogNavigation({
   unavailable = false,
   compact = false,
   visual,
+  actions,
   zeroCountLabel,
   headingLabel,
+  pathAsHeading = false,
 }: CatalogNavigationProps) {
   const zeroEntries = zeroCountLabel ? entries.filter((entry) => entry.count === 0) : [];
   const visibleEntries = zeroCountLabel ? entries.filter((entry) => entry.count > 0) : entries;
@@ -87,49 +91,68 @@ export function CatalogNavigation({
       className={compact ? "catalog-navigation catalog-navigation-compact" : "catalog-navigation"}
       aria-label={title}
     >
-      <header>
-        <h2 tabIndex={visual ? -1 : undefined} aria-label={headingLabel}>
-          {title}
-        </h2>
-        <p className="text-muted-foreground text-sm">{countDescription}</p>
-      </header>
-      {breadcrumbs.length > 0 && (
-        <nav aria-label={breadcrumbLabel}>
-          <ol className="catalog-navigation-breadcrumbs">
-            {breadcrumbs.map((crumb) => (
-              <li key={crumb.href}>
-                <Link href={crumb.href} prefetch={false}>
-                  {crumb.label}
-                </Link>
-                <ChevronRightIcon aria-hidden="true" />
-              </li>
-            ))}
-            {currentLabel && <li aria-current="location">{currentLabel}</li>}
-          </ol>
-        </nav>
-      )}
-      {(all || direct) && (
-        <div className="flex flex-wrap gap-2">
-          {all && (
-            <Button asChild variant={all.active ? "secondary" : "outline"}>
-              <Link prefetch={false} href={all.href} aria-current={all.active ? "true" : undefined}>
-                {all.label}
-              </Link>
-            </Button>
+      <header className="catalog-navigation-header">
+        <div className="catalog-navigation-context">
+          {!pathAsHeading && (
+            <h2 tabIndex={visual ? -1 : undefined} aria-label={headingLabel}>
+              {title}
+            </h2>
           )}
-          {direct && (
-            <Button asChild variant={direct.active ? "secondary" : "ghost"}>
-              <Link
-                prefetch={false}
-                href={direct.href}
-                aria-current={direct.active ? "true" : undefined}
-              >
-                {direct.label}
-              </Link>
-            </Button>
+          {(breadcrumbs.length > 0 || pathAsHeading) && (
+            <nav aria-label={breadcrumbLabel}>
+              <ol className="catalog-navigation-breadcrumbs">
+                {breadcrumbs.map((crumb) => (
+                  <li key={crumb.href}>
+                    <Link href={crumb.href} prefetch={false}>
+                      {crumb.label}
+                    </Link>
+                    <ChevronRightIcon aria-hidden="true" />
+                  </li>
+                ))}
+                {(currentLabel || pathAsHeading) && (
+                  <li aria-current="location">
+                    {pathAsHeading ? (
+                      <h2 tabIndex={-1} aria-label={headingLabel}>
+                        {currentLabel ?? title}
+                      </h2>
+                    ) : (
+                      currentLabel
+                    )}
+                  </li>
+                )}
+              </ol>
+            </nav>
           )}
+          <p className="text-muted-foreground text-sm">{countDescription}</p>
         </div>
-      )}
+        {(all || direct || actions) && (
+          <div className="catalog-navigation-actions">
+            {all && (
+              <Button asChild variant={all.active ? "secondary" : "outline"}>
+                <Link
+                  prefetch={false}
+                  href={all.href}
+                  aria-current={all.active ? "true" : undefined}
+                >
+                  {all.label}
+                </Link>
+              </Button>
+            )}
+            {direct && (
+              <Button asChild variant={direct.active ? "secondary" : "ghost"}>
+                <Link
+                  prefetch={false}
+                  href={direct.href}
+                  aria-current={direct.active ? "true" : undefined}
+                >
+                  {direct.label}
+                </Link>
+              </Button>
+            )}
+            {actions}
+          </div>
+        )}
+      </header>
       {visual}
       {unavailable ? (
         <Alert>

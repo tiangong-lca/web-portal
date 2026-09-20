@@ -51,7 +51,8 @@
     "communityCompact": "社区",
     "collectionsCompact": "清单",
     "catalog": "数据目录",
-    "catalogCompact": "目录"
+    "catalogCompact": "目录",
+    "loading": "正在载入…"
   },
   "Home": {
     "eyebrow": "天工 LCA 数据门户",

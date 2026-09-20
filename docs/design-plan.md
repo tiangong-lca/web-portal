@@ -23,8 +23,8 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 38e78553acb5472099bd2edcb7bf389750d9032a
-lastReviewedNote: "Reviewed for Portal #101: Pacific-centered offline geometry, balanced region grid, native zero-count disclosure and persistent progressive drilldown. 321 unit tests, 232 Storybook scenarios, 72 browser tests and 8 final navigation regressions passed; no contract or count-semantics change."
+lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
+lastReviewedNote: "Reviewed for Portal #103: compact control grouping, responsive regional map insets and genuine delayed navigation feedback preserve four-locale, no-JavaScript, privacy, count and public-data boundaries. Twelve page families were visually audited; source delivery and final hosted readback remain tracked in the PR."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1475,6 +1475,10 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 地区探索采用单列阅读顺序：路径与范围操作在上方，完整地图在中间，紧凑地区网格在下方。零匹配地区默认放入原生 details 折叠项，仍可无 JavaScript 访问；缺失计数不得当作零。世界图采用中央经线 150°E 的 Robinson 投影，由离线 mapshaper 在 30°W 切缝，避免横穿大陆的连线。
 
 地图悬停或聚焦可预览名称与公开版本数，选择后显示明确的下级/数据入口。地区到地区的链接通过 React transition 和现有 Next 路由原位切换，保留展开状态、已有画面及加载提示；不增加第二套数据 API、逐节点请求或批量预取。每次下钻保留筛选、重置游标并加入 URL 历史；返回/刷新仍由真实 URL 恢复。地图选择只驻留内存，真正下钻才改变 URL。手机地图仍默认收起，无 JavaScript 使用原生链接；减少动态效果时不播放淡化过渡。
+
+地区浏览的路径标题、公开版本计数和范围/地图操作组合为紧凑控制栏；已应用筛选跟随目录维度工具栏，避免分散的空行。国家和省市的 SVG 外层增加响应式内边距，世界图、viewBox、边界资产及计数合同不变。
+
+共享导航反馈仅消费 Next Link 的 pending 或实际 React transition/文件读取状态，不预取整层链接、不新增数据请求或运行时库。页面保留旧内容和可编辑查询；较长等待延迟 150ms 后出现细进度条和四语状态播报。筛选抽屉关闭后其父级仍保留导航状态；清单导入保留预览与确认流程。原先等待文档截图完成的搜索/目录入口过渡已撤下，避免慢请求下的画面冻结。
 
 ## 26. 官方参考
 

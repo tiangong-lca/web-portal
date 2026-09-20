@@ -151,3 +151,31 @@
 .collection-record-resolution {
   grid-column: 1 / -1;
 }
+
+/* The two optional disclosures share a row; file and sharing tools keep their own action row. */
+.collection-details,
+.collection-add-shell {
+  order: 1;
+  grid-column: auto;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.collection-add-shell > summary {
+  margin-left: auto;
+}
+.collection-details[open],
+.collection-add-shell[open] {
+  grid-column: 1 / -1;
+}
+.collection-tools {
+  order: 2;
+}
+@media (max-width: 760px) {
+  .collection-details,
+  .collection-add-shell {
+    grid-column: 1 / -1;
+  }
+  .collection-add-shell > summary {
+    margin-left: 0;
+  }
+}

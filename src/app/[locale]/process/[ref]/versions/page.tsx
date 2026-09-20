@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";

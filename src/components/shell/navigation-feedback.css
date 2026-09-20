@@ -1,0 +1,73 @@
+.portal-feedback-link {
+  position: relative;
+}
+.portal-pending-mark {
+  display: none;
+}
+.portal-feedback-link:has(> .portal-pending-mark[data-pending]),
+.portal-pending-control[data-pending] {
+  cursor: progress;
+}
+.portal-feedback-link:has(> .portal-pending-mark[data-pending])::after,
+.portal-pending-control[data-pending]::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  inset: auto 0 0;
+  background: var(--primary);
+  opacity: 0.65;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.portal-pending-control {
+  position: relative;
+}
+.portal-route-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 3px;
+  z-index: 110;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+}
+.portal-route-progress[data-pending] {
+  opacity: 1;
+}
+.portal-route-progress > span {
+  display: block;
+  width: 35%;
+  height: 100%;
+  background: var(--primary);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .portal-route-progress[data-pending] > span {
+    animation: portal-route-travel 1.5s ease-in-out infinite;
+  }
+  @keyframes portal-route-travel {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(386%);
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portal-route-progress > span {
+    width: 100%;
+  }
+}
+.portal-keyword-form[data-pending] [type="submit"] {
+  cursor: progress;
+  position: relative;
+}
+.portal-keyword-form[data-pending] [type="submit"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 8px 4px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.7;
+  border-radius: 2px;
+}

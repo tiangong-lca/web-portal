@@ -1,3 +1,4 @@
+import { NavigationFeedbackProvider } from "../src/components/shell/navigation-feedback";
 import type { Preview } from "@storybook/nextjs-vite";
 import { NextIntlClientProvider } from "next-intl";
 import { setupWorker } from "msw/browser";
@@ -76,11 +77,13 @@ const preview: Preview = {
       const Surface = parameters.pageLayout ? "div" : "main";
       return (
         <NextIntlClientProvider locale={locale} messages={dictionaries[locale]} timeZone="UTC">
-          <Surface
-            className={`bg-background text-foreground min-h-screen ${parameters.pageLayout ? "" : "p-4 sm:p-6"}`}
-          >
-            <Story key={locale} />
-          </Surface>
+          <NavigationFeedbackProvider label={dictionaries[locale].Common.loading}>
+            <Surface
+              className={`bg-background text-foreground min-h-screen ${parameters.pageLayout ? "" : "p-4 sm:p-6"}`}
+            >
+              <Story key={locale} />
+            </Surface>
+          </NavigationFeedbackProvider>
         </NextIntlClientProvider>
       );
     },

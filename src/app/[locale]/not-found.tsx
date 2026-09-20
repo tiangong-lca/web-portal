@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { Button } from "@/components/ui/button";
 import { isPortalLocale, localePath } from "@/i18n/routing";
 

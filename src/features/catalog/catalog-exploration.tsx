@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { getTranslations } from "next-intl/server";
 import { getPublicFacets, searchPublicFlows, searchPublicProcesses } from "@/server/data/catalog";
 import { PortalDataError } from "@/server/data/supabase-rpc";

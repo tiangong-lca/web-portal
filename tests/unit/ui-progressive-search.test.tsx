@@ -4,6 +4,9 @@ import { act, cleanup, render as renderBase, screen, waitFor } from "@testing-li
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+const navigation = vi.hoisted(() => ({ push: vi.fn<(href: string) => void>() }));
+vi.mock("next/navigation", () => ({ useRouter: () => navigation }));
+
 import { HybridSearchPanel } from "@/features/catalog/hybrid-search-panel";
 import type { SearchResultLabels } from "@/features/catalog/search-results";
 import messages from "@/i18n/messages/en.json";

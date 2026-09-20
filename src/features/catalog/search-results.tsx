@@ -4,7 +4,7 @@ import { CatalogResultRow, CatalogResultList, CatalogResultSummary } from "./cat
 import { DatasetVersionTag, PublicContentTag } from "./dataset-tags";
 import "./search-workspace.css";
 import { BookmarkPlusIcon } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 
 import {
   Accordion,

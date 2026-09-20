@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { PendingFeedback } from "./navigation-feedback";
 import { LanguagesIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -20,9 +22,16 @@ type LocaleSwitcherProps = {
 
 export function LocaleSwitcher({ currentLocale, label }: LocaleSwitcherProps) {
   const pathname = usePathname();
+  const [pending, setPending] = useState(false);
+  useEffect(() => {
+    const restored = () => setPending(false);
+    window.addEventListener("pageshow", restored);
+    return () => window.removeEventListener("pageshow", restored);
+  }, []);
 
   function switchLocale(nextLocale: string) {
     if (!isPortalLocale(nextLocale) || nextLocale === currentLocale) return;
+    setPending(true);
     const segments = pathname.split("/");
     segments[1] = nextLocale;
     window.location.assign(`${segments.join("/")}${window.location.search}${window.location.hash}`);
@@ -30,9 +39,15 @@ export function LocaleSwitcher({ currentLocale, label }: LocaleSwitcherProps) {
 
   return (
     <div className="flex items-center gap-2">
+      <PendingFeedback pending={pending} />
       <LanguagesIcon aria-hidden="true" className="hidden sm:block" />
       <Select onValueChange={switchLocale} value={currentLocale}>
-        <SelectTrigger aria-label={label} className="min-h-11 w-16 sm:min-w-28">
+        <SelectTrigger
+          aria-label={label}
+          className="portal-pending-control min-h-11 w-16 sm:min-w-28"
+          aria-busy={pending}
+          data-pending={pending || undefined}
+        >
           <SelectValue>
             <span aria-hidden="true" className="sm:hidden">
               {currentLocale === "zh-CN" ? "中" : currentLocale.toUpperCase()}

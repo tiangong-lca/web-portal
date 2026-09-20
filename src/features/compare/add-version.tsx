@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import "./compare-controls.css";
+
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -9,6 +12,7 @@ import { isExactDatasetRef } from "@/features/catalog/exact-ref";
 import { compareSelectionHref } from "@/features/compare/selection";
 import type { PortalLocale } from "@/i18n/routing";
 
+/** @import import { AddCompareVersion } from "@/features/compare/add-version"; */
 export function AddCompareVersion({
   ids,
   locale,
@@ -20,6 +24,7 @@ export function AddCompareVersion({
 }) {
   const [invalid, setInvalid] = useState(false);
   const router = useRouter();
+  const [pending, startTransition] = useTransition();
   if (ids.length >= 4) return null;
   return (
     <form
@@ -34,14 +39,17 @@ export function AddCompareVersion({
           return;
         }
         setInvalid(false);
-        router.push(
-          compareSelectionHref(
-            locale,
-            [...new Set([...ids, ref])].map((value) => ({ ref: value, name: value })),
+        startTransition(() =>
+          router.push(
+            compareSelectionHref(
+              locale,
+              [...new Set([...ids, ref])].map((value) => ({ ref: value, name: value })),
+            ),
           ),
         );
       }}
     >
+      <PendingFeedback pending={pending} />
       <input name="v" type="hidden" value="1" />
       <Field>
         <FieldLabel htmlFor="add-compare-version">{labels.title}</FieldLabel>
@@ -56,7 +64,13 @@ export function AddCompareVersion({
             placeholder="00000000-0000-0000-0000-000000000000@01.00.000"
             required
           />
-          <Button type="submit" variant="outline">
+          <Button
+            type="submit"
+            variant="outline"
+            className="portal-pending-control"
+            data-pending={pending || undefined}
+            aria-busy={pending}
+          >
             {labels.add}
           </Button>
         </div>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowRightIcon, ArrowUpRightIcon, MailIcon } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 
 import { Button } from "@/components/ui/button";
 import { localePath, type PortalLocale } from "@/i18n/routing";

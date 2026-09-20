@@ -1,3 +1,6 @@
+import { AddCompareVersion } from "@/features/compare/add-version";
+import { FeedbackLink } from "@/components/shell/feedback-link";
+import { Button } from "@/components/ui/button";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect } from "storybook/test";
 import {
@@ -19,7 +22,14 @@ import {
 
 const meta = {
   component: CompareWorkbench,
-  subcomponents: { CompareSelectionSeed, CompareChoice, CompareSelectionProvider },
+  subcomponents: {
+    CompareSelectionSeed,
+    CompareChoice,
+    CompareSelectionProvider,
+    AddCompareVersion,
+    FeedbackLink,
+    Button,
+  },
   title: "Compare/Workbench",
   tags: ["!autodocs"],
 } satisfies Meta;
@@ -155,4 +165,38 @@ export const SelectionDisclosure: Story = {
     await userEvent.click(choices[1]!);
     await expect(choices[1]).toHaveAttribute("aria-pressed", "false");
   },
+};
+
+export const CompareControls: Story = {
+  render: (_, { globals }) => {
+    const locale = storyLocale(globals);
+    const t = dictionaries[locale].Compare;
+    return (
+      <div className="compare-member-actions max-w-6xl p-4">
+        <AddCompareVersion
+          ids={[refs[0]!]}
+          locale={locale}
+          labels={{
+            title: t.addVersion,
+            hint: t.addVersionHint,
+            invalid: t.invalidRef,
+            add: t.addVersion,
+          }}
+        />
+        <Button asChild variant="outline">
+          <FeedbackLink href={`/${locale}/search?kind=process`}>{t.continueSelecting}</FeedbackLink>
+        </Button>
+      </div>
+    );
+  },
+  play: async ({ canvas, globals, userEvent }) => {
+    const t = dictionaries[storyLocale(globals)].Compare;
+    await userEvent.type(canvas.getByRole("textbox", { name: t.addVersion }), "invalid-version");
+    await userEvent.click(canvas.getByRole("button", { name: t.addVersion }));
+    await expect(canvas.getByText(t.invalidRef)).toBeVisible();
+  },
+};
+export const CompareControlsMobile: Story = {
+  ...CompareControls,
+  globals: { ...mobileGlobals, locale: "de" },
 };

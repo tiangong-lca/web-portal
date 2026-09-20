@@ -6,7 +6,7 @@
     {
       "layer": "world",
       "source": "world-map-units-50m",
-      "shapes": 265,
+      "shapes": 267,
       "mapped": 261,
       "projection": "+proj=robin +lon_0=150",
       "simplify": "20%",
@@ -48,7 +48,9 @@
           "nodeId": "geo:um",
           "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
         }
-      ]
+      ],
+      "sourceShapes": 265,
+      "supplementShapes": 2
     },
     {
       "layer": "geo:cn",
@@ -848,6 +850,28 @@
       "reason": "no shape in the world source asserts this code, so it has no boundary to draw"
     }
   ],
+  "interaction": {
+    "aliases": [
+      {
+        "boundaryId": "ne50m:TWN",
+        "navigationNodeId": "geo:cn"
+      }
+    ],
+    "supplements": [
+      {
+        "boundaryId": "cnprov:100000_JD",
+        "from": "geo:cn",
+        "source": "china-province-100000-full",
+        "sourceField": "adchar=\"JD\" (nine-dash line inset)"
+      },
+      {
+        "boundaryId": "datav:460300",
+        "from": "geo:cn-hi",
+        "source": "datav-460000",
+        "sourceField": "adcode 460300 (三沙市)"
+      }
+    ]
+  },
   "sources": [
     {
       "id": "china-province-100000-full",

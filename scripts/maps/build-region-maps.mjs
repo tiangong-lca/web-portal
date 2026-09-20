@@ -168,6 +168,82 @@ function assertPreservedFeatures(label, before, after) {
   }
 }
 
+/* ---------------------------------------------------------- interaction --- */
+
+/**
+ * Interaction-only aliases: a shape keeps its own scientific `nodeId` and gains a
+ * `navigationNodeId` that says which navigation entry it opens. The renderer
+ * groups by `navigationNodeId ?? nodeId`, so the mainland country shape (already
+ * `geo:cn`), the island of Taiwan and the two South China Sea shapes below all
+ * answer to one entry — without renaming anything or merging any count.
+ */
+const WORLD_ALIASES = { "ne50m:TWN": "geo:cn" };
+
+/**
+ * Shapes the world layer borrows from layers that already project them in the
+ * same Pacific Robinson coordinate space. Copying the emitted path verbatim is
+ * the only honest way to add them here: they are not redrawn, not guessed from a
+ * latitude. They stay `nodeId: null` because the *current* location dictionary has
+ * no entry matching them — a statement about this mapping, not a claim that the
+ * place holds no public records. A future dictionary revision that adds such a
+ * code must revisit the mapping. `source` is the vendored file the shape
+ * ultimately comes from.
+ */
+const WORLD_SUPPLEMENTS = [
+  {
+    boundaryId: "cnprov:100000_JD",
+    from: "geo:cn",
+    source: "china-province-100000-full",
+    sourceField: 'adchar="JD" (nine-dash line inset)',
+  },
+  {
+    boundaryId: "datav:460300",
+    from: "geo:cn-hi",
+    source: "datav-460000",
+    sourceField: "adcode 460300 (三沙市)",
+  },
+];
+
+/** Append the borrowed shapes, then keep the layer's deterministic ordering. */
+function attachWorldSupplements(worldLayer, layers, report) {
+  for (const supplement of WORLD_SUPPLEMENTS) {
+    const sourceLayer = layers[supplement.from];
+    const source = sourceLayer?.features.find(
+      (feature) => feature.boundaryId === supplement.boundaryId,
+    );
+    if (!source) {
+      throw new Error(
+        `World supplement ${supplement.boundaryId} is missing from ${supplement.from}; the borrowed path would have to be invented.`,
+      );
+    }
+    if (source.nodeId !== null) {
+      throw new Error(
+        `World supplement ${supplement.boundaryId} resolved to nodeId ${source.nodeId}; the borrow assumes the current dictionary has no matching code, so this mapping needs review.`,
+      );
+    }
+    worldLayer.features.push({
+      boundaryId: source.boundaryId,
+      nodeId: null,
+      path: source.path,
+      navigationNodeId: "geo:cn",
+    });
+    report.interaction.supplements.push({ ...supplement });
+  }
+  worldLayer.features.sort((a, b) =>
+    a.boundaryId < b.boundaryId ? -1 : a.boundaryId > b.boundaryId ? 1 : 0,
+  );
+  // The world's receipt is written when the world is built, before these shapes
+  // exist, so it is corrected here: `shapes` must describe what is emitted, and
+  // the borrowed count is reported separately from the source's own shapes.
+  const entry = report.layers.find((item) => item.layer === "world");
+  if (entry) {
+    entry.shapes = worldLayer.features.length;
+    entry.mapped = worldLayer.features.filter((feature) => feature.nodeId).length;
+    entry.sourceShapes = worldLayer.features.length - report.interaction.supplements.length;
+    entry.supplementShapes = report.interaction.supplements.length;
+  }
+}
+
 /* -------------------------------------------------------------- basemap --- */
 
 /** Longitude/latitude extent of a source, used to pick a graticule density. */
@@ -306,10 +382,12 @@ function buildWorld(source, vocabularyIndex, workDir, report) {
         reason: "no source-asserted ISO alpha-2 code present in the location dictionary",
       });
     }
+    const alias = WORLD_ALIASES[ids[index]];
     features.push({
       boundaryId: ids[index],
       nodeId: resolved ? nodeIdFor(resolved.code) : null,
       path,
+      ...(alias ? { navigationNodeId: alias } : {}),
     });
   });
 
@@ -457,7 +535,7 @@ function buildCityLayer(source, provinceCode, vocabularyIndex, transform, workDi
 /* ------------------------------------------------------------- assembly --- */
 
 function buildAssets(sources, plan, vocabularyIndex, workDir) {
-  const report = { droppedRings: [], layers: [] };
+  const report = { droppedRings: [], layers: [], interaction: { aliases: [], supplements: [] } };
   const layers = {};
   const stats = (entry) => ({
     shapes: entry.layer.features.length,
@@ -467,6 +545,9 @@ function buildAssets(sources, plan, vocabularyIndex, workDir) {
   // The world comes first: it fits the one transform every other layer reuses.
   const world = buildWorld(sources.get("world-map-units-50m"), vocabularyIndex, workDir, report);
   layers.world = world.layer;
+  for (const [boundaryId, alias] of Object.entries(WORLD_ALIASES)) {
+    report.interaction.aliases.push({ boundaryId, navigationNodeId: alias });
+  }
   report.layers.push({
     layer: "world",
     source: "world-map-units-50m",
@@ -576,6 +657,9 @@ function buildAssets(sources, plan, vocabularyIndex, workDir) {
     });
   }
 
+  // The world's two borrowed shapes come from layers built above, so it is
+  // completed here — after every layer exists, before anything is emitted.
+  attachWorldSupplements(layers.world, layers, report);
   return { layers, report, contextWindow };
 }
 
@@ -663,6 +747,12 @@ function buildManifest(vendoredManifest, emitted, report, vocabularyIndex) {
     layers,
     projection: PROJECTION,
     coordinateSpace: COORDINATE_SPACE,
+    interaction: {
+      rule: "navigationNodeId ?? nodeId",
+      note: "`navigationNodeId` is an interaction entry only and never replaces `nodeId`. The world layer answers to one `geo:cn` entry through its mainland shape (nodeId geo:cn) plus one alias (the island of Taiwan, still geo:tw) and two borrowed South China Sea shapes (the nine-dash inset and 三沙市). Those two are copied byte for byte from the layers that already project them in this same coordinate space: they are not redrawn and not guessed from a latitude. They carry nodeId null because the current location dictionary holds no matching code — a statement about this mapping, not a claim that the places have no public records; a dictionary revision that adds such a code must revisit them.",
+      aliases: report.interaction.aliases,
+      supplements: report.interaction.supplements,
+    },
     simplify: SIMPLIFY,
     basemap: {
       ...BASEMAP,
@@ -760,6 +850,7 @@ async function main() {
     layers: built.report.layers,
     droppedRings: built.report.droppedRings,
     unmapped: manifest.unmapped,
+    interaction: built.report.interaction,
     sources: vendoredManifest.sources,
     licenses: manifest.licenses,
   });

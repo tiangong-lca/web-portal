@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { gzipSync } from "node:zlib";
+import { gunzipSync, gzipSync } from "node:zlib";
 
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
@@ -57,6 +57,11 @@ const featureSchema = z.object({
     .regex(/^geo:[a-z0-9-]+$/)
     .nullable(),
   path: z.string().min(1),
+  // Interaction entry only: it never replaces `nodeId`.
+  navigationNodeId: z
+    .string()
+    .regex(/^geo:[a-z0-9-]+$/)
+    .optional(),
 });
 
 const viewBoxSchema = z.string().regex(/^-?\d+ -?\d+ \d+ \d+$/);
@@ -162,9 +167,9 @@ describe("region map manifest", () => {
       const { minX, minY, width, height } = viewBox(layerKey);
       for (const feature of parsedLayer(layerKey).features) {
         const where = `${layerKey} ${feature.boundaryId}`;
-        const keys = Object.keys(feature).sort();
-        if (keys.join(",") !== "boundaryId,nodeId,path")
-          broken.push(`${where}: keys ${keys.join(",")}`);
+        const keys = Object.keys(feature).sort().join(",");
+        if (keys !== "boundaryId,nodeId,path" && keys !== "boundaryId,navigationNodeId,nodeId,path")
+          broken.push(`${where}: keys ${keys}`);
         if (!/^(M-?\d+ -?\d+(?:L-?\d+ -?\d+)+Z)+$/.test(feature.path)) {
           broken.push(`${where}: path is not a closed polygon set`);
           continue;
@@ -674,5 +679,129 @@ describe("region map basemap", () => {
       )
       .map((entry) => `${entry.layer}: ${entry.graticuleInterval}`);
     expect(wrong).toStrictEqual([]);
+  });
+});
+
+/**
+ * The world layer answers to one `geo:cn` interaction entry. These checks pin the
+ * two things that make that honest: the alias never touches a shape's scientific
+ * `nodeId`, and the two South China Sea shapes are copied from layers that already
+ * project them rather than redrawn here.
+ */
+describe("world interaction grouping", () => {
+  const worldLayer = () => parsedLayer("world");
+
+  it("aliases exactly one shape, and only as an interaction entry", () => {
+    // An alias points a shape that already has an identity at another entry; a
+    // borrowed shape has no identity of its own (nodeId null) and is checked next.
+    const aliased = worldLayer().features.filter(
+      (feature) => feature.navigationNodeId && feature.nodeId !== null,
+    );
+    expect(aliased.map((feature) => feature.boundaryId)).toStrictEqual(["ne50m:TWN"]);
+    expect(aliased[0]!.navigationNodeId).toBe("geo:cn");
+    // The island keeps its own scientific identity; the alias is additive.
+    expect(aliased[0]!.nodeId).toBe("geo:tw");
+    // The mainland already is the entry, so it must not carry a redundant alias.
+    expect(worldLayer().features.find((f) => f.boundaryId === "ne50m:CHN")!.nodeId).toBe("geo:cn");
+    for (const feature of worldLayer().features) {
+      expect(feature.navigationNodeId).not.toBe(feature.nodeId);
+    }
+  });
+
+  it("borrows exactly two shapes, byte for byte, from layers in the same space", () => {
+    const borrowed = worldLayer().features.filter(
+      (feature) => feature.navigationNodeId && feature.boundaryId !== "ne50m:TWN",
+    );
+    expect(borrowed.map((feature) => feature.boundaryId)).toStrictEqual([
+      "cnprov:100000_JD",
+      "datav:460300",
+    ]);
+    for (const feature of borrowed) {
+      expect(feature.nodeId, `${feature.boundaryId} must stay unmapped`).toBeNull();
+      expect(feature.navigationNodeId).toBe("geo:cn");
+    }
+    const source = (layerKey: string, boundaryId: string) =>
+      parsedLayer(layerKey).features.find((feature) => feature.boundaryId === boundaryId)!.path;
+    expect(borrowed[0]!.path).toBe(source("geo:cn", "cnprov:100000_JD"));
+    expect(borrowed[1]!.path).toBe(source("geo:cn-hi", "datav:460300"));
+  });
+
+  it("gathers the entry from four shapes without changing any other layer", () => {
+    const entry = worldLayer()
+      .features.filter((feature) => (feature.navigationNodeId ?? feature.nodeId) === "geo:cn")
+      .map((feature) => feature.boundaryId);
+    expect(entry).toStrictEqual(["cnprov:100000_JD", "datav:460300", "ne50m:CHN", "ne50m:TWN"]);
+    expect(worldLayer().features.length).toBe(267);
+    const elsewhere = layerKeys
+      .filter((layerKey) => layerKey !== "world")
+      .filter((layerKey) =>
+        parsedLayer(layerKey).features.some((feature) => feature.navigationNodeId !== undefined),
+      );
+    expect(elsewhere).toStrictEqual([]);
+  });
+
+  it("declares the grouping rule and both borrowed shapes in the receipts", () => {
+    const interaction = (
+      manifest as {
+        interaction?: {
+          rule?: string;
+          aliases?: { boundaryId: string; navigationNodeId: string }[];
+          supplements?: { boundaryId: string; from: string; source: string }[];
+        };
+      }
+    ).interaction;
+    expect(interaction?.rule).toBe("navigationNodeId ?? nodeId");
+    expect(interaction?.aliases).toStrictEqual([
+      { boundaryId: "ne50m:TWN", navigationNodeId: "geo:cn" },
+    ]);
+    expect(
+      interaction?.supplements?.map((item) => `${item.boundaryId}<-${item.from}`),
+    ).toStrictEqual(["cnprov:100000_JD<-geo:cn", "datav:460300<-geo:cn-hi"]);
+    const coverage = JSON.parse(
+      readFileSync(resolve("scripts/maps/coverage-report.json"), "utf8"),
+    ) as { interaction?: { supplements?: unknown[] } };
+    expect(coverage.interaction?.supplements).toHaveLength(2);
+  });
+
+  it("reports the world's emitted shape count, not the count before borrowing", () => {
+    const coverage = JSON.parse(
+      readFileSync(resolve("scripts/maps/coverage-report.json"), "utf8"),
+    ) as {
+      layers: {
+        layer: string;
+        shapes: number;
+        mapped: number;
+        sourceShapes?: number;
+        supplementShapes?: number;
+      }[];
+    };
+    const world = coverage.layers.find((entry) => entry.layer === "world")!;
+    const emitted = parsedLayer("world").features;
+    // The receipt is written while the world is built, before the borrowed shapes
+    // are attached, so it has to be corrected or it under-reports what ships.
+    expect(world.shapes).toBe(emitted.length);
+    expect(world.mapped).toBe(emitted.filter((feature) => feature.nodeId).length);
+    expect(world.sourceShapes).toBe(265);
+    expect(world.supplementShapes).toBe(2);
+    expect((world.sourceShapes ?? 0) + (world.supplementShapes ?? 0)).toBe(world.shapes);
+    const otherLayers = coverage.layers.filter((entry) => entry.layer !== "world");
+    expect(otherLayers.every((entry) => entry.supplementShapes === undefined)).toBe(true);
+  });
+
+  it("leaves the vendored sources untouched", () => {
+    const sources = JSON.parse(
+      readFileSync(resolve("scripts/maps/sources/manifest.json"), "utf8"),
+    ) as { sources: { id: string; sha256: string; rawBytes: number }[] };
+    const drifted: string[] = [];
+    for (const source of sources.sources) {
+      const bytes = gunzipSync(
+        readFileSync(resolve("scripts/maps/sources", `${source.id}.json.gz`)),
+      );
+      const sha256 = createHash("sha256").update(bytes).digest("hex");
+      if (sha256 !== source.sha256 || bytes.byteLength !== source.rawBytes) {
+        drifted.push(source.id);
+      }
+    }
+    expect(drifted).toStrictEqual([]);
   });
 });

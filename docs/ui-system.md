@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
+lastReviewedCommit: 386ef831bac1530b730b6cdec1df36dc62c0b9cd
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #105: solid administrative contours, contextual basemaps, responsive framing, persistent loading and continuous geographic camera preserve keyboard access, four languages and reduced motion."
+lastReviewedNote: "Reviewed for Portal #107: shared multipath links unify pointer and keyboard states; selection-only live announcements avoid hover noise while missing target counts remain unknown."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -287,6 +287,10 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 地区地图是地区列表的渐进增强：桌面默认显示，手机由按钮展开；无 JavaScript、地图失败和无法定位的范围仍可通过文字链接进入结果及精确版本详情。颜色仅表示匹配公开版本数，未载入不代表零；跨区、历史范围与歧义编码不强配行政边界。浏览器只获取当前层的预投影 SVG 路径，不载入全世界城市、不请求第三方地图服务。地图来源、边界映射、简化参数和不能定位的条目均绑定资源 receipt。现有主题语义色、焦点、四语、44px 触控和减少动态效果规范继续适用。
 
 地区探索的地图和地区网格采用上下排列，路径保持在地图之前；零匹配地区用原生可展开项收纳。地图支持选择后原位显示名称、数量和明确动作，选中时用边框和文字共同表达。下钻保留画布及手机展开选择，加载状态可被辅助技术读取，完成后焦点回到当前地区面板；回到地区面板阅读起点不使用滚动动画。
+
+同一导航目标的离散图形共用一个链接，悬停和键盘焦点同时高亮全部路径，点击任一部分显示同一操作区。世界层的大陆、台湾岛、三沙诸岛与南海标示统一进入中国；公开版本数读取同一导航条目一次，不因形状数量增加。缺少该条目时不借用其他原码的数量或填零。
+
+悬停和焦点只更新视觉预览，辅助技术的礼貌播报仅在明确选择时更新，避免遍历地图时重复朗读链接名称和面板内容。换层清除瞬时悬停状态；等待中的旧图形只作为中性地理背景，不承载新层级计数或操作。
 
 ### 控件编排与导航反馈
 

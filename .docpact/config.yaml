@@ -1,8 +1,8 @@
 version: 1
 layout: repo
-lastReviewedAt: "2026-09-13"
-lastReviewedCommit: "92e4b1f8550d90e3a245a8782ad273ba806d1324"
-lastReviewedNote: "Portal #81: canonicalRepo migrated to tiangong-lca/web-portal; the Database contract synchronizer now records source identity tiangong-lca/database at the same reviewed source commit 521741a064f402c9b674583ef69a5947d1b5885f with all 34 contract bytes unchanged. Package name, Storybook negative guard and fixed location receipt are preserved."
+lastReviewedAt: "2026-09-21"
+lastReviewedCommit: "969ed22b4d9336f850ed4fc5e96464e32e8c36a4"
+lastReviewedNote: "Reviewed for Portal #113: the compact classification branch DTO and its unit checks now route to the existing product-runtime contract; ownership and completion rules are unchanged."
 
 catalog:
   repos:
@@ -367,6 +367,10 @@ rules:
         kind: root-document
       - path: src/app/*.ts
         kind: route-metadata
+      - path: src/lib/classification-navigation.ts
+        kind: navigation-branch-contract
+      - path: tests/unit/classification-navigation.test.ts
+        kind: navigation-branch-check
       - path: src/lib/catalog-*.ts
         kind: catalog-seo
       - path: src/lib/seo.ts

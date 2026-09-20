@@ -16,9 +16,9 @@ checkPaths:
   - docs/development.md
   - docs/ui-system.md
   - .docpact/config.yaml
-lastReviewedAt: 2026-09-20
-lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
-lastReviewedNote: "Reviewed for Portal #105: the camera unit test is routed to the existing UI contract. Repository ownership, anonymous data boundaries and delivery policy remain unchanged."
+lastReviewedAt: 2026-09-21
+lastReviewedCommit: 969ed22b4d9336f850ed4fc5e96464e32e8c36a4
+lastReviewedNote: "Reviewed for Portal #113: classification DTO/check routing and production MapLibre stay within Portal ownership, anonymous read-only data and the existing reviewed main/integration release policy."
 related:
   - docs/development.md
   - docs/ui-system.md

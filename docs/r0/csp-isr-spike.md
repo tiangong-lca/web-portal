@@ -20,9 +20,9 @@ checkPaths:
   - edgeone.json
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
-lastReviewedAt: 2026-09-20
-lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
-lastReviewedNote: "Reviewed for Portal #103: the layout adds a small client pending-feedback provider without changing locale HTML, static/ISR boundaries, CSP directives or server data caching. Existing historical hosted receipts and strict-profile findings remain unchanged; final hosted readback is recorded in the delivery PR."
+lastReviewedAt: 2026-09-21
+lastReviewedCommit: 76e90b40e918150dd407e84b091a784bdbae80a6
+lastReviewedNote: "Reviewed for Portal #113: production MapLibre and classification branches pass the enforcing performance CSP locally; the paint probe now waits for a real LCP before input. CSP/cache rules and historical hosted receipts remain unchanged. The exact production release readback is recorded in PR #114."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

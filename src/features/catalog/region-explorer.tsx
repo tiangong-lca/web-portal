@@ -3,6 +3,12 @@
 import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { isPortalLocale, defaultLocale } from "@/i18n/routing";
+import { RegionMapLoading } from "./region-map-loading";
+import type { RegionMapAssets } from "./region-maplibre-types";
+import "./region-maplibre.css";
 import {
   useEffect,
   useId,
@@ -13,14 +19,16 @@ import {
   type ReactNode,
   type MouseEvent,
 } from "react";
-import { Button } from "@/components/ui/button";
 import {
   CatalogNavigation,
   type CatalogNavigationProps,
   type NavigationEntry,
 } from "./catalog-navigation";
 
-const Map = dynamic(() => import("./region-map").then((module) => module.RegionMap));
+const Map = dynamic(() => import("./region-maplibre").then((module) => module.RegionMapLibre), {
+  ssr: false,
+  loading: () => <RegionMapLoading whole />,
+});
 function subscribe(callback: () => void) {
   const query = window.matchMedia("(min-width: 768px)");
   query.addEventListener("change", callback);
@@ -33,13 +41,13 @@ const desktop = () => window.matchMedia("(min-width: 768px)").matches;
  */
 export function RegionExplorer({
   children,
-  mapUrl,
+  mapAssets,
   entries,
   navigation,
   labels,
 }: {
   children?: ReactNode;
-  mapUrl?: string;
+  mapAssets?: RegionMapAssets;
   entries: NavigationEntry[];
   navigation?: CatalogNavigationProps;
   labels: {
@@ -60,13 +68,17 @@ export function RegionExplorer({
   };
 }) {
   const router = useRouter();
+  const t = useTranslations("Navigation");
+  const language = useLocale();
+  const locale = isPortalLocale(language) ? language : defaultLocale;
   const isDesktop = useSyncExternalStore(subscribe, desktop, () => false);
-  const [choice, setChoice] = useState<boolean | null>(null);
+  const [choice, setChoice] = useState<"globe" | "flat" | "list" | null>(null);
   const [pending, startTransition] = useTransition();
   const focusAfterNavigation = useRef(false);
   const frame = useRef<HTMLDivElement>(null);
   const listId = useId();
-  const visible = Boolean(mapUrl && (choice ?? isDesktop));
+  const mode = choice ?? (isDesktop ? "globe" : "list");
+  const visible = Boolean(mapAssets && mode !== "list");
 
   // Native links remain intact (including modified clicks and no-JS). Only region-to-region
   // navigation is enhanced, using the existing RSC request/cache instead of a second API.
@@ -121,46 +133,71 @@ export function RegionExplorer({
 
   const controls = (
     <div className="catalog-map-toolbar">
-      {mapUrl && (
-        <Button
-          className="catalog-map-toggle"
+      {mapAssets && (
+        <ToggleGroup
+          className="catalog-map-mode"
+          type="single"
           variant="outline"
-          type="button"
-          aria-expanded={visible}
-          onClick={() => setChoice(!visible)}
+          value={mode}
+          aria-label={t("mapView")}
+          onValueChange={(value) => {
+            if (value === "globe" || value === "flat" || value === "list") setChoice(value);
+          }}
         >
-          {visible ? labels.hideMap : labels.showMap}
-        </Button>
+          <ToggleGroupItem value="globe">{t("mapGlobe")}</ToggleGroupItem>
+          <ToggleGroupItem value="flat">{t("mapFlat")}</ToggleGroupItem>
+          <ToggleGroupItem value="list">{t("mapList")}</ToggleGroupItem>
+        </ToggleGroup>
       )}
       <span className="catalog-region-progress sr-only">{pending ? labels.navigating : ""}</span>
     </div>
   );
   const visual = (
     <div className="catalog-region-visual">
-      {!mapUrl && (
+      {!mapAssets && (
         <p className="text-muted-foreground text-sm">{labels.noMap ?? labels.unavailable}</p>
       )}
-      {mapUrl && labels.skipMap && (
+      {visible && mapAssets && labels.skipMap && (
         <a className="sr-only focus:not-sr-only" href={`#${listId}`}>
           {labels.skipMap}
         </a>
       )}
-      {visible && mapUrl && (
+      {visible && mapAssets && (
         <Map
-          url={mapUrl}
+          assets={mapAssets}
           entries={entries}
-          title={labels.title}
-          loadingLabel={labels.loading}
-          unavailableLabel={labels.unavailable}
-          legend={labels.legend}
-          selectLabel={labels.selectRegion}
-          exploreLabel={labels.exploreRegion}
-          viewDataLabel={labels.viewData}
-          clearLabel={labels.clearSelection}
+          locale={locale}
+          globe={mode === "globe"}
+          parentHref={navigation?.breadcrumbs.at(-1)?.href}
+          labels={{
+            title: t("interactiveMap"),
+            loading: labels.loading,
+            unavailable: labels.unavailable,
+            select: labels.selectRegion,
+            explore: labels.exploreRegion,
+            viewData: labels.viewData,
+            clear: labels.clearSelection,
+            reset: t("mapReset"),
+            back: t("mapBack"),
+            retry: t("mapRetry"),
+            smallRegions: t("mapSmallRegions"),
+            shortcutNames: { TW: t("mapTaiwan"), HK: t("mapHongKong"), MO: t("mapMacao") },
+            gestureWindows: t("mapGestureWindows"),
+            gestureMac: t("mapGestureMac"),
+            gestureMobile: t("mapGestureMobile"),
+            information: {
+              count: t("counts"),
+              lower: t("mapFewer"),
+              higher: t("mapMore"),
+              information: t("mapInformation"),
+              explanation: t("mapExplanation"),
+              sources: t("mapSources"),
+            },
+          }}
         />
       )}
-      {!visible && choice === null && mapUrl && (
-        <div className="catalog-map-placeholder hidden min-h-80 md:block" aria-hidden="true" />
+      {!visible && choice === null && mapAssets && (
+        <div className="region-maplibre-placeholder hidden md:block" aria-hidden="true" />
       )}
       <PendingFeedback pending={pending} />
       <span id={listId} tabIndex={-1} />
@@ -192,7 +229,7 @@ export function RegionExplorer({
       )}
       {children}
       <noscript>
-        <style>{".catalog-map-toggle,.catalog-map-placeholder{display:none}"}</style>
+        <style>{".catalog-map-mode,.region-maplibre-placeholder{display:none}"}</style>
       </noscript>
     </div>
   );

@@ -1,8 +1,13 @@
 import { mkdir } from "node:fs/promises";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 const first = "11111111-1111-1111-1111-111111111111@01.00.000";
 const second = "77777777-7777-7777-7777-777777777777@01.00.000";
 const flow = "22222222-2222-2222-2222-222222222222@01.00.000";
+
+/** Generated `::after` content; `"none"` proves the element draws no local underline. */
+function pseudoAfterContent(locator: Locator) {
+  return locator.evaluate((element) => getComputedStyle(element, "::after").content);
+}
 
 for (const width of [1440, 390]) {
   test(`control composition and visual page-family audit at ${width}px`, async ({ page }, info) => {
@@ -34,17 +39,14 @@ for (const width of [1440, 390]) {
           expect(bar!.height).toBeLessThan(130);
           const controls = await page.locator(".catalog-navigation-actions").boundingBox();
           expect(controls!.x).toBeGreaterThan(bar!.x + 200);
-          const canvas = page.locator(".catalog-map-figure");
-          const geometry = await page.locator(".catalog-region-map svg").boundingBox();
-          const frame = await canvas.boundingBox();
-          expect(geometry!.y - frame!.y).toBeGreaterThanOrEqual(24);
-          expect(frame!.y + frame!.height - geometry!.y - geometry!.height).toBeGreaterThanOrEqual(
-            24,
-          );
-          const caption = page.locator(".catalog-map-caption");
+          const scene = page.locator(".region-maplibre-scene");
+          await expect(scene).toHaveAttribute("data-state", "ready", { timeout: 20_000 });
+          const geometry = await page.locator(".region-maplibre-canvas").boundingBox();
+          expect(geometry!.height).toBeGreaterThanOrEqual(380);
+          const caption = page.locator(".map-information");
           await expect(caption).toHaveCSS("font-size", "12px");
           const note = await caption.boundingBox();
-          const selection = await page.locator(".catalog-map-selection").boundingBox();
+          const selection = await page.locator(".region-maplibre-selection").boundingBox();
           expect(note!.y).toBeGreaterThanOrEqual(geometry!.y + geometry!.height);
           expect(note!.y + note!.height).toBeLessThanOrEqual(selection!.y);
         }
@@ -78,10 +80,42 @@ test("links show pending feedback without losing content, then clear on completi
   await flowLink.click();
   await expect(flowLink.locator(".portal-pending-mark")).toHaveAttribute("data-pending", "true");
   await expect(page.locator(".portal-route-progress")).toHaveAttribute("data-pending", "true");
+  // The pending link draws no local progress underline: the global bar is the
+  // only loading visual. The kind switch keeps its own selected-tab border, which
+  // is state rather than progress, so it is transparent while pending and
+  // emphasized once this link is the current one.
+  expect(await pseudoAfterContent(flowLink)).toBe("none");
+  await expect(flowLink).toHaveCSS("border-bottom-color", "rgba(0, 0, 0, 0)");
   await expect(page.getByRole("heading", { name: "Browse categories" })).toBeVisible();
   release();
   await expect(page).toHaveURL(/kind=flow/);
   await expect(page.locator(".portal-route-progress")).not.toHaveAttribute("data-pending", "true");
+  await expect(flowLink).toHaveAttribute("aria-current", "page");
+  await expect(flowLink).not.toHaveCSS("border-bottom-color", "rgba(0, 0, 0, 0)");
+});
+
+test("the header brand link keeps pending feedback in the global bar only", async ({ page }) => {
+  await page.goto("/en/search?kind=process");
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route(
+    (url) => url.pathname === "/en",
+    async (route) => {
+      await gate;
+      await route.continue();
+    },
+  );
+  const brand = page.locator("[data-portal-header] a[href='/en']");
+  await brand.click();
+  await expect(brand.locator(".portal-pending-mark")).toHaveAttribute("data-pending", "true");
+  await expect(page.locator(".portal-route-progress")).toHaveAttribute("data-pending", "true");
+  expect(await pseudoAfterContent(brand)).toBe("none");
+  release();
+  await expect(page).toHaveURL(/\/en$/);
+  await expect(page.locator(".portal-route-progress")).not.toHaveAttribute("data-pending", "true");
+  await expect(brand.locator(".portal-pending-mark")).not.toHaveAttribute("data-pending", "true");
 });
 
 test("search remains live while pending and filter feedback survives closing its drawer", async ({
@@ -140,43 +174,38 @@ test("long localized controls reflow at a 200-percent desktop-equivalent width",
   }
 });
 
-test("offline basemap provides context and keeps Taiwan's contour solid", async ({ page }) => {
+test("offline map keeps geographic context through China and province views", async ({ page }) => {
+  // Three cold software-rendered levels plus four visual captures share this deadline.
+  test.setTimeout(60_000);
   await page.setViewportSize({ width: 1440, height: 1100 });
-  await mkdir("/tmp/portal105-visual", { recursive: true });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await mkdir("/tmp/portal113-visual", { recursive: true });
   const layers = new Set<string>();
   page.on("request", (request) => {
-    if (new URL(request.url()).pathname.startsWith("/maps/")) layers.add(request.url());
+    const path = new URL(request.url()).pathname;
+    if (path.startsWith("/maps/gl/") && path.endsWith(".geojson")) layers.add(path);
   });
   await page.goto("/en/search?explore=region");
-  const context = page.locator(".catalog-map-current-context");
-  await expect(context.locator(".catalog-map-graticule")).toHaveAttribute("d", /^M/);
-  await expect(context.locator(".catalog-map-ocean")).toHaveAttribute("d", /^M/);
-  await page.locator(".catalog-region-map").screenshot({ path: "/tmp/portal105-visual/world.png" });
-  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
-  await page.mouse.move(0, 0);
-  const taiwan = page.locator('[data-boundary-id="cnprov:710000"]');
-  await expect(taiwan).toBeVisible();
-  await expect(taiwan).toHaveCSS("stroke-dasharray", "none");
-  await expect(taiwan).not.toHaveAttribute("data-availability", "unknown");
-  await expect(
-    page
-      .locator(".catalog-region-map svg")
-      .getByRole("link", { name: /^Taiwan Sheng,China: 0 public versions$/ }),
-  ).toBeVisible();
-  const anhui = page.locator('[data-boundary-id="cnprov:340000"]');
-  expect(await taiwan.evaluate((el) => getComputedStyle(el).strokeWidth)).toBe(
-    await anhui.evaluate((el) => getComputedStyle(el).strokeWidth),
-  );
-  await expect(context.locator(".catalog-map-context-land")).toHaveAttribute("d", /^M/);
-  await page.locator(".catalog-region-map").screenshot({ path: "/tmp/portal105-visual/china.png" });
-  await page.locator(".catalog-navigation-list").getByRole("link", { name: /Anhui/ }).click();
-  await expect(context.locator(".catalog-map-context-borders")).toHaveAttribute("d", /^M/);
-  await expect(context.locator(".catalog-map-context-borders")).toBeVisible();
-  await page.locator(".catalog-region-map").screenshot({ path: "/tmp/portal105-visual/anhui.png" });
+  const scene = page.locator(".region-maplibre-scene");
+  for (const [layer, name, link] of [
+    ["world", "world", null],
+    ["geo:cn", "china", /China/],
+    ["geo:cn-ah", "anhui", /Anhui/],
+  ] as const) {
+    if (link)
+      await page.locator(".catalog-navigation-list").getByRole("link", { name: link }).click();
+    await expect(scene).toHaveAttribute("data-layer", layer, { timeout: 20_000 });
+    await expect(scene).toHaveAttribute("data-state", "ready", { timeout: 20_000 });
+    await expect(scene).not.toHaveAttribute("data-moving", { timeout: 10_000 });
+    await expect(page.getByRole("link", { name: "Natural Earth", exact: true })).toBeVisible();
+    await page
+      .locator(".region-maplibre")
+      .screenshot({ path: `/tmp/portal113-visual/${name}.png` });
+  }
   await page.emulateMedia({ colorScheme: "dark" });
   await expect(page.locator("html")).toHaveClass(/dark/);
   await page
-    .locator(".catalog-region-map")
-    .screenshot({ path: "/tmp/portal105-visual/anhui-dark.png" });
+    .locator(".region-maplibre")
+    .screenshot({ path: "/tmp/portal113-visual/anhui-dark.png" });
   expect(layers.size).toBe(3);
 });

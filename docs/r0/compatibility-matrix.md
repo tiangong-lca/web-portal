@@ -20,9 +20,9 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
-lastReviewedAt: 2026-09-20
-lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
-lastReviewedNote: "Reviewed for Portal #103: the layout adds a small client pending-feedback provider without changing locale HTML, static/ISR boundaries, CSP directives or server data caching. Existing historical hosted receipts and strict-profile findings remain unchanged; final hosted readback is recorded in the delivery PR."
+lastReviewedAt: 2026-09-21
+lastReviewedCommit: 76e90b40e918150dd407e84b091a784bdbae80a6
+lastReviewedNote: "Reviewed for Portal #113: production MapLibre and classification branches pass the enforcing performance CSP locally; the paint probe now waits for a real LCP before input. CSP/cache rules and historical hosted receipts remain unchanged. The exact production release readback is recorded in PR #114."
 related:
   - ../design-plan.md
   - ../../AGENTS.md
@@ -105,3 +105,7 @@ Portal #33 retested a `dynamicParams=true` application candidate. It branded nes
 ## Portal #97 hierarchical navigation proof
 
 The controlled local production fixture passes 69 browser checks (three explicitly disabled optional profiles), including native-link navigation with JavaScript disabled, world/China/province/city drill-down, exact-version detail return, mobile fallback, four locales, map failure, cache headers and existing Hybrid behavior. Unit/integration validation passes 315 tests with the optional credentialed live probe skipped. Content-hashed map JSON is immutable; dynamic filtered HTML remains no-store, and public navigation RPCs use the existing 30-second cache. Home and ordinary search do not fetch maps; only the visible region layer is loaded. These are local receipts, not an EdgeOne deployment or a hosted search-latency claim.
+
+## Portal #113 navigation qualification
+
+The production geography/branch-navigation change uses the existing enforcing performance CSP, same-origin immutable map worker/geometry, and no-store dynamic pages. Local coverage includes real pointer and keyboard paths, history, failure recovery, no-JavaScript links, four-language layout, and initial route-JavaScript budgets. The paint sampler waits for a real LCP receipt before the first input; performance thresholds remain unchanged. The exact reviewed merge, CI and hosted deployment SHA/interaction receipt are tracked together in [Portal PR #114](https://github.com/tiangong-lca/web-portal/pull/114). Local results and Storybook previews do not substitute for that release receipt.

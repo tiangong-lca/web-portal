@@ -1,3 +1,5 @@
 contracts/database-engine/portal/**
 # Preserve the exact bytes of the provider-issued ownership proof.
 public/baidu_verify_codeva-TdxNc4b0Uq.html
+# Content-hashed, canonical MapLibre geometry, worker and license assets.
+public/maps/gl/**

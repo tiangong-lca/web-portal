@@ -130,7 +130,32 @@ const nodes: Node[] = [
     directCount: 1,
     hasChildren: false,
   },
+  {
+    nodeId: "class:isic:0.1",
+    parentNodeId: "class:isic:0",
+    code: "02",
+    taxonomy: "isic",
+    dimension: "classification",
+    count: 1,
+    directCount: 0,
+    hasChildren: false,
+  },
+  {
+    nodeId: "class:isic:0.2",
+    parentNodeId: "class:isic:0",
+    code: "03",
+    taxonomy: "isic",
+    dimension: "classification",
+    count: 0,
+    directCount: 0,
+    hasChildren: false,
+  },
 ];
+
+/** One classification branch pages in two requests, so cursor behaviour is exercised end to end. */
+const pagedBranch = "class:isic:0";
+const pagedCursor = "isic-a2";
+const pagedFirstPage = ["class:isic:0.0", "class:isic:0.1"];
 
 function dto(node: Node) {
   const { dimension: _dimension, ...rest } = node;
@@ -162,6 +187,15 @@ export function navigationFixture(arguments_: Record<string, unknown>) {
         arguments_.p_kind === "all" ||
         (arguments_.p_kind === "process" ? node.taxonomy === "isic" : node.taxonomy === "cpc")),
   );
+  const cursor = typeof arguments_.p_cursor === "string" ? arguments_.p_cursor : null;
+  const paged = parentId === pagedBranch;
+  const listed = paged
+    ? children.filter((node) =>
+        cursor === pagedCursor
+          ? !pagedFirstPage.includes(node.nodeId)
+          : pagedFirstPage.includes(node.nodeId),
+      )
+    : children;
   return {
     schemaVersion: "portal.public-navigation.v1",
     countBasis: "public_versions",
@@ -170,8 +204,8 @@ export function navigationFixture(arguments_: Record<string, unknown>) {
     totals: { process: 2, flow: 1 },
     parent: parent ? dto(parent) : null,
     ancestors,
-    nodes: children.map(dto),
-    nextCursor: null,
+    nodes: listed.map(dto),
+    nextCursor: paged && cursor !== pagedCursor ? pagedCursor : null,
   };
 }
 

@@ -56,10 +56,14 @@ import {
   getPublicBrowseFacets,
 } from "@/server/data/navigation";
 import { hierarchyFilters } from "@/features/catalog/navigation-links";
-import { CatalogNavigation } from "@/features/catalog/catalog-navigation";
+import {
+  ClassificationNavigation,
+  ClassificationNavigationProvider,
+} from "@/features/catalog/classification-navigation";
+import { classificationSeeds } from "@/server/classification/navigation";
 import { navigationView } from "@/features/catalog/navigation-view";
 import { RegionExplorer } from "@/features/catalog/region-explorer";
-import mapManifest from "@/features/catalog/region-map-manifest.generated.json";
+import { regionMapAssets } from "@/features/catalog/region-map-assets";
 import { navigationLabel } from "@/server/navigation-labels";
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -156,6 +160,10 @@ export default async function SearchPage({
           if (error instanceof PortalDataError) return null;
           throw error;
         });
+  const classificationPromise =
+    !inputInvalid && !aggregateView && hasQuery
+      ? navigationPromise.then((page) => classificationSeeds(locale, parsedSearch, page, navCursor))
+      : Promise.resolve([{ parentNodeId: null, page: null }]);
 
   let dataUnavailable = false;
   let nextCursor: string | null = null;
@@ -237,8 +245,13 @@ export default async function SearchPage({
     hierarchyDimension,
     navigation,
   );
-  const { layers } = mapManifest as { layers: Record<string, { url: string }> };
-  const mapUrl = layers[parentNodeId ?? "world"]?.url;
+  const initialClassification = await classificationPromise;
+  const {
+    entries: _classificationEntries,
+    more: _classificationMore,
+    ...classificationHeader
+  } = navigationProps;
+  const mapAssets = regionMapAssets(parentNodeId ?? "world");
   const preserveNavigationPage = (href: string | null) =>
     href && navCursor ? `${href}&navCursor=${encodeURIComponent(navCursor)}` : href;
   if (navigationProps.more && navigation?.nextCursor) {
@@ -360,356 +373,368 @@ export default async function SearchPage({
           </header>
         )}
 
-        <SearchModes
-          key={JSON.stringify({
-            kind: parsedSearch.kind,
-            query,
-            filters:
-              dimension === "region"
-                ? {
-                    ...parsedSearch.filters,
-                    geography: undefined,
-                    geographyNodeId: undefined,
-                    geographyScope: undefined,
-                  }
-                : parsedSearch.filters,
-            dimension,
-          })}
-          descriptionBlocked={
-            hasNavigationFilters(parsedSearch.filters)
-              ? {
-                  message: navigationT("hybridBlocked"),
-                  label: navigationT("clearHierarchy"),
-                  href: `${searchHref(locale, { ...parsedSearch, filters: noHierarchyFilters }, null)}#description`,
-                }
-              : undefined
+        <ClassificationNavigationProvider
+          locale={locale}
+          input={parsedSearch}
+          seeds={initialClassification}
+          selectedPath={
+            hierarchyDimension === "classification" && navigation?.parent
+              ? [...navigation.ancestors.map((node) => node.nodeId), navigation.parent.nodeId]
+              : []
           }
-          labels={{
-            mode: t("searchMode"),
-            keyword: t("keywordMode"),
-            description: t("descriptionMode"),
-          }}
-          keyword={
-            initialEntry ? (
-              <CatalogSearchEntry
-                locale={locale}
-                kind={parsedSearch.kind}
-                counts={navigation?.totals ?? null}
-              />
-            ) : (
-              <>
-                <search className="brand-search catalog-results-query">
-                  <KeywordSearchForm action={localePath(locale, "search")} key={query}>
-                    {Array.from(searchParameters(parsedSearch, null))
-                      .filter(([key]) => key !== "q")
-                      .map(([key, value]) => (
-                        <input key={key} name={key} type="hidden" value={value} />
-                      ))}
-                    <label className="sr-only" htmlFor="catalog-query">
-                      {t("label")}
-                    </label>
-                    <CatalogSearchInput
-                      submitLabel={t("submit")}
-                      clearLabel={common("clear")}
-                      defaultValue={query}
-                      id="catalog-query"
-                      maxLength={512}
-                      name="q"
-                      placeholder={t("placeholder")}
-                    />
-                  </KeywordSearchForm>
-                </search>
+        >
+          <SearchModes
+            key={JSON.stringify({
+              kind: parsedSearch.kind,
+              query,
+              filters:
+                dimension === "region"
+                  ? {
+                      ...parsedSearch.filters,
+                      geography: undefined,
+                      geographyNodeId: undefined,
+                      geographyScope: undefined,
+                    }
+                  : parsedSearch.filters,
+              dimension,
+            })}
+            descriptionBlocked={
+              hasNavigationFilters(parsedSearch.filters)
+                ? {
+                    message: navigationT("hybridBlocked"),
+                    label: navigationT("clearHierarchy"),
+                    href: `${searchHref(locale, { ...parsedSearch, filters: noHierarchyFilters }, null)}#description`,
+                  }
+                : undefined
+            }
+            labels={{
+              mode: t("searchMode"),
+              keyword: t("keywordMode"),
+              description: t("descriptionMode"),
+            }}
+            keyword={
+              initialEntry ? (
+                <CatalogSearchEntry
+                  locale={locale}
+                  kind={parsedSearch.kind}
+                  counts={navigation?.totals ?? null}
+                />
+              ) : (
+                <>
+                  <search className="brand-search catalog-results-query">
+                    <KeywordSearchForm action={localePath(locale, "search")} key={query}>
+                      {Array.from(searchParameters(parsedSearch, null))
+                        .filter(([key]) => key !== "q")
+                        .map(([key, value]) => (
+                          <input key={key} name={key} type="hidden" value={value} />
+                        ))}
+                      <label className="sr-only" htmlFor="catalog-query">
+                        {t("label")}
+                      </label>
+                      <CatalogSearchInput
+                        submitLabel={t("submit")}
+                        clearLabel={common("clear")}
+                        defaultValue={query}
+                        id="catalog-query"
+                        maxLength={512}
+                        name="q"
+                        placeholder={t("placeholder")}
+                      />
+                    </KeywordSearchForm>
+                  </search>
 
-                <CatalogSearchLayout>
-                  <div className="catalog-control-bar">
-                    <CatalogResultsToolbar
-                      hideTitle={!query}
-                      titleId="results-heading"
-                      title={query ? `“${query}”` : reference("catalog")}
-                      scope={
-                        <>
-                          {" "}
-                          <CatalogKindSwitch
-                            value={dimension}
-                            label={t("objectType")}
+                  <CatalogSearchLayout>
+                    <div className="catalog-control-bar">
+                      <CatalogResultsToolbar
+                        hideTitle={!query}
+                        titleId="results-heading"
+                        title={query ? `“${query}”` : reference("catalog")}
+                        scope={
+                          <>
+                            {" "}
+                            <CatalogKindSwitch
+                              value={dimension}
+                              label={t("objectType")}
+                              labels={{
+                                process: common("process"),
+                                flow: common("flow"),
+                                region: t("region"),
+                                source: home("browseSource"),
+                              }}
+                              hrefs={{
+                                process: facetHref(locale, parsedSearch, "kind", "process")!,
+                                flow: facetHref(locale, parsedSearch, "kind", "flow")!,
+                                region: `${searchHref(locale, parsedSearch, null)}&explore=region`,
+                                source: `${searchHref(locale, parsedSearch, null)}&explore=source`,
+                              }}
+                            />
+                          </>
+                        }
+                        actions={
+                          <>
+                            {" "}
+                            <ResponsiveFacets
+                              drawer
+                              labels={{
+                                title: t("facets"),
+                                description: t("filtersDescription"),
+                                close: common("close"),
+                              }}
+                            >
+                              {facetContent}
+                            </ResponsiveFacets>
+                            {!aggregateView && (
+                              <CatalogSort
+                                value={parsedSearch.sort}
+                                label={reference("sort")}
+                                options={(
+                                  [
+                                    ["relevance", "sortRelevance"],
+                                    ["modified_desc", "sortModified"],
+                                    ["name_asc", "sortName"],
+                                  ] as const
+                                ).map(([value, label]) => ({
+                                  value,
+                                  label: t(label),
+                                  href: preserveNavigationPage(
+                                    searchHref(locale, { ...parsedSearch, sort: value }, null),
+                                  )!,
+                                }))}
+                              />
+                            )}
+                          </>
+                        }
+                      />
+                      {filterSummary.length > 0 ? (
+                        <div aria-label={t("appliedFilters")} className="catalog-applied-filters">
+                          {filterSummary.map((entry) => {
+                            const params = searchParameters(parsedSearch, null);
+                            entry.keys.forEach((key) => params.delete(key));
+                            return (
+                              <Button
+                                asChild
+                                className="h-auto min-h-11 whitespace-normal"
+                                key={entry.keys[0]}
+                                variant="outline"
+                              >
+                                <Link
+                                  aria-label={`${common("clear")}: ${entry.label}`}
+                                  href={`${localePath(locale, "search")}?${params}`}
+                                  prefetch={false}
+                                >
+                                  <span>
+                                    {entry.label}: {entry.value}
+                                  </span>
+                                  <XIcon data-icon="inline-end" />
+                                </Link>
+                              </Button>
+                            );
+                          })}
+                          <Button asChild variant="ghost">
+                            <Link href={clearFiltersHref} prefetch={false}>
+                              {t("clearFilters")}
+                            </Link>
+                          </Button>
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className={!aggregateView ? "catalog-hierarchy-layout" : ""}>
+                      {!aggregateView && (
+                        <details className="catalog-classification-panel" open>
+                          <summary>{navigationT("classification")}</summary>
+                          <ClassificationNavigation navigation={classificationHeader} />
+                        </details>
+                      )}
+                      <section
+                        aria-labelledby="results-heading"
+                        aria-live="polite"
+                        className="min-w-0"
+                      >
+                        {!hasQuery ? (
+                          <Empty className="min-h-80">
+                            <EmptyHeader>
+                              <EmptyMedia variant="icon">
+                                <SearchIcon aria-hidden="true" />
+                              </EmptyMedia>
+                              <EmptyTitle>{t("initialTitle")}</EmptyTitle>
+                              <EmptyDescription>{t("initialDescription")}</EmptyDescription>
+                            </EmptyHeader>
+                          </Empty>
+                        ) : inputInvalid ||
+                          (dataUnavailable && !(dimension === "region" && navigation)) ? (
+                          <Alert variant={inputInvalid ? "destructive" : "default"}>
+                            <AlertDescription>
+                              {inputInvalid ? t("emptyDescription") : t("unavailableDescription")}
+                            </AlertDescription>
+                          </Alert>
+                        ) : dimension === "region" ? (
+                          <RegionExplorer
+                            mapAssets={navigation ? mapAssets : undefined}
+                            entries={navigationProps.entries}
+                            navigation={navigationProps}
                             labels={{
-                              process: common("process"),
-                              flow: common("flow"),
-                              region: t("region"),
-                              source: home("browseSource"),
-                            }}
-                            hrefs={{
-                              process: facetHref(locale, parsedSearch, "kind", "process")!,
-                              flow: facetHref(locale, parsedSearch, "kind", "flow")!,
-                              region: `${searchHref(locale, parsedSearch, null)}&explore=region`,
-                              source: `${searchHref(locale, parsedSearch, null)}&explore=source`,
-                            }}
-                          />
-                        </>
-                      }
-                      actions={
-                        <>
-                          {" "}
-                          <ResponsiveFacets
-                            drawer
-                            labels={{
-                              title: t("facets"),
-                              description: t("filtersDescription"),
-                              close: common("close"),
+                              title: navigationT("geography"),
+                              showMap: navigationT("showMap"),
+                              hideMap: navigationT("hideMap"),
+                              loading: navigationT("mapLoading"),
+                              unavailable: navigationT("mapUnavailable"),
+                              legend: navigationT("mapLegend"),
+                              noMap: navigationT("noMap"),
+                              skipMap: navigationT("skipMap"),
+                              selectRegion: navigationT("selectRegion"),
+                              exploreRegion: navigationT("exploreRegion"),
+                              viewData: navigationT("viewData"),
+                              clearSelection: navigationT("clearSelection"),
+                              navigating: navigationT("navigating"),
+                              zeroRegions: navigationT("zeroRegions"),
                             }}
                           >
-                            {facetContent}
-                          </ResponsiveFacets>
-                          {!aggregateView && (
-                            <CatalogSort
-                              value={parsedSearch.sort}
-                              label={reference("sort")}
-                              options={(
-                                [
-                                  ["relevance", "sortRelevance"],
-                                  ["modified_desc", "sortModified"],
-                                  ["name_asc", "sortName"],
-                                ] as const
-                              ).map(([value, label]) => ({
-                                value,
-                                label: t(label),
-                                href: preserveNavigationPage(
-                                  searchHref(locale, { ...parsedSearch, sort: value }, null),
-                                )!,
-                              }))}
-                            />
-                          )}
-                        </>
-                      }
-                    />
-                    {filterSummary.length > 0 ? (
-                      <div aria-label={t("appliedFilters")} className="catalog-applied-filters">
-                        {filterSummary.map((entry) => {
-                          const params = searchParameters(parsedSearch, null);
-                          entry.keys.forEach((key) => params.delete(key));
-                          return (
-                            <Button
-                              asChild
-                              className="h-auto min-h-11 whitespace-normal"
-                              key={entry.keys[0]}
-                              variant="outline"
-                            >
-                              <Link
-                                aria-label={`${common("clear")}: ${entry.label}`}
-                                href={`${localePath(locale, "search")}?${params}`}
-                                prefetch={false}
-                              >
-                                <span>
-                                  {entry.label}: {entry.value}
-                                </span>
-                                <XIcon data-icon="inline-end" />
-                              </Link>
-                            </Button>
-                          );
-                        })}
-                        <Button asChild variant="ghost">
-                          <Link href={clearFiltersHref} prefetch={false}>
-                            {t("clearFilters")}
-                          </Link>
-                        </Button>
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className={!aggregateView ? "catalog-hierarchy-layout" : ""}>
-                    {!aggregateView && (
-                      <details className="catalog-classification-panel" open>
-                        <summary>{navigationT("classification")}</summary>
-                        <CatalogNavigation {...navigationProps} />
-                      </details>
-                    )}
-                    <section
-                      aria-labelledby="results-heading"
-                      aria-live="polite"
-                      className="min-w-0"
-                    >
-                      {!hasQuery ? (
-                        <Empty className="min-h-80">
-                          <EmptyHeader>
-                            <EmptyMedia variant="icon">
-                              <SearchIcon aria-hidden="true" />
-                            </EmptyMedia>
-                            <EmptyTitle>{t("initialTitle")}</EmptyTitle>
-                            <EmptyDescription>{t("initialDescription")}</EmptyDescription>
-                          </EmptyHeader>
-                        </Empty>
-                      ) : inputInvalid || dataUnavailable ? (
-                        <Alert variant={inputInvalid ? "destructive" : "default"}>
-                          <AlertDescription>
-                            {inputInvalid ? t("emptyDescription") : t("unavailableDescription")}
-                          </AlertDescription>
-                        </Alert>
-                      ) : dimension === "region" ? (
-                        <RegionExplorer
-                          mapUrl={navigation ? mapUrl : undefined}
-                          entries={navigationProps.entries}
-                          navigation={navigationProps}
-                          labels={{
-                            title: navigationT("geography"),
-                            showMap: navigationT("showMap"),
-                            hideMap: navigationT("hideMap"),
-                            loading: navigationT("mapLoading"),
-                            unavailable: navigationT("mapUnavailable"),
-                            legend: navigationT("mapLegend"),
-                            noMap: navigationT("noMap"),
-                            skipMap: navigationT("skipMap"),
-                            selectRegion: navigationT("selectRegion"),
-                            exploreRegion: navigationT("exploreRegion"),
-                            viewData: navigationT("viewData"),
-                            clearSelection: navigationT("clearSelection"),
-                            navigating: navigationT("navigating"),
-                            zeroRegions: navigationT("zeroRegions"),
-                          }}
-                        >
-                          {!navigation && facets && (
-                            <CatalogFacetResults
-                              dimension="region"
-                              facets={facets}
-                              locale={locale}
-                              input={parsedSearch}
-                              emptyLabel={t("emptyDescription")}
-                              moreLabel={navigationT("partialRegions")}
-                            />
-                          )}
-                        </RegionExplorer>
-                      ) : aggregateView ? (
-                        <CatalogFacetResults
-                          dimension={dimension}
-                          facets={facets}
-                          locale={locale}
-                          input={parsedSearch}
-                          emptyLabel={t("emptyDescription")}
-                          moreLabel={t("filtersDescription")}
-                        />
-                      ) : (
-                        <CompareSelectionForm action={localePath(locale, "compare")}>
-                          <input name="v" type="hidden" value="1" />
-                          <SearchResults
-                            query={query}
-                            items={results}
-                            labels={resultLabels}
+                            {!navigation && facets && (
+                              <CatalogFacetResults
+                                dimension="region"
+                                facets={facets}
+                                locale={locale}
+                                input={parsedSearch}
+                                emptyLabel={t("emptyDescription")}
+                                moreLabel={navigationT("partialRegions")}
+                              />
+                            )}
+                          </RegionExplorer>
+                        ) : aggregateView ? (
+                          <CatalogFacetResults
+                            dimension={dimension}
+                            facets={facets}
                             locale={locale}
-                            selectable
-                            siteOrigin={process.env.SITE_URL ?? "http://localhost:3000"}
+                            input={parsedSearch}
+                            emptyLabel={t("emptyDescription")}
+                            moreLabel={t("filtersDescription")}
                           />
-                          <noscript>
-                            {" "}
-                            {results.some((item) => item.kind === "process") ? (
-                              <Button
-                                className="h-auto min-h-11 max-w-full self-start whitespace-normal"
-                                type="submit"
-                              >
-                                {t("compareSelected")}
+                        ) : (
+                          <CompareSelectionForm action={localePath(locale, "compare")}>
+                            <input name="v" type="hidden" value="1" />
+                            <SearchResults
+                              query={query}
+                              items={results}
+                              labels={resultLabels}
+                              locale={locale}
+                              selectable
+                              siteOrigin={process.env.SITE_URL ?? "http://localhost:3000"}
+                            />
+                            <noscript>
+                              {" "}
+                              {results.some((item) => item.kind === "process") ? (
+                                <Button
+                                  className="h-auto min-h-11 max-w-full self-start whitespace-normal"
+                                  type="submit"
+                                >
+                                  {t("compareSelected")}
+                                </Button>
+                              ) : null}
+                            </noscript>
+                          </CompareSelectionForm>
+                        )}
+                        {!aggregateView && (previousPageHref || nextPageHref) ? (
+                          <CatalogPagination label={`${common("previous")} / ${common("next")}`}>
+                            {previousPageHref ? (
+                              <Button asChild variant="outline">
+                                <Link href={previousPageHref} prefetch={false}>
+                                  <ArrowLeftIcon aria-hidden="true" />
+                                  {common("previous")}
+                                </Link>
                               </Button>
-                            ) : null}
-                          </noscript>
-                        </CompareSelectionForm>
-                      )}
-                      {!aggregateView && (previousPageHref || nextPageHref) ? (
-                        <CatalogPagination label={`${common("previous")} / ${common("next")}`}>
-                          {previousPageHref ? (
-                            <Button asChild variant="outline">
-                              <Link href={previousPageHref} prefetch={false}>
+                            ) : (
+                              <Button disabled variant="outline">
                                 <ArrowLeftIcon aria-hidden="true" />
                                 {common("previous")}
-                              </Link>
-                            </Button>
-                          ) : (
-                            <Button disabled variant="outline">
-                              <ArrowLeftIcon aria-hidden="true" />
-                              {common("previous")}
-                            </Button>
-                          )}
-                          {nextPageHref ? (
-                            <Button asChild variant="outline">
-                              <Link href={nextPageHref} prefetch={false}>
+                              </Button>
+                            )}
+                            {nextPageHref ? (
+                              <Button asChild variant="outline">
+                                <Link href={nextPageHref} prefetch={false}>
+                                  {common("next")}
+                                  <ArrowRightIcon aria-hidden="true" />
+                                </Link>
+                              </Button>
+                            ) : (
+                              <Button disabled variant="outline">
                                 {common("next")}
                                 <ArrowRightIcon aria-hidden="true" />
-                              </Link>
-                            </Button>
-                          ) : (
-                            <Button disabled variant="outline">
-                              {common("next")}
-                              <ArrowRightIcon aria-hidden="true" />
-                            </Button>
-                          )}
-                        </CatalogPagination>
-                      ) : null}
-                    </section>
-                  </div>
-                </CatalogSearchLayout>
-              </>
-            )
-          }
-          description={
-            <HybridSearchPanel
-              key={JSON.stringify({ kind: parsedSearch.kind, filters: parsedSearch.filters })}
-              initialFilters={parsedSearch.filters}
-              initialKind={parsedSearch.kind}
-              labels={{
-                activeFilters: hybrid("activeFilters"),
-                clearFilters: hybrid("clearFilters"),
-                technicalPreview: hybrid("technicalPreview"),
-                filterAccess: hybrid("filterAccess"),
-                filterClassification: hybrid("filterClassification"),
-                filterGeography: hybrid("filterGeography"),
-                filterSource: hybrid("filterSource"),
-                filterSubtype: hybrid("filterSubtype"),
-                filterYearFrom: hybrid("filterYearFrom"),
-                filterYearTo: hybrid("filterYearTo"),
-                advisoryDescription: hybrid("advisoryDescription"),
-                advisoryTitle: hybrid("advisoryTitle"),
-                compareSelected: t("compareSelected"),
-                description: hybrid("description"),
-                emptyDescription: hybrid("emptyDescription"),
-                emptyTitle: hybrid("emptyTitle"),
-                error: hybrid("error"),
-                fallbackDescription: hybrid("fallbackDescription"),
-                fallbackTitle: hybrid("fallbackTitle"),
-                flow: hybrid("flow"),
-                flowPlaceholder: hybrid("flowPlaceholder"),
-                kind: hybrid("kind"),
-                privacy: hybrid("privacy"),
-                process: hybrid("process"),
-                queryLabel: hybrid("queryLabel"),
-                queryPlaceholder: hybrid("queryPlaceholder"),
-                resultsTitle: hybrid("resultsTitle"),
-                running: hybrid("running"),
-                initialDescription: hybrid("initialDescription"),
-                optimizing: hybrid("optimizing"),
-                optimizingDescription: hybrid("optimizingDescription"),
-                updateTitle: hybrid("updateTitle"),
-                updateDescription: hybrid("updateDescription"),
-                showUpdated: hybrid("showUpdated"),
-                optimized: hybrid("optimized"),
-                noMatchesTitle: hybrid("noMatchesTitle"),
-                noMatchesDescription: hybrid("noMatchesDescription"),
-                loadMore: hybrid("loadMore"),
-                loadingMore: hybrid("loadingMore"),
-                pageError: hybrid("pageError"),
-                cursorExpired: hybrid("cursorExpired"),
-                restart: hybrid("restart"),
-                semanticQuery: hybrid("semanticQuery"),
-                shareCancel: hybrid("shareCancel"),
-                shareConfirm: hybrid("shareConfirm"),
-                shareDisclosure: hybrid("shareDisclosure"),
-                sharePreview: hybrid("sharePreview"),
-                shareQuery: hybrid("shareQuery"),
-                shared: hybrid("shared"),
-                submit: hybrid("submit"),
-                terms: hybrid("terms"),
-                title: hybrid("title"),
-              }}
-              locale={locale}
-              resultLabels={resultLabels}
-              siteOrigin={process.env.SITE_URL ?? "http://localhost:3000"}
-            />
-          }
-        />
+                              </Button>
+                            )}
+                          </CatalogPagination>
+                        ) : null}
+                      </section>
+                    </div>
+                  </CatalogSearchLayout>
+                </>
+              )
+            }
+            description={
+              <HybridSearchPanel
+                key={JSON.stringify({ kind: parsedSearch.kind, filters: parsedSearch.filters })}
+                initialFilters={parsedSearch.filters}
+                initialKind={parsedSearch.kind}
+                labels={{
+                  activeFilters: hybrid("activeFilters"),
+                  clearFilters: hybrid("clearFilters"),
+                  technicalPreview: hybrid("technicalPreview"),
+                  filterAccess: hybrid("filterAccess"),
+                  filterClassification: hybrid("filterClassification"),
+                  filterGeography: hybrid("filterGeography"),
+                  filterSource: hybrid("filterSource"),
+                  filterSubtype: hybrid("filterSubtype"),
+                  filterYearFrom: hybrid("filterYearFrom"),
+                  filterYearTo: hybrid("filterYearTo"),
+                  advisoryDescription: hybrid("advisoryDescription"),
+                  advisoryTitle: hybrid("advisoryTitle"),
+                  compareSelected: t("compareSelected"),
+                  description: hybrid("description"),
+                  emptyDescription: hybrid("emptyDescription"),
+                  emptyTitle: hybrid("emptyTitle"),
+                  error: hybrid("error"),
+                  fallbackDescription: hybrid("fallbackDescription"),
+                  fallbackTitle: hybrid("fallbackTitle"),
+                  flow: hybrid("flow"),
+                  flowPlaceholder: hybrid("flowPlaceholder"),
+                  kind: hybrid("kind"),
+                  privacy: hybrid("privacy"),
+                  process: hybrid("process"),
+                  queryLabel: hybrid("queryLabel"),
+                  queryPlaceholder: hybrid("queryPlaceholder"),
+                  resultsTitle: hybrid("resultsTitle"),
+                  running: hybrid("running"),
+                  initialDescription: hybrid("initialDescription"),
+                  optimizing: hybrid("optimizing"),
+                  optimizingDescription: hybrid("optimizingDescription"),
+                  updateTitle: hybrid("updateTitle"),
+                  updateDescription: hybrid("updateDescription"),
+                  showUpdated: hybrid("showUpdated"),
+                  optimized: hybrid("optimized"),
+                  noMatchesTitle: hybrid("noMatchesTitle"),
+                  noMatchesDescription: hybrid("noMatchesDescription"),
+                  loadMore: hybrid("loadMore"),
+                  loadingMore: hybrid("loadingMore"),
+                  pageError: hybrid("pageError"),
+                  cursorExpired: hybrid("cursorExpired"),
+                  restart: hybrid("restart"),
+                  semanticQuery: hybrid("semanticQuery"),
+                  shareCancel: hybrid("shareCancel"),
+                  shareConfirm: hybrid("shareConfirm"),
+                  shareDisclosure: hybrid("shareDisclosure"),
+                  sharePreview: hybrid("sharePreview"),
+                  shareQuery: hybrid("shareQuery"),
+                  shared: hybrid("shared"),
+                  submit: hybrid("submit"),
+                  terms: hybrid("terms"),
+                  title: hybrid("title"),
+                }}
+                locale={locale}
+                resultLabels={resultLabels}
+                siteOrigin={process.env.SITE_URL ?? "http://localhost:3000"}
+              />
+            }
+          />
+        </ClassificationNavigationProvider>
       </div>
     </main>
   );

@@ -7,6 +7,7 @@ import { CatalogKindSwitch } from "@/features/catalog/catalog-kind-switch";
 import { Button } from "@/components/ui/button";
 import { ResponsiveFacets } from "@/features/catalog/responsive-facets";
 import { CatalogNavigation } from "@/features/catalog/catalog-navigation";
+import { regionMapAssets } from "@/features/catalog/region-map-assets";
 import { RegionExplorer } from "@/features/catalog/region-explorer";
 import { RegionMap } from "@/features/catalog/region-map";
 import { dictionaries, mobileGlobals, storyLocale } from "../fixtures";
@@ -85,7 +86,7 @@ const meta = {
     return (
       <div className="mx-auto max-w-5xl p-6">
         <RegionExplorer
-          mapUrl={parameters.regionMapUrl ?? "/maps/story.json"}
+          mapAssets={regionMapAssets("world")}
           entries={localizedEntries}
           labels={{
             title: t.geography,
@@ -173,6 +174,25 @@ export const UnifiedChinaInteractions: Story = {
   ...World,
   globals: { locale: "zh-CN" },
   args: World.args,
+  // Retain the canonical SVG boundary-group regression independently of the production
+  // WebGL explorer, whose pointer and camera behavior is covered in the globe stories/E2E.
+  render: (args) => (
+    <RegionMap
+      url={mapManifest.layers.world.url}
+      entries={args.entries.map((entry) => ({
+        ...entry,
+        label: geographyName(entry.code, "zh-CN") ?? entry.label,
+      }))}
+      title="按地区浏览"
+      loadingLabel="正在加载地图"
+      unavailableLabel="地图暂不可用"
+      legend="匹配的公开版本数"
+      selectLabel="选择地区"
+      exploreLabel="浏览下级地区"
+      viewDataLabel="查看数据"
+      clearLabel="取消选择"
+    />
+  ),
   play: async ({ canvas, canvasElement, userEvent }) => {
     const show = canvas.queryByRole("button", { name: "显示地图" });
     if (show) await userEvent.click(show);
@@ -317,7 +337,7 @@ export const ChinaMap: Story = {
         )}
 
         <RegionExplorer
-          mapUrl={mapManifest.layers[layerKey].url}
+          mapAssets={regionMapAssets(layerKey)}
           entries={entries}
           labels={{
             title: t.geography,
@@ -375,37 +395,36 @@ export const ChinaZeroRegions: Story = {
   ...ChinaMap,
   globals: { locale: "zh-CN" },
   play: async ({ canvas, canvasElement, userEvent }) => {
-    const show = canvas.queryByRole("button", { name: "显示地图" });
-    if (show) await userEvent.click(show);
-    await canvas.findByRole("link", { name: /^台湾:/ }, { timeout: 5000 });
-    for (const [boundary, node, label] of [
-      ["cnprov:540000", "geo:cn-xz", "西藏"],
-      ["cnprov:820000", "geo:mo", "澳门"],
-      ["cnprov:710000", "geo:tw", "台湾"],
-    ] as const) {
-      const shape = canvasElement.querySelector(`[data-boundary-id="${boundary}"]`)!;
-      const link = shape.closest("a")!;
-      await expect(link).toHaveAttribute("href", expect.stringContaining(node));
-      await userEvent.hover(shape);
+    await userEvent.click(canvas.getByRole("radio", { name: "平面" }));
+    await waitFor(
+      () =>
+        expect(canvasElement.querySelector(".region-maplibre")).toHaveAttribute(
+          "data-map-ready",
+          "true",
+        ),
+      { timeout: 20000 },
+    );
+    for (const [id, name] of [
+      ["geo:mo", "澳门"],
+      ["geo:tw", "台湾"],
+    ]) {
+      await userEvent.click(
+        canvasElement.querySelector<HTMLButtonElement>(`[data-region-shortcut="${id}"]`)!,
+      );
       await expect(
-        canvasElement.querySelector(".catalog-map-selection-description"),
-      ).toHaveTextContent(label!);
+        canvasElement.querySelector(".region-maplibre-selection-summary"),
+      ).toHaveTextContent(name!);
       await expect(
-        canvasElement.querySelector(".catalog-map-selection-description"),
+        canvasElement.querySelector(".region-maplibre-selection-summary"),
       ).toHaveTextContent("0 个公开版本");
-      await userEvent.click(shape);
-      await expect(link).toHaveAttribute("data-selected", "true");
-      if (node === "geo:tw") {
-        await expect(canvas.getByRole("link", { name: "查看数据" })).toHaveAttribute(
-          "href",
-          expect.stringContaining("geoNode=geo:tw"),
-        );
-      } else {
-        await userEvent.click(canvas.getByRole("button", { name: "取消选择" }));
-        await expect(link).toHaveFocus();
-        await userEvent.unhover(shape);
-      }
+      await expect(canvas.getByRole("link", { name: "查看数据" })).toHaveAttribute(
+        "href",
+        expect.stringContaining(encodeURIComponent(id!)),
+      );
+      await userEvent.click(canvas.getByRole("button", { name: "取消选择" }));
     }
+    await userEvent.click(canvas.getByText(/暂无匹配数据的地区/u));
+    await expect(canvas.getByRole("link", { name: /西藏/u })).toBeVisible();
   },
 };
 export const ChinaZeroRegionsMobileDark: Story = {
@@ -425,31 +444,38 @@ export const DarkFrench: Story = {
 };
 export const MobileChinese: Story = {
   globals: { ...mobileGlobals, locale: "zh-CN" },
-  play: async ({ canvas, userEvent }) => {
-    await expect(canvas.getByRole("button", { name: "显示地图" })).toHaveAttribute(
-      "aria-expanded",
-      "false",
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "显示地图" }));
-    await expect(canvas.getByRole("button", { name: "收起地图" })).toHaveAttribute(
-      "aria-expanded",
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    await expect(canvas.getByRole("radio", { name: "地区列表" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
-    await expect(await canvas.findByRole("group", { name: "按地区浏览" })).toBeVisible();
-    const china = canvas.getByRole("link", { name: "中国: 142 个公开版本" });
-    await userEvent.click(china);
-    const action = canvas.getByRole("link", { name: "浏览下级地区" });
-    await expect(action).toBeVisible();
-    await expect(action).toHaveFocus();
-    await userEvent.click(canvas.getByRole("button", { name: "取消选择" }));
-    await expect(canvas.queryByRole("link", { name: "浏览下级地区" })).not.toBeInTheDocument();
-    await expect(china).toHaveAttribute("href", "/zh-CN/search?explore=region&geoNode=geo:cn");
+    await expect(canvasElement.querySelector(".maplibregl-canvas")).toBeNull();
+    await userEvent.click(canvas.getByRole("radio", { name: "平面" }));
+    await waitFor(
+      () =>
+        expect(canvasElement.querySelector(".region-maplibre")).toHaveAttribute(
+          "data-map-ready",
+          "true",
+        ),
+      { timeout: 20000 },
+    );
+    await expect(
+      canvasElement.querySelector(".region-maplibre-canvas")!.getBoundingClientRect().height,
+    ).toBeGreaterThanOrEqual(380);
+    await userEvent.click(canvas.getByRole("radio", { name: "地区列表" }));
+    await expect(canvasElement.querySelector(".maplibregl-canvas")).toBeNull();
+    await expect(canvas.getByRole("link", { name: /中国 CN/u })).toHaveAttribute(
+      "href",
+      "/zh-CN/search?explore=region&geoNode=geo:cn",
+    );
   },
 };
 export const MapFailure: Story = {
   parameters: {
     msw: {
-      handlers: [http.get("*/maps/story.json", () => HttpResponse.json({}, { status: 503 }))],
+      handlers: [
+        http.get(/\/maps\/gl\/.*\.geojson$/u, () => HttpResponse.json({}, { status: 503 })),
+      ],
     },
   },
   play: async ({ canvas, globals }) => {

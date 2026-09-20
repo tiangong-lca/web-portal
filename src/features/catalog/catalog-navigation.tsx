@@ -35,6 +35,7 @@ export type CatalogNavigationProps = {
   zeroCountLabel?: string;
   headingLabel?: string;
   pathAsHeading?: boolean;
+  children?: ReactNode;
 };
 
 /** One server-renderable level of the public catalog; every node remains a native link.
@@ -59,6 +60,7 @@ export function CatalogNavigation({
   zeroCountLabel,
   headingLabel,
   pathAsHeading = false,
+  children,
 }: CatalogNavigationProps) {
   const zeroEntries = zeroCountLabel ? entries.filter((entry) => entry.count === 0) : [];
   const visibleEntries = zeroCountLabel ? entries.filter((entry) => entry.count > 0) : entries;
@@ -158,6 +160,8 @@ export function CatalogNavigation({
         <Alert>
           <AlertDescription>{unavailableLabel}</AlertDescription>
         </Alert>
+      ) : children ? (
+        children
       ) : (
         <>
           {visibleEntries.length > 0 ? (

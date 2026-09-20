@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-09-20
-lastReviewedCommit: 292145751bcc9536e9977c34703d3ce8670fcd80
-lastReviewedNote: "Reviewed for Portal #109: exact Database hierarchy and GeoAtlas bindings make zero-count China regions selectable; existing URL, anonymous data, progressive enhancement, layout and loading contracts remain intact."
+lastReviewedAt: 2026-09-21
+lastReviewedCommit: 969ed22b4d9336f850ed4fc5e96464e32e8c36a4
+lastReviewedNote: "Reviewed for Portal #113: production globe geography and bounded classification branches use existing public navigation contracts; the map interaction script budget is waived while initial route budgets remain enforced."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1462,29 +1462,23 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 
 ## 25. 层级目录与地区地图
 
-分类导航和地图使用 Database `portal_navigation_v1` 的单层公开版本聚合，查询、父节点、筛选和分页均在服务端校验。Search/Facets V3 独立接纳分类/地区节点及 direct/subtree 范围，V2 与 Hybrid 的既有输入合同保留。首页原有 summary 仍统计去重数据集；新入口计数显示匹配的公开版本，二者不得互换。节点身份带词表路径，分类与地区父子关系来自绑定精确源版本的静态词表；生成的 Database 合同快照不得手改。
+导航和地图仍使用 Database `portal_navigation_v1` 的单层公开版本聚合，Search/Facets V3 接纳节点及 direct/subtree 范围，V2 与 Hybrid 的合同保持独立。计数按唯一 kind/id/version，包含历史公开版本；父级直属记录不摊给子级，多条分类路径不重复计数。首页 summary 的去重数据集口径保持不变。节点身份、词表和地区映射继续绑定精确源版本，生成合同快照不手改。
 
-导航响应最多 64 KiB；每次请求一个有界层并保留续页，不再把现有 facet 的前 100 项当成完整目录。公开 navigation/search/facets 数据缓存 30 秒，动态搜索页面不缓存；相同导航请求额外通过 React request cache 去重。所有导航链接关闭自动预取。
+过程/流分类在现有侧栏使用官方 Radix Nova Collapsible：展开箭头和分类链接并列，前者不改变右侧结果，后者保留组合筛选并重置结果游标。当前分类由 URL 决定，刷新恢复祖先路径；展开状态按类型分别放在搜索模式重建边界之外。初始 HTML 仅提供根与当前路径的分支，进一步展开通过同源 `POST /internal/navigation` 读取一层。每页最多 50 项并保留完整续页、缓存、失败重试和旧响应隔离；不下载整棵树、不逐节点获取数量。当前路径节点在父级第一页之外时，使用它的真实 counted parent receipt 保持可见，不伪造数量。语义结构为 nav/ul/li/disclosure，不声明 TreeView。
 
-地图原始数据、映射规则与生成器位于 `scripts/maps/`，仅散列命名的派生层在 `public/maps/` 对外提供。每层最多 150 KiB gzip，地图交互新增 JavaScript 最多 30 KiB gzip，并继续满足首页 120 KiB、搜索 250 KiB 上限。`pnpm check:maps` 离线重建并核对源摘要、所有层和 manifest；构建工具 mapshaper 仅作为精确锁定的开发依赖，生产浏览器不加载它。
+内部分类适配器请求上限 8 KiB，响应上限 64 KiB，只返回当前语言的标签和数量，不重复传递完整查询链接。它与 RSC 共用现有输入验证、标签和导航链接规则。POST envelope 不缓存为 CDN 页面，底层公共 navigation/search/facets 数据仍缓存 30 秒；客户端按类型、查询、筛选、语言、父节点及游标去重并短暂缓存，不持久化查询。所有大量导航链接关闭自动预取。原生分类/地区链接、范围入口和续页在无 JavaScript 下可用。
 
-地区列表始终提供等价原生链接。地图只承载有明确行政边界映射的节点；跨区、历史范围、未知和歧义编码保持可浏览且保留原码，不根据相似名称强配边界，不分摊国家级数据到省市。名称、层级、边界的收据分别维护，来源语言回退必须显式标注。
+MapLibre 替换生产 SVG 展示，提供地球、平面和列表三种模式。地球静止朝向东亚及西太平洋，平面世界以太平洋居中；世界、中国、省内城市共享相机，在推进时逐渐转为平面。首帧和减少动态效果直接定位；普通下钻动画约 850ms。手机默认列表，启用地图后协作手势保留页面滚动。名称、精确数量和操作使用水平 HTML，浅海色/陆地/行政线提供地理背景，不加光照、地形或自动旋转干扰数量填色。
 
-未知分类的虚拟分组（例如 `class:elementary:~raw`）仅通过节点条件筛选，其内部 `~` 占位符不得进入旧版精确分类筛选。只有实际原始叶节点才在 URL 中同时保留原始编码；切换到分组仍清除旧分类条件和分页游标，并保留其他浏览维度。旧版界面生成的“虚拟分组节点 + `classification=~`”组合在 URL 解析时仅移除该合成条件并重置结果游标；独立的 `~` 精确筛选和真实原始叶节点保持原语义。
+生产几何与自托管 ES worker 由 `scripts/maps/build-maplibre-maps.mjs` 从现有 receipted sources 离线生成，输出到散列命名的 `public/maps/gl`，与词表、身份、来源摘要和构建参数绑定。每层 GeoJSON 最多 150 KiB gzip；MapLibre 运行代码按需加载，用户已解除原有 30 KiB 增量限制，但首页 120 KiB、搜索页 250 KiB 首屏 JavaScript 预算仍然适用。首页和普通搜索不下载地图、worker 或图表；不使用第三方瓦片服务或 MapTiler 账号。生成器及 Mapshaper 不进入浏览器。
 
-地区探索采用单列阅读顺序：路径与范围操作在上方，完整地图在中间，紧凑地区网格在下方。零匹配地区默认放入原生 details 折叠项，仍可无 JavaScript 访问；缺失计数不得当作零。世界图采用中央经线 150°E 的 Robinson 投影，由离线 mapshaper 在 30°W 切缝，避免横穿大陆的连线。
+世界层大陆、台湾、香港、澳门及已入库南海图形共用中国的交互目标；`navigationNodeId` 不覆盖原始 `nodeId`，数量只读目标条目一次，不把多个形状相加。中国层按各地区自己的 TW/HK/MO 等节点读取数量，已知零数量仍可选择；小地区另有普通 HTML 快捷目标。历史、跨区、经济区、电网、未知及歧义编码保留原码和列表路径，不强配城市多边形。接口失败或未加载时显示未知/不可用，不画成零。
 
-地图悬停或聚焦可预览名称与公开版本数，选择后显示明确的下级/数据入口。地区到地区的链接通过 React transition 和现有 Next 路由原位切换，保留展开状态、已有画面及加载提示；不增加第二套数据 API、逐节点请求或批量预取。每次下钻保留筛选、重置游标并加入 URL 历史；返回/刷新仍由真实 URL 恢复。地图选择只驻留内存，真正下钻才改变 URL。手机地图仍默认收起，无 JavaScript 使用原生链接；减少动态效果时不播放淡化过渡。
+地图几何缓存与 feature-state 计数分开。只加载当前层及需要的世界/中国背景，查询或主题改变不重新解析边界。换层期间旧图仅作中性背景，不保留旧计数或交互；过期请求被取消或忽略。悬停只作视觉预览，明确选择才播报并在必要时露出操作区。清除选择恢复触发器焦点。worker、WebGL、边界或数据失败均有局部说明并保留原生列表，允许重试。
 
-地区浏览的路径标题、公开版本计数和范围/地图操作组合为紧凑控制栏；已应用筛选跟随目录维度工具栏，避免分散的空行。国家和省市的 SVG 外层保留响应式内边距；海洋、周边陆地、经纬网和行政边界组成低强调底图，紫色单独表达公开版本数。台湾等行政轮廓统一使用实线，与是否存在对应数据节点无关。
+地图下沿信息栏约 12px：左侧为匹配公开版本数、渐变、少到多及地图说明；右侧为 Natural Earth 与 DataV GeoAtlas。两组共享基线和内边距，窄屏把整个来源组移到下一行。完整说明可用键盘/触控展开，涵盖历史公开版本、零/未知/未加载数量以及未定位和跨区范围。
 
-世界地图将大陆、台湾、香港、澳门及已入库的三沙诸岛和南海标示合为一个中国交互入口，共享悬停、键盘焦点、选择和下钻链接。离线资产的可选 `navigationNodeId` 单独记录交互目标，不覆盖原始 `nodeId`；南海图形逐字复用既有同坐标层的路径并记录来源。渲染按交互目标合并多个路径为一个 SVG 链接，计数只读取目标导航条目一次，不相加、不新增请求；目标条目缺失时保持不可交互的未知状态。文字列表继续保留原始地区编码入口，各省市按自己的导航节点浏览。台湾、香港、澳门沿用 `TW/HK/MO` 编码，在中国层中使用 Database 审阅的父子关系与 GeoAtlas 唯一行政编码绑定；计数为零时仍可悬停、选择及进入数据列表。
-
-世界、中国与省内城市层统一使用离线 Pacific Robinson 投影和同一仿射坐标系。层资源分别记录前景推荐窗口及背景覆盖窗口，画布按实际宽高比扩大视野而不拉伸轮廓。世界保留完整投影外形；地区背景覆盖 0.75–4 的宽高比，并保留相邻地理范围。下钻与浏览器返回使用约 420ms 的 SVG viewBox 过渡，仅更新视野，不逐帧重绘 React 路径树。缩放期间保留已加载的地理背景，当前层数量和可点击边界在停稳后呈现；层加载失败仍保留列表。新导航、尺寸变化及卸载会取消旧动画，减少动态效果时直接定位。
-
-共享导航反馈仅消费 Next Link 的 pending 或实际 React transition/文件读取状态，不预取整层链接、不新增数据请求或运行时库。页面保留旧内容和可编辑查询；较长等待延迟 150ms 后出现细进度条和四语状态播报。筛选抽屉关闭后其父级仍保留导航状态；清单导入保留预览与确认流程。原先等待文档截图完成的搜索/目录入口过渡已撤下，避免慢请求下的画面冻结。
-
-地图点选后，若操作区被视口边缘、固定页头或核对选择条遮挡，只滚动露出必要区域；键盘焦点保留在明确操作上。减少动态效果时立即移动，已可见时不滚动。取消选择同样把焦点与可见区域交还地图节点。
+页面导航、搜索、筛选与语言切换保留真实 pending 状态，但只使用延迟约 150ms 的顶部进度条；按钮、Logo 和搜索提交不绘制局部加载短线。正常按压、键盘焦点和当前栏目下划线保持，完成、取消、卸载均清理对应状态。地图和搜索失败保留区域内说明，展开分类是局部读取，不伪装成页面导航。
 
 ## 26. 官方参考
 

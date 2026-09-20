@@ -29,7 +29,7 @@ export default defineConfig({
   use: {
     baseURL: portalE2eUrl,
     launchOptions:
-      process.env.PORTAL_WEBGL_TESTS === "1" && process.env.CI
+      process.env.CI || process.env.PORTAL_WEBGL_TESTS === "1"
         ? { args: ["--use-gl=angle", "--use-angle=swiftshader"] }
         : undefined,
     trace: "on-first-retry",

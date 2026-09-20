@@ -15,6 +15,28 @@ const nodes = new Map<string, VocabularyNode>(
   (vocabulary.nodes as VocabularyNode[]).map((node) => [node.nodeId, node]),
 );
 
+export type NavigationVirtualLabel =
+  "isic" | "cpc" | "elementary" | "special" | "unmapped" | "uncategorized";
+const virtualLabels: Record<string, NavigationVirtualLabel> = {
+  "class:isic": "isic",
+  "class:cpc": "cpc",
+  "class:elementary": "elementary",
+  "geo:special": "special",
+  "geo:unmapped": "unmapped",
+  "class:unmapped": "uncategorized",
+  "class:unclassified": "uncategorized",
+};
+
+export function localizedNavigationLabel(
+  node: Pick<NavigationNode, "nodeId" | "code">,
+  locale: PortalLocale,
+  compact: boolean,
+  translate: (key: NavigationVirtualLabel) => string,
+): string {
+  const virtual = node.nodeId.endsWith(":~raw") ? "uncategorized" : virtualLabels[node.nodeId];
+  return virtual ? translate(virtual) : navigationLabel(node, locale, compact);
+}
+
 export function navigationLabel(
   node: Pick<NavigationNode, "nodeId" | "code">,
   locale: PortalLocale,

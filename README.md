@@ -16,9 +16,9 @@ checkPaths:
   - AGENTS.md
   - docs/design-plan.md
   - package.json
-lastReviewedAt: 2026-09-20
-lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
-lastReviewedNote: "Reviewed for Portal #105: geographic context and continuous world-to-province zoom stay within anonymous discovery. Setup, commands, publication and source ownership remain unchanged."
+lastReviewedAt: 2026-09-21
+lastReviewedCommit: 969ed22b4d9336f850ed4fc5e96464e32e8c36a4
+lastReviewedNote: "Reviewed for Portal #113: globe geography and expandable category navigation extend anonymous discovery; repository boundaries and hosted evidence entrypoints remain accurate."
 related:
   - docs/development.md
   - docs/ui-system.md

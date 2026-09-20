@@ -5,7 +5,7 @@ import type {
   PublicNavigation,
   NavigationDimension,
 } from "@/server/contracts/navigation";
-import { navigationLabel } from "@/server/navigation-labels";
+import { localizedNavigationLabel } from "@/server/navigation-labels";
 import type { PortalLocale } from "@/i18n/routing";
 import { navigationHref } from "./navigation-links";
 import type { CatalogNavigationProps } from "./catalog-navigation";
@@ -20,24 +20,8 @@ export async function navigationView(
   const geographic = dimension === "geography";
   const scope = geographic ? input.filters.geographyScope : input.filters.classificationScope;
   const rootLabel = t(geographic ? "world" : "root");
-  const label = (node: { nodeId: string; code: string }) => {
-    const virtual: Record<
-      string,
-      "isic" | "cpc" | "elementary" | "special" | "unmapped" | "uncategorized"
-    > = {
-      "class:isic": "isic",
-      "class:cpc": "cpc",
-      "class:elementary": "elementary",
-      "geo:special": "special",
-      "geo:unmapped": "unmapped",
-      "class:unmapped": "uncategorized",
-      "class:unclassified": "uncategorized",
-    };
-    if (node.nodeId.endsWith(":~raw")) return t("uncategorized");
-    return virtual[node.nodeId]
-      ? t(virtual[node.nodeId]!)
-      : navigationLabel(node, locale, geographic);
-  };
+  const label = (node: { nodeId: string; code: string }) =>
+    localizedNavigationLabel(node, locale, geographic, t);
   const view: CatalogNavigationProps = {
     title: t(dimension),
     countDescription: t("counts"),

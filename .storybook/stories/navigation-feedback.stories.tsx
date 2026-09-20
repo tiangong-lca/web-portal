@@ -66,10 +66,22 @@ type Story = StoryObj<typeof meta>;
 export const Idle: Story = {};
 export const Waiting: Story = {
   parameters: { initialPending: true },
-  play: async ({ canvas, globals }) => {
-    await expect(
-      await canvas.findByText(dictionaries[storyLocale(globals)].Common.loading),
-    ).toBeVisible();
+  play: async ({ canvas, canvasElement, globals }) => {
+    const t = dictionaries[storyLocale(globals)].Common;
+    await expect(await canvas.findByText(t.loading)).toBeVisible();
+    // One navigation shows one loading state: the global bar. The pending control
+    // keeps its busy state, its progress cursor and its marker attribute, but no
+    // local `::after` underline is generated on it or on any link.
+    const control = canvas.getByRole("button", { name: t.search });
+    await expect(control).toHaveAttribute("aria-busy", "true");
+    await expect(window.getComputedStyle(control).cursor).toBe("progress");
+    await expect(canvasElement.querySelector(".portal-route-progress")).toHaveAttribute(
+      "data-pending",
+      "true",
+    );
+    for (const element of [control, canvas.getByRole("link")]) {
+      await expect(window.getComputedStyle(element, "::after").content).toBe("none");
+    }
   },
 };
 export const CancelAndRetry: Story = {

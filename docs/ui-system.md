@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
+lastReviewedCommit: 1c2233d0d99e26d3b5a9d40501ac23b3f66c1344
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #103: compact control grouping, responsive regional map insets and genuine delayed navigation feedback preserve four-locale, no-JavaScript, privacy, count and public-data boundaries. Twelve page families were visually audited; source delivery and final hosted readback remain tracked in the PR."
+lastReviewedNote: "Reviewed for Portal #105: local map selection reveals only necessary scroll distance, respecting real header/tray bounds, focus and reduced motion. An impossible viewport does not trigger counterproductive scrolling; data, URL, asset and navigation contracts are unchanged."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

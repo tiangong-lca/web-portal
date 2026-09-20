@@ -291,7 +291,9 @@ export const MobileChinese: Story = {
     await expect(await canvas.findByRole("group", { name: "按地区浏览" })).toBeVisible();
     const china = canvas.getByRole("link", { name: "中国: 142 个公开版本" });
     await userEvent.click(china);
-    await expect(canvas.getByRole("link", { name: "浏览下级地区" })).toBeVisible();
+    const action = canvas.getByRole("link", { name: "浏览下级地区" });
+    await expect(action).toBeVisible();
+    await expect(action).toHaveFocus();
     await userEvent.click(canvas.getByRole("button", { name: "取消选择" }));
     await expect(canvas.queryByRole("link", { name: "浏览下级地区" })).not.toBeInTheDocument();
     await expect(china).toHaveAttribute("href", "/zh-CN/search?explore=region&geoNode=geo:cn");

@@ -98,6 +98,7 @@ test("loads only the visible map layer within the additional JavaScript budget",
 test("map previews locally, keeps the explorer during drilldown, and restores URL history", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/en/search?explore=region&kind=process");
   const explorer = page.locator(".catalog-region-explorer");
   const mapChina = page.locator(".catalog-region-map svg").getByRole("link", { name: /^China:/ });
@@ -107,6 +108,9 @@ test("map previews locally, keeps the explorer during drilldown, and restores UR
   await mapChina.focus();
   await mapChina.press("Enter");
   await expect(page.getByRole("link", { name: "Explore subregions", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Explore subregions", exact: true })).toBeInViewport({
+    ratio: 1,
+  });
   expect(page.url()).toBe(original);
   await expect(mapChina).toHaveAttribute("data-selected", "true");
   await explorer.evaluate((element) =>
@@ -218,4 +222,33 @@ test("a newer region choice wins while an earlier navigation is waiting", async 
   await expect(
     page.locator(".catalog-navigation-list").getByRole("link", { name: /Rest of World/ }),
   ).toBeVisible();
+});
+
+test("mobile reduced-motion map selection stays above the comparison tray", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 720 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en/search?kind=process");
+  await page.locator('input[type="checkbox"][name="ids"]').first().check();
+  await expect(page.locator("[data-compare-tray]")).toBeVisible();
+  await page
+    .locator(".catalog-kind-switch")
+    .getByRole("link", { name: "Region", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Show map", exact: true }).click();
+  const china = page.locator(".catalog-region-map svg").getByRole("link", { name: /^China:/ });
+  await china.click();
+  const action = page.getByRole("link", { name: "Explore subregions", exact: true });
+  await expect(action).toBeFocused();
+  await expect(action).toBeInViewport({ ratio: 1 });
+  const bounds = await action.boundingBox();
+  const tray = await page.locator("[data-compare-tray]").boundingBox();
+  const header = await page.locator("[data-portal-header]").boundingBox();
+  expect(bounds!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
+  expect(bounds!.y + bounds!.height).toBeLessThan(tray!.y);
+  await page
+    .locator(".catalog-map-selection")
+    .getByRole("button", { name: "Clear selection", exact: true })
+    .click();
+  await expect(china).toBeFocused();
+  await expect(china).toBeInViewport();
 });

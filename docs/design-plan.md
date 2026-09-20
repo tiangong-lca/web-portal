@@ -23,8 +23,8 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
-lastReviewedNote: "Reviewed for Portal #103: compact control grouping, responsive regional map insets and genuine delayed navigation feedback preserve four-locale, no-JavaScript, privacy, count and public-data boundaries. Twelve page families were visually audited; source delivery and final hosted readback remain tracked in the PR."
+lastReviewedCommit: 1c2233d0d99e26d3b5a9d40501ac23b3f66c1344
+lastReviewedNote: "Reviewed for Portal #105: local map selection reveals only necessary scroll distance, respecting real header/tray bounds, focus and reduced motion. An impossible viewport does not trigger counterproductive scrolling; data, URL, asset and navigation contracts are unchanged."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1479,6 +1479,8 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 地区浏览的路径标题、公开版本计数和范围/地图操作组合为紧凑控制栏；已应用筛选跟随目录维度工具栏，避免分散的空行。国家和省市的 SVG 外层增加响应式内边距，世界图、viewBox、边界资产及计数合同不变。
 
 共享导航反馈仅消费 Next Link 的 pending 或实际 React transition/文件读取状态，不预取整层链接、不新增数据请求或运行时库。页面保留旧内容和可编辑查询；较长等待延迟 150ms 后出现细进度条和四语状态播报。筛选抽屉关闭后其父级仍保留导航状态；清单导入保留预览与确认流程。原先等待文档截图完成的搜索/目录入口过渡已撤下，避免慢请求下的画面冻结。
+
+地图点选后，若操作区被视口边缘、固定页头或核对选择条遮挡，只滚动露出必要区域；键盘焦点保留在明确操作上。减少动态效果时立即移动，已可见时不滚动。取消选择同样把焦点与可见区域交还地图节点。
 
 ## 26. 官方参考
 

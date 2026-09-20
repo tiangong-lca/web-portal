@@ -29,6 +29,29 @@ function validLayer(value: unknown): value is MapLayer {
   );
 }
 
+// Reveal only the obscured part of a local selection, keeping the surrounding map in place.
+function revealSelection(element: Element, focusTarget: Element = element) {
+  const header = document.querySelector("[data-portal-header]")?.getBoundingClientRect();
+  const tray = document.querySelector("[data-compare-tray]")?.getBoundingClientRect();
+  const top = Math.max(0, header?.bottom ?? 0) + 16;
+  const bottom = Math.min(window.innerHeight, tray?.top ?? window.innerHeight) - 16;
+  if (bottom <= top) return;
+  const panelBounds = element.getBoundingClientRect();
+  const bounds =
+    panelBounds.height > bottom - top ? focusTarget.getBoundingClientRect() : panelBounds;
+  // No scroll can fully reveal a target taller than the unobscured viewport.
+  if (bounds.height > bottom - top) return;
+  const delta =
+    bounds.bottom > bottom ? bounds.bottom - bottom : bounds.top < top ? bounds.top - top : 0;
+  if (delta)
+    window.scrollBy({
+      top: delta,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
+}
+
 /** Geometry is fetched only for the visible layer, independent of the complete text navigation.
  * @import import { RegionMap } from "@/features/catalog/region-map";
  */
@@ -59,7 +82,13 @@ export function RegionMap({
   const selectionTrigger = useRef<HTMLAnchorElement | null>(null);
   const [selection, setSelection] = useState<{ url: string; nodeId: string } | null>(null);
   useEffect(() => {
-    if (selection) action.current?.focus({ preventScroll: true });
+    if (selection && action.current) {
+      action.current.focus({ preventScroll: true });
+      revealSelection(
+        action.current.closest(".catalog-map-selection") ?? action.current,
+        action.current,
+      );
+    }
   }, [selection]);
   const [hovered, setHovered] = useState<string | null>(null);
   const [state, setState] = useState<{
@@ -172,6 +201,7 @@ export function RegionMap({
               onClick={() => {
                 setSelection(null);
                 selectionTrigger.current?.focus({ preventScroll: true });
+                if (selectionTrigger.current) revealSelection(selectionTrigger.current);
               }}
             >
               {clearLabel}

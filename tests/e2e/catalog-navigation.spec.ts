@@ -94,3 +94,128 @@ test("loads only the visible map layer within the additional JavaScript budget",
     await region.close();
   }
 });
+
+test("map previews locally, keeps the explorer during drilldown, and restores URL history", async ({
+  page,
+}) => {
+  await page.goto("/en/search?explore=region&kind=process");
+  const explorer = page.locator(".catalog-region-explorer");
+  const mapChina = page.locator(".catalog-region-map svg").getByRole("link", { name: /^China:/ });
+  await expect(mapChina).toBeVisible();
+  // The selection itself does not navigate or fetch another layer.
+  const original = page.url();
+  await mapChina.focus();
+  await mapChina.press("Enter");
+  await expect(page.getByRole("link", { name: "Explore subregions", exact: true })).toBeVisible();
+  expect(page.url()).toBe(original);
+  await expect(mapChina).toHaveAttribute("data-selected", "true");
+  await explorer.evaluate((element) =>
+    element.setAttribute("data-persistence-probe", "same-frame"),
+  );
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/en/search?**", async (route) => {
+    if (
+      new URL(route.request().url()).searchParams.get("geoNode") === "geo:cn" &&
+      route.request().headers().rsc === "1"
+    )
+      await gate;
+    await route.continue();
+  });
+  await page.getByRole("link", { name: "Explore subregions", exact: true }).click();
+  await expect(explorer).toHaveAttribute("data-pending", "true");
+  await expect(page.getByText("Loading region…", { exact: true })).toBeVisible();
+  await expect(mapChina).toBeVisible();
+  release();
+  await expect(page).toHaveURL(/geoNode=geo%3Acn/);
+  await expect(explorer).not.toHaveAttribute("data-pending", "true");
+  await expect(explorer).toHaveAttribute("data-persistence-probe", "same-frame");
+  await expect(
+    page.locator(".catalog-navigation-list").getByRole("link", { name: /Anhui/ }),
+  ).toBeVisible();
+  await expect(explorer.getByRole("heading", { name: "Browse regions: China" })).toBeFocused();
+  await page.goBack();
+  await expect(page).toHaveURL(original);
+  await expect(
+    page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }),
+  ).toBeVisible();
+});
+
+test("zero-count regions stay reachable without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("/en/search?explore=region");
+    const zero = page.locator(".catalog-zero-regions");
+    await expect(zero).not.toHaveAttribute("open");
+    await zero.locator("summary").click();
+    await zero.getByRole("link", { name: /Antarctica/ }).click();
+    await expect(page).toHaveURL(/geoNode=geo%3Aaq/);
+  } finally {
+    await context.close();
+  }
+});
+
+test("mobile map stays expanded across levels and map errors keep the region list", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    reducedMotion: "reduce",
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto("/zh-CN/search?explore=region");
+    await expect(page.locator(".catalog-region-map")).toHaveCount(0);
+    await page.getByRole("button", { name: "显示地图" }).click();
+    await expect(page.locator(".catalog-region-map svg")).toBeVisible();
+    await page.route("**/maps/geo-cn.*.json", (route) =>
+      route.fulfill({ status: 503, body: "unavailable" }),
+    );
+    await page.locator(".catalog-navigation-list").getByRole("link", { name: /中国/ }).click();
+    await expect(page.getByRole("button", { name: "收起地图" })).toBeVisible();
+    await expect(page.locator(".catalog-region-map-status")).toContainText("地区列表");
+    await expect(
+      page.locator(".catalog-navigation-list").getByRole("link", { name: /安徽/ }),
+    ).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});
+
+test("a newer region choice wins while an earlier navigation is waiting", async ({ page }) => {
+  await page.goto("/en/search?explore=region");
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let intercepted!: () => void;
+  const started = new Promise<void>((resolve) => {
+    intercepted = resolve;
+  });
+  await page.route("**/en/search?**", async (route) => {
+    if (
+      new URL(route.request().url()).searchParams.get("geoNode") === "geo:cn" &&
+      route.request().headers().rsc === "1"
+    ) {
+      intercepted();
+      await gate;
+    }
+    await route.continue();
+  });
+  await page.locator(".catalog-navigation-list").getByRole("link", { name: /China/ }).click();
+  await started;
+  await page.locator('.catalog-navigation-list a[href*="geo%3Aspecial"]').click();
+  await expect(page).toHaveURL(/geoNode=geo%3Aspecial/);
+  release();
+  await expect(page.locator(".catalog-region-explorer")).not.toHaveAttribute(
+    "data-pending",
+    "true",
+  );
+  await expect(page).toHaveURL(/geoNode=geo%3Aspecial/);
+  await expect(
+    page.locator(".catalog-navigation-list").getByRole("link", { name: /Rest of World/ }),
+  ).toBeVisible();
+});

@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-09-19
-lastReviewedCommit: 08d4d08fef2d9fc4ab5ec641299dc2a1a176546f
+lastReviewedAt: 2026-09-20
+lastReviewedCommit: 38e78553acb5472099bd2edcb7bf389750d9032a
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #95 against 08d4d08: public generator, owner and declared use terms stay distinct; untyped authors and absent license URLs are not invented. Existing four-locale, capability, runtime and delivery boundaries remain unchanged. Local static/build, 292 tests and 65 browser checks pass; source delivery and production verification remain pending."
+lastReviewedNote: "Reviewed for Portal #101: Pacific-centered offline geometry, balanced region grid, native zero-count disclosure and persistent progressive drilldown. 321 unit tests, 232 Storybook scenarios, 72 browser tests and 8 final navigation regressions passed; no contract or count-semantics change."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -285,3 +285,5 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 目录按 ISIC、CPC 和基本流词表的实际层级浏览，节点数量为匹配的公开版本数；同一版本的重复分类路径不重复计数。桌面保留分类导航与结果的并列阅读顺序，手机使用原生可展开面板。每层提供路径、返回、包含后代和仅本级数据入口，状态进入 URL，变化重置结果游标。词法目录的层级条件不静默传入或丢弃于描述检索；切换时显示显式清除入口。
 
 地区地图是地区列表的渐进增强：桌面默认显示，手机由按钮展开；无 JavaScript、地图失败和无法定位的范围仍可通过文字链接进入结果及精确版本详情。颜色仅表示匹配公开版本数，未载入不代表零；跨区、历史范围与歧义编码不强配行政边界。浏览器只获取当前层的预投影 SVG 路径，不载入全世界城市、不请求第三方地图服务。地图来源、边界映射、简化参数和不能定位的条目均绑定资源 receipt。现有主题语义色、焦点、四语、44px 触控和减少动态效果规范继续适用。
+
+地区探索的地图和地区网格采用上下排列，路径保持在地图之前；零匹配地区用原生可展开项收纳。地图支持选择后原位显示名称、数量和明确动作，选中时用边框和文字共同表达。下钻保留画布及手机展开选择，加载状态可被辅助技术读取，完成后焦点回到当前地区面板；回到地区面板阅读起点不使用滚动动画。

@@ -37,9 +37,20 @@ export const COORDINATE_UNITS = 80000;
  * space, so a province sublayer's `viewBox` is a window into exactly the same
  * space as `geo:cn`. The UI can therefore zoom a province and swap in its city
  * layer without re-projecting or re-fitting.
+ *
+ * The world layer is Pacific-centred: Robinson with its central meridian at
+ * 150°E, so the seam falls at 30°W in the mid-Atlantic and Asia, Australia and
+ * the Americas all sit inside the frame. 150°E is chosen over 180° because at
+ * 180° the seam runs through Greenwich and slices England, France, Spain and
+ * four West African countries across both edges; at 150°E the seam touches Greenland, the Azores, South Georgia and Antarctica.
+ *
+ * The seam must be cut by the projection engine, never by shifting SVG
+ * coordinates: `mapshaper -proj` splits any ring crossing the projection's own
+ * seam and inserts the seam edge (Greenland goes from 17 to 19 parts), which a
+ * post-hoc translation cannot reproduce.
  */
 export const PROJECTIONS = {
-  world: "robinson",
+  world: "+proj=robin +lon_0=150",
   china: "webmercator",
 };
 

@@ -29,9 +29,13 @@ node scripts/maps/build-region-maps.mjs --fetch
 
 | Layer key | Contents | Projection |
 | --- | --- | --- |
-| `world` | 265 Natural Earth Admin-0 map units | `mapshaper -proj robinson` |
+| `world` | 265 Natural Earth Admin-0 map units | `mapshaper -proj "+proj=robin +lon_0=150"` |
 | `geo:cn` | 31 province-level divisions + the nine-dash line inset | `mapshaper -proj webmercator` |
 | `geo:cn-xx` | The prefectures of province `xx` (27 provinces) | same space as `geo:cn` |
+
+The world layer is Pacific-centred: Robinson with its central meridian at 150°E, so the seam falls at 30°W in the mid-Atlantic and Asia, Australia and the Americas all sit inside the frame. `180°` was rejected because there the seam runs through Greenwich and slices England, France, Spain and four West African countries across both map edges; at 150°E the only landmasses the seam touches are Greenland, South Georgia, the Azores and Antarctica.
+
+The seam is cut by the projection engine, not by shifting projected coordinates. `mapshaper -proj` splits every ring that crosses the projection's own seam and inserts the seam edge — Greenland goes from 17 to 19 parts — which a post-hoc translation cannot reproduce; a translated map draws each straddling feature as one ring crossing the whole frame. `tests/unit/region-map-assets.test.ts` rejects both that signature and any seam that would slice a populated continent.
 
 Every Chinese layer shares one projection **and one fitted coordinate space**: the largest dimension of the province layer is fitted to 80 000 integer units, and a province sublayer's `viewBox` is a literal window into that same space. A consumer can therefore zoom a province outline and swap in its prefecture layer without re-projecting or re-fitting, and the two agree pixel for pixel.
 

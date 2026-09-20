@@ -17,9 +17,9 @@
   },
   "layers": {
     "world": {
-      "url": "/maps/world.64a2552a03f20d02.json",
-      "sha256": "64a2552a03f20d02a51f5720368fa985cd85efb1f36c232e297a0161f6a8ca4a",
-      "gzipBytes": 111984
+      "url": "/maps/world.2bb66ee8c46df1fa.json",
+      "sha256": "2bb66ee8c46df1fa10d0be80929cd0143a11a9aa4d346448ff89fb04390c240e",
+      "gzipBytes": 112112
     },
     "geo:cn": {
       "url": "/maps/geo-cn.ecc3b0c82addde97.json",
@@ -163,7 +163,7 @@
     }
   },
   "projection": {
-    "world": "robinson",
+    "world": "+proj=robin +lon_0=150",
     "china": "webmercator"
   },
   "simplify": {

@@ -101,15 +101,68 @@
     display: block;
   }
 }
-.catalog-region-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem;
+/* One reading column keeps large layers and long region inventories balanced. */
+.catalog-region-explorer {
+  scroll-margin-top: 7rem;
+  outline: none;
 }
-@media (min-width: 1100px) {
-  .catalog-region-layout {
-    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
-    align-items: start;
+.catalog-region-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.catalog-map-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+.catalog-region-progress {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+.catalog-region-explorer[data-pending] .catalog-region-map {
+  opacity: 0.65;
+}
+.catalog-zero-regions > summary {
+  min-height: 44px;
+  padding-block: 0.75rem;
+  cursor: pointer;
+  color: var(--muted-foreground);
+}
+.catalog-zero-regions > summary:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.catalog-map-selection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: 88px;
+  border-block: 1px solid var(--border);
+  background: var(--background);
+}
+.catalog-map-selection-description {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+.catalog-map-selection-description > span {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+.catalog-map-selection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .catalog-region-map {
+    transition: opacity 140ms ease;
   }
 }
 .catalog-region-map {
@@ -140,6 +193,7 @@
 .catalog-region-map a[data-count="4"] path {
   fill: var(--primary);
 }
+.catalog-region-map a[data-selected] path,
 .catalog-region-map a:hover path,
 .catalog-region-map a:focus-visible path {
   stroke: var(--foreground);
@@ -151,10 +205,10 @@
 .catalog-region-map svg {
   display: block;
   width: 100%;
-  max-height: 520px;
+  height: clamp(240px, 42vw, 480px);
 }
 .catalog-region-map-status {
-  min-height: 220px;
+  height: clamp(240px, 42vw, 480px);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -297,3 +297,99 @@ describe("Database vocabulary and map layer compatibility", () => {
     expect(mismatches).toEqual([]);
   });
 });
+
+/**
+ * The world layer is Pacific-centred, so its seam falls in the mid-Atlantic and has to be cut by
+ * the projection engine. Shifting projected coordinates instead (the shortcut this guards against)
+ * leaves a feature that straddles the seam as one ring crossing the whole frame. `ringsOf` reads the
+ * emitted path grammar back into rings, and `spaceOf` gives the coordinate space a layer is drawn
+ * in: a Chinese sublayer is a window, so its rings are measured against the shared `geo:cn` frame.
+ */
+function ringsOf(path: string): { left: number; right: number; height: number }[] {
+  return path
+    .split("M")
+    .slice(1)
+    .map((subpath) => {
+      const numbers = subpath.replace(/Z.*/s, "").match(/-?\d+/g)!.map(Number);
+      let left = Infinity;
+      let right = -Infinity;
+      let top = Infinity;
+      let bottom = -Infinity;
+      for (let index = 0; index < numbers.length; index += 2) {
+        left = Math.min(left, numbers[index]!);
+        right = Math.max(right, numbers[index]!);
+        top = Math.min(top, numbers[index + 1]!);
+        bottom = Math.max(bottom, numbers[index + 1]!);
+      }
+      return { left, right, height: bottom - top };
+    });
+}
+
+function spaceOf(layerKey: string) {
+  return viewBox(layerKey.startsWith("geo:cn") ? "geo:cn" : "world");
+}
+
+describe("region map seam geometry", () => {
+  it("cuts the seam in the projection instead of shifting projected coordinates", () => {
+    // A ring confined to the polar rim (Antarctica's Robinson edge) may be wide; one that reaches
+    // into the map body while spanning half the frame is an uncut seam.
+    const spanning: string[] = [];
+    for (const layerKey of layerKeys) {
+      const space = spaceOf(layerKey);
+      for (const feature of parsedLayer(layerKey).features) {
+        for (const ring of ringsOf(feature.path)) {
+          const width = (ring.right - ring.left) / space.width;
+          if (width > 0.5 && ring.height / space.height > 0.1) {
+            spanning.push(
+              `${layerKey} ${feature.boundaryId}: ring spans ${(width * 100).toFixed(0)}%`,
+            );
+          }
+        }
+      }
+    }
+    expect(spanning).toStrictEqual([]);
+  });
+
+  it("centres the world on the Pacific: Asia west of the Americas", () => {
+    const space = viewBox("world");
+    const centre = (boundaryId: string) => {
+      const feature = parsedLayer("world").features.find((item) => item.boundaryId === boundaryId)!;
+      const rings = ringsOf(feature.path);
+      const left = Math.min(...rings.map((ring) => ring.left));
+      const right = Math.max(...rings.map((ring) => ring.right));
+      return ((left + right) / 2 - space.minX) / space.width;
+    };
+
+    expect(centre("ne50m:CHN")).toBeLessThan(0.5);
+    expect(centre("ne50m:USA")).toBeGreaterThan(0.5);
+  });
+
+  it("keeps the world seam in the Atlantic, clear of populated continents", () => {
+    const space = viewBox("world");
+    const onBothEdges: string[] = [];
+    for (const feature of parsedLayer("world").features) {
+      let left = false;
+      let right = false;
+      for (const ring of ringsOf(feature.path)) {
+        if ((ring.left - space.minX) / space.width < 0.2) left = true;
+        if ((ring.right - space.minX) / space.width > 0.8) right = true;
+      }
+      if (left && right) onBothEdges.push(feature.boundaryId);
+    }
+
+    // A feature appears on both edges only because the seam cut it, so this set must not be empty.
+    expect(onBothEdges).toContain("ne50m:GRL");
+    // A central meridian of 180° would put these here; 150°E must not.
+    const slicedContinents = [
+      "ne50m:ENG",
+      "ne50m:FRA",
+      "ne50m:ESP",
+      "ne50m:DZA",
+      "ne50m:MLI",
+      "ne50m:GHA",
+      "ne50m:TGO",
+      "ne50m:BFA",
+    ];
+    expect(onBothEdges.filter((id) => slicedContinents.includes(id))).toStrictEqual([]);
+  });
+});

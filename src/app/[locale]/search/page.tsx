@@ -364,7 +364,15 @@ export default async function SearchPage({
           key={JSON.stringify({
             kind: parsedSearch.kind,
             query,
-            filters: parsedSearch.filters,
+            filters:
+              dimension === "region"
+                ? {
+                    ...parsedSearch.filters,
+                    geography: undefined,
+                    geographyNodeId: undefined,
+                    geographyScope: undefined,
+                  }
+                : parsedSearch.filters,
             dimension,
           })}
           descriptionBlocked={
@@ -539,6 +547,7 @@ export default async function SearchPage({
                         <RegionExplorer
                           mapUrl={navigation ? mapUrl : undefined}
                           entries={navigationProps.entries}
+                          navigation={navigationProps}
                           labels={{
                             title: navigationT("geography"),
                             showMap: navigationT("showMap"),
@@ -548,9 +557,14 @@ export default async function SearchPage({
                             legend: navigationT("mapLegend"),
                             noMap: navigationT("noMap"),
                             skipMap: navigationT("skipMap"),
+                            selectRegion: navigationT("selectRegion"),
+                            exploreRegion: navigationT("exploreRegion"),
+                            viewData: navigationT("viewData"),
+                            clearSelection: navigationT("clearSelection"),
+                            navigating: navigationT("navigating"),
+                            zeroRegions: navigationT("zeroRegions"),
                           }}
                         >
-                          <CatalogNavigation {...navigationProps} />
                           {!navigation && facets && (
                             <CatalogFacetResults
                               dimension="region"

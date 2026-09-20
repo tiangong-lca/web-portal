@@ -176,23 +176,27 @@ export const UnifiedChinaInteractions: Story = {
   args: World.args,
   // Retain the canonical SVG boundary-group regression independently of the production
   // WebGL explorer, whose pointer and camera behavior is covered in the globe stories/E2E.
-  render: (args) => (
-    <RegionMap
-      url={mapManifest.layers.world.url}
-      entries={args.entries.map((entry) => ({
-        ...entry,
-        label: geographyName(entry.code, "zh-CN") ?? entry.label,
-      }))}
-      title="按地区浏览"
-      loadingLabel="正在加载地图"
-      unavailableLabel="地图暂不可用"
-      legend="匹配的公开版本数"
-      selectLabel="选择地区"
-      exploreLabel="浏览下级地区"
-      viewDataLabel="查看数据"
-      clearLabel="取消选择"
-    />
-  ),
+  render: (args, { globals }) => {
+    const locale = storyLocale(globals);
+    const t = dictionaries[locale].Navigation;
+    return (
+      <RegionMap
+        url={mapManifest.layers.world.url}
+        entries={args.entries.map((entry) => ({
+          ...entry,
+          label: geographyName(entry.code, locale) ?? entry.label,
+        }))}
+        title={t.geography}
+        loadingLabel={t.mapLoading}
+        unavailableLabel={t.mapUnavailable}
+        legend={t.mapLegend}
+        selectLabel={t.selectRegion}
+        exploreLabel={t.exploreRegion}
+        viewDataLabel={t.viewData}
+        clearLabel={t.clearSelection}
+      />
+    );
+  },
   play: async ({ canvas, canvasElement, userEvent }) => {
     const show = canvas.queryByRole("button", { name: "显示地图" });
     if (show) await userEvent.click(show);
@@ -246,6 +250,7 @@ export const UnifiedChinaMobileDark: Story = {
 
 export const ChinaCountUnavailable: Story = {
   ...World,
+  render: UnifiedChinaInteractions.render,
   globals: { locale: "en" },
   args: { entries: [taiwanEntry] },
   play: async ({ canvas, canvasElement, userEvent }) => {

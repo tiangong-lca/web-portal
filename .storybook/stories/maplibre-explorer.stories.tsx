@@ -168,13 +168,17 @@ export const KeyboardReducedMotion: Story = {
   },
 };
 export const FrenchFlat: Story = {
-  args: { initialLevel: "geo:cn", initialMode: "flat" },
+  args: { initialLevel: "world", initialMode: "flat" },
   globals: { locale: "fr" },
   play: async ({ canvasElement }) => {
     await ready(canvasElement);
     await expect(canvasElement.querySelector(".globe-prototype")).toHaveAttribute(
       "data-mode",
       "flat",
+    );
+    await expect(canvasElement.querySelector(".globe-scene-canvas")).toHaveAttribute(
+      "data-camera-longitude",
+      "137.000",
     );
   },
 };

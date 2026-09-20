@@ -151,7 +151,7 @@ export function MapScene(props: Props) {
         pitchWithRotate: false,
         maxPitch: 0,
         canvasContextAttributes: { antialias: true },
-        renderWorldCopies: false,
+        renderWorldCopies: true,
       });
     } catch {
       queueMicrotask(() => {
@@ -275,15 +275,19 @@ export function MapScene(props: Props) {
     // The camera instance survives every geographic level; callbacks read current React props.
   }, [props.unavailable]);
 
-  useEffect(() => {
+  const synchronizeProjection = useEffectEvent(() => {
     const map = mapRef.current;
-    if (!loaded || !map) return;
+    if (!map) return;
     // Globe begins flattening as country/province detail enters view.
     map.setProjection({
       type: props.globe
-        ? ["interpolate", ["linear"], ["zoom"], 2.0, "vertical-perspective", 4.0, "mercator"]
+        ? ["interpolate", ["linear"], ["zoom"], 2, "vertical-perspective", 4, "mercator"]
         : "mercator",
     });
+    fit(props.selected);
+  });
+  useEffect(() => {
+    if (loaded) synchronizeProjection();
   }, [loaded, props.globe]);
 
   useEffect(() => {

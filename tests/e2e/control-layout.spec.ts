@@ -157,7 +157,12 @@ test("offline basemap provides context and keeps Taiwan's contour solid", async 
   const taiwan = page.locator('[data-boundary-id="cnprov:710000"]');
   await expect(taiwan).toBeVisible();
   await expect(taiwan).toHaveCSS("stroke-dasharray", "none");
-  await expect(taiwan).toHaveAttribute("data-availability", "unknown");
+  await expect(taiwan).not.toHaveAttribute("data-availability", "unknown");
+  await expect(
+    page
+      .locator(".catalog-region-map svg")
+      .getByRole("link", { name: /^Taiwan Sheng,China: 0 public versions$/ }),
+  ).toBeVisible();
   const anhui = page.locator('[data-boundary-id="cnprov:340000"]');
   expect(await taiwan.evaluate((el) => getComputedStyle(el).strokeWidth)).toBe(
     await anhui.evaluate((el) => getComputedStyle(el).strokeWidth),

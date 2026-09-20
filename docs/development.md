@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 112a6dd96ef2adbb04f1da5a959fd95dda889798
+lastReviewedCommit: 386ef831bac1530b730b6cdec1df36dc62c0b9cd
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #105: the offline map generator keeps deterministic hashed outputs, common projection and graded context simplification; current map, Storybook, browser and Docpact commands cover the change."
+lastReviewedNote: "Reviewed for Portal #107: the offline asset pipeline receipts interaction aliases and exact supplementary paths; existing map, Storybook, browser and Docpact commands cover the change."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

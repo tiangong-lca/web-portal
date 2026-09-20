@@ -79,6 +79,25 @@ Background simplification is **graded** (`contextSimplify`), because a covered w
 
 Both `land` and `borders` use their layer's value. The shared context is pre-cut to the union of every declared background window (recorded as `contextWindow` in `coverage-report.json`), so a layer can never declare a window wider than the context it was cut from.
 
+## Interaction grouping
+
+A feature may carry `navigationNodeId`: an **interaction entry only** that never replaces `nodeId`. The renderer groups shapes by `navigationNodeId ?? nodeId`, so several paths can share one `Link`, one hover, one focus and one `href`, and it reads that entry's count **once** instead of summing the shapes.
+
+The world layer answers to a single `geo:cn` entry through four shapes:
+
+| Shape | `nodeId` | `navigationNodeId` | Where its path comes from |
+| --- | --- | --- | --- |
+| `ne50m:CHN` (mainland) | `geo:cn` | — (already the entry) | the world source |
+| `ne50m:TWN` (island of Taiwan) | `geo:tw` | `geo:cn` | the world source, unchanged |
+| `cnprov:100000_JD` (nine-dash inset) | `null` | `geo:cn` | copied byte for byte from `geo:cn` |
+| `datav:460300` (三沙市) | `null` | `geo:cn` | copied byte for byte from `geo:cn-hi` |
+
+The two borrowed shapes are **not new data**: the nine-dash line is the `adchar="JD"` feature of `china-province-100000-full`, and 三沙市 is adcode `460300` in `datav-460000`. Both were already projected into this same Pacific Robinson space by the layers that own them, so the world layer copies their emitted paths verbatim — nothing is redrawn or guessed from a latitude.
+
+Both stay `nodeId: null` because the **current** location dictionary holds no matching code. That is a statement about this mapping, not a claim that the places have no public records: a dictionary revision that adds a matching code must revisit them. The world layer therefore depends transitively on those two sources; no source is fetched, added or modified outside them.
+
+`coverage-report.json` reports the world layer's emitted `shapes` (265 source shapes + 2 borrowed = 267), with `sourceShapes` and `supplementShapes` broken out so the borrowed ones are never mistaken for source geometry.
+
 ## Resolution rules
 
 A shape receives a `nodeId` only when the source itself asserts a code the Portal location dictionary already contains, and only when that assertion is unique. Nothing is guessed from a similar name, a neighbouring boundary, a successor administration or a historic predecessor; an unresolved shape keeps `nodeId: null` and is recorded in the audit trail.

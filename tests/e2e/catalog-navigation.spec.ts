@@ -1,6 +1,73 @@
 import { gzipSync } from "node:zlib";
 import { expect, test } from "@playwright/test";
 
+test("mainland, Taiwan and South China Sea share real pointer, keyboard and navigation behavior", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en/search?explore=region");
+  const map = page.locator(".catalog-region-map svg");
+  const china = map.getByRole("link", { name: /^China:/ });
+  await expect(china).toBeVisible();
+  await expect(china).toHaveCount(1);
+  const ids = ["ne50m:CHN", "ne50m:TWN", "datav:460300", "cnprov:100000_JD"];
+  for (const id of ids) {
+    const shape = map.locator(`[data-boundary-id="${id}"]`);
+    await expect(shape).toBeVisible();
+    await shape.scrollIntoViewIfNeeded();
+    // Tiny islands and broken cartographic marks have sea in their bounding-box center.
+    // Hit an actual visible contour, not that empty center or a synthetic dispatched click.
+    const point = await shape.evaluate((element) => {
+      const path = element as SVGPathElement;
+      const box = path.getBoundingClientRect();
+      const matrix = path.getScreenCTM()!;
+      const candidates: { x: number; y: number }[] = [];
+      // Prefer visible land interiors, then contour points for tiny islands/line marks.
+      for (const x of [0.5, 0.25, 0.75])
+        for (const y of [0.5, 0.25, 0.75])
+          candidates.push({ x: box.x + box.width * x, y: box.y + box.height * y });
+      for (let i = 0; i < 80; i++) {
+        const position = path.getPointAtLength((path.getTotalLength() * (i + 0.5)) / 80);
+        const screen = new DOMPoint(position.x, position.y).matrixTransform(matrix);
+        candidates.push(screen);
+      }
+      const hit = candidates.find(({ x, y }) => document.elementFromPoint(x, y) === path);
+      if (!hit) throw new Error(`No painted pointer target for ${path.dataset.boundaryId}`);
+      return { x: hit.x, y: hit.y };
+    });
+    await page.mouse.move(point.x, point.y);
+    await expect(
+      page.locator(".catalog-map-selection-description strong"),
+      `${id} pointer preview`,
+    ).toHaveText("China");
+    for (const groupedId of ids) {
+      await expect(map.locator(`[data-boundary-id="${groupedId}"]`)).toHaveCSS(
+        "stroke-width",
+        "2px",
+      );
+    }
+    await page.mouse.click(point.x, point.y);
+    await expect(china).toHaveAttribute("data-selected", "true");
+    const action = page.getByRole("link", { name: "Explore subregions", exact: true });
+    expect(
+      new URL((await action.getAttribute("href"))!, page.url()).searchParams.get("geoNode"),
+    ).toBe("geo:cn");
+    await page.getByRole("button", { name: "Clear selection", exact: true }).click();
+    await expect(china).toBeFocused();
+  }
+  await china.press("Enter");
+  await expect(china).toHaveAttribute("data-selected", "true");
+  await page.getByRole("link", { name: "Explore subregions", exact: true }).click();
+  await expect(page).toHaveURL(/geoNode=geo%3Acn(?:&|$)/);
+  await expect(
+    page.locator(".catalog-navigation-list").getByRole("link", { name: /Anhui/ }),
+  ).toBeVisible();
+  await page.goBack();
+  await expect(china).toBeVisible();
+  await expect(china).toHaveCount(1);
+});
+
 test("drills from world to a Chinese city and opens an exact public version", async ({ page }) => {
   const layers: string[] = [];
   page.on("request", (request) => {

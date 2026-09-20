@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { FeedbackLink } from "@/components/shell/feedback-link";
 import { Button } from "@/components/ui/button";
 import type { NavigationEntry } from "./catalog-navigation";
 import { containsViewBox, parseViewBox } from "./map-viewport";
 import { useMapCamera } from "./use-map-camera";
+import { groupMapInteractions, type MapFeature } from "./map-interactions";
 
 type MapLayer = {
   viewBox: string;
   coordinateSpace?: string;
   basemap?: { viewBox?: string; land: string; graticule: string; borders?: string; frame?: string };
-  features: { boundaryId: string; nodeId: string | null; path: string }[];
+  features: MapFeature[];
 };
 
 function validContextPath(value: unknown) {
@@ -44,6 +45,7 @@ function validLayer(value: unknown): value is MapLayer {
         typeof feature === "object" &&
         typeof feature.boundaryId === "string" &&
         (feature.nodeId === null || typeof feature.nodeId === "string") &&
+        (feature.navigationNodeId === undefined || typeof feature.navigationNodeId === "string") &&
         typeof feature.path === "string" &&
         /^[MmLlHhVvCcSsQqTtAaZz0-9., eE+-]+$/u.test(feature.path),
     )
@@ -163,6 +165,7 @@ export function RegionMap({
         const layer: unknown = JSON.parse(text);
         if (!validLayer(layer)) throw new Error("Invalid layer");
         if (active) {
+          setHovered(null);
           setState((previous) => ({
             url,
             layer,
@@ -183,6 +186,7 @@ export function RegionMap({
   }, [url]);
   const current = state?.url === url ? state : null;
   const layer = state?.layer;
+  const groups = useMemo(() => groupMapInteractions(layer?.features ?? []), [layer]);
   const failed = failedUrl === url;
   const isWorld = (state?.url ?? url).startsWith("/maps/world.");
   const svg = useMapCamera(
@@ -194,7 +198,7 @@ export function RegionMap({
   const byNode = new Map((current ? entries : []).map((entry) => [entry.nodeId, entry]));
   const selected = selection?.url === url ? byNode.get(selection.nodeId) : undefined;
   const preview = selected ?? (hovered ? byNode.get(hovered) : undefined);
-  const maximum = Math.max(1, ...entries.map((entry) => entry.count));
+  const maximum = Math.max(1, ...groups.map((group) => byNode.get(group.nodeId ?? "")?.count ?? 0));
   // An interactive SVG group contains links; fieldset is not a valid SVG replacement.
   /* oxlint-disable jsx-a11y/prefer-tag-over-role */
   return (
@@ -213,25 +217,27 @@ export function RegionMap({
               <g className="catalog-map-transition-context">{background(state.backdrop, true)}</g>
               <g className="catalog-map-current-context">{background(layer)}</g>
               <g className="catalog-map-data">
-                {layer.features.map((feature, index) => {
-                  const entry = feature.nodeId ? byNode.get(feature.nodeId) : undefined;
-                  const key = `${feature.boundaryId}:${index}`;
+                {groups.map((group) => {
+                  const entry = group.nodeId ? byNode.get(group.nodeId) : undefined;
                   if (!entry)
                     return (
-                      <path
-                        key={key}
-                        className="catalog-map-feature"
-                        data-boundary-id={feature.boundaryId}
-                        d={feature.path}
-                        data-availability="unknown"
-                        aria-hidden="true"
-                      />
+                      <g key={group.key} aria-hidden="true">
+                        {group.features.map((feature) => (
+                          <path
+                            key={feature.boundaryId}
+                            className="catalog-map-feature"
+                            data-boundary-id={feature.boundaryId}
+                            d={feature.path}
+                            data-availability="unknown"
+                          />
+                        ))}
+                      </g>
                     );
                   const shade =
                     entry.count === 0 ? 0 : Math.max(1, Math.ceil((entry.count / maximum) * 4));
                   return (
                     <Link
-                      key={key}
+                      key={group.key}
                       href={entry.href}
                       prefetch={false}
                       aria-label={`${entry.label}: ${entry.countLabel}`}
@@ -255,11 +261,14 @@ export function RegionMap({
                       <title>
                         {entry.label}: {entry.countLabel}
                       </title>
-                      <path
-                        className="catalog-map-feature"
-                        data-boundary-id={feature.boundaryId}
-                        d={feature.path}
-                      />
+                      {group.features.map((feature) => (
+                        <path
+                          key={feature.boundaryId}
+                          className="catalog-map-feature"
+                          data-boundary-id={feature.boundaryId}
+                          d={feature.path}
+                        />
+                      ))}
                     </Link>
                   );
                 })}
@@ -291,7 +300,10 @@ export function RegionMap({
           </span>
         </figcaption>
       </figure>
-      <div className="catalog-map-selection" aria-live="polite">
+      <div className="catalog-map-selection">
+        <span className="sr-only" aria-live="polite">
+          {selected ? `${selected.label}: ${selected.countLabel}` : ""}
+        </span>
         <div className="catalog-map-selection-description">
           {preview ? (
             <>

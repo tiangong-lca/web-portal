@@ -17,9 +17,9 @@
   },
   "layers": {
     "world": {
-      "url": "/maps/world.38300507e97e5bc0.json",
-      "sha256": "38300507e97e5bc093f7ecd60c890c4d4633274b59100bb3170d52ba0879dfc9",
-      "gzipBytes": 136065
+      "url": "/maps/world.26b44225a2cbcacb.json",
+      "sha256": "26b44225a2cbcacbc0eb6159354be566dbe55a15a7b0edfba84b7188656acb68",
+      "gzipBytes": 137423
     },
     "geo:cn": {
       "url": "/maps/geo-cn.bd2998c79efc75ba.json",
@@ -164,6 +164,30 @@
   },
   "projection": "+proj=robin +lon_0=150",
   "coordinateSpace": "pacific-robinson-v1",
+  "interaction": {
+    "rule": "navigationNodeId ?? nodeId",
+    "note": "`navigationNodeId` is an interaction entry only and never replaces `nodeId`. The world layer answers to one `geo:cn` entry through its mainland shape (nodeId geo:cn) plus one alias (the island of Taiwan, still geo:tw) and two borrowed South China Sea shapes (the nine-dash inset and 三沙市). Those two are copied byte for byte from the layers that already project them in this same coordinate space: they are not redrawn and not guessed from a latitude. They carry nodeId null because the current location dictionary holds no matching code — a statement about this mapping, not a claim that the places have no public records; a dictionary revision that adds such a code must revisit them.",
+    "aliases": [
+      {
+        "boundaryId": "ne50m:TWN",
+        "navigationNodeId": "geo:cn"
+      }
+    ],
+    "supplements": [
+      {
+        "boundaryId": "cnprov:100000_JD",
+        "from": "geo:cn",
+        "source": "china-province-100000-full",
+        "sourceField": "adchar=\"JD\" (nine-dash line inset)"
+      },
+      {
+        "boundaryId": "datav:460300",
+        "from": "geo:cn-hi",
+        "source": "datav-460000",
+        "sourceField": "adcode 460300 (三沙市)"
+      }
+    ]
+  },
   "simplify": {
     "world": "20%",
     "chinaProvince": "50%",
@@ -567,7 +591,7 @@
       {
         "layer": "world",
         "source": "world-map-units-50m",
-        "shapes": 265,
+        "shapes": 267,
         "mapped": 261
       },
       {

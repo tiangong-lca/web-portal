@@ -72,6 +72,15 @@ async function collectVitals(page: Page, route: string): Promise<Vitals> {
       timeout: artworkReadyTimeout,
     });
   }
+  // A visible heading can precede its first painted frame. LCP stops after the first input,
+  // so wait for a real paint receipt before exercising the theme control.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => (window as unknown as { __portalVitals: Omit<Vitals, "ttfb"> }).__portalVitals.lcp,
+      ),
+    )
+    .toBeGreaterThan(0);
   await expect(page.locator("html")).not.toHaveClass(/dark/);
   const darkTheme = page.getByRole("radio", { name: "Dark" });
   await darkTheme.click();

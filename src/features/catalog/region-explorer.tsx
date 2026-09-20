@@ -1,5 +1,6 @@
 "use client";
 
+import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
@@ -118,24 +119,24 @@ export function RegionExplorer({
     }
   }, [pending]);
 
+  const controls = (
+    <div className="catalog-map-toolbar">
+      {mapUrl && (
+        <Button
+          className="catalog-map-toggle"
+          variant="outline"
+          type="button"
+          aria-expanded={visible}
+          onClick={() => setChoice(!visible)}
+        >
+          {visible ? labels.hideMap : labels.showMap}
+        </Button>
+      )}
+      <span className="catalog-region-progress sr-only">{pending ? labels.navigating : ""}</span>
+    </div>
+  );
   const visual = (
     <div className="catalog-region-visual">
-      <div className="catalog-map-toolbar">
-        {mapUrl && (
-          <Button
-            className="catalog-map-toggle"
-            variant="outline"
-            type="button"
-            aria-expanded={visible}
-            onClick={() => setChoice(!visible)}
-          >
-            {visible ? labels.hideMap : labels.showMap}
-          </Button>
-        )}
-        <output className="catalog-region-progress" aria-live="polite">
-          {pending ? labels.navigating : ""}
-        </output>
-      </div>
       {!mapUrl && (
         <p className="text-muted-foreground text-sm">{labels.noMap ?? labels.unavailable}</p>
       )}
@@ -161,6 +162,7 @@ export function RegionExplorer({
       {!visible && choice === null && mapUrl && (
         <div className="catalog-map-placeholder hidden min-h-80 md:block" aria-hidden="true" />
       )}
+      <PendingFeedback pending={pending} />
       <span id={listId} tabIndex={-1} />
     </div>
   );
@@ -174,6 +176,8 @@ export function RegionExplorer({
       {navigation ? (
         <CatalogNavigation
           {...navigation}
+          actions={controls}
+          pathAsHeading
           headingLabel={
             navigation.currentLabel ? `${labels.title}: ${navigation.currentLabel}` : labels.title
           }
@@ -181,7 +185,10 @@ export function RegionExplorer({
           visual={visual}
         />
       ) : (
-        visual
+        <>
+          {controls}
+          {visual}
+        </>
       )}
       {children}
       <noscript>

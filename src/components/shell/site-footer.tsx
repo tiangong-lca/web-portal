@@ -1,7 +1,7 @@
 import "./site-shell.css";
 import { BrandLogo } from "@/components/brand/brand-logo";
 import { ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { getTranslations } from "next-intl/server";
 
 import { Separator } from "@/components/ui/separator";

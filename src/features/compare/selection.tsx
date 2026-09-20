@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, ChevronDownIcon, GitCompareArrowsIcon, XIcon } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { useRouter } from "next/navigation";
 import {
   createContext,
@@ -10,9 +10,11 @@ import {
   useEffect,
   useMemo,
   useState,
+  useTransition,
   type ReactNode,
 } from "react";
 
+import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import { Button } from "@/components/ui/button";
 import { isExactDatasetRef } from "@/features/catalog/exact-ref";
 import { localePath, type PortalLocale } from "@/i18n/routing";
@@ -53,6 +55,7 @@ export function CompareSelectionProvider({
   const [members, setMembers] = useState<CompareSelectionItem[]>([]);
   const [limited, setLimited] = useState(false);
   const router = useRouter();
+  const [pending, startTransition] = useTransition();
   const replace = useCallback((items: CompareSelectionItem[]) => {
     const valid = [
       ...new Map(
@@ -78,7 +81,7 @@ export function CompareSelectionProvider({
     [members],
   );
   const open = useCallback(
-    () => router.push(compareSelectionHref(locale, members)),
+    () => startTransition(() => router.push(compareSelectionHref(locale, members))),
     [router, locale, members],
   );
   const value = useMemo(
@@ -89,6 +92,7 @@ export function CompareSelectionProvider({
   return (
     <CompareSelectionContext.Provider value={value}>
       {children}
+      <PendingFeedback pending={pending} />
       {members.length > 0 ? (
         <>
           <div aria-hidden="true" className="h-44 shrink-0" />

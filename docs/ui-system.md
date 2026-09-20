@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 38e78553acb5472099bd2edcb7bf389750d9032a
+lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #101: Pacific-centered offline geometry, balanced region grid, native zero-count disclosure and persistent progressive drilldown. 321 unit tests, 232 Storybook scenarios, 72 browser tests and 8 final navigation regressions passed; no contract or count-semantics change."
+lastReviewedNote: "Reviewed for Portal #103: compact control grouping, responsive regional map insets and genuine delayed navigation feedback preserve four-locale, no-JavaScript, privacy, count and public-data boundaries. Twelve page families were visually audited; source delivery and final hosted readback remain tracked in the PR."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -270,7 +270,7 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 
 目录条目按标题与能力图标、元信息、两行真实摘要排列，摘要来自公开搜索契约的 `summary`，不额外请求详情或虚构缺失描述。精确标识由图标复制，完整 UUID 在详情中展示；条目不再有 UUID 折叠区或重复详情按钮。引用复制与收藏为紧凑图标操作。过程/流浏览复用搜索页面实现；需求描述复用结果行、类型切换、工具栏与分页外观，排序仍遵守各检索接口能力。选择操作条仅在选中条目后出现，不足两项不能比较。
 
-顶层导航以数据目录统一搜索与浏览，不再单列浏览。目录初始页的过程、流、地区和来源入口通过 `explore` 参数进入紧凑结果布局，搜索框以原生 View Transition 过渡，减少动态效果时直接导航。结果工具栏保留四个维度；地区与来源使用相同查询和筛选的公开聚合接口，不从当前页结果计算。点击聚合值回到带条件的数据列表。旧浏览 URL 保持兼容。
+顶层导航以数据目录统一搜索与浏览，不再单列浏览。目录初始页的过程、流、地区和来源入口通过 `explore` 参数进入紧凑结果布局，搜索与目录导航保持现有内容可操作，通过局部提示和延迟出现的细进度条反馈等待，不以页面截图等待阻断交互。结果工具栏保留四个维度；地区与来源使用相同查询和筛选的公开聚合接口，不从当前页结果计算。点击聚合值回到带条件的数据列表。旧浏览 URL 保持兼容。
 
 数据说明与候选清单使用 `PortalPage` 统一容器、标题与说明排版。数据说明为章节导航与阅读正文，候选清单复用目录记录行，清单信息与手动添加默认收起，导入、备份与分享集中于工具栏，状态和备注保留在记录内；导入、分享及本地存储错误处理保持原行为。页头导航使用跟随鼠标悬停和键盘焦点的低强调品牌底色，离开后回到当前页面，减少动态效果偏好下禁用过渡，页脚使用品牌标识与低强调链接，不再重复记录核对提示。Storybook 直接使用数据说明组件及候选清单页面视图，Shell 场景同时展示页头与页脚。
 
@@ -287,3 +287,9 @@ Header 与 Footer 的容器宽度、响应式边距及字体由 `src/components/
 地区地图是地区列表的渐进增强：桌面默认显示，手机由按钮展开；无 JavaScript、地图失败和无法定位的范围仍可通过文字链接进入结果及精确版本详情。颜色仅表示匹配公开版本数，未载入不代表零；跨区、历史范围与歧义编码不强配行政边界。浏览器只获取当前层的预投影 SVG 路径，不载入全世界城市、不请求第三方地图服务。地图来源、边界映射、简化参数和不能定位的条目均绑定资源 receipt。现有主题语义色、焦点、四语、44px 触控和减少动态效果规范继续适用。
 
 地区探索的地图和地区网格采用上下排列，路径保持在地图之前；零匹配地区用原生可展开项收纳。地图支持选择后原位显示名称、数量和明确动作，选中时用边框和文字共同表达。下钻保留画布及手机展开选择，加载状态可被辅助技术读取，完成后焦点回到当前地区面板；回到地区面板阅读起点不使用滚动动画。
+
+### 控件编排与导航反馈
+
+目录维度、筛选和排序组成完整工具栏，已应用条件紧接其下；工具栏位于分类和结果共同上方。地区路径作为上下文标题，范围切换与地图开关在桌面右侧同行，手机按组自然换行。分类栏避免重复标题，详情动作保持紧凑同排，核对和候选清单按选择/导入/分享的任务关系分组。阅读型页面保持自身内容分区。
+
+同源 Next 链接通过共享反馈组件显示局部等待标记，搜索、排序、筛选抽屉和核对导航使用 React transition 保留现有内容。约 150ms 后仍未完成才显示细进度条及四语礼貌播报；不遮挡页面、不使用虚假百分比。取消、完成、组件卸载均清除相应状态；减少动态效果时保留静态提示。地图选择本身是即时局部行为，明确下钻才启动导航反馈。中国及省市图在画布内保留 24–40px 响应式留白；世界图保留原构图和源几何。

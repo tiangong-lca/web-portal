@@ -51,7 +51,8 @@
     "communityCompact": "Community",
     "collectionsCompact": "Shortlist",
     "catalog": "Data catalog",
-    "catalogCompact": "Catalog"
+    "catalogCompact": "Catalog",
+    "loading": "Loading…"
   },
   "Home": {
     "eyebrow": "TianGong LCA Data Portal",

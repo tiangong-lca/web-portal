@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { Button } from "@/components/ui/button";
 /** @import import { CatalogKindSwitch } from "@/features/catalog/catalog-kind-switch"; */
 export function CatalogKindSwitch({

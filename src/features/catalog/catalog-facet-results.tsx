@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { localizedText } from "./map-public-data";
 import { facetHref } from "./search-links";
 import { formatGeographyCode } from "@/i18n/geography";

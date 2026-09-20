@@ -25,7 +25,7 @@
 .actions {
   align-self: start;
   margin-top: 36px;
-  max-width: 340px;
+  max-width: 440px;
 }
 .actions [data-slot="button"],
 .actions [data-slot="dialog-trigger"],

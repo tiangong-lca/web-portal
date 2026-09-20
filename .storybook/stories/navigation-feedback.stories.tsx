@@ -1,0 +1,86 @@
+import { useState } from "react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect } from "storybook/test";
+import { Button } from "@/components/ui/button";
+import { FeedbackLink } from "@/components/shell/feedback-link";
+import {
+  NavigationFeedbackProvider,
+  PendingFeedback,
+} from "@/components/shell/navigation-feedback";
+import { dictionaries, storyLocale } from "../fixtures";
+
+function FeedbackExample({
+  initialPending,
+  startLabel,
+  finishLabel,
+  catalogLabel,
+}: {
+  initialPending: boolean;
+  startLabel: string;
+  finishLabel: string;
+  catalogLabel: string;
+}) {
+  const [pending, setPending] = useState(initialPending);
+  return (
+    <div className="flex max-w-xl flex-wrap items-center gap-3 p-6">
+      <Button
+        onClick={() => setPending(true)}
+        aria-busy={pending}
+        className="portal-pending-control"
+        data-pending={pending || undefined}
+      >
+        {startLabel}
+      </Button>
+      <Button onClick={() => setPending(false)} variant="outline">
+        {finishLabel}
+      </Button>
+      <FeedbackLink href="/en/search" prefetch={false}>
+        {catalogLabel}
+      </FeedbackLink>
+      <PendingFeedback pending={pending} />
+    </div>
+  );
+}
+const meta = {
+  title: "Shell/Navigation feedback",
+  component: NavigationFeedbackProvider,
+  subcomponents: { FeedbackLink, PendingFeedback, Button },
+  args: { label: "Loading…", children: null },
+  parameters: { initialPending: false },
+  render: (args, { globals, parameters }) => {
+    const t = dictionaries[storyLocale(globals)].Common;
+    return (
+      <NavigationFeedbackProvider {...args} label={t.loading}>
+        <FeedbackExample
+          initialPending={parameters.initialPending}
+          startLabel={t.search}
+          finishLabel={t.close}
+          catalogLabel={t.catalogCompact}
+        />
+      </NavigationFeedbackProvider>
+    );
+  },
+} satisfies Meta<typeof NavigationFeedbackProvider>;
+export default meta;
+type Story = StoryObj<typeof meta>;
+export const Idle: Story = {};
+export const Waiting: Story = {
+  parameters: { initialPending: true },
+  play: async ({ canvas, globals }) => {
+    await expect(
+      await canvas.findByText(dictionaries[storyLocale(globals)].Common.loading),
+    ).toBeVisible();
+  },
+};
+export const CancelAndRetry: Story = {
+  play: async ({ canvas, globals, userEvent }) => {
+    const t = dictionaries[storyLocale(globals)].Common;
+    await userEvent.click(canvas.getByRole("button", { name: t.search }));
+    await expect(await canvas.findByText(t.loading)).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: t.close }));
+    await expect(canvas.queryByText(t.loading)).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: t.search }));
+    await expect(await canvas.findByText(t.loading)).toBeVisible();
+  },
+};
+export const GermanDark: Story = { ...Waiting, globals: { theme: "dark", locale: "de" } };

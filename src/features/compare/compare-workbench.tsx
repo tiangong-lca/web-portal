@@ -5,7 +5,7 @@ import {
   GitCompareArrowsIcon,
   TriangleAlertIcon,
 } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";

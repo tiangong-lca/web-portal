@@ -1,7 +1,9 @@
 "use client";
 
 import { FilterIcon } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useState, useTransition, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { PendingFeedback } from "@/components/shell/navigation-feedback";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -23,12 +25,20 @@ export function ResponsiveFacets({
   labels: { title: string; description: string; close: string };
 }) {
   const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
   return (
     <>
+      <PendingFeedback pending={pending} />
       <div className={drawer ? "portal-facets-trigger" : "portal-facets-trigger xl:hidden"}>
         <Sheet onOpenChange={setOpen} open={open}>
           <SheetTrigger asChild>
-            <Button className="min-h-11" variant="outline">
+            <Button
+              className="portal-pending-control min-h-11"
+              data-pending={pending || undefined}
+              aria-busy={pending}
+              variant="outline"
+            >
               <FilterIcon data-icon="inline-start" />
               {labels.title}
             </Button>
@@ -42,8 +52,27 @@ export function ResponsiveFacets({
             {/* oxlint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div
               className="overflow-y-auto px-4 pb-6 [&_[data-facet-intro]]:hidden"
-              onClick={(event) => {
-                if ((event.target as HTMLElement).closest("a[href]")) setOpen(false);
+              onClickCapture={(event) => {
+                if (
+                  event.defaultPrevented ||
+                  event.button !== 0 ||
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey
+                )
+                  return;
+                const target = event.target;
+                if (!(target instanceof Element)) return;
+                const anchor = target.closest("a[href]");
+                const href = anchor?.getAttribute("href");
+                if (!href || anchor?.hasAttribute("target") || anchor?.hasAttribute("download"))
+                  return;
+                const url = new URL(href, window.location.href);
+                if (url.origin !== window.location.origin) return;
+                event.preventDefault();
+                setOpen(false);
+                startTransition(() => router.push(`${url.pathname}${url.search}${url.hash}`));
               }}
             >
               {children}

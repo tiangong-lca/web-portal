@@ -8,18 +8,25 @@ export function CatalogResultsToolbar({
   scope,
   actions,
   headingRef,
+  hideTitle = false,
 }: {
   title: ReactNode;
   titleId: string;
   scope?: ReactNode;
   actions: ReactNode;
   headingRef?: Ref<HTMLHeadingElement>;
+  hideTitle?: boolean;
 }) {
   return (
     <div className="catalog-results-toolbar">
       <div className="catalog-results-toolbar-summary">
         {title && (
-          <h2 id={titleId} ref={headingRef} tabIndex={headingRef ? -1 : undefined}>
+          <h2
+            className={hideTitle ? "sr-only" : undefined}
+            id={titleId}
+            ref={headingRef}
+            tabIndex={headingRef ? -1 : undefined}
+          >
             {title}
           </h2>
         )}

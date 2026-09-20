@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 

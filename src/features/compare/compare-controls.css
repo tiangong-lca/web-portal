@@ -1,0 +1,17 @@
+.compare-member-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem 2rem;
+}
+.compare-member-actions > a {
+  justify-self: end;
+}
+@media (max-width: 767px) {
+  .compare-member-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .compare-member-actions > a {
+    justify-self: start;
+  }
+}

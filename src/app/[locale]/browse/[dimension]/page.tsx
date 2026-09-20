@@ -2,7 +2,7 @@ import SearchPage from "../../search/page";
 import { Rows3Icon } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { notFound } from "next/navigation";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";

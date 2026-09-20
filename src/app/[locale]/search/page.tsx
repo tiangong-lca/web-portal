@@ -6,7 +6,7 @@ import { CatalogResultsToolbar } from "@/features/catalog/catalog-results-toolba
 import { CatalogSearchLayout } from "@/features/catalog/catalog-search-layout";
 import { CatalogSearchInput } from "@/features/catalog/catalog-search-input";
 import { ArrowLeftIcon, ArrowRightIcon, SearchIcon, XIcon } from "lucide-react";
-import Link from "next/link";
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -420,42 +420,101 @@ export default async function SearchPage({
                   </KeywordSearchForm>
                 </search>
 
-                {filterSummary.length > 0 ? (
-                  <div
-                    aria-label={t("appliedFilters")}
-                    className="flex flex-wrap items-center gap-2"
-                  >
-                    {filterSummary.map((entry) => {
-                      const params = searchParameters(parsedSearch, null);
-                      entry.keys.forEach((key) => params.delete(key));
-                      return (
-                        <Button
-                          asChild
-                          className="h-auto min-h-11 whitespace-normal"
-                          key={entry.keys[0]}
-                          variant="outline"
-                        >
-                          <Link
-                            aria-label={`${common("clear")}: ${entry.label}`}
-                            href={`${localePath(locale, "search")}?${params}`}
-                            prefetch={false}
+                <CatalogSearchLayout>
+                  <div className="catalog-control-bar">
+                    <CatalogResultsToolbar
+                      hideTitle={!query}
+                      titleId="results-heading"
+                      title={query ? `“${query}”` : reference("catalog")}
+                      scope={
+                        <>
+                          {" "}
+                          <CatalogKindSwitch
+                            value={dimension}
+                            label={t("objectType")}
+                            labels={{
+                              process: common("process"),
+                              flow: common("flow"),
+                              region: t("region"),
+                              source: home("browseSource"),
+                            }}
+                            hrefs={{
+                              process: facetHref(locale, parsedSearch, "kind", "process")!,
+                              flow: facetHref(locale, parsedSearch, "kind", "flow")!,
+                              region: `${searchHref(locale, parsedSearch, null)}&explore=region`,
+                              source: `${searchHref(locale, parsedSearch, null)}&explore=source`,
+                            }}
+                          />
+                        </>
+                      }
+                      actions={
+                        <>
+                          {" "}
+                          <ResponsiveFacets
+                            drawer
+                            labels={{
+                              title: t("facets"),
+                              description: t("filtersDescription"),
+                              close: common("close"),
+                            }}
                           >
-                            <span>
-                              {entry.label}: {entry.value}
-                            </span>
-                            <XIcon data-icon="inline-end" />
+                            {facetContent}
+                          </ResponsiveFacets>
+                          {!aggregateView && (
+                            <CatalogSort
+                              value={parsedSearch.sort}
+                              label={reference("sort")}
+                              options={(
+                                [
+                                  ["relevance", "sortRelevance"],
+                                  ["modified_desc", "sortModified"],
+                                  ["name_asc", "sortName"],
+                                ] as const
+                              ).map(([value, label]) => ({
+                                value,
+                                label: t(label),
+                                href: preserveNavigationPage(
+                                  searchHref(locale, { ...parsedSearch, sort: value }, null),
+                                )!,
+                              }))}
+                            />
+                          )}
+                        </>
+                      }
+                    />
+                    {filterSummary.length > 0 ? (
+                      <div aria-label={t("appliedFilters")} className="catalog-applied-filters">
+                        {filterSummary.map((entry) => {
+                          const params = searchParameters(parsedSearch, null);
+                          entry.keys.forEach((key) => params.delete(key));
+                          return (
+                            <Button
+                              asChild
+                              className="h-auto min-h-11 whitespace-normal"
+                              key={entry.keys[0]}
+                              variant="outline"
+                            >
+                              <Link
+                                aria-label={`${common("clear")}: ${entry.label}`}
+                                href={`${localePath(locale, "search")}?${params}`}
+                                prefetch={false}
+                              >
+                                <span>
+                                  {entry.label}: {entry.value}
+                                </span>
+                                <XIcon data-icon="inline-end" />
+                              </Link>
+                            </Button>
+                          );
+                        })}
+                        <Button asChild variant="ghost">
+                          <Link href={clearFiltersHref} prefetch={false}>
+                            {t("clearFilters")}
                           </Link>
                         </Button>
-                      );
-                    })}
-                    <Button asChild variant="ghost">
-                      <Link href={clearFiltersHref} prefetch={false}>
-                        {t("clearFilters")}
-                      </Link>
-                    </Button>
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
-                <CatalogSearchLayout>
                   <div className={!aggregateView ? "catalog-hierarchy-layout" : ""}>
                     {!aggregateView && (
                       <details className="catalog-classification-panel" open>
@@ -468,65 +527,6 @@ export default async function SearchPage({
                       aria-live="polite"
                       className="min-w-0"
                     >
-                      <CatalogResultsToolbar
-                        titleId="results-heading"
-                        title={query ? `“${query}”` : reference("catalog")}
-                        scope={
-                          <>
-                            {" "}
-                            <CatalogKindSwitch
-                              value={dimension}
-                              label={t("objectType")}
-                              labels={{
-                                process: common("process"),
-                                flow: common("flow"),
-                                region: t("region"),
-                                source: home("browseSource"),
-                              }}
-                              hrefs={{
-                                process: facetHref(locale, parsedSearch, "kind", "process")!,
-                                flow: facetHref(locale, parsedSearch, "kind", "flow")!,
-                                region: `${searchHref(locale, parsedSearch, null)}&explore=region`,
-                                source: `${searchHref(locale, parsedSearch, null)}&explore=source`,
-                              }}
-                            />
-                          </>
-                        }
-                        actions={
-                          <>
-                            {" "}
-                            <ResponsiveFacets
-                              drawer
-                              labels={{
-                                title: t("facets"),
-                                description: t("filtersDescription"),
-                                close: common("close"),
-                              }}
-                            >
-                              {facetContent}
-                            </ResponsiveFacets>
-                            {!aggregateView && (
-                              <CatalogSort
-                                value={parsedSearch.sort}
-                                label={reference("sort")}
-                                options={(
-                                  [
-                                    ["relevance", "sortRelevance"],
-                                    ["modified_desc", "sortModified"],
-                                    ["name_asc", "sortName"],
-                                  ] as const
-                                ).map(([value, label]) => ({
-                                  value,
-                                  label: t(label),
-                                  href: preserveNavigationPage(
-                                    searchHref(locale, { ...parsedSearch, sort: value }, null),
-                                  )!,
-                                }))}
-                              />
-                            )}
-                          </>
-                        }
-                      />
                       {!hasQuery ? (
                         <Empty className="min-h-80">
                           <EmptyHeader>

@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-20
-lastReviewedCommit: 38e78553acb5472099bd2edcb7bf389750d9032a
+lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed for Portal #101: Pacific-centered offline geometry, balanced region grid, native zero-count disclosure and persistent progressive drilldown. 321 unit tests, 232 Storybook scenarios, 72 browser tests and 8 final navigation regressions passed; no contract or count-semantics change."
+lastReviewedNote: "Reviewed for Portal #103: compact control grouping, responsive regional map insets and genuine delayed navigation feedback preserve four-locale, no-JavaScript, privacy, count and public-data boundaries. Twelve page families were visually audited; source delivery and final hosted readback remain tracked in the PR."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -265,3 +265,5 @@ Navigation and Search/Facets V3 changes additionally require the generated Datab
 `Brand/Team Ensemble/Composition Studio` is a local Storybook-only editor. Drag face handles or use the Person, Depth, X, Bottom, Size and Layer controls; arrow keys nudge the selected portrait. Undo restores the previous edit. Desktop and mobile previews share the same 16:9 composition; the toggle only changes preview width. Crop top/right/bottom/left controls trim the image bounds in percentages without rescaling the face or editing the source file; opposite edges cannot exceed 99% in total. Crop settings scale with the fixed composition. Keep exposed silhouettes intact and hide straight crop edges behind overlapping portraits. Export layout reveals JSON for `src/features/team/team-ensemble-layout.json`; export does not write to disk. Preview enables the real profile interactions. This editor is not imported by public routes. Visual review must assess gaps and source-image crop edges as well as face visibility; passing interaction tests does not approve the composition.
 
 Geographic explorer changes require the pending-navigation, history, mobile map persistence, map failure and no-JavaScript zero-region journeys in `tests/e2e/catalog-navigation.spec.ts`. The Pacific-centered world uses Robinson at 150°E with an offline projection seam at 30°W; geometry regression tests check orientation and seam rings, while `check:maps` verifies receipts and unchanged reproducible layers. Selection is local, and drilldown uses the existing RSC navigation with no bulk prefetch or extra data endpoint.
+
+The control-layout audit uses `tests/e2e/control-layout.spec.ts` for twelve page families at desktop/mobile widths, regional map insets, effective 200% reflow, slow links/search and feedback after a filter drawer closes. `ui-navigation-feedback.test.tsx` covers the 150ms delay, cancellation and concurrent/unmounted operations. Shared feedback uses Next's `useLinkStatus` and real transitions; keep native href/GET behavior and reduced-motion tests. Use the Storybook navigation-feedback and region-controls scenarios alongside detail, shortlist and comparison consumers for visual review.

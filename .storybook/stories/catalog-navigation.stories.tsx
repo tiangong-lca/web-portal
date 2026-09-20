@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect } from "storybook/test";
 import { http, HttpResponse } from "msw";
+import { CatalogResultsToolbar } from "@/features/catalog/catalog-results-toolbar";
+import { CatalogKindSwitch } from "@/features/catalog/catalog-kind-switch";
+import { Button } from "@/components/ui/button";
+import { ResponsiveFacets } from "@/features/catalog/responsive-facets";
 import { CatalogNavigation } from "@/features/catalog/catalog-navigation";
 import { RegionExplorer } from "@/features/catalog/region-explorer";
 import { RegionMap } from "@/features/catalog/region-map";
@@ -11,7 +15,14 @@ import { geographyName } from "@/i18n/geography";
 const meta = {
   title: "Catalog/Hierarchical navigation",
   component: CatalogNavigation,
-  subcomponents: { RegionExplorer, RegionMap },
+  subcomponents: {
+    RegionExplorer,
+    RegionMap,
+    CatalogResultsToolbar,
+    CatalogKindSwitch,
+    ResponsiveFacets,
+    Button,
+  },
   tags: ["!autodocs"],
   args: {
     unavailable: false,
@@ -147,7 +158,7 @@ export const World: Story = {
   },
 };
 export const ChinaMap: Story = {
-  render: (args, { globals }) => {
+  render: (args, { globals, parameters }) => {
     const locale = storyLocale(globals);
     const t = dictionaries[locale].Navigation;
     const entries = [
@@ -164,7 +175,51 @@ export const ChinaMap: Story = {
       href: `/${locale}/search?explore=region&geoNode=geo:${code.toLowerCase()}`,
     }));
     return (
-      <div className="mx-auto max-w-6xl p-6">
+      <div className="mx-auto flex max-w-6xl flex-col gap-5 p-6">
+        {parameters.fullControls && (
+          <div className="catalog-control-bar">
+            <CatalogResultsToolbar
+              title={dictionaries[locale].Common.catalogCompact}
+              hideTitle
+              titleId="region-results"
+              scope={
+                <CatalogKindSwitch
+                  value="region"
+                  label={t.geography}
+                  labels={{
+                    process: dictionaries[locale].Common.process,
+                    flow: dictionaries[locale].Common.flow,
+                    region: t.geography,
+                  }}
+                  hrefs={{
+                    process: `/${locale}/search?kind=process`,
+                    flow: `/${locale}/search?kind=flow`,
+                    region: `/${locale}/search?explore=region`,
+                  }}
+                />
+              }
+              actions={
+                <ResponsiveFacets
+                  drawer
+                  labels={{
+                    title: dictionaries[locale].Search.facets,
+                    description: dictionaries[locale].Search.filtersDescription,
+                    close: dictionaries[locale].Common.close,
+                  }}
+                >
+                  <p>{dictionaries[locale].Search.region}</p>
+                </ResponsiveFacets>
+              }
+            />
+            <div className="catalog-applied-filters">
+              <Button variant="outline">
+                {dictionaries[locale].Search.region}: {geographyName("CN", locale)}
+              </Button>
+              <Button variant="ghost">{dictionaries[locale].Search.clearFilters}</Button>
+            </div>
+          </div>
+        )}
+
         <RegionExplorer
           mapUrl={mapManifest.layers["geo:cn"].url}
           entries={entries}
@@ -192,6 +247,15 @@ export const ChinaMap: Story = {
             breadcrumbs: [{ label: t.world, href: `/${locale}/search?explore=region` }],
             breadcrumbLabel: t.path,
             currentLabel: geographyName("CN", locale),
+            all: {
+              label: t.all.replace("{count}", "681"),
+              href: `/${locale}/search?geoNode=geo:cn`,
+              active: true,
+            },
+            direct: {
+              label: t.direct.replace("{count}", "12"),
+              href: `/${locale}/search?geoNode=geo:cn&geoScope=direct`,
+            },
             unavailableLabel: t.unavailable,
             emptyLabel: t.empty,
           }}
@@ -290,3 +354,10 @@ export const UnmappedLocations: Story = {
     );
   },
 };
+
+export const RegionControls: Story = { ...ChinaMap, parameters: { fullControls: true } };
+export const RegionControlsMobile: Story = {
+  ...RegionControls,
+  globals: { ...mobileGlobals, locale: "zh-CN" },
+};
+export const RegionControlsGerman: Story = { ...RegionControls, globals: { locale: "de" } };

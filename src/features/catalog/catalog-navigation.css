@@ -122,7 +122,7 @@
   font-size: 0.875rem;
 }
 .catalog-region-explorer[data-pending] .catalog-region-map {
-  opacity: 0.65;
+  opacity: 0.88;
 }
 .catalog-zero-regions > summary {
   min-height: 44px;
@@ -212,4 +212,128 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Context and actions form one browse bar instead of a stack of isolated rows. */
+.catalog-navigation-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem 2rem;
+}
+.catalog-navigation-context {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.catalog-navigation-context > p {
+  font-size: 0.8125rem;
+}
+.catalog-navigation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.catalog-map-toolbar {
+  gap: 0.5rem;
+}
+.catalog-region-progress:empty {
+  display: none;
+}
+.catalog-navigation-breadcrumbs {
+  align-items: center;
+}
+.catalog-navigation-compact .catalog-navigation-header {
+  align-items: start;
+}
+.catalog-navigation-compact .catalog-navigation-actions {
+  width: 100%;
+}
+.catalog-map-canvas:not([data-world]) {
+  padding: clamp(24px, 3vw, 40px);
+}
+.catalog-map-canvas:not([data-world]) svg,
+.catalog-map-canvas:not([data-world]) .catalog-region-map-status {
+  height: clamp(220px, 36vw, 400px);
+}
+@media (max-width: 767px) {
+  .catalog-navigation-header {
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .catalog-navigation-actions {
+    width: 100%;
+    gap: 0.375rem;
+  }
+  .catalog-navigation-actions > [data-slot="button"] {
+    flex: 1 1 auto;
+  }
+  .catalog-map-toolbar {
+    margin-left: auto;
+  }
+  .catalog-map-canvas:not([data-world]) {
+    padding: 24px 16px;
+  }
+}
+@media (min-width: 1024px) {
+  .catalog-classification-panel > summary {
+    display: none;
+  }
+}
+@media (max-width: 1023px) {
+  .catalog-classification-panel .catalog-navigation-context > h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+@media (max-width: 767px) {
+  .catalog-region-explorer .catalog-navigation-header {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 0.75rem;
+  }
+  .catalog-region-explorer .catalog-navigation-context {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .catalog-region-explorer .catalog-navigation-actions {
+    display: contents;
+  }
+  .catalog-region-explorer .catalog-navigation-actions > a {
+    grid-row: 2;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+    padding-inline: 0.625rem;
+  }
+  .catalog-region-explorer .catalog-navigation-actions > a:first-of-type {
+    grid-column: 1;
+  }
+  .catalog-region-explorer .catalog-navigation-actions > a:nth-of-type(2) {
+    grid-column: 2;
+  }
+  .catalog-region-explorer .catalog-map-toolbar {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    margin-left: 0;
+  }
+  .catalog-region-explorer .catalog-map-toggle {
+    max-width: 100%;
+    white-space: normal;
+  }
+  .catalog-region-explorer .catalog-navigation-breadcrumbs li {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .catalog-region-explorer .catalog-navigation-breadcrumbs h2 {
+    overflow-wrap: anywhere;
+  }
 }

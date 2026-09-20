@@ -20,9 +20,9 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
-lastReviewedAt: 2026-09-19
-lastReviewedCommit: 91aa406d3735b9d7d5e62eec8ac571be6ca37a24
-lastReviewedNote: "Reviewed for Portal #87: no capability row changes. Deduplicating the font definitions alters no runtime, routing, caching, CSP, image or fallback capability in this matrix, and the existing hosted measurements are historical evidence rather than a current budget. Font payload reduction is recorded in the development guide."
+lastReviewedAt: 2026-09-20
+lastReviewedCommit: 64daa3c8c117ce077ad2c1977193629228a9f0f0
+lastReviewedNote: "Reviewed for Portal #103: the layout adds a small client pending-feedback provider without changing locale HTML, static/ISR boundaries, CSP directives or server data caching. Existing historical hosted receipts and strict-profile findings remain unchanged; final hosted readback is recorded in the delivery PR."
 related:
   - ../design-plan.md
   - ../../AGENTS.md

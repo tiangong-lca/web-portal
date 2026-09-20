@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { FeedbackLink } from "@/components/shell/feedback-link";
 import { Button } from "@/components/ui/button";
 import type { NavigationEntry } from "./catalog-navigation";
 
@@ -98,52 +99,54 @@ export function RegionMap({
   /* oxlint-disable jsx-a11y/prefer-tag-over-role */
   return (
     <figure className="catalog-region-map">
-      {current?.layer ? (
-        <svg viewBox={current.layer.viewBox} role="group" aria-label={title}>
-          {current.layer.features.map((feature, index) => {
-            const entry = feature.nodeId ? byNode.get(feature.nodeId) : undefined;
-            const key = `${feature.boundaryId}:${index}`;
-            if (!entry)
+      <div className="catalog-map-canvas" data-world={url.startsWith("/maps/world.") || undefined}>
+        {current?.layer ? (
+          <svg viewBox={current.layer.viewBox} role="group" aria-label={title}>
+            {current.layer.features.map((feature, index) => {
+              const entry = feature.nodeId ? byNode.get(feature.nodeId) : undefined;
+              const key = `${feature.boundaryId}:${index}`;
+              if (!entry)
+                return (
+                  <path key={key} d={feature.path} data-availability="unknown" aria-hidden="true" />
+                );
+              const shade =
+                entry.count === 0 ? 0 : Math.max(1, Math.ceil((entry.count / maximum) * 4));
               return (
-                <path key={key} d={feature.path} data-availability="unknown" aria-hidden="true" />
+                <Link
+                  key={key}
+                  href={entry.href}
+                  prefetch={false}
+                  aria-label={`${entry.label}: ${entry.countLabel}`}
+                  data-count={shade}
+                  data-selected={selected?.nodeId === entry.nodeId || undefined}
+                  onMouseEnter={() => setHovered(entry.nodeId)}
+                  onMouseLeave={() => setHovered(null)}
+                  onFocus={() => setHovered(entry.nodeId)}
+                  onBlur={() => setHovered(null)}
+                  onClick={(event) => {
+                    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                    event.preventDefault();
+                    selectionTrigger.current = event.currentTarget;
+                    setSelection({ url, nodeId: entry.nodeId });
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") setSelection(null);
+                  }}
+                >
+                  <title>
+                    {entry.label}: {entry.countLabel}
+                  </title>
+                  <path d={feature.path} />
+                </Link>
               );
-            const shade =
-              entry.count === 0 ? 0 : Math.max(1, Math.ceil((entry.count / maximum) * 4));
-            return (
-              <Link
-                key={key}
-                href={entry.href}
-                prefetch={false}
-                aria-label={`${entry.label}: ${entry.countLabel}`}
-                data-count={shade}
-                data-selected={selected?.nodeId === entry.nodeId || undefined}
-                onMouseEnter={() => setHovered(entry.nodeId)}
-                onMouseLeave={() => setHovered(null)}
-                onFocus={() => setHovered(entry.nodeId)}
-                onBlur={() => setHovered(null)}
-                onClick={(event) => {
-                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-                  event.preventDefault();
-                  selectionTrigger.current = event.currentTarget;
-                  setSelection({ url, nodeId: entry.nodeId });
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Escape") setSelection(null);
-                }}
-              >
-                <title>
-                  {entry.label}: {entry.countLabel}
-                </title>
-                <path d={feature.path} />
-              </Link>
-            );
-          })}
-        </svg>
-      ) : (
-        <output className="catalog-region-map-status">
-          {current?.failed ? unavailableLabel : loadingLabel}
-        </output>
-      )}
+            })}
+          </svg>
+        ) : (
+          <output className="catalog-region-map-status">
+            {current?.failed ? unavailableLabel : loadingLabel}
+          </output>
+        )}
+      </div>
       <div className="catalog-map-selection" aria-live="polite">
         <div className="catalog-map-selection-description">
           {preview ? (
@@ -159,9 +162,9 @@ export function RegionMap({
         {selected && (
           <div className="catalog-map-selection-actions">
             <Button asChild>
-              <Link ref={action} href={selected.href} prefetch={false}>
+              <FeedbackLink ref={action} href={selected.href} prefetch={false}>
                 {selected.hasChildren ? exploreLabel : viewDataLabel}
-              </Link>
+              </FeedbackLink>
             </Button>
             <Button
               variant="ghost"

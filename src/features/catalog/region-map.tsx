@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import type { NavigationEntry } from "./catalog-navigation";
 
 type MapLayer = {
@@ -37,6 +38,10 @@ export function RegionMap({
   loadingLabel,
   unavailableLabel,
   legend,
+  selectLabel,
+  exploreLabel,
+  viewDataLabel,
+  clearLabel,
 }: {
   url: string;
   entries: NavigationEntry[];
@@ -44,7 +49,18 @@ export function RegionMap({
   loadingLabel: string;
   unavailableLabel: string;
   legend: string;
+  selectLabel: string;
+  exploreLabel: string;
+  viewDataLabel: string;
+  clearLabel: string;
 }) {
+  const action = useRef<HTMLAnchorElement>(null);
+  const selectionTrigger = useRef<HTMLAnchorElement | null>(null);
+  const [selection, setSelection] = useState<{ url: string; nodeId: string } | null>(null);
+  useEffect(() => {
+    if (selection) action.current?.focus({ preventScroll: true });
+  }, [selection]);
+  const [hovered, setHovered] = useState<string | null>(null);
   const [state, setState] = useState<{
     url: string;
     layer: MapLayer | null;
@@ -75,6 +91,8 @@ export function RegionMap({
   }, [url]);
   const current = state?.url === url ? state : null;
   const byNode = new Map(entries.map((entry) => [entry.nodeId, entry]));
+  const selected = selection?.url === url ? byNode.get(selection.nodeId) : undefined;
+  const preview = selected ?? (hovered ? byNode.get(hovered) : undefined);
   const maximum = Math.max(1, ...entries.map((entry) => entry.count));
   // An interactive SVG group contains links; fieldset is not a valid SVG replacement.
   /* oxlint-disable jsx-a11y/prefer-tag-over-role */
@@ -98,6 +116,20 @@ export function RegionMap({
                 prefetch={false}
                 aria-label={`${entry.label}: ${entry.countLabel}`}
                 data-count={shade}
+                data-selected={selected?.nodeId === entry.nodeId || undefined}
+                onMouseEnter={() => setHovered(entry.nodeId)}
+                onMouseLeave={() => setHovered(null)}
+                onFocus={() => setHovered(entry.nodeId)}
+                onBlur={() => setHovered(null)}
+                onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  selectionTrigger.current = event.currentTarget;
+                  setSelection({ url, nodeId: entry.nodeId });
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") setSelection(null);
+                }}
               >
                 <title>
                   {entry.label}: {entry.countLabel}
@@ -112,6 +144,38 @@ export function RegionMap({
           {current?.failed ? unavailableLabel : loadingLabel}
         </output>
       )}
+      <div className="catalog-map-selection" aria-live="polite">
+        <div className="catalog-map-selection-description">
+          {preview ? (
+            <>
+              <strong>{preview.label}</strong>
+              <span>{preview.countLabel}</span>
+              {preview.description && <small>{preview.description}</small>}
+            </>
+          ) : (
+            <span>{selectLabel}</span>
+          )}
+        </div>
+        {selected && (
+          <div className="catalog-map-selection-actions">
+            <Button asChild>
+              <Link ref={action} href={selected.href} prefetch={false}>
+                {selected.hasChildren ? exploreLabel : viewDataLabel}
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              type="button"
+              onClick={() => {
+                setSelection(null);
+                selectionTrigger.current?.focus({ preventScroll: true });
+              }}
+            >
+              {clearLabel}
+            </Button>
+          </div>
+        )}
+      </div>
       <figcaption className="text-muted-foreground flex flex-col gap-2 p-3 text-sm">
         <span>{legend}</span>
         <span className="text-xs">

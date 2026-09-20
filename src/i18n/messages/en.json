@@ -643,6 +643,12 @@
     "skipMap": "Skip map and browse the region list",
     "partialRegions": "This fallback list is incomplete. Narrow your filters to find additional regions.",
     "ambiguousRegion": "This source code covers multiple cities. Its verified province is retained; no single city boundary is assigned.",
-    "unmappedRegion": "The extent is unconfirmed. The source code is retained without assigning a map boundary."
+    "unmappedRegion": "The extent is unconfirmed. The source code is retained without assigning a map boundary.",
+    "selectRegion": "Select a region to preview its count and continue exploring.",
+    "exploreRegion": "Explore subregions",
+    "viewData": "View data",
+    "clearSelection": "Clear selection",
+    "navigating": "Loading region…",
+    "zeroRegions": "Regions without matching data"
   }
 }

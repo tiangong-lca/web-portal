@@ -643,6 +643,12 @@
     "skipMap": "跳过地图，浏览地区列表",
     "partialRegions": "当前降级列表并非完整地区目录，请缩小筛选范围查找更多地区。",
     "ambiguousRegion": "该原始编码涉及多个城市；保留已确认的省级归属，不对应单一城市边界。",
-    "unmappedRegion": "范围尚未确认，保留原始编码；暂未对应地图边界。"
+    "unmappedRegion": "范围尚未确认，保留原始编码；暂未对应地图边界。",
+    "selectRegion": "选择地图上的地区，预览数量后继续浏览。",
+    "exploreRegion": "浏览下级地区",
+    "viewData": "查看数据",
+    "clearSelection": "取消选择",
+    "navigating": "正在载入地区…",
+    "zeroRegions": "暂无匹配数据的地区"
   }
 }

@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-09-19
-lastReviewedCommit: 08d4d08fef2d9fc4ab5ec641299dc2a1a176546f
-lastReviewedNote: "Reviewed for Portal #95 against 08d4d08: public generator, owner and declared use terms stay distinct; untyped authors and absent license URLs are not invented. Existing four-locale, capability, runtime and delivery boundaries remain unchanged. Local static/build, 292 tests and 65 browser checks pass; source delivery and production verification remain pending."
+lastReviewedAt: 2026-09-20
+lastReviewedCommit: 38e78553acb5472099bd2edcb7bf389750d9032a
+lastReviewedNote: "Reviewed for Portal #101: Pacific-centered offline geometry, balanced region grid, native zero-count disclosure and persistent progressive drilldown. 321 unit tests, 232 Storybook scenarios, 72 browser tests and 8 final navigation regressions passed; no contract or count-semantics change."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1471,6 +1471,10 @@ Portal 已在 workspace delivery profile 中注册为 `portal`，所有新工作
 地区列表始终提供等价原生链接。地图只承载有明确行政边界映射的节点；跨区、历史范围、未知和歧义编码保持可浏览且保留原码，不根据相似名称强配边界，不分摊国家级数据到省市。名称、层级、边界的收据分别维护，来源语言回退必须显式标注。
 
 未知分类的虚拟分组（例如 `class:elementary:~raw`）仅通过节点条件筛选，其内部 `~` 占位符不得进入旧版精确分类筛选。只有实际原始叶节点才在 URL 中同时保留原始编码；切换到分组仍清除旧分类条件和分页游标，并保留其他浏览维度。旧版界面生成的“虚拟分组节点 + `classification=~`”组合在 URL 解析时仅移除该合成条件并重置结果游标；独立的 `~` 精确筛选和真实原始叶节点保持原语义。
+
+地区探索采用单列阅读顺序：路径与范围操作在上方，完整地图在中间，紧凑地区网格在下方。零匹配地区默认放入原生 details 折叠项，仍可无 JavaScript 访问；缺失计数不得当作零。世界图采用中央经线 150°E 的 Robinson 投影，由离线 mapshaper 在 30°W 切缝，避免横穿大陆的连线。
+
+地图悬停或聚焦可预览名称与公开版本数，选择后显示明确的下级/数据入口。地区到地区的链接通过 React transition 和现有 Next 路由原位切换，保留展开状态、已有画面及加载提示；不增加第二套数据 API、逐节点请求或批量预取。每次下钻保留筛选、重置游标并加入 URL 历史；返回/刷新仍由真实 URL 恢复。地图选择只驻留内存，真正下钻才改变 URL。手机地图仍默认收起，无 JavaScript 使用原生链接；减少动态效果时不播放淡化过渡。
 
 ## 26. 官方参考
 

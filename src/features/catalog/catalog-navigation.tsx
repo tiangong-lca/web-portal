@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -29,6 +30,9 @@ export type CatalogNavigationProps = {
   emptyLabel: string;
   unavailable?: boolean;
   compact?: boolean;
+  visual?: ReactNode;
+  zeroCountLabel?: string;
+  headingLabel?: string;
 };
 
 /** One server-renderable level of the public catalog; every node remains a native link.
@@ -48,14 +52,45 @@ export function CatalogNavigation({
   emptyLabel,
   unavailable = false,
   compact = false,
+  visual,
+  zeroCountLabel,
+  headingLabel,
 }: CatalogNavigationProps) {
+  const zeroEntries = zeroCountLabel ? entries.filter((entry) => entry.count === 0) : [];
+  const visibleEntries = zeroCountLabel ? entries.filter((entry) => entry.count > 0) : entries;
+  const renderEntries = (items: NavigationEntry[]) => (
+    <ul className="catalog-navigation-list">
+      {items.map((entry) => (
+        <li key={entry.nodeId}>
+          <Link prefetch={false} href={entry.href}>
+            <span className="catalog-navigation-name">
+              {entry.label}
+              {entry.code && entry.code !== entry.label && (
+                <span className="text-muted-foreground text-xs">{entry.code}</span>
+              )}
+              {entry.description && (
+                <span className="text-muted-foreground text-xs">{entry.description}</span>
+              )}
+            </span>
+            <span className="catalog-navigation-count" title={entry.countLabel}>
+              {entry.countText ?? String(entry.count)}
+              <span className="sr-only"> {countDescription}</span>
+            </span>
+            {entry.hasChildren && <ChevronRightIcon aria-hidden="true" />}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
   return (
     <section
       className={compact ? "catalog-navigation catalog-navigation-compact" : "catalog-navigation"}
       aria-label={title}
     >
       <header>
-        <h2>{title}</h2>
+        <h2 tabIndex={visual ? -1 : undefined} aria-label={headingLabel}>
+          {title}
+        </h2>
         <p className="text-muted-foreground text-sm">{countDescription}</p>
       </header>
       {breadcrumbs.length > 0 && (
@@ -95,35 +130,27 @@ export function CatalogNavigation({
           )}
         </div>
       )}
+      {visual}
       {unavailable ? (
         <Alert>
           <AlertDescription>{unavailableLabel}</AlertDescription>
         </Alert>
-      ) : entries.length > 0 ? (
-        <ul className="catalog-navigation-list">
-          {entries.map((entry) => (
-            <li key={entry.nodeId}>
-              <Link prefetch={false} href={entry.href}>
-                <span className="catalog-navigation-name">
-                  {entry.label}
-                  {entry.code && entry.code !== entry.label && (
-                    <span className="text-muted-foreground text-xs">{entry.code}</span>
-                  )}
-                  {entry.description && (
-                    <span className="text-muted-foreground text-xs">{entry.description}</span>
-                  )}
-                </span>
-                <span className="catalog-navigation-count" title={entry.countLabel}>
-                  {entry.countText ?? String(entry.count)}
-                  <span className="sr-only"> {countDescription}</span>
-                </span>
-                {entry.hasChildren && <ChevronRightIcon aria-hidden="true" />}
-              </Link>
-            </li>
-          ))}
-        </ul>
       ) : (
-        <p className="text-muted-foreground text-sm">{emptyLabel}</p>
+        <>
+          {visibleEntries.length > 0 ? (
+            renderEntries(visibleEntries)
+          ) : zeroEntries.length === 0 ? (
+            <p className="text-muted-foreground text-sm">{emptyLabel}</p>
+          ) : null}
+          {zeroEntries.length > 0 && (
+            <details className="catalog-zero-regions">
+              <summary>
+                {zeroCountLabel} <span>({zeroEntries.length})</span>
+              </summary>
+              {renderEntries(zeroEntries)}
+            </details>
+          )}
+        </>
       )}
       {more && (
         <Button asChild variant="outline">

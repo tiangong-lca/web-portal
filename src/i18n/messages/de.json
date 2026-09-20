@@ -643,6 +643,12 @@
     "skipMap": "Karte überspringen und Regionenliste nutzen",
     "partialRegions": "Diese Ersatzliste ist unvollständig. Grenzen Sie die Filter ein, um weitere Regionen zu finden.",
     "ambiguousRegion": "Dieser Quellcode umfasst mehrere Städte. Die bestätigte Provinz bleibt erhalten; keine einzelne Stadtgrenze wird zugeordnet.",
-    "unmappedRegion": "Die räumliche Ausdehnung ist unbestätigt. Der Quellcode bleibt ohne zugeordnete Kartengrenze erhalten."
+    "unmappedRegion": "Die räumliche Ausdehnung ist unbestätigt. Der Quellcode bleibt ohne zugeordnete Kartengrenze erhalten.",
+    "selectRegion": "Wählen Sie eine Region, um die Anzahl zu sehen und weiterzusuchen.",
+    "exploreRegion": "Unterregionen erkunden",
+    "viewData": "Daten anzeigen",
+    "clearSelection": "Auswahl aufheben",
+    "navigating": "Region wird geladen…",
+    "zeroRegions": "Regionen ohne passende Daten"
   }
 }

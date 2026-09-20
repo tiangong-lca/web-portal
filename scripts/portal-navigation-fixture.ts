@@ -11,6 +11,16 @@ type Node = {
 };
 const nodes: Node[] = [
   {
+    nodeId: "geo:aq",
+    parentNodeId: null,
+    code: "AQ",
+    taxonomy: "ilcd-locations",
+    dimension: "geography",
+    count: 0,
+    directCount: 0,
+    hasChildren: false,
+  },
+  {
     nodeId: "geo:cn",
     parentNodeId: null,
     code: "CN",

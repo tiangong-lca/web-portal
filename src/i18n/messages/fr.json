@@ -643,6 +643,12 @@
     "skipMap": "Passer la carte et parcourir la liste des régions",
     "partialRegions": "Cette liste de secours est incomplète. Affinez les filtres pour trouver d’autres régions.",
     "ambiguousRegion": "Ce code source couvre plusieurs villes. La province vérifiée est conservée ; aucune limite de ville unique n’est attribuée.",
-    "unmappedRegion": "L’étendue n’est pas confirmée. Le code source est conservé sans limite cartographique attribuée."
+    "unmappedRegion": "L’étendue n’est pas confirmée. Le code source est conservé sans limite cartographique attribuée.",
+    "selectRegion": "Sélectionnez une région pour voir son nombre de versions et poursuivre.",
+    "exploreRegion": "Explorer les sous-régions",
+    "viewData": "Voir les données",
+    "clearSelection": "Effacer la sélection",
+    "navigating": "Chargement de la région…",
+    "zeroRegions": "Régions sans données correspondantes"
   }
 }

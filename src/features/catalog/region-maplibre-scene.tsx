@@ -446,7 +446,7 @@ export function RegionMapScene({
     };
     // MapLibre builds its worker pool while the first map is constructed, so the supplied
     // same-origin worker is registered first; a cross-origin URL would be fetched as a blob.
-    if (!sameOrigin(assets.workerUrl) || !assets.workerUrl.endsWith(".mjs")) {
+    if (!sameOrigin(assets.workerUrl) || !assets.workerUrl.endsWith(".js")) {
       queueMicrotask(fail);
       return;
     }

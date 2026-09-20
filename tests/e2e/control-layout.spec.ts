@@ -175,6 +175,8 @@ test("long localized controls reflow at a 200-percent desktop-equivalent width",
 });
 
 test("offline map keeps geographic context through China and province views", async ({ page }) => {
+  // Three cold software-rendered levels plus four visual captures share this deadline.
+  test.setTimeout(60_000);
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await mkdir("/tmp/portal113-visual", { recursive: true });
@@ -194,6 +196,7 @@ test("offline map keeps geographic context through China and province views", as
       await page.locator(".catalog-navigation-list").getByRole("link", { name: link }).click();
     await expect(scene).toHaveAttribute("data-layer", layer, { timeout: 20_000 });
     await expect(scene).toHaveAttribute("data-state", "ready", { timeout: 20_000 });
+    await expect(scene).not.toHaveAttribute("data-moving", { timeout: 10_000 });
     await expect(page.getByRole("link", { name: "Natural Earth", exact: true })).toBeVisible();
     await page
       .locator(".region-maplibre")

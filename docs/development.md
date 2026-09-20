@@ -292,4 +292,4 @@ The control-layout audit uses `tests/e2e/control-layout.spec.ts` for twelve page
 
 China administrative map changes also require the zero-count Taiwan/Hong Kong/Macao/Tibet pointer journeys at desktop and mobile widths, native Enter, result/Back, and no-JavaScript list entry checks. `China Zero Regions` and its mobile dark scenario cover the same boundaries in Storybook. Map generation verifies the exact Database vocabulary snapshot and unique GeoAtlas parent/adcode bindings before emitting geometry.
 
-Production geography browser tests use real MapLibre frames in ordinary CI; Playwright selects ANGLE/SwiftShader in CI, or locally with `PORTAL_WEBGL_TESTS=1`. This does not opt ordinary CI into the separately gated homepage cinematic performance lane.
+Production geography browser tests use real MapLibre frames in ordinary CI. Both the production and Storybook runners use `channel: "chromium"` for the full Chromium headless renderer; Playwright selects ANGLE/SwiftShader in CI, or locally with `PORTAL_WEBGL_TESTS=1`. This does not opt ordinary CI into the separately gated homepage cinematic performance lane.

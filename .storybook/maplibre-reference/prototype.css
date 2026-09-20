@@ -392,10 +392,6 @@
   outline: 2px solid var(--ring);
   outline-offset: 3px;
 }
-.globe-svg-reference .catalog-region-map {
-  border: 0;
-  border-radius: 0;
-}
 @media (max-width: 900px) {
   .globe-regions {
     grid-template-columns: repeat(3, minmax(0, 1fr));

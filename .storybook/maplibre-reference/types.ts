@@ -25,7 +25,7 @@ export type RegionProperties = {
 };
 export type RegionFeature = Feature<Polygon | MultiPolygon, RegionProperties>;
 export type RegionGeometry = FeatureCollection<Polygon | MultiPolygon, RegionProperties>;
-export type MapMode = "globe" | "flat" | "svg" | "list";
+export type MapMode = "globe" | "flat" | "list";
 
 export function regionLabel(entry: RegionEntry, locale: PortalLocale) {
   const label = entry.labels[locale] ?? entry.labels["zh-CN"] ?? entry.code;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import {
   ArrowLeftIcon,
   ArrowUpRightIcon,
@@ -9,9 +9,7 @@ import {
   SearchIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { RegionMap } from "@/features/catalog/region-map";
 import type { PortalLocale } from "@/i18n/routing";
-import svgManifest from "@/features/catalog/region-map-manifest.generated.json";
 import boundaryManifest from "./boundaries.generated.json";
 import snapshot from "./counts.generated.json";
 import { messages } from "./messages";
@@ -21,7 +19,6 @@ import "./prototype.css";
 
 const branches: Record<string, NavigationBranch> = snapshot.branches;
 const layers: Record<string, { url: string }> = boundaryManifest.layers;
-const oldLayers: Record<string, { url: string }> = svgManifest.layers;
 const index = new Map(
   Object.values(branches)
     .flatMap((branch) => branch.entries)
@@ -64,7 +61,6 @@ export function MapLibreExplorer({
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
   const [camera, setCamera] = useState({ nodeId: null as string | null, sequence: 0 });
-  const svgHost = useRef<HTMLDivElement>(null);
   const level = trail.at(-1)!;
   const branch = branches[level]!;
   const entries = branch.entries;
@@ -101,25 +97,6 @@ export function MapLibreExplorer({
     window.addEventListener("popstate", back);
     return () => window.removeEventListener("popstate", back);
   }, []);
-
-  useEffect(() => {
-    const element = svgHost.current;
-    if (!element || mode !== "svg") return;
-    const follow = (event: MouseEvent) => {
-      const target = event.target instanceof Element ? event.target.closest("a") : null;
-      if (!target || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-      const id = new URL(target.href).searchParams.get("geoNode");
-      if (id && layers[id] && branches[id]) {
-        event.preventDefault();
-        navigate([...trail, id]);
-      } else {
-        target.target = "_blank";
-        target.rel = "noreferrer";
-      }
-    };
-    element.addEventListener("click", follow);
-    return () => element.removeEventListener("click", follow);
-  }, [mode, navigate, trail]);
 
   const preview = entries.find((entry) => entry.nodeId === (selected ?? hovered));
   const filtered = useMemo(
@@ -226,7 +203,7 @@ export function MapLibreExplorer({
             </ol>
           </nav>
           <fieldset className="globe-view-switch" aria-label={t.mapLabel}>
-            {(["globe", "flat", "svg", "list"] as const).map((value) => (
+            {(["globe", "flat", "list"] as const).map((value) => (
               <button
                 type="button"
                 key={value}
@@ -291,28 +268,7 @@ export function MapLibreExplorer({
             <span className="globe-map-location">{title}</span>
           </div>
         )}
-        {mode === "svg" && (
-          <div className="globe-svg-reference" ref={svgHost}>
-            <RegionMap
-              url={oldLayers[level]!.url}
-              entries={entries.map((entry) => ({
-                ...entry,
-                label: regionLabel(entry, locale),
-                countLabel: `${entry.count.toLocaleString(locale)} ${t.count}`,
-                href: dataUrl(entry),
-              }))}
-              title={t.mapLabel}
-              loadingLabel={t.loading}
-              unavailableLabel={t.unavailable}
-              legend={t.legend}
-              selectLabel={t.hint}
-              exploreLabel={t.explore}
-              viewDataLabel={t.data}
-              clearLabel={t.clear}
-            />
-          </div>
-        )}
-        {mode !== "svg" && mode !== "list" && (
+        {mode !== "list" && (
           <div className="globe-map-meta">
             <span>
               {t.legend}
@@ -336,41 +292,39 @@ export function MapLibreExplorer({
             ? `${regionLabel(preview, locale)} · ${preview.count.toLocaleString(locale)} ${t.count}`
             : ""}
         </output>
-        {mode !== "svg" && (
-          <div className="globe-selection">
-            <div>
-              <span className="globe-selection-label">
-                {preview ? regionLabel(preview, locale) : t.select}
+        <div className="globe-selection">
+          <div>
+            <span className="globe-selection-label">
+              {preview ? regionLabel(preview, locale) : t.select}
+            </span>
+            {preview ? (
+              <span className="globe-selection-count">
+                <strong>{preview.count.toLocaleString(locale)}</strong> {t.count}
               </span>
-              {preview ? (
-                <span className="globe-selection-count">
-                  <strong>{preview.count.toLocaleString(locale)}</strong> {t.count}
-                </span>
-              ) : (
-                <span className="globe-selection-hint">{t.hint}</span>
-              )}
-            </div>
-            {preview && (
-              <div className="globe-selection-actions">
-                {canExplore && (
-                  <Button onClick={() => navigate([...trail, preview.nodeId])}>
-                    {t.explore}
-                    <ChevronRightIcon size={15} />
-                  </Button>
-                )}
-                <Button asChild variant={canExplore ? "outline" : "default"}>
-                  <a href={dataUrl(preview)} target="_blank" rel="noreferrer">
-                    {t.data}
-                    <ArrowUpRightIcon size={15} />
-                  </a>
-                </Button>
-                <Button variant="ghost" onClick={reset}>
-                  {t.clear}
-                </Button>
-              </div>
+            ) : (
+              <span className="globe-selection-hint">{t.hint}</span>
             )}
           </div>
-        )}
+          {preview && (
+            <div className="globe-selection-actions">
+              {canExplore && (
+                <Button onClick={() => navigate([...trail, preview.nodeId])}>
+                  {t.explore}
+                  <ChevronRightIcon size={15} />
+                </Button>
+              )}
+              <Button asChild variant={canExplore ? "outline" : "default"}>
+                <a href={dataUrl(preview)} target="_blank" rel="noreferrer">
+                  {t.data}
+                  <ArrowUpRightIcon size={15} />
+                </a>
+              </Button>
+              <Button variant="ghost" onClick={reset}>
+                {t.clear}
+              </Button>
+            </div>
+          )}
+        </div>
       </section>
       <section className="globe-directory" aria-label={t.childList}>
         <div className="globe-directory-header">

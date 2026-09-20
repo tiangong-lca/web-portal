@@ -117,10 +117,6 @@ export const Mobile: Story = {
     await expect(canvasElement.querySelector(".globe-selection")).toHaveTextContent("澳门");
   },
 };
-export const OriginalSvg: Story = {
-  args: { initialMode: "svg", initialLevel: "geo:cn" },
-  globals: { locale: "zh-CN" },
-};
 export const WebglUnavailable: Story = {
   args: { unavailable: true, initialLevel: "geo:cn" },
   globals: { locale: "en" },

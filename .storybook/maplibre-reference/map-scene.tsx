@@ -64,6 +64,7 @@ export function MapScene(props: Props) {
   const initial = useRef({ dark: props.dark, label: props.label, gestures: props.gestures });
   const geometryCache = useRef(new Map<string, RegionGeometry>());
   const [completedUrl, setCompletedUrl] = useState<string | null>(null);
+  const framed = useRef(false);
   const shapeRef = useRef<RegionGeometry>(empty);
   const markers = useRef<Marker[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -76,7 +77,7 @@ export function MapScene(props: Props) {
     if (!map) return;
     const reduced =
       props.reducedMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const duration = immediate || reduced ? 0 : 850;
+    const duration = immediate || !framed.current || reduced ? 0 : 850;
     if (props.layer === "world" && !nodeId) {
       map.flyTo({
         center: [137, 24],
@@ -262,7 +263,18 @@ export function MapScene(props: Props) {
         onReady(false);
       }
     });
-    const observer = new ResizeObserver(() => map.resize());
+    // Storybook freezes animation callbacks in review thumbnails. Paint completed
+    // source work synchronously so the thumbnail contains the real map, not a loader.
+    map.on("sourcedata", (event) => {
+      if (event.isSourceLoaded)
+        queueMicrotask(() => {
+          if (!disposed) map.redraw();
+        });
+    });
+    const observer = new ResizeObserver(() => {
+      map.resize();
+      map.redraw();
+    });
     observer.observe(host.current);
     return () => {
       disposed = true;
@@ -388,6 +400,7 @@ export function MapScene(props: Props) {
           }
         }
         fit(null);
+        framed.current = true;
         const ready = () => {
           if (active) {
             setCompletedUrl(props.layerUrl);
@@ -396,6 +409,7 @@ export function MapScene(props: Props) {
           }
         };
         map.once("idle", ready);
+        map.redraw();
       })
       .catch(() => {
         if (active) {

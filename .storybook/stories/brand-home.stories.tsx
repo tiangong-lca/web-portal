@@ -145,6 +145,10 @@ export const CinematicPrototype: Story = {
     await expect(hero).toBeInTheDocument();
     await expect(header).toBeInTheDocument();
     await expect(sticky).toBeInTheDocument();
+    // Cold CI viewports may still be decoding their first image or mounting the scroll effect.
+    // Start the functional scroll journey only after the actual cinematic frame is ready.
+    await waitFor(() => expect(hero).toHaveAttribute("data-media", "ready"), { timeout: 10000 });
+    await waitFor(() => expect(hero).toHaveAttribute("data-motion", "scrub"), { timeout: 5000 });
     window.scrollTo({ top: 0, behavior: "auto" });
     const headerHeight = header!.getBoundingClientRect().height;
     const initialStickyTop = sticky!.getBoundingClientRect().top;
@@ -223,7 +227,7 @@ export const CinematicPrototype: Story = {
     await expect(secondAmbient).toHaveAttribute("data-visible", "false");
     await expect(firstAmbient).toHaveAttribute("src", firstForeground.getAttribute("src"));
     window.scrollTo({ top: 24, behavior: "auto" });
-    await waitFor(() => expect(Number(hero?.dataset.frame)).toBeGreaterThan(1), { timeout: 1000 });
+    await waitFor(() => expect(Number(hero?.dataset.frame)).toBeGreaterThan(1), { timeout: 5000 });
     await expect(
       Math.abs(sticky!.getBoundingClientRect().top - initialStickyTop),
     ).toBeLessThanOrEqual(1);

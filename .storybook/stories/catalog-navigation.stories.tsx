@@ -440,18 +440,33 @@ export const ContinuousZoom: Story = {
     );
   },
   play: async ({ canvas, canvasElement, userEvent }) => {
-    await expect(await canvas.findByRole("link", { name: /^中国:/ })).toBeVisible();
+    await expect(
+      await canvas.findByRole("link", { name: /^中国:/ }, { timeout: 5000 }),
+    ).toBeVisible();
     const svg = canvasElement.querySelector("svg")!;
+    const settled = async (level: "world" | "geo:cn" | "geo:cn-ah") => {
+      // Data links deliberately leave the accessibility tree while the camera moves.
+      // Wait for both geometry and animation before querying them, including on cold CI.
+      await waitFor(
+        async () => {
+          await expect(svg).toHaveAttribute("data-layer-url", mapManifest.layers[level].url);
+          await expect(svg).not.toHaveAttribute("data-camera-moving");
+        },
+        { timeout: 5000 },
+      );
+    };
     const worldWindow = svg.getAttribute("viewBox");
     await userEvent.click(canvas.getByRole("button", { name: /^中国$/ }));
-    await expect(await canvas.findByRole("link", { name: /安徽/ })).toBeVisible();
-    await waitFor(() => expect(svg).not.toHaveAttribute("data-camera-moving"));
+    await settled("geo:cn");
+    await expect(canvas.getByRole("link", { name: /安徽/ })).toBeVisible();
     await expect(canvasElement.querySelector("svg")).toBe(svg);
     await expect(svg.getAttribute("viewBox")).not.toBe(worldWindow);
     await userEvent.click(canvas.getByRole("button", { name: /安徽/ }));
-    await expect(await canvas.findByRole("link", { name: /合肥/ })).toBeVisible();
+    await settled("geo:cn-ah");
+    await expect(canvas.getByRole("link", { name: /合肥/ })).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: /^世界$/ }));
-    await expect(await canvas.findByRole("link", { name: /^中国:/ })).toBeVisible();
-    await waitFor(() => expect(svg).toHaveAttribute("viewBox", worldWindow!));
+    await settled("world");
+    await expect(canvas.getByRole("link", { name: /^中国:/ })).toBeVisible();
+    await expect(svg).toHaveAttribute("viewBox", worldWindow!);
   },
 };

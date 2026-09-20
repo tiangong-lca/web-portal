@@ -172,12 +172,19 @@ const taiwanEntry = {
 export const UnifiedChinaInteractions: Story = {
   ...World,
   globals: { locale: "zh-CN" },
-  args: { entries: [...(World.args?.entries ?? []), taiwanEntry] },
+  args: World.args,
   play: async ({ canvas, canvasElement, userEvent }) => {
     const show = canvas.queryByRole("button", { name: "显示地图" });
     if (show) await userEvent.click(show);
     const china = await canvas.findByRole("link", { name: /^中国:/ }, { timeout: 5000 });
-    const ids = ["ne50m:CHN", "ne50m:TWN", "datav:460300", "cnprov:100000_JD"];
+    const ids = [
+      "ne50m:CHN",
+      "ne50m:TWN",
+      "ne50m:HKG",
+      "ne50m:MAC",
+      "datav:460300",
+      "cnprov:100000_JD",
+    ];
     for (const id of ids) {
       const shape = canvasElement.querySelector(`[data-boundary-id="${id}"]`)!;
       await expect(shape).not.toBeNull();
@@ -208,10 +215,7 @@ export const UnifiedChinaInteractions: Story = {
     // Native SVG Enter activation is exercised by the real-browser navigation test.
     // Testing Library synthesizes key events but does not implement that SVG default action.
     await expect(canvas.getAllByRole("link", { name: /^中国:/ })).toHaveLength(1);
-    await expect(canvas.getByRole("link", { name: /台湾 TW/ })).toHaveAttribute(
-      "href",
-      expect.stringContaining("geoNode=geo:tw"),
-    );
+    await expect(canvas.queryByRole("link", { name: /台湾 TW/ })).toBeNull();
   },
 };
 
@@ -252,6 +256,10 @@ export const ChinaMap: Story = {
             { code: "CN-AH", count: 142 },
             { code: "CN-GD", count: 328 },
             { code: "CN-SD", count: 211 },
+            { code: "CN-XZ", count: 0 },
+            { code: "TW", count: 0 },
+            { code: "HK", count: 3 },
+            { code: "MO", count: 0 },
           ]
     ).map(({ code, count }) => ({
       nodeId: `geo:${code.toLowerCase()}`,
@@ -259,8 +267,8 @@ export const ChinaMap: Story = {
       count,
       label: geographyName(code, locale)!,
       countLabel: t.versions.replace("{count}", String(count)),
-      hasChildren: !provincial,
-      href: `/${locale}/search?explore=${provincial ? "process" : "region"}&geoNode=geo:${code.toLowerCase()}`,
+      hasChildren: !provincial && code.startsWith("CN-"),
+      href: `/${locale}/search?explore=${provincial || !code.startsWith("CN-") ? "process" : "region"}&geoNode=geo:${code.toLowerCase()}`,
     }));
     return (
       <div className="mx-auto flex max-w-6xl flex-col gap-5 p-6">
@@ -363,6 +371,47 @@ export const ChinaMap: Story = {
   },
 };
 export const ChinaMobile: Story = { ...ChinaMap, globals: { ...mobileGlobals, locale: "zh-CN" } };
+export const ChinaZeroRegions: Story = {
+  ...ChinaMap,
+  globals: { locale: "zh-CN" },
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const show = canvas.queryByRole("button", { name: "显示地图" });
+    if (show) await userEvent.click(show);
+    await canvas.findByRole("link", { name: /^台湾:/ }, { timeout: 5000 });
+    for (const [boundary, node, label] of [
+      ["cnprov:540000", "geo:cn-xz", "西藏"],
+      ["cnprov:820000", "geo:mo", "澳门"],
+      ["cnprov:710000", "geo:tw", "台湾"],
+    ] as const) {
+      const shape = canvasElement.querySelector(`[data-boundary-id="${boundary}"]`)!;
+      const link = shape.closest("a")!;
+      await expect(link).toHaveAttribute("href", expect.stringContaining(node));
+      await userEvent.hover(shape);
+      await expect(
+        canvasElement.querySelector(".catalog-map-selection-description"),
+      ).toHaveTextContent(label!);
+      await expect(
+        canvasElement.querySelector(".catalog-map-selection-description"),
+      ).toHaveTextContent("0 个公开版本");
+      await userEvent.click(shape);
+      await expect(link).toHaveAttribute("data-selected", "true");
+      if (node === "geo:tw") {
+        await expect(canvas.getByRole("link", { name: "查看数据" })).toHaveAttribute(
+          "href",
+          expect.stringContaining("geoNode=geo:tw"),
+        );
+      } else {
+        await userEvent.click(canvas.getByRole("button", { name: "取消选择" }));
+        await expect(link).toHaveFocus();
+        await userEvent.unhover(shape);
+      }
+    }
+  },
+};
+export const ChinaZeroRegionsMobileDark: Story = {
+  ...ChinaZeroRegions,
+  globals: { ...mobileGlobals, locale: "zh-CN", theme: "dark" },
+};
 export const Unavailable: Story = { args: { unavailable: true } };
 export const DarkFrench: Story = {
   globals: { theme: "dark", locale: "fr" },
@@ -515,6 +564,17 @@ export const ContinuousZoom: Story = {
               hasChildren: level !== "geo:cn-ah",
               href: `/${locale}/search?explore=region&geoNode=geo:${code.toLowerCase()}`,
             },
+            ...(level === "geo:cn"
+              ? ["TW", "HK", "MO", "CN-XZ"].map((code) => ({
+                  nodeId: `geo:${code.toLowerCase()}`,
+                  code,
+                  label: geographyName(code, locale)!,
+                  count: 0,
+                  countLabel: t.versions.replace("{count}", "0"),
+                  hasChildren: code === "CN-XZ",
+                  href: `/${locale}/search?explore=process&geoNode=geo:${code.toLowerCase()}`,
+                }))
+              : []),
           ]}
         />
       </div>
@@ -540,6 +600,14 @@ export const ContinuousZoom: Story = {
     await userEvent.click(canvas.getByRole("button", { name: /^中国$/ }));
     await settled("geo:cn");
     await expect(canvas.getByRole("link", { name: /安徽/ })).toBeVisible();
+    const taiwan = canvas.getByRole("link", { name: /^台湾:/ });
+    await userEvent.click(taiwan);
+    await expect(taiwan).toHaveAttribute("data-selected", "true");
+    await expect(canvas.getByRole("link", { name: "查看数据" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("geo:tw"),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "取消选择" }));
     await expect(canvasElement.querySelector("svg")).toBe(svg);
     await expect(svg.getAttribute("viewBox")).not.toBe(worldWindow);
     await userEvent.click(canvas.getByRole("button", { name: /安徽/ }));

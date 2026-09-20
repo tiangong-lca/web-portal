@@ -111,3 +111,19 @@ export const OUTPUT = {
 
 /** Public URL prefix the emitted layers are served from. */
 export const LAYER_URL_PREFIX = "/maps";
+
+/**
+ * Chinese administrative parents the pinned Database vocabulary already states,
+ * bound to the GeoAtlas feature that asserts the same parenthood.
+ *
+ * Both halves are evidence and both are required: the canonical node must exist
+ * with exactly this id, code and parent, and the GeoAtlas source must hold
+ * exactly one feature at this adcode, named this, at province level, whose own
+ * `parent.adcode` is 100000. A code like `CN-TW` is never guessed, and a feature
+ * that fails a required binding gate fails the build.
+ */
+export const CHINA_ADMINISTRATIVE_BINDINGS = [
+  { nodeId: "geo:tw", code: "TW", adcode: 710000, name: "台湾省", parentNodeId: "geo:cn" },
+  { nodeId: "geo:hk", code: "HK", adcode: 810000, name: "香港特别行政区", parentNodeId: "geo:cn" },
+  { nodeId: "geo:mo", code: "MO", adcode: 820000, name: "澳门特别行政区", parentNodeId: "geo:cn" },
+];

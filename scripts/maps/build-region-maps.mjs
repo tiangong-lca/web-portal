@@ -26,6 +26,7 @@ import { gzipSync } from "node:zlib";
 
 import {
   BASEMAP,
+  CHINA_ADMINISTRATIVE_BINDINGS,
   COORDINATE_UNITS,
   LAYER_GZIP_BUDGET_BYTES,
   LAYER_URL_PREFIX,
@@ -53,6 +54,7 @@ import {
   removeWorkDir,
   resolveMapshaper,
 } from "./lib/mapshaper.mjs";
+import { loadNavigationContract } from "./lib/contract.mjs";
 import { boundaryIds, nodeIdFor, resolveByName, worldCode } from "./lib/mapping.mjs";
 import {
   BASE_SOURCES,
@@ -116,16 +118,51 @@ function citiesOf(vocabularyIndex, provinceCode) {
  * feature attributes, so the pre-projection and post-projection calls in
  * `currentPlan` and `buildChinaLayer` cannot disagree on the answer.
  */
-function provinceResolution(features, vocabularyIndex) {
+function provinceResolution(features, vocabularyIndex, contract, bindings) {
   const { byCode, unresolved } = resolveByName(
     vocabularyIndex.provinces,
     features,
     vocabularyIndex.names,
     "CN",
   );
+  // Evidence-gated administrative bindings. Both halves must hold exactly as
+  // declared. A missing required binding fails the build instead of shipping an
+  // inert shape again; other unresolved vocabulary entries retain their fallbacks.
+  const bound = [];
+  for (const binding of bindings) {
+    const node = contract.nodeById(binding.nodeId);
+    if (
+      !node ||
+      node.code !== binding.code ||
+      node.dimension !== "geography" ||
+      node.parentNodeId !== binding.parentNodeId ||
+      node.taxonomy !== "ilcd-locations"
+    ) {
+      throw new Error(
+        `The pinned contract does not state ${binding.nodeId} as ${binding.code} under ${binding.parentNodeId}`,
+      );
+    }
+    const matches = features.filter((feature) => {
+      const properties = feature.properties ?? {};
+      return String(properties.adcode) === String(binding.adcode);
+    });
+    const properties = matches[0]?.properties;
+    if (
+      matches.length !== 1 ||
+      properties.name !== binding.name ||
+      properties.level !== "province" ||
+      String(properties.parent?.adcode ?? "") !== "100000"
+    ) {
+      throw new Error(
+        `GeoAtlas must state exactly one province-level ${binding.name} (${binding.adcode}) under 100000`,
+      );
+    }
+    byCode.set(binding.code, matches[0]);
+    bound.push({ ...binding, boundaryId: String(matches[0].properties.adcode) });
+  }
   const adcodeOf = new Map();
   for (const [code, feature] of byCode) adcodeOf.set(code, String(feature.properties.adcode));
-  return { byCode, unresolved, adcodeOf };
+  return { byCode, unresolved, adcodeOf, bound };
 }
 
 /**
@@ -177,7 +214,15 @@ function assertPreservedFeatures(label, before, after) {
  * `geo:cn`), the island of Taiwan and the two South China Sea shapes below all
  * answer to one entry — without renaming anything or merging any count.
  */
-const WORLD_ALIASES = { "ne50m:TWN": "geo:cn" };
+const WORLD_ALIASES = {
+  // Natural Earth keeps Hong Kong, Macao and the island of Taiwan as their own
+  // map units. Each keeps its own raw nodeId; the alias only says which single
+  // navigation entry the unit opens, so the runtime groups them with the mainland
+  // and reads that entry's count once instead of summing the shapes.
+  "ne50m:HKG": "geo:cn",
+  "ne50m:MAC": "geo:cn",
+  "ne50m:TWN": "geo:cn",
+};
 
 /**
  * Shapes the world layer borrows from layers that already project them in the
@@ -433,10 +478,15 @@ function buildWorld(source, vocabularyIndex, workDir, report) {
 
 /* ---------------------------------------------------------------- china --- */
 
-function buildChinaLayer(provinceGeo, vocabularyIndex, transform, workDir, report) {
+function buildChinaLayer(provinceGeo, vocabularyIndex, contract, transform, workDir, report) {
   const projected = project(ROOT, provinceGeo, PROJECTION, SIMPLIFY.chinaProvince, workDir);
   const ids = boundaryIds(projected.features, (feature) => feature.properties?.adcode, "cnprov");
-  const resolution = provinceResolution(projected.features, vocabularyIndex);
+  const resolution = provinceResolution(
+    projected.features,
+    vocabularyIndex,
+    contract,
+    CHINA_ADMINISTRATIVE_BINDINGS,
+  );
   const nodeIdByFeature = new Map();
   for (const [code, feature] of resolution.byCode) nodeIdByFeature.set(feature, nodeIdFor(code));
 
@@ -564,6 +614,7 @@ function buildAssets(sources, plan, vocabularyIndex, workDir) {
   const china = buildChinaLayer(
     sources.get("china-province-100000-full"),
     vocabularyIndex,
+    plan.contract,
     world.transform,
     workDir,
     report,
@@ -619,6 +670,8 @@ function buildAssets(sources, plan, vocabularyIndex, workDir) {
     simplify: SIMPLIFY.chinaProvince,
     sharesCoordinateSpace: true,
     graticuleInterval: chinaInterval,
+    // Evidence-gated administrative parents accepted for this layer, if any.
+    boundCodes: plan.provinceResolution.bound ?? [],
     unresolvedCodes: plan.provinceResolution.unresolved,
     unresolvedShapes: china.unresolvedShapes,
     unshapedCodes: [],
@@ -689,7 +742,7 @@ function emitLayers(layers) {
   return emitted;
 }
 
-function buildManifest(vendoredManifest, emitted, report, vocabularyIndex) {
+function buildManifest(vendoredManifest, emitted, report, vocabularyIndex, contract) {
   const layers = {};
   for (const [layerKey, layer] of Object.entries(emitted)) {
     layers[layerKey] = {
@@ -747,9 +800,18 @@ function buildManifest(vendoredManifest, emitted, report, vocabularyIndex) {
     layers,
     projection: PROJECTION,
     coordinateSpace: COORDINATE_SPACE,
+    // The Database snapshot every China binding was accepted against: repository,
+    // commit and the verified vocabulary hash. A snapshot refresh changes this
+    // receipt and regenerates the two layers that depend on it.
+    contract: {
+      ...contract.receipt,
+      bindings: report.layers
+        .flatMap((entry) => entry.boundCodes ?? [])
+        .map((binding) => `${binding.nodeId} (${binding.code}) -> adcode ${binding.boundaryId}`),
+    },
     interaction: {
       rule: "navigationNodeId ?? nodeId",
-      note: "`navigationNodeId` is an interaction entry only and never replaces `nodeId`. The world layer answers to one `geo:cn` entry through its mainland shape (nodeId geo:cn) plus one alias (the island of Taiwan, still geo:tw) and two borrowed South China Sea shapes (the nine-dash inset and 三沙市). Those two are copied byte for byte from the layers that already project them in this same coordinate space: they are not redrawn and not guessed from a latitude. They carry nodeId null because the current location dictionary holds no matching code — a statement about this mapping, not a claim that the places have no public records; a dictionary revision that adds such a code must revisit them.",
+      note: "`navigationNodeId` is an interaction entry only and never replaces `nodeId`. The world layer answers to one `geo:cn` entry through its mainland shape (nodeId geo:cn) plus three aliases (Taiwan, Hong Kong and Macao, retaining geo:tw/geo:hk/geo:mo) and two borrowed South China Sea shapes (the nine-dash inset and 三沙市). Those two are copied byte for byte from the layers that already project them in this same coordinate space: they are not redrawn and not guessed from a latitude. They carry nodeId null because the current location dictionary holds no matching code — a statement about this mapping, not a claim that the places have no public records; a dictionary revision that adds such a code must revisit them.",
       aliases: report.interaction.aliases,
       supplements: report.interaction.supplements,
     },
@@ -787,12 +849,18 @@ function buildManifest(vendoredManifest, emitted, report, vocabularyIndex) {
 
 /* ------------------------------------------------------------------ main --- */
 
-function currentPlan(root) {
+function currentPlan(root, contract) {
   const vocabularyIndex = vocabulary(root);
   const provinceGeo = readVendored(root, "china-province-100000-full");
-  const resolution = provinceResolution(provinceGeo.features, vocabularyIndex);
+  const resolution = provinceResolution(
+    provinceGeo.features,
+    vocabularyIndex,
+    contract,
+    CHINA_ADMINISTRATIVE_BINDINGS,
+  );
   const adcodes = datavAdcodes(resolution, vocabularyIndex);
   return {
+    contract,
     vocabularyIndex,
     provinceResolution: resolution,
     adcodes,
@@ -800,12 +868,17 @@ function currentPlan(root) {
   };
 }
 
-async function fetchMode(root) {
+async function fetchMode(root, contract) {
   const vocabularyIndex = vocabulary(root);
   const entries = [];
   for (const source of BASE_SOURCES) entries.push(await fetchSource(root, source));
   const provinceGeo = readVendored(root, "china-province-100000-full");
-  const resolution = provinceResolution(provinceGeo.features, vocabularyIndex);
+  const resolution = provinceResolution(
+    provinceGeo.features,
+    vocabularyIndex,
+    contract,
+    CHINA_ADMINISTRATIVE_BINDINGS,
+  );
   for (const adcode of datavAdcodes(resolution, vocabularyIndex)) {
     entries.push(await fetchSource(root, datavSource(adcode)));
   }
@@ -824,9 +897,13 @@ async function main() {
   const mode = args.has("--check") ? "check" : args.has("--fetch") ? "fetch" : "build";
   const root = ROOT;
 
-  if (mode === "fetch") await fetchMode(root);
+  // The pinned contract snapshot is read once and verified against its manifest
+  // before anything is generated, so a half-synced snapshot fails loudly instead
+  // of weakening a binding gate.
+  const contract = loadNavigationContract(root);
+  if (mode === "fetch") await fetchMode(root, contract);
 
-  const plan = currentPlan(root);
+  const plan = currentPlan(root, contract);
   const { manifest: vendoredManifest, sources } = loadSources(root, plan.required);
 
   const workDir = createWorkDir();
@@ -838,7 +915,13 @@ async function main() {
   }
 
   const emitted = emitLayers(built.layers);
-  const manifest = buildManifest(vendoredManifest, emitted, built.report, plan.vocabularyIndex);
+  const manifest = buildManifest(
+    vendoredManifest,
+    emitted,
+    built.report,
+    plan.vocabularyIndex,
+    plan.contract,
+  );
   const manifestBody = stableJson(manifest);
   const coverageBody = stableJson({
     schemaVersion: "portal.region-map-coverage.v1",
@@ -851,6 +934,7 @@ async function main() {
     droppedRings: built.report.droppedRings,
     unmapped: manifest.unmapped,
     interaction: built.report.interaction,
+    contract: manifest.contract,
     sources: vendoredManifest.sources,
     licenses: manifest.licenses,
   });

@@ -10,6 +10,16 @@ type Node = {
   hasChildren: boolean;
 };
 const nodes: Node[] = [
+  ...["TW", "HK", "MO", "CN-XZ"].map((code) => ({
+    nodeId: `geo:${code.toLowerCase()}`,
+    parentNodeId: "geo:cn",
+    code,
+    taxonomy: "ilcd-locations",
+    dimension: "geography",
+    count: 0,
+    directCount: 0,
+    hasChildren: code === "CN-XZ",
+  })),
   {
     nodeId: "geo:aq",
     parentNodeId: null,
@@ -170,6 +180,8 @@ export function filterNavigationFixture<T extends { items: unknown[] }>(
   arguments_: Record<string, unknown>,
 ): T {
   const filters = arguments_.p_filters as Record<string, unknown> | undefined;
+  if (nodes.some((node) => node.nodeId === filters?.geographyNodeId && node.count === 0))
+    return { ...page, items: [] };
   if (filters?.geographyNodeId === "geo:cn-ah" || filters?.geographyNodeId === "geo:cn-ah-hfe") {
     return {
       ...page,

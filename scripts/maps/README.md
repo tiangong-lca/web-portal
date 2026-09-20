@@ -30,7 +30,7 @@ node scripts/maps/build-region-maps.mjs --fetch
 | Layer key | Contents | Projection |
 | --- | --- | --- |
 | `world` | 265 Natural Earth Admin-0 map units | `mapshaper -proj "+proj=robin +lon_0=150"` |
-| `geo:cn` | 31 province-level divisions + the nine-dash line inset | same projection and transform |
+| `geo:cn` | 34 province-level divisions + the nine-dash line inset | same projection and transform |
 | `geo:cn-xx` | The prefectures of province `xx` (27 provinces) | same projection and transform |
 
 **All 29 layers are windows into one map.** They share one projection _and_ one affine transform, declared as `coordinateSpace: "pacific-robinson-v1"` on every layer, so the world, each country and each province are consecutive zoom levels of the same picture: any layer's `viewBox` is literally a rectangle inside the world's. The renderer interpolates a camera between them and needs no projection, SDK or extra request at runtime.
@@ -41,7 +41,7 @@ The seam is cut by the projection engine, not by shifting projected coordinates.
 
 The world's bounding box is fitted to `COORDINATE_UNITS` integer units, and every other layer is a window into that one space. The value is set by the smallest window the product shows: a city layer is roughly 1/300 of the world width, and 400 000 units still leaves it sub-pixel integer precision while every layer stays under the gzip budget.
 
-`nodeId` resolves a node to its layer without an index: `world` holds the two-letter codes, `geo:cn` holds `geo:cn-xx`, `geo:cn-xx` holds `geo:cn-xx-yyy`. Codes that have no drawable shape are listed in the manifest's `unmapped` array with the layer they would have appeared in. Codes outside those three families (regions such as `AFR`, economic groupings such as `EU-25`) are never mapped to a boundary.
+`nodeId` resolves a node to its layer without an index: `world` holds the two-letter codes, `geo:cn` holds `geo:cn-xx` plus the existing `geo:tw`, `geo:hk`, `geo:mo` nodes, `geo:cn-xx` holds `geo:cn-xx-yyy`. Codes that have no drawable shape are listed in the manifest's `unmapped` array with the layer they would have appeared in. Codes outside those three families (regions such as `AFR`, economic groupings such as `EU-25`) are never mapped to a boundary.
 
 ## Basemap
 
@@ -83,12 +83,14 @@ Both `land` and `borders` use their layer's value. The shared context is pre-cut
 
 A feature may carry `navigationNodeId`: an **interaction entry only** that never replaces `nodeId`. The renderer groups shapes by `navigationNodeId ?? nodeId`, so several paths can share one `Link`, one hover, one focus and one `href`, and it reads that entry's count **once** instead of summing the shapes.
 
-The world layer answers to a single `geo:cn` entry through four shapes:
+The world layer answers to a single `geo:cn` entry through six shapes:
 
 | Shape | `nodeId` | `navigationNodeId` | Where its path comes from |
 | --- | --- | --- | --- |
 | `ne50m:CHN` (mainland) | `geo:cn` | — (already the entry) | the world source |
 | `ne50m:TWN` (island of Taiwan) | `geo:tw` | `geo:cn` | the world source, unchanged |
+| `ne50m:HKG` (Hong Kong) | `geo:hk` | `geo:cn` | the world source, unchanged |
+| `ne50m:MAC` (Macao) | `geo:mo` | `geo:cn` | the world source, unchanged |
 | `cnprov:100000_JD` (nine-dash inset) | `null` | `geo:cn` | copied byte for byte from `geo:cn` |
 | `datav:460300` (三沙市) | `null` | `geo:cn` | copied byte for byte from `geo:cn-hi` |
 
@@ -103,7 +105,7 @@ Both stay `nodeId: null` because the **current** location dictionary holds no ma
 A shape receives a `nodeId` only when the source itself asserts a code the Portal location dictionary already contains, and only when that assertion is unique. Nothing is guessed from a similar name, a neighbouring boundary, a successor administration or a historic predecessor; an unresolved shape keeps `nodeId: null` and is recorded in the audit trail.
 
 - **World.** The first of Natural Earth's `ISO_A2` and `ISO_A2_EH` that is a dictionary key. `ISO_A2_EH` is required: Natural Earth leaves `ISO_A2` as `-99` on map units that are parts of a sovereign state (England, Madeira, Zanzibar, Réunion) and records the state code in `ISO_A2_EH`. Result: 261 of 265 shapes resolved; only Somaliland, Kosovo, Northern Cyprus and the Siachen Glacier stay null, because the source asserts no code for them.
-- **Provinces.** Exact, unique Chinese name match against the `CN-*` dictionary entries. Result: 31 of 35 shapes resolved.
+- **Provinces.** Exact, unique Chinese name match against the `CN-*` dictionary entries. The three additional existing codes `TW`, `HK`, `MO` bind explicitly to GeoAtlas adcodes 710000, 810000, 820000. Each requires the pinned Database node to state parent `geo:cn` and the unique source feature to state its reviewed name, province level and parent adcode 100000; a failed required binding stops the build. Result: 34 of 35 shapes resolved. The build receipt records the exact Database snapshot commit and vocabulary digest; no runtime contract fetch or extra region-count request is added.
 - **Prefectures.** Exact, unique Chinese name match against that province's `CN-xx-*` entries, inside that province only. Result: 317 of 333 codes resolved across 27 sublayers.
 
 ## Known exceptions
@@ -112,9 +114,9 @@ These are deliberate, and each one is recorded in `coverage-report.json`.
 
 **Codes with no boundary (19).** Historic or renamed names that have no shape in today's boundaries: `geo:cn-ah-cah` (巢湖市, abolished 2011), `geo:cn-sd-lws` (莱芜市, merged into济南 2019), `geo:cn-hb-xfn` (襄樊市, renamed 襄阳市 2010), `geo:cn-gz-bjd` and `geo:cn-gz-trd` (毕节/铜仁 地区, now 市), `geo:cn-qh-hdd` (海东地区, now 海东市), the five 西藏 地区 codes (`geo:cn-xz-nad/nyd/qad/snd/xid`), the four 新疆 地区 codes (`geo:cn-xj-hmd/tud/ksi/tcd`), and the parenthesised `geo:cn-nm-cfs` (赤峰（乌兰哈达）市). Also `geo:bv`, `geo:gi`, `geo:um`, which have no shape in the 1:50m world source. These are **not** snapped onto their successors.
 
-**Shapes with no node (54).** 4 in `world` (Somaliland, Kosovo, Northern Cyprus, Siachen Glacier) and 46 in the prefecture layers, which are the 省直辖县级行政区划 and 兵团 cities (济源市, 仙桃市, 石河子市 …) plus the successor cities of the renamed 地区 above; they are drawn so their province has no holes.
+**Shapes with no node (51 source shapes).** 4 in `world` (Somaliland, Kosovo, Northern Cyprus, Siachen Glacier) and 46 in the prefecture layers, which are the 省直辖县级行政区划 and 兵团 cities (济源市, 仙桃市, 石河子市 …) plus the successor cities of the renamed 地区 above; they are drawn so their province has no holes.
 
-In `geo:cn`: `cnprov:710000` 台湾省, `cnprov:810000` 香港特别行政区 and `cnprov:820000` 澳门特别行政区 are drawn but unassigned — the dictionary carries Hong Kong, Macao and Taiwan as top-level codes `HK`, `MO` and `TW` (named 香港/澳门/台湾), not as `CN-` subdivisions and not under the source's names, so neither the province rule nor the city rule matches them. `cnprov:100000_JD` is the nine-dash line inset: kept as decoration, and it must never receive a node.
+In `geo:cn`, only `cnprov:100000_JD` remains without a data-node assignment. The world layer additionally carries two borrowed shapes with no raw node, described above; both use the country interaction entry.
 
 **Dropped rings (none).** A ring that rounds to fewer than three integer points cannot be filled, so it is dropped and recorded here. The shared 400 000-unit space loses no ring at all: the two sub-resolution islets that the previous 80 000-unit space lost (one in 湖南省, one in 怀化市) now survive, as does every small island in the world layer.
 

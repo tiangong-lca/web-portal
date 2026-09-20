@@ -17,14 +17,14 @@
   },
   "layers": {
     "world": {
-      "url": "/maps/world.26b44225a2cbcacb.json",
-      "sha256": "26b44225a2cbcacbc0eb6159354be566dbe55a15a7b0edfba84b7188656acb68",
-      "gzipBytes": 137423
+      "url": "/maps/world.00e3626f72056404.json",
+      "sha256": "00e3626f72056404e1318999e4c8a6c549f8abe2bdc48548b9fe2aac46990518",
+      "gzipBytes": 137476
     },
     "geo:cn": {
-      "url": "/maps/geo-cn.bd2998c79efc75ba.json",
-      "sha256": "bd2998c79efc75bac51e8a60d7822ddf1eb6c5284719f27d0d317bc31c279ca5",
-      "gzipBytes": 88078
+      "url": "/maps/geo-cn.9b918784da0f232d.json",
+      "sha256": "9b918784da0f232d4a82f33291226c50f4d6efdf7570389f67e86dd3fe469a04",
+      "gzipBytes": 88091
     },
     "geo:cn-he": {
       "url": "/maps/geo-cn-he.41bcf05abcc1fd8c.json",
@@ -164,10 +164,33 @@
   },
   "projection": "+proj=robin +lon_0=150",
   "coordinateSpace": "pacific-robinson-v1",
+  "contract": {
+    "schemaVersion": "portal.database-contract-snapshot.v1",
+    "sourceRepository": "tiangong-lca/database",
+    "sourceCommit": "7f3c73651b5743bd4ff7da54e4ce0918c1229b63",
+    "vocabulary": {
+      "byteLength": 3976799,
+      "path": "contracts/database-engine/portal/navigation-vocabulary.json",
+      "sha256": "b10774794860ba4282237251907b000758a66a4e22d1e08906ac4855fbb5b30c"
+    },
+    "bindings": [
+      "geo:tw (TW) -> adcode 710000",
+      "geo:hk (HK) -> adcode 810000",
+      "geo:mo (MO) -> adcode 820000"
+    ]
+  },
   "interaction": {
     "rule": "navigationNodeId ?? nodeId",
-    "note": "`navigationNodeId` is an interaction entry only and never replaces `nodeId`. The world layer answers to one `geo:cn` entry through its mainland shape (nodeId geo:cn) plus one alias (the island of Taiwan, still geo:tw) and two borrowed South China Sea shapes (the nine-dash inset and 三沙市). Those two are copied byte for byte from the layers that already project them in this same coordinate space: they are not redrawn and not guessed from a latitude. They carry nodeId null because the current location dictionary holds no matching code — a statement about this mapping, not a claim that the places have no public records; a dictionary revision that adds such a code must revisit them.",
+    "note": "`navigationNodeId` is an interaction entry only and never replaces `nodeId`. The world layer answers to one `geo:cn` entry through its mainland shape (nodeId geo:cn) plus three aliases (Taiwan, Hong Kong and Macao, retaining geo:tw/geo:hk/geo:mo) and two borrowed South China Sea shapes (the nine-dash inset and 三沙市). Those two are copied byte for byte from the layers that already project them in this same coordinate space: they are not redrawn and not guessed from a latitude. They carry nodeId null because the current location dictionary holds no matching code — a statement about this mapping, not a claim that the places have no public records; a dictionary revision that adds such a code must revisit them.",
     "aliases": [
+      {
+        "boundaryId": "ne50m:HKG",
+        "navigationNodeId": "geo:cn"
+      },
+      {
+        "boundaryId": "ne50m:MAC",
+        "navigationNodeId": "geo:cn"
+      },
       {
         "boundaryId": "ne50m:TWN",
         "navigationNodeId": "geo:cn"
@@ -598,7 +621,7 @@
         "layer": "geo:cn",
         "source": "china-province-100000-full",
         "shapes": 35,
-        "mapped": 31
+        "mapped": 34
       },
       {
         "layer": "geo:cn-he",

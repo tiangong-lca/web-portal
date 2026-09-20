@@ -56,31 +56,39 @@
       "layer": "geo:cn",
       "source": "china-province-100000-full",
       "shapes": 35,
-      "mapped": 31,
+      "mapped": 34,
       "projection": "+proj=robin +lon_0=150",
       "simplify": "50%",
       "sharesCoordinateSpace": true,
       "graticuleInterval": 10,
+      "boundCodes": [
+        {
+          "nodeId": "geo:tw",
+          "code": "TW",
+          "adcode": 710000,
+          "name": "台湾省",
+          "parentNodeId": "geo:cn",
+          "boundaryId": "710000"
+        },
+        {
+          "nodeId": "geo:hk",
+          "code": "HK",
+          "adcode": 810000,
+          "name": "香港特别行政区",
+          "parentNodeId": "geo:cn",
+          "boundaryId": "810000"
+        },
+        {
+          "nodeId": "geo:mo",
+          "code": "MO",
+          "adcode": 820000,
+          "name": "澳门特别行政区",
+          "parentNodeId": "geo:cn",
+          "boundaryId": "820000"
+        }
+      ],
       "unresolvedCodes": [],
       "unresolvedShapes": [
-        {
-          "boundaryId": "cnprov:710000",
-          "name": "台湾省",
-          "adchar": null,
-          "reason": "no CN-* dictionary province code carries the exact name \"台湾省\""
-        },
-        {
-          "boundaryId": "cnprov:810000",
-          "name": "香港特别行政区",
-          "adchar": null,
-          "reason": "no CN-* dictionary province code carries the exact name \"香港特别行政区\""
-        },
-        {
-          "boundaryId": "cnprov:820000",
-          "name": "澳门特别行政区",
-          "adchar": null,
-          "reason": "no CN-* dictionary province code carries the exact name \"澳门特别行政区\""
-        },
         {
           "boundaryId": "cnprov:100000_JD",
           "name": "",
@@ -853,6 +861,14 @@
   "interaction": {
     "aliases": [
       {
+        "boundaryId": "ne50m:HKG",
+        "navigationNodeId": "geo:cn"
+      },
+      {
+        "boundaryId": "ne50m:MAC",
+        "navigationNodeId": "geo:cn"
+      },
+      {
         "boundaryId": "ne50m:TWN",
         "navigationNodeId": "geo:cn"
       }
@@ -870,6 +886,21 @@
         "source": "datav-460000",
         "sourceField": "adcode 460300 (三沙市)"
       }
+    ]
+  },
+  "contract": {
+    "schemaVersion": "portal.database-contract-snapshot.v1",
+    "sourceRepository": "tiangong-lca/database",
+    "sourceCommit": "7f3c73651b5743bd4ff7da54e4ce0918c1229b63",
+    "vocabulary": {
+      "byteLength": 3976799,
+      "path": "contracts/database-engine/portal/navigation-vocabulary.json",
+      "sha256": "b10774794860ba4282237251907b000758a66a4e22d1e08906ac4855fbb5b30c"
+    },
+    "bindings": [
+      "geo:tw (TW) -> adcode 710000",
+      "geo:hk (HK) -> adcode 810000",
+      "geo:mo (MO) -> adcode 820000"
     ]
   },
   "sources": [

@@ -22,7 +22,7 @@
     "name": "maplibre-gl",
     "version": "6.10.0",
     "worker": {
-      "url": "/maps/gl/maplibre-gl-worker.96a97fd73283489c.mjs",
+      "url": "/maps/gl/maplibre-gl-worker.96a97fd73283489c.js",
       "sha256": "96a97fd73283489cdf5411ca5c93765f4310286891adf659b891f35997d4e9e8",
       "bytes": 648270
     },

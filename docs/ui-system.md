@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-09-21
-lastReviewedCommit: 969ed22b4d9336f850ed4fc5e96464e32e8c36a4
+lastReviewedCommit: 76f03640ad6b00e434e969a6414996932ff12f85
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Reviewed for Portal #113: official Collapsible classification navigation, continuous MapLibre camera, compact map information and delayed top-only navigation feedback are the production UI contract."
+lastReviewedNote: "Reviewed for Portal #115: the same self-hosted MapLibre worker is served under .js to satisfy EdgeOne MIME delivery. Geometry, counts, UI interaction and CSP policy are unchanged."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

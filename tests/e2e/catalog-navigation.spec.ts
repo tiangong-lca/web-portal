@@ -560,6 +560,7 @@ test("loads only the visible map level and serves the hashed map assets immutabl
     ).toBe(sha256);
   }
   // The worker must arrive as JavaScript, or a module worker cannot be constructed from it.
+  expect(WORKER.url).toMatch(/\.js$/u);
   const worker = await request.get(WORKER.url);
   expect(worker.headers()["content-type"]).toMatch(/javascript/u);
   // Same-origin only: no map request leaves the Portal's own origin while the canvas renders.

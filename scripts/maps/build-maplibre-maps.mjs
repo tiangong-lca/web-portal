@@ -10,7 +10,7 @@
  * two things the Portal serves itself:
  *
  *   public/maps/gl/<layer>.<sha16>.geojson        EPSG:4326 boundary layers
- *   public/maps/gl/maplibre-gl-worker.<sha16>.mjs one self-contained worker
+ *   public/maps/gl/maplibre-gl-worker.<sha16>.js one self-contained worker
  *   public/maps/gl/maplibre-NOTICE.<sha16>.txt    third-party license notices
  *   src/features/catalog/region-maplibre-manifest.generated.json
  *
@@ -589,7 +589,8 @@ async function build() {
         name: RENDERER.name,
         version: RENDERER.version,
         worker: {
-          url: `${ASSET_URL_PREFIX}/${WORKER_FILE_STEM}.${workerSha256.slice(0, 16)}.mjs`,
+          // EdgeOne infers MIME from the extension; .mjs is served as octet-stream.
+          url: `${ASSET_URL_PREFIX}/${WORKER_FILE_STEM}.${workerSha256.slice(0, 16)}.js`,
           sha256: workerSha256,
           bytes: workerBytes.byteLength,
         },

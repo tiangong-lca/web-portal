@@ -23,8 +23,8 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-09-21
-lastReviewedCommit: 969ed22b4d9336f850ed4fc5e96464e32e8c36a4
-lastReviewedNote: "Reviewed for Portal #113: production globe geography and bounded classification branches use existing public navigation contracts; the map interaction script budget is waived while initial route budgets remain enforced."
+lastReviewedCommit: 76f03640ad6b00e434e969a6414996932ff12f85
+lastReviewedNote: "Reviewed for Portal #115: the same self-hosted MapLibre worker is served under .js to satisfy EdgeOne MIME delivery. Geometry, counts, UI interaction and CSP policy are unchanged."
 related:
   - docs/ui-system.md
   - docs/development.md

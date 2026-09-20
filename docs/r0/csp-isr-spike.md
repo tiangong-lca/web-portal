@@ -21,8 +21,8 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
 lastReviewedAt: 2026-09-21
-lastReviewedCommit: 76e90b40e918150dd407e84b091a784bdbae80a6
-lastReviewedNote: "Reviewed for Portal #113: production MapLibre and classification branches pass the enforcing performance CSP locally; the paint probe now waits for a real LCP before input. CSP/cache rules and historical hosted receipts remain unchanged. The exact production release readback is recorded in PR #114."
+lastReviewedCommit: 76f03640ad6b00e434e969a6414996932ff12f85
+lastReviewedNote: "Reviewed for Portal #115: serving the exact worker bytes as .js corrects hosted MIME inference without relaxing CSP. The strict no-inline research disposition is unchanged; actual hosted qualification remains in the delivery receipt."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

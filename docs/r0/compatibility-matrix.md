@@ -20,9 +20,9 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
-lastReviewedAt: 2026-09-21
-lastReviewedCommit: 76e90b40e918150dd407e84b091a784bdbae80a6
-lastReviewedNote: "Reviewed for Portal #113: production MapLibre and classification branches pass the enforcing performance CSP locally; the paint probe now waits for a real LCP before input. CSP/cache rules and historical hosted receipts remain unchanged. The exact production release readback is recorded in PR #114."
+lastReviewedAt: 2026-09-26
+lastReviewedCommit: c59831fc62845fc5d7dd634423b628c4c60dc34b
+lastReviewedNote: "Reviewed Portal #119 bounded catalog cache/load coordination, isolated deadline and recovery regressions, safe telemetry, and the retained homepage ISR exception. Local production cache tests pass; hosted new-runtime/log proof remains tracked separately and existing CSP requirements remain."
 related:
   - ../design-plan.md
   - ../../AGENTS.md
@@ -78,6 +78,10 @@ Portal #49 subsequently merged and published exact Main `91ba3c5ab49f1b92e7a4d8a
 The release records actual performance separately from functional success: twenty lexical requests had p95 TTFB 2,155 ms and 386,046-byte HTML, so the historical 2-second target is **not** claimed met. Process Hybrid returned 20 rows in 9,850 ms and a disjoint 20-row continuation in 2,461 ms. Flow first returned explicit timeout fallback after 26,053 ms; one warm follow-up returned genuine Hybrid in 21,201 ms and a disjoint continuation in 3,632 ms. [Database #603](https://github.com/tiangong-lca/database-engine/issues/603#issuecomment-5520081063) retains this pre-existing cold-read work. No runtime budget, index, source data or performance gate was changed; the user's correctness-first acceptance and no-RUM decision remain in [workspace #963](https://github.com/tiangong-lca/workspace/issues/963).
 
 The hosted copy review identified the remaining raw Process subtype labels, now owned by [Portal #50](https://github.com/tiangong-lca/portal/issues/50). That display-only follow-up and the final exact root integration remain required before the overall user request is closed out.
+
+## Portal #119 bounded catalog reads
+
+Portal #119 adds controlled local qualification for catalog read coordination: 383 unit/integration assertions and all five production cache-policy browser checks pass, including four simultaneous same-parameter requests with one origin call, cold/warm reuse, and one refresh after the 30-second window. The four homepages remain ISR with a 30-second revalidation interval; dynamic HTML remains private/no-store. The candidate source is preserved by commit `c59831f`. These local results do not qualify EdgeOne's new logging or cache behavior; the exact hosted deployment and log readback remain required in [Portal #119](https://github.com/tiangong-lca/web-portal/issues/119).
 
 ## CSP disposition
 

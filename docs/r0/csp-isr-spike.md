@@ -20,9 +20,9 @@ checkPaths:
   - edgeone.json
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
-lastReviewedAt: 2026-09-21
-lastReviewedCommit: c8c3ece4d5da9687014cdf411adcc9c99193806f
-lastReviewedNote: "Reviewed for Portal #117: byte-identical GeoJSON now uses standard .json asset URLs so EdgeOne applies HTTP compression. Geometry, UI behavior, data contracts and CSP directives remain unchanged."
+lastReviewedAt: 2026-09-26
+lastReviewedCommit: c59831fc62845fc5d7dd634423b628c4c60dc34b
+lastReviewedNote: "Reviewed Portal #119 bounded catalog cache/load coordination, isolated deadline and recovery regressions, safe telemetry, and the retained homepage ISR exception. Local production cache tests pass; hosted new-runtime/log proof remains tracked separately and existing CSP requirements remain."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

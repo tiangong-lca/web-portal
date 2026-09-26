@@ -21,8 +21,8 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
 lastReviewedAt: 2026-09-26
-lastReviewedCommit: c59831fc62845fc5d7dd634423b628c4c60dc34b
-lastReviewedNote: "Reviewed Portal #119 bounded catalog cache/load coordination, isolated deadline and recovery regressions, safe telemetry, and the retained homepage ISR exception. Local production cache tests pass; hosted new-runtime/log proof remains tracked separately and existing CSP requirements remain."
+lastReviewedCommit: 90980f893a4eb5ebbe8d9250545879fa40e74c3a
+lastReviewedNote: "Reviewed Portal #121: Next-first bounded instance envelope reuse, serialized-byte/count limits, original 30-second age, safe tier/instance telemetry, and non-persisting-runtime regressions preserve public contracts, homepage ISR and CSP. Hosted positive cache proof is owned by #121; adapter source alone does not invalidate native ISR evidence."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

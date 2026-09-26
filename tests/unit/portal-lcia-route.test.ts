@@ -123,6 +123,7 @@ describe("Portal LCIA same-origin Route Handler", () => {
         status: "ok",
         errorCode: null,
         deploymentSha: "d".repeat(40),
+        instanceMarker: expect.stringMatching(/^[a-f0-9]{8}$/),
       },
     ]);
     const serialized = JSON.stringify(events);

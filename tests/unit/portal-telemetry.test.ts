@@ -74,6 +74,7 @@ describe("Portal structured telemetry", () => {
         errorCode: null,
         locale: "en",
         deploymentSha,
+        instanceMarker: expect.stringMatching(/^[a-f0-9]{8}$/),
       },
     ]);
     const serialized = JSON.stringify(events);

@@ -21,7 +21,13 @@ export type PortalCacheBoundary = {
     key: string,
     options: { readonly revalidateSeconds: number; readonly tags: readonly string[] },
     loader: () => Promise<PortalReadEnvelope>,
-  ): Promise<PortalReadEnvelope>;
+  ): Promise<
+    | PortalReadEnvelope
+    | {
+        readonly envelope: PortalReadEnvelope;
+        readonly cacheSource: "runtime" | "instance";
+      }
+  >;
 };
 
 export type PortalReadOutcome = "origin" | "coalesced" | "cache";
@@ -45,6 +51,7 @@ export type PortalConsumerRecord = {
   readonly originMarker: string;
   readonly gateWaitMs: number;
   readonly dedupeShared: boolean;
+  readonly cacheSource?: "runtime" | "instance";
 };
 
 export type PortalReadResult = {
@@ -475,7 +482,11 @@ export function createPortalReadCoordinator(
     });
   }
 
-  function resultOf(envelope: PortalReadEnvelope, attempt: OriginAttempt | null): PortalReadResult {
+  function resultOf(
+    envelope: PortalReadEnvelope,
+    attempt: OriginAttempt | null,
+    cacheSource: "runtime" | "instance" = "runtime",
+  ): PortalReadResult {
     // The payload counts as this call's own load only when the envelope marker
     // matches it: a boundary may have started a refresh and still returned an
     // older entry.
@@ -488,6 +499,7 @@ export function createPortalReadCoordinator(
         originMarker: envelope.originMarker,
         gateWaitMs: own ? attempt.gate.waitMs : 0,
         dedupeShared: own ? attempt.dedupeShared : false,
+        ...(own ? {} : { cacheSource }),
       },
     };
   }
@@ -509,9 +521,10 @@ export function createPortalReadCoordinator(
         input.deadlineMs,
       );
 
-      const envelope = usableEnvelope(served);
+      const wrapped = served !== null && typeof served === "object" && "envelope" in served;
+      const envelope = usableEnvelope(wrapped ? served.envelope : served);
       if (envelope !== null && now() - envelope.loadedAtMs <= windowMsOf(input.revalidateSeconds)) {
-        return resultOf(envelope, attempt);
+        return resultOf(envelope, attempt, wrapped ? served.cacheSource : "runtime");
       }
 
       // Stale, future-dated or malformed: this call waits for its own controlled

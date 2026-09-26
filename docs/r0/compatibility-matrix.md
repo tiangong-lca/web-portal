@@ -21,8 +21,8 @@ checkPaths:
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
 lastReviewedAt: 2026-09-26
-lastReviewedCommit: c59831fc62845fc5d7dd634423b628c4c60dc34b
-lastReviewedNote: "Reviewed Portal #119 bounded catalog cache/load coordination, isolated deadline and recovery regressions, safe telemetry, and the retained homepage ISR exception. Local production cache tests pass; hosted new-runtime/log proof remains tracked separately and existing CSP requirements remain."
+lastReviewedCommit: 90980f893a4eb5ebbe8d9250545879fa40e74c3a
+lastReviewedNote: "Reviewed Portal #121: Next-first bounded instance envelope reuse, serialized-byte/count limits, original 30-second age, safe tier/instance telemetry, and non-persisting-runtime regressions preserve public contracts, homepage ISR and CSP. Hosted positive cache proof is owned by #121; adapter source alone does not invalidate native ISR evidence."
 related:
   - ../design-plan.md
   - ../../AGENTS.md
@@ -81,7 +81,11 @@ The hosted copy review identified the remaining raw Process subtype labels, now 
 
 ## Portal #119 bounded catalog reads
 
-Portal #119 adds controlled local qualification for catalog read coordination: 383 unit/integration assertions and all five production cache-policy browser checks pass, including four simultaneous same-parameter requests with one origin call, cold/warm reuse, and one refresh after the 30-second window. The four homepages remain ISR with a 30-second revalidation interval; dynamic HTML remains private/no-store. The candidate source is preserved by commit `c59831f`. These local results do not qualify EdgeOne's new logging or cache behavior; the exact hosted deployment and log readback remain required in [Portal #119](https://github.com/tiangong-lca/web-portal/issues/119).
+Portal #119 adds controlled local qualification for catalog read coordination: 383 unit/integration assertions and all five production cache-policy browser checks pass, including four simultaneous same-parameter requests with one origin call, cold/warm reuse, and one refresh after the 30-second window. The four homepages remain ISR with a 30-second revalidation interval; dynamic HTML remains private/no-store. Main `ad9863aa048fe62219686c688ad528a71d84ece6` is deployed as `dpd2cmg0jxg5`. On 2026-09-26, its hosted console exposed sanitized origin/consumer JSON for Search/Facets/navigation with exact SHA, bounded shape and elapsed time. Four controlled repeated calls still produced distinct origins; response speed and a keyword search without results do not qualify cache reuse.
+
+[Portal #121](https://github.com/tiangong-lca/web-portal/issues/121) owns the bounded instance-cache repair and its exact hosted qualification. The official published `@edgeone/opennextjs-pages@0.2.10-beta.1` handler inspected that day returns cache misses and does not store writes; Production build logs confirm the injected package name but do not disclose its exact version. This explains the observed behavior without proving the deployed binary's identity. The application retains Next-first caching and adds successful-copy reuse inside the loader, limited to 256 entries/16 MiB and the original 30-second age. The runtime fixture deliberately discards all framework cache writes. Hosted proof must show a real `cacheHit:true`, `cacheSource:instance`, increasing age and a repeated origin marker on the same random instance marker, then bounded refresh after expiry. No cross-instance sharing or provider-wide ceiling is claimed. Mixed provider details do not constitute end-to-end request correlation; provider-generated URL lines are distinct from application JSON.
+
+This application repair does not change the retained homepage ISR/CSP release decision. The adapter's Data Cache source alone does not invalidate the earlier measured native ISR regeneration proof or establish the behavior of every provider cache layer. A separately observed legacy V2 facet timeout is database-owned follow-up rather than evidence that the completed V3 query rewrite covers V2.
 
 ## CSP disposition
 

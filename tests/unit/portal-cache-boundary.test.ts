@@ -23,6 +23,15 @@ function unwrap(result: Awaited<ReturnType<PortalCacheBoundary["read"]>>) {
 }
 
 describe("bounded instance reuse behind a non-persisting runtime cache", () => {
+  it("refuses unbounded or invalid cache configurations", () => {
+    for (const options of [
+      { maximumEntries: 4097 },
+      { maximumBytes: 64 * 1024 * 1024 + 1 },
+      { maximumEntries: 0 },
+    ]) {
+      expect(() => createPortalInstanceCacheBoundary(missEveryTime, options)).toThrow(RangeError);
+    }
+  });
   it("coalesces cold concurrent origins, reuses a warm copy and reports the actual tier", async () => {
     let clock = 1000;
     const boundary = createPortalInstanceCacheBoundary(missEveryTime, { now: () => clock });
@@ -55,6 +64,7 @@ describe("bounded instance reuse behind a non-persisting runtime cache", () => {
     const refreshed = await coordinator.runBounded(input);
     expect(load).toHaveBeenCalledTimes(2);
     expect(refreshed.consumer).toMatchObject({ outcome: "origin", loadedAtAgeMs: 0 });
+    expect(refreshed.consumer).not.toHaveProperty("cacheSource");
   });
 
   it("does not serve an expired envelope after origin failure, or extend age on hits", async () => {

@@ -14,8 +14,13 @@ export function createPortalInstanceCacheBoundary(
   const now = options.now ?? Date.now;
   const maximumEntries = options.maximumEntries ?? 256;
   const maximumBytes = options.maximumBytes ?? 16 * 1024 * 1024;
-  for (const bound of [maximumEntries, maximumBytes]) {
-    if (!Number.isSafeInteger(bound) || bound <= 0) throw new RangeError("Invalid cache bound");
+  for (const [bound, ceiling] of [
+    [maximumEntries, 4096],
+    [maximumBytes, 64 * 1024 * 1024],
+  ] as const) {
+    if (!Number.isSafeInteger(bound) || bound <= 0 || bound > ceiling) {
+      throw new RangeError("Invalid cache bound");
+    }
   }
   const entries = new Map<string, Entry>();
   let storedBytes = 0;
@@ -39,7 +44,13 @@ export function createPortalInstanceCacheBoundary(
       return null;
     }
     // Read copies never share mutable payload objects with callers.
-    const envelope = JSON.parse(entry.serialized) as PortalReadEnvelope;
+    let envelope: PortalReadEnvelope;
+    try {
+      envelope = JSON.parse(entry.serialized) as PortalReadEnvelope;
+    } catch {
+      remove(key);
+      return null;
+    }
     entries.delete(key);
     entries.set(key, entry);
     return envelope;

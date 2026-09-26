@@ -434,6 +434,9 @@ export function createPortalRpcClient(options: PortalRpcClientOptions = {}): Por
                   loadedAtAgeMs: consumer.loadedAtAgeMs,
                   gateQueuedMs: consumer.gateWaitMs,
                   originMarker: consumer.originMarker,
+                  ...(consumer.cacheSource === undefined
+                    ? {}
+                    : { cacheSource: consumer.cacheSource }),
                 }),
             // A closed-vocabulary description only: never the query text, a
             // filter value, an identifier, or a token.

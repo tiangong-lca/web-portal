@@ -574,7 +574,9 @@ Portal 不形成第三方 API 产品。Route Handler 或 Server Action 仅允许
 
 ### 10.0 昂贵公共读的有界边界
 
-页面发起的 public lexical Search（V2/V3）、Facets（V2/V3）与 navigation 读通过 `src/server/data/cache-boundary.ts` 的 `unstable_cache` 边界缓存，缓存与 30 秒窗口、tags 仍由同一个 Next Incremental Cache 提供；`src/server/data/read-coordinator.ts` 的进程级协调器在 loader 内提供同参并发合并（键为"环境身份（URL + publishable key）+ RPC + 请求体规范形 + timeout + cache 策略"的稳定 hash）、实例内准入与有界失败冷却，并把真实回源包进内部 envelope（`loadedAt` + origin marker）：**超过 30 秒窗口的载荷不再视为公开数据**，消费者必须等到一次受控回源结果或返回暂不可用，上游持续失败时不会无限 serve stale；失败永不被当作成功数据缓存。回源请求使用自己的 8 秒超时，某个访客的取消不会传播给其他消费者；合并共享已解析 payload，每个调用方仍独立跑自己的精细 schema（写入前先由 RPC 固定 schema 校验）。该边界只在当前运行实例内成立，不宣称跨实例全局限流。
+页面发起的 public lexical Search（V2/V3）、Facets（V2/V3）与 navigation 读保留 `src/server/data/cache-boundary.ts` 的 `unstable_cache` 边界。Next 命中优先；它的 loader 内另有 `instance-cache.ts` 成功 envelope 缓存，在托管适配器不保存 Data Cache 时提供实例内复用。该层最多 256 条、16 MiB UTF-8 序列化内容，按最近使用顺序淘汰；超大条目跳过缓存，不清空已有有效条目。命中返回独立解析的副本，保持原 `loadedAt`，最长 30 秒，拒绝未来或已过期的本地条目；no-store 读不经过这层。Next tags 仅由 Next 层实现；当前没有 on-demand tag/path invalidation，未来引入时必须同时失效实例层，不能把两层当成同一失效面。
+
+`src/server/data/read-coordinator.ts` 的进程级协调器在 loader 内提供同参并发合并（键为"环境身份（URL + publishable key）+ RPC + 请求体规范形 + timeout + cache 策略"的稳定 hash）、实例内准入与有界失败冷却，并把真实回源包进内部 envelope（`loadedAt` + origin marker）：**超过 30 秒窗口的载荷不再视为公开数据**，消费者必须等到一次受控回源结果或返回暂不可用，上游持续失败时不会无限 serve stale；失败永不被当作成功数据缓存。新鲜窗口内可以在上游故障时复用已验证成功结果。回源请求使用自己的 8 秒超时，某个访客的取消不会传播给其他消费者；每个调用方仍独立跑自己的精细 schema（写入前先由 RPC 固定 schema 校验）。本地缓存与准入只在当前运行实例内成立，实例终止即丢失，不宣称跨实例共享缓存或全局限流。服务端 JSON 的 `cacheSource` 区分 `instance/runtime` 实际命中，随机 `instanceMarker` 标识同一进程，不派生自环境、主机或查询内容。
 
 默认每个实例、每个昂贵 RPC family 最多同时运行 8 次回源，准入等待最多 1.5 秒，最多跟踪 256 个未完成键；达到上限时拒绝新工作，不驱逐仍在运行的项。同键失败冷却默认 2 秒，过期项释放容量；这些约束也用于同 family 的 no-store 调用，但不持久缓存其结果。消费者保留各自 deadline；容量或冷却拒绝沿用公开的暂不可用错误，并仅在服务端日志区分原因。首页的 ISR 导航调用保留原 fetch 缓存路径，见缓存职责表。
 
@@ -890,7 +892,7 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 | --- | --- | --- |
 | 经验证的共享 CDN | hash 静态资源、构建产物，以及显式启用后的 sitemap XML | 不缓存 Search 或详情动态 HTML，不判断数据可见性；未证明同步 revalidate/no-stale 时不得缓存 sitemap |
 | Next Route/Data Cache | 首页/目录 ISR、详情 DTO、Exchange 页、LCIA，以及页面发起的 public lexical Search/facet RPC 30 秒短缓存与 request dedupe | 不缓存用户/团队数据、Hybrid 原文或 sitemap manifest/shard RPC；Search tag 只含固定 family/kind，不含 query/filter |
-| 有界读协调器（`src/server/data/read-coordinator.ts`） | 昂贵 Search/Facets/navigation 读的同参并发合并、实例内准入、失败冷却，以及"超过 30 秒窗口即等待受控回源或返回暂不可用"的可见性铁律；经 `unstable_cache`（`src/server/data/cache-boundary.ts`）复用同一 Next Incremental Cache，stale 后台刷新同样走应用 loader | 不是跨实例全局限流，多实例总上限会随实例数增加；不缓存失败；不把 key/原 query/UUID 写入日志；详情/版本/LCIA/sitemap 与首页 ISR 调用点仍走原 fetch 缓存路径（首页因 `no-store` 回源会破坏静态渲染而显式保留 legacy 边界） |
+| 有界读协调器与实例缓存（`src/server/data/read-coordinator.ts`、`instance-cache.ts`） | 昂贵 Search/Facets/navigation 读的同参并发合并、实例内准入、失败冷却，以及"超过 30 秒窗口即等待受控回源或返回暂不可用"的可见性铁律；Next 命中优先，loader 内以 256 条/16 MiB 上限补齐实例内成功结果复用；stale 后台刷新同样走应用 loader | 不是跨实例共享缓存或全局限流，多实例总上限会随实例数增加；实例层不实现 Next tag/path invalidation；不缓存失败或延长 loadedAt；不把 key/原 query/UUID 写入日志；详情/版本/LCIA/sitemap 与首页 ISR 调用点仍走原 fetch 缓存路径（首页因 `no-store` 回源会破坏静态渲染而显式保留 legacy 边界） |
 | Edge Redis | HMAC nonce、route budget、concurrency lease，以及 Hybrid rewrite/embedding/公共结果的 hash-key 短缓存 | 不缓存页面 HTML、候选集或 Database 权限事实；不决定数据可见性 |
 
 | 内容 | 策略 | 最大陈旧时间 |

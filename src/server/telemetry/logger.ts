@@ -1,8 +1,13 @@
 import "server-only";
 
+import { randomBytes } from "node:crypto";
 import { z } from "zod";
 
 const immutableBuildSha = process.env.PORTAL_BUILD_SHA;
+const instanceMarkerKey = Symbol.for("tiangong.portal.telemetry.instance.v1");
+const runtimeMarkers = globalThis as unknown as Record<symbol, string | undefined>;
+const instanceMarker = runtimeMarkers[instanceMarkerKey] ?? randomBytes(4).toString("hex");
+runtimeMarkers[instanceMarkerKey] = instanceMarker;
 
 const correlationIdSchema = z
   .string()
@@ -50,6 +55,8 @@ const telemetryEventSchema = z.strictObject({
   /** Distinguishes the request that answered a consumer from the real origin load. */
   eventKind: z.enum(["consumer", "origin"]).optional(),
   cacheOutcome: z.enum(["origin", "coalesced", "cache"]).optional(),
+  cacheSource: z.enum(["runtime", "instance"]).optional(),
+  instanceMarker: z.string().regex(/^[a-f0-9]{8}$/),
   dedupeShared: z.boolean().optional(),
   loadedAtAgeMs: z.number().int().min(0).max(86_400_000).optional(),
   gateQueuedMs: z.number().int().min(0).max(120_000).optional(),
@@ -103,7 +110,10 @@ const telemetryEventSchema = z.strictObject({
 });
 
 export type PortalTelemetryEvent = z.infer<typeof telemetryEventSchema>;
-export type PortalTelemetryEventInput = Omit<PortalTelemetryEvent, "deploymentSha">;
+export type PortalTelemetryEventInput = Omit<
+  PortalTelemetryEvent,
+  "deploymentSha" | "instanceMarker"
+>;
 export type PortalTelemetryLogger = (event: Readonly<PortalTelemetryEvent>) => void | Promise<void>;
 export type PortalTelemetryLocale = "zh-CN" | "en" | "de" | "fr";
 
@@ -168,6 +178,7 @@ export function emitPortalTelemetry(
     const parsed = telemetryEventSchema.safeParse({
       ...input,
       deploymentSha: readPortalDeploymentSha(environment),
+      instanceMarker,
     });
     if (!parsed.success) {
       return;

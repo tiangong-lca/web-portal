@@ -45,7 +45,25 @@ const telemetryEventSchema = z.strictObject({
     ])
     .nullable(),
   cachePolicy: z.enum(["no-store", "revalidate"]),
-  cacheHit: z.literal("unknown"),
+  /** `"unknown"` means the read path cannot observe cache state; bounded reads report a boolean. */
+  cacheHit: z.union([z.literal("unknown"), z.boolean()]),
+  /** Distinguishes the request that answered a consumer from the real origin load. */
+  eventKind: z.enum(["consumer", "origin"]).optional(),
+  cacheOutcome: z.enum(["origin", "coalesced", "cache"]).optional(),
+  dedupeShared: z.boolean().optional(),
+  loadedAtAgeMs: z.number().int().min(0).max(86_400_000).optional(),
+  gateQueuedMs: z.number().int().min(0).max(120_000).optional(),
+  /** Short random correlation token for one origin load; never derived from data. */
+  originMarker: z.string().min(1).max(16).optional(),
+  /**
+   * Closed-vocabulary read shape. These fields exist so hosted logs can tell an
+   * expensive empty browse from a targeted identifier read without ever
+   * recording the query, a filter value, a cursor, or an identifier.
+   */
+  queryShape: z.enum(["empty", "identifier", "text"]).optional(),
+  hasFilters: z.boolean().optional(),
+  hasCursor: z.boolean().optional(),
+  sort: z.enum(["relevance", "modified_desc", "name_asc", "other"]).optional(),
   backend: z.enum(["supabase_data_api", "portal_edge_lcia", "portal_edge_hybrid", "portal_bff"]),
   latencyMs: z.number().int().min(0).max(120_000),
   rowCount: z.number().int().min(0).max(4096).nullable(),
@@ -74,6 +92,10 @@ const telemetryEventSchema = z.strictObject({
       "contract_failure",
       "internal_error",
       "hybrid_fallback_unavailable",
+      // Instance-local shedding. These never describe the Edge Redis guard,
+      // which keeps its own `concurrency_exhausted` code.
+      "local_capacity_shed",
+      "local_cooldown_shed",
     ])
     .nullable(),
   locale: z.enum(["zh-CN", "en", "de", "fr"]).optional(),
@@ -86,7 +108,9 @@ export type PortalTelemetryLogger = (event: Readonly<PortalTelemetryEvent>) => v
 export type PortalTelemetryLocale = "zh-CN" | "en" | "de" | "fr";
 
 export const defaultPortalTelemetryLogger: PortalTelemetryLogger = (event) => {
-  process.stdout.write(`${JSON.stringify(event)}\n`);
+  // Hosted runtimes capture console output for the Node server; one JSON object
+  // per line keeps the events grep-able without a logging dependency.
+  console.log(JSON.stringify(event));
 };
 
 export function createPortalCorrelationId(

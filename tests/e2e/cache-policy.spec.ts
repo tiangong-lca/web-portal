@@ -110,3 +110,49 @@ test("reuses short public Search data without sharing dynamic HTML", async ({ re
   expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
   expect(await rpcReceiptCount(request, "portal_facets_v2", facetBody)).toBe(1);
 });
+
+test("collapses concurrent identical Search reads into one origin call", async ({ request }) => {
+  const query = `cache-concurrent-${crypto.randomUUID()}`;
+  const path = `/en/search?v=1&kind=process&q=${encodeURIComponent(query)}`;
+  const searchBody = {
+    p_query: query,
+    p_filters: {},
+    p_sort: "relevance",
+    p_cursor: null,
+    p_limit: 10,
+  };
+
+  const responses = await Promise.all(Array.from({ length: 4 }, () => request.get(path)));
+  for (const response of responses) expect(response.ok()).toBe(true);
+
+  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
+});
+
+test("refreshes the short public Search data through the origin once the window expires", async ({
+  request,
+}) => {
+  test.setTimeout(120_000);
+  const query = `cache-stale-${crypto.randomUUID()}`;
+  const path = `/en/search?v=1&kind=process&q=${encodeURIComponent(query)}`;
+  const searchBody = {
+    p_query: query,
+    p_filters: {},
+    p_sort: "relevance",
+    p_cursor: null,
+    p_limit: 10,
+  };
+
+  const fresh = await request.get(path);
+  expect(fresh.ok()).toBe(true);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
+
+  await new Promise((resolve) => setTimeout(resolve, 32_000));
+
+  const refreshed = await request.get(path);
+  expect(refreshed.ok()).toBe(true);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(2);
+
+  const settled = await request.get(path);
+  expect(settled.ok()).toBe(true);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(2);
+});

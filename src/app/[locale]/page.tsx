@@ -34,13 +34,19 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   setRequestLocale(locale);
   const [summary, navigation] = await Promise.all([
     readCatalogSummary(),
-    getPublicNavigation({
-      kind: "all",
-      query: "",
-      filters: {},
-      dimension: "classification",
-      limit: 1,
-    }).catch((error: unknown) => {
+    getPublicNavigation(
+      {
+        kind: "all",
+        query: "",
+        filters: {},
+        dimension: "classification",
+        limit: 1,
+      },
+      undefined,
+      // This route is statically rendered: the coordinated read path issues a
+      // `no-store` origin request, which would opt the page out of ISR.
+      { boundary: "legacy" },
+    ).catch((error: unknown) => {
       if (error instanceof PortalDataError) return null;
       throw error;
     }),

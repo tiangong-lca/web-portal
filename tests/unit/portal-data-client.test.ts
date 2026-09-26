@@ -223,7 +223,9 @@ describe("Portal Supabase public RPC client", () => {
         p_limit: 20,
       },
       expect.anything(),
-      { mode: "no-store" },
+      // The bounded read path carries the fixed public schema used to validate a
+      // payload before it is shared; the query itself never enters the policy.
+      expect.objectContaining({ mode: "no-store", writeSchema: expect.anything() }),
     ]);
   });
 
@@ -245,16 +247,20 @@ describe("Portal Supabase public RPC client", () => {
       { cache: "short-public" },
     );
 
-    expect(calls[0]?.[3]).toEqual({
-      mode: "revalidate",
-      seconds: 30,
-      tags: ["portal:catalog-search:process"],
-    });
-    expect(calls[1]?.[3]).toEqual({
-      mode: "revalidate",
-      seconds: 30,
-      tags: ["portal:catalog-facets:process"],
-    });
+    expect(calls[0]?.[3]).toEqual(
+      expect.objectContaining({
+        mode: "revalidate",
+        seconds: 30,
+        tags: ["portal:catalog-search:process"],
+      }),
+    );
+    expect(calls[1]?.[3]).toEqual(
+      expect.objectContaining({
+        mode: "revalidate",
+        seconds: 30,
+        tags: ["portal:catalog-facets:process"],
+      }),
+    );
     expect(JSON.stringify(calls.map((call) => call[3]))).not.toContain("private cache key");
   });
 
@@ -423,10 +429,10 @@ describe("Portal Supabase public RPC client", () => {
       expect.objectContaining({ mode: "revalidate", seconds: 60 }),
       expect.objectContaining({ mode: "revalidate", seconds: 300 }),
       expect.objectContaining({ mode: "revalidate", seconds: 300 }),
-      { mode: "no-store" },
+      expect.objectContaining({ mode: "no-store" }),
       expect.objectContaining({ mode: "revalidate", seconds: 300 }),
-      { mode: "no-store" },
-      { mode: "no-store" },
+      expect.objectContaining({ mode: "no-store" }),
+      expect.objectContaining({ mode: "no-store" }),
     ]);
     expect(calls[0]?.arguments_).toEqual({});
     expect(calls[1]?.arguments_).toEqual({

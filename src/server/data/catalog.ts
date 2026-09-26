@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { z } from "zod";
+import type { ZodType, z } from "zod";
 
 import {
   catalogSearchInputSchema,
@@ -51,6 +51,7 @@ const shortPublicCatalogCacheSeconds = 30;
 function publicCatalogQueryCachePolicy(
   family: "search" | "facets",
   kind: "all" | "process" | "flow",
+  writeSchema: ZodType<unknown>,
   options?: PublicCatalogReadOptions,
 ): PortalFetchCachePolicy {
   return options?.cache === "short-public"
@@ -58,8 +59,11 @@ function publicCatalogQueryCachePolicy(
         mode: "revalidate",
         seconds: shortPublicCatalogCacheSeconds,
         tags: [`portal:catalog-${family}:${kind}`],
+        // Validated before the shared payload is cached; each caller still runs
+        // its own refined schema on the returned value.
+        writeSchema,
       }
-    : { mode: "no-store" };
+    : { mode: "no-store", writeSchema };
 }
 
 function parseInput<T>(schema: z.ZodType<T>, input: unknown): T {
@@ -102,7 +106,7 @@ async function searchPublicCatalog(
       p_limit: parsed.limit,
     },
     responseSchema,
-    publicCatalogQueryCachePolicy("search", kind, options),
+    publicCatalogQueryCachePolicy("search", kind, publicSearchPageSchema, options),
   );
   return requireBoundResponse(
     page,
@@ -262,7 +266,7 @@ export async function getPublicFacets(
       p_filters: parsed.filters,
     },
     responseSchema,
-    publicCatalogQueryCachePolicy("facets", parsed.kind, options),
+    publicCatalogQueryCachePolicy("facets", parsed.kind, publicFacetsSchema, options),
   );
   return requireBoundResponse(facets, facets.kind === parsed.kind);
 }

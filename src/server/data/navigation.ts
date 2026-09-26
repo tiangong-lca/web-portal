@@ -14,11 +14,24 @@ const publicCache = {
   seconds: 30,
   tags: ["portal:catalog-navigation"],
 } as const;
-const cachePolicy = () => ({ ...publicCache, tags: [...publicCache.tags] });
+
+export type PortalNavigationReadOptions = {
+  /**
+   * `"bounded"` (default) uses the coordinated read path. Statically rendered
+   * callers must pass `"legacy"`: the bounded origin request is `no-store` and
+   * would opt their route out of static generation.
+   */
+  readonly boundary?: "bounded" | "legacy";
+};
+
+function cachePolicy(writeSchema: z.ZodType<unknown>, boundary: "bounded" | "legacy" = "bounded") {
+  return { ...publicCache, tags: [...publicCache.tags], boundary, writeSchema };
+}
 
 async function readNavigation(
   input: z.input<typeof navigationInputSchema>,
   client: PortalRpcClient,
+  options?: PortalNavigationReadOptions,
 ) {
   const value = navigationInputSchema.safeParse(input);
   if (!value.success) throw new PortalDataError("invalid_request");
@@ -42,7 +55,7 @@ async function readNavigation(
       p_limit: parsed.limit,
     },
     schema,
-    cachePolicy(),
+    cachePolicy(publicNavigationSchema, options?.boundary),
   );
 }
 
@@ -53,8 +66,12 @@ const readCachedNavigation = cache((serialized: string) =>
 export async function getPublicNavigation(
   input: z.input<typeof navigationInputSchema>,
   client?: PortalRpcClient,
+  options?: PortalNavigationReadOptions,
 ) {
-  return client ? readNavigation(input, client) : readCachedNavigation(JSON.stringify(input));
+  if (client) return readNavigation(input, client, options);
+  if (options?.boundary === "legacy")
+    return readNavigation(input, createPortalRpcClient(), options);
+  return readCachedNavigation(JSON.stringify(input));
 }
 
 export async function searchPublicBrowse(
@@ -77,7 +94,7 @@ export async function searchPublicBrowse(
       (page) =>
         page.kind === parsed.kind && page.items.every((item) => item.key.kind === parsed.kind),
     ),
-    cachePolicy(),
+    cachePolicy(publicSearchPageSchema),
   );
 }
 
@@ -93,6 +110,6 @@ export async function getPublicBrowseFacets(
     "portal_facets_v3",
     { p_kind: parsed.kind, p_query: parsed.query, p_filters: parsed.filters },
     publicFacetsSchema.refine((page) => page.kind === parsed.kind),
-    cachePolicy(),
+    cachePolicy(publicFacetsSchema),
   );
 }

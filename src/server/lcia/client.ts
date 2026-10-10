@@ -59,7 +59,7 @@ export async function queryPublishedLciaRaw(
   if (rawBody.byteLength === 0 || rawBody.byteLength > maximumRequestBytes) {
     throw new PortalLciaInputError();
   }
-  const requestBody = new Uint8Array(rawBody.byteLength);
+  let requestBody = new Uint8Array(rawBody.byteLength);
   requestBody.set(rawBody);
 
   let decoded: unknown;
@@ -81,6 +81,13 @@ export async function queryPublishedLciaRaw(
   }
 
   const environment = options.environment ?? readPortalLciaEnvironment();
+  requestBody = new TextEncoder().encode(
+    JSON.stringify({
+      ...parsedInput.data,
+      schemaVersion: "portal.published-lcia-request.v2",
+      allowedBrandCodes: environment.dataBrandScope.allowedBrandCodes,
+    }),
+  );
   const signed = await signPortalHmac({
     rawBody: requestBody,
     keyId: environment.keyId,

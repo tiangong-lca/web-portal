@@ -41,6 +41,7 @@ const meta = {
       const locale = storyLocale(globals);
       const kind = parameters.flow ? "flow" : "process";
       const record = parameters.missing ? undefined : detailRecord(locale, kind);
+      if (record && parameters.brand) record.brand = parameters.brand;
       if (record && parameters.noCitation) record.citation = undefined;
       if (record && parameters.attribution) {
         record.dataGenerator = "Example research group";
@@ -322,4 +323,9 @@ export const DeclaredAttribution: Story = {
 export const DeclaredAttributionMobileGerman: Story = {
   ...DeclaredAttribution,
   globals: { ...mobileGlobals, locale: "de" },
+};
+
+export const DisplayBrand: Story = {
+  parameters: { brand: "World steel" },
+  globals: { locale: "en" },
 };

@@ -33,37 +33,33 @@ const defaultMaximumResponseBytes = 512 * 1024;
 const maximumErrorResponseBytes = 4 * 1024;
 const sitemapShardMaximumResponseBytes = 2 * 1024 * 1024;
 const rpcNames = new Set([
-  "portal_search_processes_v2",
-  "portal_search_processes_v3",
-  "portal_search_flows_v3",
-  "portal_facets_v3",
-  "portal_navigation_v1",
-  "portal_search_flows_v2",
-  "portal_catalog_summary_v1",
-  "portal_get_dataset_v1",
-  "portal_list_versions_v1",
-  "portal_list_process_exchanges_v1",
-  "portal_facets_v2",
-  "portal_sitemap_entries_v1",
-  "portal_sitemap_manifest_v1",
-  "portal_sitemap_shard_v1",
+  "portal_search_processes_v4",
+  "portal_search_flows_v4",
+  "portal_facets_v4",
+  "portal_navigation_v2",
+  "portal_catalog_summary_v2",
+  "portal_get_dataset_v2",
+  "portal_list_versions_v2",
+  "portal_list_process_exchanges_v2",
+  "portal_flow_link_eligibility_v1",
+  "portal_sitemap_entries_v2",
+  "portal_sitemap_manifest_v2",
+  "portal_sitemap_shard_v2",
 ]);
 
 export type PortalRpcName =
-  | "portal_search_processes_v2"
-  | "portal_search_processes_v3"
-  | "portal_search_flows_v3"
-  | "portal_facets_v3"
-  | "portal_navigation_v1"
-  | "portal_search_flows_v2"
-  | "portal_catalog_summary_v1"
-  | "portal_get_dataset_v1"
-  | "portal_list_versions_v1"
-  | "portal_list_process_exchanges_v1"
-  | "portal_facets_v2"
-  | "portal_sitemap_entries_v1"
-  | "portal_sitemap_manifest_v1"
-  | "portal_sitemap_shard_v1";
+  | "portal_search_processes_v4"
+  | "portal_search_flows_v4"
+  | "portal_facets_v4"
+  | "portal_navigation_v2"
+  | "portal_catalog_summary_v2"
+  | "portal_get_dataset_v2"
+  | "portal_list_versions_v2"
+  | "portal_list_process_exchanges_v2"
+  | "portal_flow_link_eligibility_v1"
+  | "portal_sitemap_entries_v2"
+  | "portal_sitemap_manifest_v2"
+  | "portal_sitemap_shard_v2";
 
 export { PortalDataError };
 export type { PortalDataErrorCode };
@@ -178,26 +174,24 @@ function sharedOrDefaultCoordinator(): PortalReadCoordinator {
 
 function routeFamily(name: PortalRpcName): PortalTelemetryEvent["routeFamily"] {
   switch (name) {
-    case "portal_search_processes_v3":
-    case "portal_search_flows_v3":
-    case "portal_search_processes_v2":
-    case "portal_search_flows_v2":
+    case "portal_search_processes_v4":
+    case "portal_search_flows_v4":
       return "catalog_search";
-    case "portal_catalog_summary_v1":
+    case "portal_catalog_summary_v2":
       return "catalog_summary";
-    case "portal_get_dataset_v1":
+    case "portal_get_dataset_v2":
       return "dataset_detail";
-    case "portal_list_versions_v1":
+    case "portal_list_versions_v2":
       return "dataset_versions";
-    case "portal_list_process_exchanges_v1":
+    case "portal_flow_link_eligibility_v1":
+    case "portal_list_process_exchanges_v2":
       return "dataset_exchanges";
-    case "portal_facets_v3":
-    case "portal_navigation_v1":
-    case "portal_facets_v2":
+    case "portal_facets_v4":
+    case "portal_navigation_v2":
       return "catalog_facets";
-    case "portal_sitemap_entries_v1":
-    case "portal_sitemap_manifest_v1":
-    case "portal_sitemap_shard_v1":
+    case "portal_sitemap_entries_v2":
+    case "portal_sitemap_manifest_v2":
+    case "portal_sitemap_shard_v2":
       return "sitemap";
   }
 }
@@ -251,8 +245,8 @@ function describeCatalogRead(
 }
 
 function maximumResponseBytes(name: PortalRpcName): number {
-  if (name === "portal_navigation_v1") return 64 * 1024;
-  return name === "portal_sitemap_shard_v1"
+  if (name === "portal_navigation_v2") return 64 * 1024;
+  return name === "portal_sitemap_shard_v2"
     ? sitemapShardMaximumResponseBytes
     : defaultMaximumResponseBytes;
 }
@@ -438,7 +432,10 @@ export function createPortalRpcClient(options: PortalRpcClientOptions = {}): Por
 
       // Serialized once and reused, so the read key, the request body and the
       // payload stay consistent even if the caller mutates its arguments later.
-      const requestBody = JSON.stringify(arguments_);
+      const requestBody = JSON.stringify({
+        ...arguments_,
+        p_allowed_brands: environment.dataBrandScope.allowedBrandCodes,
+      });
       const readArguments = JSON.parse(requestBody) as Record<string, unknown>;
       const readShape = describeCatalogRead(name, readArguments);
       const startedAt = now();

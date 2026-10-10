@@ -40,7 +40,7 @@ describe("bounded instance reuse behind a non-persisting runtime cache", () => {
     const input = {
       key: "environment-and-policy-bound-key",
       family: "catalog_search",
-      rpcName: "portal_search_processes_v2",
+      rpcName: "portal_search_processes_v4",
       ...policy,
       timeoutMs: 8000,
       deadlineMs: Number.MAX_SAFE_INTEGER,

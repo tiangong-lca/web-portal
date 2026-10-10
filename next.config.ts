@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
+import { PHASE_PRODUCTION_SERVER } from "next/constants";
+import { readFileSync } from "node:fs";
 import createNextIntlPlugin from "next-intl/plugin";
 import { readdir, rm } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import {
+  assertPortalDataBrandScopeMatches,
+  readPortalDataBrandScope,
+} from "./src/config/data-brands";
 import { readBrandConfig } from "./src/config/brand";
 import {
   buildContentSecurityPolicy,
@@ -15,6 +21,7 @@ const enforceContentSecurityPolicy = process.env.PORTAL_CSP_MODE === "enforce";
 const strictCspProbe = process.env.PORTAL_EXPECT_STRICT_CSP === "1";
 const allowFrameworkInline =
   !strictCspProbe && (process.env.PORTAL_CSP_PROFILE ?? "performance") === "performance";
+const dataBrandScope = readPortalDataBrandScope(process.env);
 const brandConfig = readBrandConfig(process.env);
 const contentSecurityPolicy = buildContentSecurityPolicy({
   allowFrameworkInline,
@@ -26,8 +33,10 @@ const deploymentSha = resolvePortalBuildSha(process.env);
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  generateBuildId: async () => `${deploymentSha}-${dataBrandScope.allowedBrandCodes.join("-")}`,
   env: {
     PORTAL_BUILD_SHA: deploymentSha,
+    PORTAL_DATA_SCOPE_IDENTITY: dataBrandScope.identity,
     PORTAL_BRAND: brandConfig.site,
   },
   compiler: {
@@ -77,4 +86,14 @@ const nextConfig: NextConfig = {
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
-export default withNextIntl(nextConfig);
+export default function config(phase: string): NextConfig {
+  if (phase === PHASE_PRODUCTION_SERVER) {
+    const built = JSON.parse(
+      readFileSync(resolve(process.cwd(), ".next/required-server-files.json"), "utf8"),
+    ) as { config?: { env?: { PORTAL_DATA_SCOPE_IDENTITY?: string } } };
+    const identity = built.config?.env?.PORTAL_DATA_SCOPE_IDENTITY;
+    if (!identity) throw new Error("Portal build has no data brand scope identity.");
+    assertPortalDataBrandScopeMatches(identity, process.env);
+  }
+  return withNextIntl(nextConfig);
+}

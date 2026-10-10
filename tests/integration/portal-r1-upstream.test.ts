@@ -50,6 +50,10 @@ function dataEnvironment(environment: PortalR1FixtureEnvironmentName, origin: st
     supabaseUrl: origin,
     publishableKey: environmentFixture[environment].publishableKey,
     timeoutMilliseconds: 1000,
+    dataBrandScope: {
+      allowedBrandCodes: ["tiangong_lca"] as const,
+      identity: "portal-display-scope.v1:tiangong_lca",
+    },
   };
 }
 
@@ -75,7 +79,7 @@ describe("Portal R1 fixture upstream", () => {
     });
 
     const page = await client.call(
-      "portal_search_processes_v2",
+      "portal_search_processes_v4",
       { p_query: "electricity", p_filters: {}, p_sort: "relevance", p_cursor: null, p_limit: 20 },
       publicSearchPageSchema,
       { mode: "no-store" },
@@ -131,16 +135,16 @@ describe("Portal R1 fixture upstream", () => {
     expect(sitemapShard.items.map((item) => item.key.kind)).toEqual(["flow", "process"]);
     expect(fixture.receipts.rpcAccepted).toBe(11);
     expect(fixture.receipts.rpcByName).toMatchObject({
-      portal_get_dataset_v1: 2,
-      portal_catalog_summary_v1: 1,
-      portal_search_flows_v2: 1,
-      portal_search_processes_v2: 1,
-      portal_sitemap_manifest_v1: 1,
-      portal_sitemap_shard_v1: 1,
+      portal_get_dataset_v2: 2,
+      portal_catalog_summary_v2: 1,
+      portal_search_flows_v4: 1,
+      portal_search_processes_v4: 1,
+      portal_sitemap_manifest_v2: 1,
+      portal_sitemap_shard_v2: 1,
     });
-    expect(fixture.receipts.lastRpc).toMatchObject({ name: "portal_sitemap_shard_v1" });
+    expect(fixture.receipts.lastRpc).toMatchObject({ name: "portal_sitemap_shard_v2" });
 
-    const missingProfile = await fetch(`${fixture.origin}/rest/v1/rpc/portal_search_processes_v2`, {
+    const missingProfile = await fetch(`${fixture.origin}/rest/v1/rpc/portal_search_processes_v4`, {
       method: "POST",
       body: "{}",
       headers: { apikey: environmentFixture.preview.publishableKey },
@@ -148,7 +152,7 @@ describe("Portal R1 fixture upstream", () => {
     expect(missingProfile.status).toBe(403);
 
     const bearerCredential = await fetch(
-      `${fixture.origin}/rest/v1/rpc/portal_search_processes_v2`,
+      `${fixture.origin}/rest/v1/rpc/portal_search_processes_v4`,
       {
         method: "POST",
         body: "{}",
@@ -189,8 +193,22 @@ describe("Portal R1 fixture upstream", () => {
     expect(result.data?.rows[0]?.value).toBe("12.5");
     expect(fixture.receipts.lciaAccepted).toBe(1);
     expect(fixture.receipts.lastLcia).toEqual({
-      bodyBytes: Buffer.byteLength(body),
-      bodySha256: createHash("sha256").update(body).digest("hex"),
+      bodyBytes: Buffer.byteLength(
+        JSON.stringify({
+          ...JSON.parse(body),
+          schemaVersion: "portal.published-lcia-request.v2",
+          allowedBrandCodes: ["tiangong_lca"],
+        }),
+      ),
+      bodySha256: createHash("sha256")
+        .update(
+          JSON.stringify({
+            ...JSON.parse(body),
+            schemaVersion: "portal.published-lcia-request.v2",
+            allowedBrandCodes: ["tiangong_lca"],
+          }),
+        )
+        .digest("hex"),
       correlationId,
       keyId: environmentFixture.preview.keyId,
     });
@@ -252,11 +270,12 @@ describe("Portal R1 fixture upstream", () => {
             p_kind: "process",
             p_id: id,
             p_version: processReference.version,
+            p_allowed_brands: ["tiangong_lca"],
           }),
         )
         .digest("hex");
     const receiptUrl = (id: string) =>
-      `${fixture.origin}/receipts/rpc/portal_get_dataset_v1/${bodyHash(id)}`;
+      `${fixture.origin}/receipts/rpc/portal_get_dataset_v2/${bodyHash(id)}`;
 
     const evicted = await fetch(receiptUrl(ids[0]!));
     expect(evicted.status).toBe(404);
@@ -267,7 +286,7 @@ describe("Portal R1 fixture upstream", () => {
       count: 1,
       receipt: expect.objectContaining({
         bodySha256: bodyHash(ids.at(-1)!),
-        name: "portal_get_dataset_v1",
+        name: "portal_get_dataset_v2",
       }),
     });
   });
@@ -387,7 +406,7 @@ describe("Portal R1 fixture upstream", () => {
     });
     await expect(
       crossEnvironmentRpc.call(
-        "portal_search_processes_v2",
+        "portal_search_processes_v4",
         { p_query: "electricity" },
         publicSearchPageSchema,
         { mode: "no-store" },

@@ -48,7 +48,7 @@ describe("server-owned deployment data brands", () => {
         PORTAL_BRAND: "tiangong",
         NEXT_PUBLIC_PORTAL_DATA_BRANDS: "tiangong_lca",
       }),
-    ).toThrow();
+    ).toThrow("PORTAL_DATA_BRANDS");
   });
 
   it("keeps different deployments distinct and rejects runtime/build drift", () => {
@@ -71,10 +71,12 @@ describe("server-owned deployment data brands", () => {
     expect(() => readPortalDataBrandScope({ PORTAL_DATA_BRANDS: "private-value" })).toThrow(
       "unsupported brand code",
     );
+    let message = "";
     try {
       readPortalDataBrandScope({ PORTAL_DATA_BRANDS: "private-value" });
     } catch (error) {
-      expect(String(error)).not.toContain("private-value");
+      message = String(error);
     }
+    expect(message).not.toContain("private-value");
   });
 });

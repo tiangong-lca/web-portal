@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { CatalogCopyIdentity } from "./catalog-copy-identity";
 import { CatalogResultRow, CatalogResultList, CatalogResultSummary } from "./catalog-result-row";
@@ -76,6 +77,7 @@ export function SearchResults({
   siteOrigin: string;
   query?: string;
 }) {
+  const brandText = useTranslations("Common");
   if (items.length === 0) {
     return (
       <Empty className="min-h-72">
@@ -128,6 +130,9 @@ export function SearchResults({
             }
             tags={
               <>
+                <Badge variant="outline" aria-label={brandText("dataBrand")}>
+                  {item.brand ?? brandText("unassignedBrand")}
+                </Badge>
                 {item.ref.includes("@") && (
                   <DatasetVersionTag version={item.ref.split("@")[1]!} label={labels.version} />
                 )}
@@ -220,6 +225,9 @@ export function SearchResults({
                             >
                               {version.name ?? `${labels.version} ${version.version}`}
                             </Link>
+                            <Badge variant="outline" aria-label={brandText("dataBrand")}>
+                              {version.brand ?? brandText("unassignedBrand")}
+                            </Badge>
                             {version.name ? (
                               <span className="text-muted-foreground font-mono text-xs">
                                 {labels.version} {version.version}

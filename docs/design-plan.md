@@ -23,7 +23,7 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-10-10
-lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
+lastReviewedCommit: ed8596e8f474bff3b1f737fe1e3d441591371444
 lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
 related:
   - docs/ui-system.md
@@ -117,7 +117,7 @@ Portal 没有后台机器用户、登录页面或浏览器身份 token/cookie；
 
 全局可见的跨品牌 Flow/Flow property/Unit group 可以沿本站 Process 的真实精确引用提供必要的公开交换量及单位信息；它们不因此成为本站独立目录项，不计入本站数量，也不获得范围外详情链接。缺失或隐藏的支持对象仍不可用。
 
-实施状态：当前提交仅提供新契约和部署范围解析器；在线入口仍保持已发布的旧读取路径。必须完成匹配的 Database/Edge/Portal 实施和验收后统一启用新规则。不得仅凭解析器存在或设置环境变量宣称新展示范围已经生效。
+实施状态：本次代码已接通 scoped RPC、Hybrid V3 / LCIA V2 签名、品牌展示与范围内 Flow 链接。数据库迁移默认保持 legacy；部署、一次性回填、派生数据修复、切换及缓存失效须按 workspace Plan 分步验收。以下 R0/R1/R2 历史阶段中出现的 100/200 选择与旧 RPC 名称仅记录当时基线；当前展示资格和读取版本以本节及已同步 Database 契约为准。
 
 `state_code` 是工作流状态，不直接等于许可证。前端不以状态码猜测可见能力；后端公共 DTO 必须显式返回能力及其证据：
 
@@ -147,12 +147,11 @@ Portal 只能进一步隐藏能力，不能把 `false` 改成 `true`。
 
 当前产品规则：
 
-- 100 与 200 的允许元数据均公开；
-- 200 当前强制映射为 `accessLevel="metadata_only"`；
-- 100 只有在 Database 许可投影确认公共数值能力时映射为 `accessLevel="open"`，否则同样使用 `metadata_only`；
-- Exchanges、LCIA 或下载只在权威公共投影明确返回相应 capability 时展示；
-- 缺少公开结果显示“未发布或不可提供”，绝不显示为数值 0；
-- 未来即使 200 出现数值，也必须先由 Database / Worker / Release / Edge 的发布与许可契约明确授权，Portal 才能显示。
+- 精确版本必须显式 `is_visible=true`，根对象 brand 必须属于部署集合；缺省、隐藏和 null brand 均不进入本站目录。
+- 许可决定 `accessLevel` 和数值能力，不读取 `state_code` 判断展示。
+- Exchanges、LCIA 或下载只在权威公共投影返回相应 capability 时展示；数值还需完整可见依赖或当前已发布结果。
+- 缺少公开结果显示“未发布或不可提供”，绝不显示为数值 0。
+- 展示品牌与数据来源分别显示；多品牌可筛选，单品牌隐藏冗余控件。更改部署集合必须重新构建，并停止旧实例流量、清除旧 HTML/ISR/CDN/sitemap 缓存。
 
 ### 4.2 接入基线
 

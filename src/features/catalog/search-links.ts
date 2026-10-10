@@ -70,6 +70,7 @@ export function searchParameters(
     yearTo: input.filters.referenceYearTo,
     subtype: input.filters.processSubtype,
     source: input.filters.source,
+    brand: input.filters.brand,
   };
   for (const [key, value] of Object.entries(fields))
     if (value !== undefined) p.set(key, String(value));
@@ -124,6 +125,8 @@ export function facetHref(
       p.delete("classification");
     }
     if (value === "flow") p.delete("subtype");
+  } else if (group === "brand") {
+    p.set("brand", value);
   } else if (group.includes("access")) {
     if (value !== "open" && value !== "metadata_only") return null;
     p.set("access", value);

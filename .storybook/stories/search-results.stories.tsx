@@ -55,6 +55,10 @@ const meta = {
           name: items[0].name,
         },
       ];
+    if (parameters.brands)
+      items.forEach((item, index) => {
+        item.brand = ["Tiangong LCA", "BAFU", "USLCI", "World steel"][index % 4]!;
+      });
     if (parameters.missing && items[0]) delete items[0].functionalUnit;
     return (
       <CompareSelectionProvider key={locale} labels={selectionLabels(locale)} locale={locale}>
@@ -104,3 +108,5 @@ export const MobileGerman: Story = {
   globals: { ...mobileGlobals, locale: "de" },
 };
 export const DarkFrench: Story = { globals: { theme: "dark", locale: "fr" } };
+
+export const DisplayBrands: Story = { parameters: { brands: true }, globals: { locale: "en" } };

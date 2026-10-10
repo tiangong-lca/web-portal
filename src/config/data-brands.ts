@@ -1,6 +1,6 @@
 import type { BrandCode } from "../../contracts/database-engine/portal/generated/portal.common-types.v2";
 
-const dataBrandCodes = [
+export const dataBrandCodes = [
   "tiangong_lca",
   "bafu",
   "uslci",
@@ -44,3 +44,10 @@ export function assertPortalDataBrandScopeMatches(
   }
   return scope;
 }
+
+export const dataBrandNames: Readonly<Record<BrandCode, string>> = {
+  tiangong_lca: "Tiangong LCA",
+  bafu: "BAFU",
+  uslci: "USLCI",
+  worldsteel: "World steel",
+};

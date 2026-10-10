@@ -58,7 +58,10 @@
     "docsResource": "TianGong LCA documentation",
     "tidasResource": "TIDAS data system",
     "pcrResource": "Product category rules",
-    "lcdnResource": "ILCD data distribution"
+    "lcdnResource": "ILCD data distribution",
+    "dataBrand": "Database brand",
+    "unassignedBrand": "Unassigned brand",
+    "allDataBrands": "All available brands"
   },
   "Home": {
     "eyebrow": "TianGong LCA Data Portal",
@@ -143,7 +146,8 @@
     "processSubtype": "Process type",
     "classification": "Classification",
     "countsDescription": "Counts include matching public dataset versions.",
-    "noScriptCompare": "Select 2–4 Process versions, then compare."
+    "noScriptCompare": "Select 2–4 Process versions, then compare.",
+    "dataBrand": "Database brand"
   },
   "Hybrid": {
     "title": "Describe the data you need",
@@ -313,7 +317,8 @@
     "dataGenerator": "Data generator",
     "dataOwner": "Dataset owner",
     "licenseType": "Declared license type",
-    "accessRestrictions": "Access and use restrictions"
+    "accessRestrictions": "Access and use restrictions",
+    "dataBrand": "Database brand"
   },
   "Compare": {
     "title": "Compare Process datasets",

@@ -174,7 +174,7 @@ liveDescribe("Portal Production anonymous R1 contracts", () => {
 
     const environment = readPortalDataEnvironment();
     const forgedRpc = await fetch(
-      new URL("/rest/v1/rpc/portal_search_processes_v2", environment.supabaseUrl),
+      new URL("/rest/v1/rpc/portal_search_processes_v4", environment.supabaseUrl),
       {
         method: "POST",
         headers: {

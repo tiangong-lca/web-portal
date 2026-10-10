@@ -12,7 +12,7 @@ export function hybridVersionPage() {
     },
   };
   return {
-    schemaVersion: "portal.hybrid-search-page.v2" as const,
+    schemaVersion: "portal.hybrid-search-page.v3" as const,
     kind: "process" as const,
     queryFingerprint: "a".repeat(64),
     interpretation: {
@@ -29,8 +29,12 @@ export function hybridVersionPage() {
       {
         key: item.key,
         matches: [
-          { key: item.key, match: item.match },
-          { key: { ...item.key, version: "00.99.999" }, match: { ...item.match, score: 0.7 } },
+          { key: item.key, brand: item.brand, match: item.match },
+          {
+            key: { ...item.key, version: "00.99.999" },
+            brand: item.brand,
+            match: { ...item.match, score: 0.7 },
+          },
         ],
       },
     ],

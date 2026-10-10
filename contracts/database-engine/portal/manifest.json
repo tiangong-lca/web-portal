@@ -1,8 +1,20 @@
 {
   "schemaVersion": "portal.database-contract-snapshot.v1",
   "sourceRepository": "tiangong-lca/database",
-  "sourceCommit": "489402c6d118be4202cef22f9b89266c9229ed76",
+  "sourceCommit": "52da798b64a4762d81e0cd452525a9b271397203",
   "files": [
+    {
+      "path": "portal.public-flow-link-eligibility.v1.schema.json",
+      "sourcePath": "contracts/portal/portal.public-flow-link-eligibility.v1.schema.json",
+      "bytes": 630,
+      "sha256": "f86d0382c426adef6949ee9855cc7c1f3ed5e37437f3c6e4ac785f2126fe71aa"
+    },
+    {
+      "path": "generated/portal.public-flow-link-eligibility.v1.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-flow-link-eligibility.v1.d.ts",
+      "bytes": 631,
+      "sha256": "967cd4d6104a33cee4fde477b3acb78f2749c0356c1f4e8a75e61172e5626846"
+    },
     {
       "path": "portal.common-types.v2.schema.json",
       "sourcePath": "contracts/portal/portal.common-types.v2.schema.json",

@@ -44,7 +44,7 @@ async function readNavigation(
       page.nodes.every((node) => node.parentNodeId === parsed.parentNodeId),
   );
   return client.call(
-    "portal_navigation_v1",
+    "portal_navigation_v2",
     {
       p_kind: parsed.kind,
       p_query: parsed.query,
@@ -82,7 +82,7 @@ export async function searchPublicBrowse(
   if (!value.success) throw new PortalDataError("invalid_request");
   const parsed = value.data;
   return client.call(
-    parsed.kind === "process" ? "portal_search_processes_v3" : "portal_search_flows_v3",
+    parsed.kind === "process" ? "portal_search_processes_v4" : "portal_search_flows_v4",
     {
       p_query: parsed.query,
       p_filters: parsed.filters,
@@ -107,7 +107,7 @@ export async function getPublicBrowseFacets(
   if (!value.success) throw new PortalDataError("invalid_request");
   const parsed = value.data;
   return client.call(
-    "portal_facets_v3",
+    "portal_facets_v4",
     { p_kind: parsed.kind, p_query: parsed.query, p_filters: parsed.filters },
     publicFacetsSchema.refine((page) => page.kind === parsed.kind),
     cachePolicy(publicFacetsSchema),

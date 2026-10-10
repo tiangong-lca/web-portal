@@ -8,7 +8,7 @@ import type {
   TianGongPortalPublicCatalogSummaryV1 as DatabasePublicCatalogSummary,
   UuidExample as DatabaseCatalogUuidExample,
 } from "../../../contracts/database-engine/portal/generated/portal.public-catalog-summary.v1";
-import type { TianGongPortalPublicSearchPageV2 as DatabasePublicSearchPage } from "../../../contracts/database-engine/portal/generated/portal.public-search-page.v2";
+import type { TianGongPortalPublicSearchPageV3 as DatabasePublicSearchPage } from "../../../contracts/database-engine/portal/generated/portal.public-search-page.v3";
 
 export type PublicCatalogSummary = Omit<DatabasePublicCatalogSummary, "examples"> & {
   examples: Array<
@@ -240,10 +240,17 @@ export const publicPublicationSchema = z.strictObject({
       "lciaMethods must be unique",
     ),
 });
+export const publicBrandSchema = z.discriminatedUnion("code", [
+  z.strictObject({ code: z.literal("tiangong_lca"), name: z.literal("Tiangong LCA") }),
+  z.strictObject({ code: z.literal("bafu"), name: z.literal("BAFU") }),
+  z.strictObject({ code: z.literal("uslci"), name: z.literal("USLCI") }),
+  z.strictObject({ code: z.literal("worldsteel"), name: z.literal("World steel") }),
+]);
 export const publicDatasetEnvelopeSchema = z
   .strictObject({
-    schemaVersion: z.literal("portal.public-dataset.v1"),
+    schemaVersion: z.literal("portal.public-dataset.v2"),
     key: publicDatasetKeySchema,
+    brand: publicBrandSchema.nullable(),
     accessLevel: portalAccessLevelSchema,
     capabilities: publicCapabilitiesSchema,
     metadata: z.discriminatedUnion("kind", [publicProcessMetadataSchema, publicFlowMetadataSchema]),
@@ -294,6 +301,7 @@ export const searchMatchSchema = z.strictObject({
 });
 export const publicSearchItemSchema = z.strictObject({
   key: publicDatasetKeySchema,
+  brand: publicBrandSchema.nullable(),
   accessLevel: portalAccessLevelSchema,
   capabilities: publicCapabilitiesSchema,
   names: localizedTextSchema,
@@ -305,7 +313,7 @@ export const publicSearchItemSchema = z.strictObject({
   match: searchMatchSchema,
 });
 const publicSearchPageRuntimeSchema = z.strictObject({
-  schemaVersion: z.literal("portal.public-search-page.v2"),
+  schemaVersion: z.literal("portal.public-search-page.v3"),
   kind: portalDatasetKindSchema,
   queryFingerprint: portalSha256Schema,
   items: z.array(publicSearchItemSchema).max(50),
@@ -379,7 +387,7 @@ export const publicCatalogSummarySchema: z.ZodType<PublicCatalogSummary> =
   publicCatalogSummaryRuntimeSchema;
 
 export const publicFacetsSchema = z.strictObject({
-  schemaVersion: z.literal("portal.public-facets.v2"),
+  schemaVersion: z.literal("portal.public-facets.v3"),
   kind: z.enum(["all", "process", "flow"]),
   queryFingerprint: portalSha256Schema,
   groups: z.array(
@@ -401,7 +409,7 @@ export const publicFacetsSchema = z.strictObject({
 });
 
 export const publicVersionPageSchema = z.strictObject({
-  schemaVersion: z.literal("portal.public-version-page.v1"),
+  schemaVersion: z.literal("portal.public-version-page.v2"),
   dataset: z.strictObject({
     kind: portalDatasetKindSchema,
     id: portalUuidSchema,
@@ -410,6 +418,7 @@ export const publicVersionPageSchema = z.strictObject({
     .array(
       z.strictObject({
         key: publicDatasetKeySchema,
+        brand: publicBrandSchema.nullable(),
         accessLevel: portalAccessLevelSchema,
         capabilities: publicCapabilitiesSchema,
         modifiedAt: portalDateTimeSchema,
@@ -545,3 +554,7 @@ export type PublicSitemapPage = z.infer<typeof publicSitemapPageSchema>;
 export type PublicSitemapManifest = z.infer<typeof publicSitemapManifestSchema>;
 export type PublicSitemapShard = z.infer<typeof publicSitemapShardSchema>;
 export type PublishedLciaPage = z.infer<typeof publishedLciaPageSchema>;
+
+export const publicFlowLinkEligibilitySchema = z
+  .array(exactDatasetIdentitySchema.extend({ linkable: z.boolean() }))
+  .max(50);

@@ -197,7 +197,7 @@ export function navigationFixture(arguments_: Record<string, unknown>) {
       )
     : children;
   return {
-    schemaVersion: "portal.public-navigation.v1",
+    schemaVersion: "portal.public-navigation.v2",
     countBasis: "public_versions",
     dimension,
     kind: arguments_.p_kind,

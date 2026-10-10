@@ -17,7 +17,7 @@ checkPaths:
   - docs/design-plan.md
   - package.json
 lastReviewedAt: 2026-10-10
-lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
+lastReviewedCommit: ed8596e8f474bff3b1f737fe1e3d441591371444
 lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
 related:
   - docs/development.md
@@ -53,11 +53,12 @@ Next.js App Router 前后端同构，React Server Components 优先，部署到 
 在 `web-portal` 项目目录中，使用 [.node-version](.node-version) 指定的 Node 版本并安装依赖。启动前，在项目根目录的 `.env.local` 中填写现有后端的连接配置（示例值需要替换）：
 
 ```dotenv
+PORTAL_DATA_BRANDS=tiangong_lca
 SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_<your-key>
 ```
 
-这两项用于公开目录、关键词搜索与记录读取，两套 UI 共用同一配置。`.env.example` 只是模板，不会自动加载；只设置品牌变量可以显示页面，但无法加载搜索数据。`.env.local` 已被 Git 忽略，不要提交实际密钥。
+`PORTAL_DATA_BRANDS` 必须显式指定数据品牌，例如 `tiangong_lca` 或 `tiangong_lca,bafu,uslci,worldsteel`；与选择站点外观的 `PORTAL_BRAND` 独立。范围变更需要重新构建部署并清理旧部署缓存，构建与运行时不一致会拒绝启动。后端两项用于公开目录、关键词搜索与记录读取，两套 UI 共用同一配置。`.env.example` 只是模板，不会自动加载；只设置外观变量而缺少数据品牌范围时不能启动；缺少后端配置时无法加载搜索数据。`.env.local` 已被 Git 忽略，不要提交实际密钥。
 
 `pnpm dev` 不会加载 `.env.production`。本地预览需要连接正式后端时，将该后端的上述两项配置填入 `.env.local`；不要通过修改 `NODE_ENV` 来切换数据环境。在本工作区中，Platform 的正式连接配置位于 `../platform/.env`，共享开发配置位于 `../platform/.env.development`；只复用上述两项，不要整份复制环境文件。
 

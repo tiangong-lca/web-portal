@@ -14,6 +14,7 @@ import {
   publicCapabilitiesSchema,
   publicCardContextSchema,
   publicDatasetKeySchema,
+  publicBrandSchema,
   publicSearchItemSchema,
   geographySchema,
 } from "@/server/contracts/portal";
@@ -85,6 +86,7 @@ export const portalPublicHybridMatchV2Schema = hybridMatchSchema("portal-hybrid-
 
 export const portalPublicHybridCandidateSchema = z.strictObject({
   key: publicDatasetKeySchema,
+  brand: publicBrandSchema.nullable(),
   accessLevel: portalAccessLevelSchema,
   capabilities: publicCapabilitiesSchema,
   names: localizedTextSchema,
@@ -165,6 +167,7 @@ const versionPageBaseSchema = z.strictObject({
           .array(
             z.strictObject({
               key: publicDatasetKeySchema,
+              brand: publicBrandSchema.nullable(),
               match: portalPublicHybridMatchV2Schema,
             }),
           )
@@ -255,7 +258,7 @@ function validateVersionPage(
 
 export const portalHybridSearchPageV2Schema = versionPageBaseSchema
   .extend({
-    schemaVersion: z.literal("portal.hybrid-search-page.v2"),
+    schemaVersion: z.literal("portal.hybrid-search-page.v3"),
     interpretation: portalHybridInterpretationSchema,
   })
   .superRefine(validateVersionPage);
@@ -295,7 +298,9 @@ const hybridBffSuccessSchema = z.strictObject({
   queryFingerprint: portalSha256Schema,
   fallbackReason: z.null(),
   interpretation: portalHybridInterpretationSchema,
-  items: z.array(portalPublicHybridCandidateSchema).max(20),
+  items: z
+    .array(z.union([portalPublicHybridCandidateSchema, portalPublicHybridCandidateV2Schema]))
+    .max(20),
 });
 
 const hybridBffFallbackSchema = z.strictObject({

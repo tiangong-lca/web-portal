@@ -35,7 +35,15 @@ function dataEnvironment(
   origin: string,
   publishableKey = environmentFixture.preview.publishableKey,
 ) {
-  return { supabaseUrl: origin, publishableKey, timeoutMilliseconds: 2000 };
+  return {
+    supabaseUrl: origin,
+    publishableKey,
+    timeoutMilliseconds: 2000,
+    dataBrandScope: {
+      allowedBrandCodes: ["tiangong_lca"] as const,
+      identity: "portal-display-scope.v1:tiangong_lca",
+    },
+  };
 }
 
 /** Cold boundary: every consumer runs the loader, as on a cache miss. */
@@ -96,7 +104,7 @@ describe("Portal bounded read boundary against a real origin", () => {
     );
 
     expect(pages).toHaveLength(6);
-    expect(fixture.receipts.rpcByName["portal_search_processes_v2"]).toBe(1);
+    expect(fixture.receipts.rpcByName["portal_search_processes_v4"]).toBe(1);
     const consumerOutcomes = events
       .filter((event) => event.eventKind === "consumer")
       .map((event) => event.cacheOutcome);
@@ -133,8 +141,8 @@ describe("Portal bounded read boundary against a real origin", () => {
       totals.reduce(
         (sum, byName) =>
           sum +
-          (byName["portal_search_processes_v2"] ?? 0) +
-          (byName["portal_search_flows_v2"] ?? 0),
+          (byName["portal_search_processes_v4"] ?? 0) +
+          (byName["portal_search_flows_v4"] ?? 0),
         0,
       ),
     ).toBe(4);
@@ -211,7 +219,7 @@ describe("Portal bounded read boundary against a real origin", () => {
       p_limit: 5,
     };
 
-    const pending = client.call("portal_search_processes_v2", arguments_, publicSearchPageSchema, {
+    const pending = client.call("portal_search_processes_v4", arguments_, publicSearchPageSchema, {
       mode: "no-store",
       writeSchema: publicSearchPageSchema,
     });
@@ -249,7 +257,7 @@ describe("Portal bounded read boundary against a real origin", () => {
     // The first caller's own refinement rejects the payload it received.
     await expect(
       client.call(
-        "portal_search_processes_v2",
+        "portal_search_processes_v4",
         arguments_,
         publicSearchPageSchema.refine(() => false),
         policy,
@@ -258,13 +266,13 @@ describe("Portal bounded read boundary against a real origin", () => {
 
     // A second caller with the base schema reuses the same shared entry.
     const page = await client.call(
-      "portal_search_processes_v2",
+      "portal_search_processes_v4",
       arguments_,
       publicSearchPageSchema,
       policy,
     );
     expect(page.kind).toBe("process");
-    expect(fixture.receipts.rpcByName["portal_search_processes_v2"]).toBe(1);
+    expect(fixture.receipts.rpcByName["portal_search_processes_v4"]).toBe(1);
   });
 
   it("logs only a closed-vocabulary query shape", async () => {

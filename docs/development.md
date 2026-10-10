@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-10-10
-lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
+lastReviewedCommit: ed8596e8f474bff3b1f737fe1e3d441591371444
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot and inactive deployment-scope parser foundation; live reads and presentation remain unchanged pending scoped rollout."
+lastReviewedNote: "Portal #139: reviewed server-owned deployment scope, versioned read and signing chain, brand UI and dependency link restrictions; hosted cache switch remains a release gate."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -67,11 +67,15 @@ Storybook's site toolbar injects presentation identity and matching brand tokens
 
 `PORTAL_BRAND=atlas pnpm test:e2e -- tests/e2e/site-presentation.spec.ts` builds against the existing loopback fixture and checks identity, route/metadata parity, light/dark mobile/desktop accessibility, exact-version detail, citations and no-JavaScript reading. CI retains the full TianGong suite and adds the Atlas presentation suite plus existing shared functional flows. Local browser evidence does not prove a hosted Atlas release. A new domain/deployment is a separate operational scope.
 
-## Deployment data scope foundation (Portal #139)
+## Deployment data scope (Portal #139)
 
 `src/config/data-brands.ts` defines the shared build/runtime parser for the server-owned `PORTAL_DATA_BRANDS` setting. It rejects missing, empty, unknown, wildcard and empty-token inputs; trims, deduplicates and sorts valid codes; and returns an immutable, versioned scope identity. The build/runtime comparison rejects a changed scope. `PORTAL_BRAND` continues to select presentation only.
 
-The new Database schemas are byte-pinned to `489402c6d118be4202cef22f9b89266c9229ed76` in the contract manifest. This first checkpoint does not yet wire the parser or new DTOs into live reads. Remaining work in #139 must bind the scope before RPC candidate selection and HMAC serialization, scope all caches/cursors/SEO, and qualify build/runtime readiness and deployment cache invalidation before enabling the new database readers. Do not deploy this foundation as evidence that brand filtering is active.
+The contract manifest pins the exact Database source commit. Every active catalog, facet, navigation, detail, version, exchange, summary and sitemap call uses the new scoped RPC. The central client overwrites any supplied authority with the validated server scope before request serialization and cache-key construction. Hybrid V3 and LCIA V2 similarly inject scope before final serialization and HMAC signing. Browser request schemas reject deployment-scope fields; only an optional known brand filter narrows results. There is no old-RPC fallback.
+
+Set `PORTAL_DATA_BRANDS=tiangong_lca` explicitly for a single-brand build, or a comma-separated subset of `tiangong_lca,bafu,uslci,worldsteel` for a multi-brand build. This variable is required for development, CI, Storybook and deployment; `.env.example` is an example, not a runtime default. Build identity includes the canonical set. Instrumentation rejects runtime/build drift before serving, and server adapters repeat that check. Never reuse `.next`, ISR or CDN objects across scope changes. Deploy a fresh build, stop old-instance traffic and invalidate old HTML/data/sitemap caches before exposing the new deployment.
+
+Database display mode must be qualified and activated separately. A scoped reader refusal stays unavailable. Single-brand pages hide the redundant brand control; multi-brand pages offer only allowed brands. Every version/card/detail carries its independent data brand, preserving existing source attribution. Exchange support may cross brand boundaries, but batch exact Flow-link eligibility emits links only for standalone in-scope Flows. No Platform synchronization is added.
 
 ## Choose local checks
 

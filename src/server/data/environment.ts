@@ -1,5 +1,11 @@
 import "server-only";
 
+import {
+  readPortalDataBrandScope,
+  assertPortalDataBrandScopeMatches,
+  type PortalDataBrandScope,
+} from "@/config/data-brands";
+
 import { z } from "zod";
 
 const loopbackHosts = new Set(["localhost", "127.0.0.1", "[::1]"]);
@@ -40,14 +46,29 @@ const rawEnvironmentSchema = z.strictObject({
   timeoutMilliseconds: z.coerce.number().int().min(250).max(8000).default(8000),
 });
 
-export type PortalDataEnvironment = z.infer<typeof rawEnvironmentSchema>;
+export type PortalDataEnvironment = z.infer<typeof rawEnvironmentSchema> & {
+  dataBrandScope: PortalDataBrandScope;
+};
 
 export function readPortalDataEnvironment(
   environment: Record<string, string | undefined> = process.env,
 ): PortalDataEnvironment {
-  return rawEnvironmentSchema.parse({
-    supabaseUrl: environment.SUPABASE_URL,
-    publishableKey: environment.SUPABASE_PUBLISHABLE_KEY,
-    timeoutMilliseconds: environment.PORTAL_SUPABASE_TIMEOUT_MS,
-  });
+  const dataBrandScope = readPortalServerBrandScope(environment);
+  return {
+    ...rawEnvironmentSchema.parse({
+      supabaseUrl: environment.SUPABASE_URL,
+      publishableKey: environment.SUPABASE_PUBLISHABLE_KEY,
+      timeoutMilliseconds: environment.PORTAL_SUPABASE_TIMEOUT_MS,
+    }),
+    dataBrandScope,
+  };
+}
+
+export function readPortalServerBrandScope(
+  environment: Record<string, string | undefined> = process.env,
+): PortalDataBrandScope {
+  const expectedIdentity = process.env.PORTAL_DATA_SCOPE_IDENTITY;
+  return expectedIdentity
+    ? assertPortalDataBrandScopeMatches(expectedIdentity, environment)
+    : readPortalDataBrandScope(environment);
 }

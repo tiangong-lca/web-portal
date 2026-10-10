@@ -100,6 +100,7 @@ export function mapSearchItem(
     localizedText(context.source.providerName, locale) ??
     [context.source.databaseId, context.source.databaseVersion].filter(Boolean).join(" · ");
   return {
+    brand: item.brand?.name ?? null,
     description: localizedText(item.summary, locale),
     accessLevel: item.accessLevel,
     capabilities: item.capabilities,
@@ -128,6 +129,7 @@ export function mapHybridItem(item: PortalHybridCandidate, locale: Locale): Cata
     localizedText(context.source.providerName, locale) ??
     [context.source.databaseId, context.source.databaseVersion].filter(Boolean).join(" · ");
   return {
+    brand: item.brand?.name ?? null,
     description: localizedText(item.summary, locale),
     accessLevel: item.accessLevel,
     capabilities: item.capabilities,
@@ -160,6 +162,7 @@ export function mapProgressiveSearchPage(
     matchingVersions: page.versionGroups[index]!.matches.slice(1).map((member) => ({
       ref: exactRef(member.key.id, member.key.version),
       version: member.key.version,
+      brand: member.brand?.name ?? null,
       match: localizeMatchReasons(member.match.reasonCodes, locale),
     })),
   }));
@@ -182,6 +185,7 @@ export function mapDataset(
     provider: localizedText(metadata.source.providerName, locale),
   });
   const common = {
+    brand: dataset.brand?.name ?? null,
     accessLevel: dataset.accessLevel,
     capabilities: dataset.capabilities,
     canonicalUrl,
@@ -246,6 +250,7 @@ export function mapExchangePage(
   page: PublicExchangePage,
   locale: Locale,
   expectedProcessRef: string,
+  linkableFlowRefs: ReadonlySet<string> = new Set(),
 ): ExchangeViewModel[] {
   if (
     exactRef(page.process.id, page.process.version) !== expectedProcessRef ||
@@ -262,6 +267,9 @@ export function mapExchangePage(
     direction: row.direction,
     flowName: localizedText(row.flow.name, locale) ?? exactRef(row.flow.id, row.flow.version),
     flowRef: exactRef(row.flow.id, row.flow.version),
+    flowHref: linkableFlowRefs.has(exactRef(row.flow.id, row.flow.version))
+      ? `/${locale}/flow/${exactRef(row.flow.id, row.flow.version)}`
+      : undefined,
     functionalUnit,
     id: row.internalId,
     isQuantitativeReference: row.isQuantitativeReference,
@@ -322,6 +330,7 @@ export function mapVersions(page: PublicVersionPage, locale: Locale): VersionVie
     const ref = exactRef(item.key.id, item.key.version);
     return {
       version: item.key.version,
+      brand: item.brand?.name ?? null,
       isLatest: item.isLatest,
       href: `/${locale}/${item.key.kind}/${encodeURIComponent(ref)}`,
       modifiedAt: item.modifiedAt,
@@ -344,6 +353,7 @@ export function mapCompareCandidate(
     dataset.publication?.lciaMethods.length === 1 ? dataset.publication.lciaMethods[0] : undefined;
 
   return {
+    brand: dataset.brand?.name ?? null,
     allocationMethod: allocationAndModeling,
     referenceProduct: localizedText(metadata.referenceProduct, locale),
     cutoffRule: localizedText(metadata.cutoffRules, locale),

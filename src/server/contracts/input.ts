@@ -36,6 +36,7 @@ const boundedQuerySchema = z
 
 export const publicSearchFiltersSchema = z
   .strictObject({
+    brand: z.enum(["tiangong_lca", "bafu", "uslci", "worldsteel"]).optional(),
     accessLevel: z.enum(["open", "metadata_only"]).optional(),
     geography: boundedFilterTextSchema.optional(),
     classification: boundedFilterTextSchema.optional(),
@@ -238,8 +239,13 @@ export function parsePortalSearchUrl(
   const geography = optionalFilterText(firstParameter(parameters, "geo"));
   const classification = optionalFilterText(firstParameter(parameters, "classification"));
   const processSubtype = optionalFilterText(firstParameter(parameters, "subtype"));
+  const brandValue = firstParameter(parameters, "brand");
+  const parsedBrand = publicSearchFiltersSchema.shape.brand.safeParse(brandValue);
+  if (!parsedBrand.success) throw new PortalInputError();
+  const brand = parsedBrand.data;
   const source = optionalFilterText(firstParameter(parameters, "source"));
   const filters = {
+    ...(brand ? { brand } : {}),
     ...(access ? { accessLevel: access } : {}),
     ...(geography ? { geography } : {}),
     ...(classification ? { classification } : {}),

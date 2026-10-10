@@ -12,6 +12,7 @@ import {
 } from "@/server/contracts/input";
 import {
   publicDatasetEnvelopeSchema,
+  publicFlowLinkEligibilitySchema,
   publicCatalogSummarySchema,
   publicExchangePageSchema,
   publicFacetsSchema,
@@ -97,7 +98,7 @@ async function searchPublicCatalog(
     (page) => page.kind === kind && page.items.every((item) => item.key.kind === kind),
   );
   const page = await clientOrDefault(client).call(
-    kind === "process" ? "portal_search_processes_v2" : "portal_search_flows_v2",
+    kind === "process" ? "portal_search_processes_v4" : "portal_search_flows_v4",
     {
       p_query: parsed.query,
       p_filters: parsed.filters,
@@ -131,7 +132,7 @@ export function searchPublicFlows(
 }
 
 export function getPublicCatalogSummary(client?: PortalRpcClient): Promise<PublicCatalogSummary> {
-  return clientOrDefault(client).call("portal_catalog_summary_v1", {}, publicCatalogSummarySchema, {
+  return clientOrDefault(client).call("portal_catalog_summary_v2", {}, publicCatalogSummarySchema, {
     mode: "revalidate",
     seconds: 300,
     tags: ["portal:catalog-summary"],
@@ -154,7 +155,7 @@ export async function getPublicDataset(
           dataset.key.version === parsed.version),
     );
   const dataset = await clientOrDefault(client).call(
-    "portal_get_dataset_v1",
+    "portal_get_dataset_v2",
     {
       p_kind: parsed.kind,
       p_id: parsed.id,
@@ -192,7 +193,7 @@ export async function listPublicDatasetVersions(
       page.items.every((item) => item.key.kind === parsed.kind && item.key.id === parsed.id),
   );
   const page = await clientOrDefault(client).call(
-    "portal_list_versions_v1",
+    "portal_list_versions_v2",
     {
       p_kind: parsed.kind,
       p_id: parsed.id,
@@ -228,7 +229,7 @@ export async function listPublicProcessExchanges(
         (page.process.id === parsed.processId && page.process.version === parsed.processVersion),
     );
   const page = await clientOrDefault(client).call(
-    "portal_list_process_exchanges_v1",
+    "portal_list_process_exchanges_v2",
     {
       p_process_id: parsed.processId,
       p_process_version: parsed.processVersion,
@@ -259,7 +260,7 @@ export async function getPublicFacets(
 
   const responseSchema = publicFacetsSchema.refine((facets) => facets.kind === parsed.kind);
   const facets = await clientOrDefault(client).call(
-    "portal_facets_v2",
+    "portal_facets_v4",
     {
       p_kind: parsed.kind,
       p_query: parsed.query,
@@ -281,7 +282,7 @@ export async function listPublicSitemapEntries(
     (page) => parsed.kind === "all" || page.items.every((item) => item.key.kind === parsed.kind),
   );
   const page = await clientOrDefault(client).call(
-    "portal_sitemap_entries_v1",
+    "portal_sitemap_entries_v2",
     {
       p_kind: parsed.kind,
       p_cursor: parsed.cursor,
@@ -302,7 +303,7 @@ export async function listPublicSitemapEntries(
 
 export function getPublicSitemapManifest(client?: PortalRpcClient): Promise<PublicSitemapManifest> {
   return clientOrDefault(client).call(
-    "portal_sitemap_manifest_v1",
+    "portal_sitemap_manifest_v2",
     {},
     publicSitemapManifestSchema,
     { mode: "no-store" },
@@ -318,10 +319,32 @@ export async function getPublicSitemapShard(
     (shard) => shard.shardCursor === shardCursor,
   );
   const shard = await clientOrDefault(client).call(
-    "portal_sitemap_shard_v1",
+    "portal_sitemap_shard_v2",
     { p_shard_cursor: shardCursor },
     responseSchema,
     { mode: "no-store" },
   );
   return requireBoundResponse(shard, shard.shardCursor === shardCursor);
+}
+
+export async function getPublicFlowLinkEligibility(
+  refs: Array<{ id: string; version: string }>,
+  client?: PortalRpcClient,
+): Promise<ReadonlySet<string>> {
+  const unique = [...new Map(refs.map((ref) => [`${ref.id}@${ref.version}`, ref])).values()];
+  if (unique.length === 0) return new Set();
+  const result = await clientOrDefault(client).call(
+    "portal_flow_link_eligibility_v1",
+    { p_flow_refs: unique },
+    publicFlowLinkEligibilitySchema,
+    { mode: "no-store" },
+  );
+  const requested = new Set(unique.map((ref) => `${ref.id}@${ref.version}`));
+  if (
+    result.length !== unique.length ||
+    new Set(result.map((ref) => `${ref.id}@${ref.version}`)).size !== unique.length ||
+    result.some((ref) => !requested.has(`${ref.id}@${ref.version}`))
+  )
+    throw new PortalDataError("invalid_response");
+  return new Set(result.filter((ref) => ref.linkable).map((ref) => `${ref.id}@${ref.version}`));
 }

@@ -1,7 +1,7 @@
 import "server-only";
 
 import { z } from "zod";
-import type { TianGongPortalPublicNavigationPageV1 } from "../../../contracts/database-engine/portal/generated/portal.public-navigation.v1";
+import type { TianGongPortalPublicNavigationPageV2 } from "../../../contracts/database-engine/portal/generated/portal.public-navigation.v2";
 import {
   catalogSearchInputSchema,
   parsePortalSearchUrl,
@@ -108,7 +108,7 @@ export const navigationNodeSchema = navigationIdentitySchema
 
 export const publicNavigationSchema = z
   .strictObject({
-    schemaVersion: z.literal("portal.public-navigation.v1"),
+    schemaVersion: z.literal("portal.public-navigation.v2"),
     countBasis: z.literal("public_versions"),
     dimension: z.enum(["classification", "geography"]),
     kind: z.enum(["all", "process", "flow"]),
@@ -123,7 +123,7 @@ export const publicNavigationSchema = z
   })
   .refine(
     (page) => new Set(page.nodes.map((node) => node.nodeId)).size === page.nodes.length,
-  ) satisfies z.ZodType<TianGongPortalPublicNavigationPageV1>;
+  ) satisfies z.ZodType<TianGongPortalPublicNavigationPageV2>;
 export type PublicNavigation = z.infer<typeof publicNavigationSchema>;
 export type NavigationNode = z.infer<typeof navigationNodeSchema>;
 

@@ -255,6 +255,7 @@ export function CompareWorkbench({
                     href={localePath(locale, `process/${encodeURIComponent(candidate.ref)}`)}
                   >
                     {candidate.name || labels.member(index + 1)}
+                    {candidate.brand && <Badge variant="outline">{candidate.brand}</Badge>}
                   </Link>
                   <span className="text-muted-foreground mt-1 block font-mono text-xs">
                     {candidate.ref.split("@")[1]}
@@ -307,6 +308,7 @@ export function CompareWorkbench({
               >
                 <span className="sr-only">{labels.member(index + 1)}: </span>
                 {candidate.name || labels.member(index + 1)}
+                {candidate.brand && <Badge variant="outline">{candidate.brand}</Badge>}
                 <span className="text-muted-foreground mt-0.5 block font-mono text-xs">
                   {candidate.ref.split("@")[1]}
                 </span>

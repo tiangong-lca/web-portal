@@ -19,6 +19,10 @@ const environment = {
   supabaseUrl: "https://project.supabase.co",
   publishableKey: environmentFixture.preview.publishableKey,
   timeoutMilliseconds: 1000,
+  dataBrandScope: {
+    allowedBrandCodes: ["tiangong_lca"] as const,
+    identity: "portal-display-scope.v1:tiangong_lca",
+  },
 };
 
 function sequence(...values: number[]) {
@@ -44,7 +48,7 @@ describe("Portal structured telemetry", () => {
     });
 
     await client.call(
-      "portal_search_processes_v2",
+      "portal_search_processes_v4",
       {
         p_query: "fixture-query-must-not-be-logged",
         p_filters: {},
@@ -60,7 +64,7 @@ describe("Portal structured telemetry", () => {
       {
         correlationId,
         routeFamily: "catalog_search",
-        rpcName: "portal_search_processes_v2",
+        rpcName: "portal_search_processes_v4",
         cachePolicy: "no-store",
         cacheHit: "unknown",
         queryShape: "text",
@@ -111,7 +115,7 @@ describe("Portal structured telemetry", () => {
 
     await expect(
       client.call(
-        "portal_search_processes_v2",
+        "portal_search_processes_v4",
         { p_query: "fixture-query-must-not-be-logged" },
         publicSearchPageSchema,
         { mode: "no-store" },
@@ -144,12 +148,12 @@ describe("Portal structured telemetry", () => {
 
       await expect(
         client.call(
-          "portal_search_processes_v2",
+          "portal_search_processes_v4",
           { p_query: "electricity" },
           publicSearchPageSchema,
           { mode: "no-store" },
         ),
-      ).resolves.toMatchObject({ schemaVersion: "portal.public-search-page.v2" });
+      ).resolves.toMatchObject({ schemaVersion: "portal.public-search-page.v3" });
     }
   });
 

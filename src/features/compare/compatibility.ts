@@ -2,6 +2,7 @@ export type CompatibilityStatus =
   "direct" | "converted" | "reference_only" | "incompatible" | "insufficient";
 
 export type CompareCandidate = {
+  brand?: string | null;
   ref: string;
   name: string;
   functionalUnit?: string;

@@ -5,7 +5,9 @@ const processRef = "11111111-1111-1111-1111-111111111111@01.00.000";
 const fixtureOrigin = `http://127.0.0.1:${process.env.PORTAL_FIXTURE_PORT ?? "4328"}`;
 
 async function rpcReceiptCount(request: APIRequestContext, name: string, body: object) {
-  const bodySha256 = createHash("sha256").update(JSON.stringify(body)).digest("hex");
+  const bodySha256 = createHash("sha256")
+    .update(JSON.stringify({ ...body, p_allowed_brands: ["tiangong_lca"] }))
+    .digest("hex");
   const response = await request.get(`${fixtureOrigin}/receipts/rpc/${name}/${bodySha256}`);
   expect(response.ok()).toBe(true);
   return ((await response.json()) as { count: number }).count;
@@ -99,16 +101,16 @@ test("reuses short public Search data without sharing dynamic HTML", async ({ re
   const firstCacheControl = parseCacheControl(first.headers()["cache-control"]);
   expect(firstCacheControl.get("private")).toBe(true);
   expect(firstCacheControl.get("no-store")).toBe(true);
-  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
-  expect(await rpcReceiptCount(request, "portal_facets_v2", facetBody)).toBe(1);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v4", searchBody)).toBe(1);
+  expect(await rpcReceiptCount(request, "portal_facets_v4", facetBody)).toBe(1);
 
   const second = await request.get(path);
   expect(second.ok()).toBe(true);
   const secondCacheControl = parseCacheControl(second.headers()["cache-control"]);
   expect(secondCacheControl.get("private")).toBe(true);
   expect(secondCacheControl.get("no-store")).toBe(true);
-  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
-  expect(await rpcReceiptCount(request, "portal_facets_v2", facetBody)).toBe(1);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v4", searchBody)).toBe(1);
+  expect(await rpcReceiptCount(request, "portal_facets_v4", facetBody)).toBe(1);
 });
 
 test("collapses concurrent identical Search reads into one origin call", async ({ request }) => {
@@ -125,7 +127,7 @@ test("collapses concurrent identical Search reads into one origin call", async (
   const responses = await Promise.all(Array.from({ length: 4 }, () => request.get(path)));
   for (const response of responses) expect(response.ok()).toBe(true);
 
-  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v4", searchBody)).toBe(1);
 });
 
 test("refreshes the short public Search data through the origin once the window expires", async ({
@@ -144,15 +146,15 @@ test("refreshes the short public Search data through the origin once the window 
 
   const fresh = await request.get(path);
   expect(fresh.ok()).toBe(true);
-  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(1);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v4", searchBody)).toBe(1);
 
   await new Promise((resolve) => setTimeout(resolve, 32_000));
 
   const refreshed = await request.get(path);
   expect(refreshed.ok()).toBe(true);
-  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(2);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v4", searchBody)).toBe(2);
 
   const settled = await request.get(path);
   expect(settled.ok()).toBe(true);
-  expect(await rpcReceiptCount(request, "portal_search_processes_v2", searchBody)).toBe(2);
+  expect(await rpcReceiptCount(request, "portal_search_processes_v4", searchBody)).toBe(2);
 });

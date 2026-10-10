@@ -33,7 +33,16 @@ export const DataTable: Story = {
           yes: d.yes,
           no: d.no,
         }}
-        rows={parameters.empty ? [] : exchangeRows(locale)}
+        rows={
+          parameters.empty
+            ? []
+            : exchangeRows(locale).map((row, index) => ({
+                ...row,
+                ...(parameters.scopedLinks && index === 0
+                  ? { flowHref: `/${locale}/flow/${encodeURIComponent(row.flowRef)}` }
+                  : {}),
+              }))
+        }
         locale={locale}
       />
     );
@@ -85,3 +94,5 @@ export const MobileProvenance: Story = {
   ...ProvenanceDisclosure,
   globals: { ...mobileGlobals, locale: "fr" },
 };
+
+export const ScopedFlowLinks: Story = { ...DataTable, parameters: { scopedLinks: true } };

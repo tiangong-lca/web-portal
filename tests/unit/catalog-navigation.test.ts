@@ -20,7 +20,7 @@ const node = {
   hasChildren: true,
 };
 const response = {
-  schemaVersion: "portal.public-navigation.v1",
+  schemaVersion: "portal.public-navigation.v2",
   countBasis: "public_versions",
   dimension: "geography",
   kind: "process",
@@ -110,7 +110,7 @@ describe("hierarchical catalog navigation", () => {
       ),
     ).resolves.toMatchObject({ countBasis: "public_versions" });
     expect(call).toHaveBeenCalledWith(
-      "portal_navigation_v1",
+      "portal_navigation_v2",
       expect.objectContaining({ p_parent_node_id: null, p_limit: 100 }),
       expect.anything(),
       expect.objectContaining({ seconds: 30 }),

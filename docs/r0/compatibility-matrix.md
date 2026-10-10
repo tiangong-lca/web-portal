@@ -127,3 +127,7 @@ The production geography/branch-navigation change uses the existing enforcing pe
 Portal #115 records a hosted-only worker MIME correction: feature deployment `76f03640ad6b00e434e969a6414996932ff12f85` served the `.mjs` map worker as `application/octet-stream`, preventing map initialization while the region list remained available. The correction uses a `.js` URL for the same bundle bytes. Exact hosted MIME/rendering qualification and the final integrated source are recorded in the linked delivery records of [Portal #115](https://github.com/tiangong-lca/web-portal/issues/115) and [Portal #113](https://github.com/tiangong-lca/web-portal/issues/113).
 
 Portal #117 completes the static transport qualification: on `c8c3ece4d5da9687014cdf411adcc9c99193806f`, the corrected `.js` worker executes and is gzip-compressed, but `.geojson` remains uncompressed octet-stream (world 407248 bytes). Standard `.json` URLs retain identical geometry bytes while enabling EdgeOne’s existing JSON compression. The exact hosted encoded-size and rendering receipt is tracked in [Portal #117](https://github.com/tiangong-lca/web-portal/issues/117).
+
+## Display-scope deployment qualification
+
+Portal #139 binds `PORTAL_DATA_BRANDS` to build identity and server readiness. Every scope change needs a fresh build and independent runtime configuration readback, old-instance traffic drain and HTML/ISR/CDN/sitemap invalidation. The retained CSP/ISR evidence above does not prove this new paired-deployment boundary. No hosted activation is claimed by local scoped-reader and browser tests.

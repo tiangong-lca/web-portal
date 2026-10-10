@@ -127,7 +127,7 @@ export function populatedFacets(locale: PortalLocale): PublicFacets {
     ["source", m.source, [sampleNames[locale][0]!, sampleNames[locale][1]!]],
   ];
   return {
-    schemaVersion: "portal.public-facets.v2",
+    schemaVersion: "portal.public-facets.v3",
     kind: "process",
     queryFingerprint: "a".repeat(64),
     groups: groups.map(([id, label, values]) => ({

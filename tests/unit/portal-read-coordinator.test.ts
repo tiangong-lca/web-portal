@@ -17,7 +17,7 @@ import {
 
 const baseKeyInput = {
   identity: portalReadIdentity("https://project.supabase.co", "sb_publishable_test"),
-  rpcName: "portal_search_processes_v2",
+  rpcName: "portal_search_processes_v4",
   timeoutMs: 8000,
 } as const;
 

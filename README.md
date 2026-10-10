@@ -58,7 +58,7 @@ SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_<your-key>
 ```
 
-`PORTAL_DATA_BRANDS` 必须显式指定数据品牌，例如 `tiangong_lca` 或 `tiangong_lca,bafu,uslci,worldsteel`；与选择站点外观的 `PORTAL_BRAND` 独立。范围变更需要重新构建部署并清理旧部署缓存，构建与运行时不一致会拒绝启动。后端两项用于公开目录、关键词搜索与记录读取，两套 UI 共用同一配置。`.env.example` 只是模板，不会自动加载；只设置外观变量而缺少数据品牌范围时不能启动；缺少后端配置时无法加载搜索数据。`.env.local` 已被 Git 忽略，不要提交实际密钥。
+`PORTAL_DATA_BRANDS` 缺失时默认 `tiangong_lca`，也可显式指定数据品牌，例如 `tiangong_lca` 或 `tiangong_lca,bafu,uslci,worldsteel`；与选择站点外观的 `PORTAL_BRAND` 独立。范围变更需要重新构建部署并清理旧部署缓存，构建与运行时不一致会拒绝启动。后端两项用于公开目录、关键词搜索与记录读取，两套 UI 共用同一配置。`.env.example` 只是模板，不会自动加载；显式空值、未知品牌或通配符会拒绝启动；缺少后端配置时无法加载搜索数据。`.env.local` 已被 Git 忽略，不要提交实际密钥。
 
 `pnpm dev` 不会加载 `.env.production`。本地预览需要连接正式后端时，将该后端的上述两项配置填入 `.env.local`；不要通过修改 `NODE_ENV` 来切换数据环境。在本工作区中，Platform 的正式连接配置位于 `../platform/.env`，共享开发配置位于 `../platform/.env.development`；只复用上述两项，不要整份复制环境文件。
 

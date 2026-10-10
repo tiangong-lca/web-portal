@@ -20,9 +20,9 @@ checkPaths:
   - edgeone.json
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
-lastReviewedAt: 2026-10-08
-lastReviewedCommit: 3fc0d0be4989f07e4d1074d957b55b3d7ef63a2d
-lastReviewedNote: "Reviewed Portal #137: neutral entry negotiates manual preference, browser language and English with no-store redirects; explicit language URLs and localized CSP/ISR stay unchanged. Manual same-value menu selections persist without navigation; dismissal does not persist. Local tests do not claim hosted qualification."
+lastReviewedAt: 2026-10-10
+lastReviewedCommit: 38ee06a68db83a346d6e3660afd6e68a74b8c854
+lastReviewedNote: "Portal #141: omitted data-brand configuration defaults to Tiangong LCA; explicit invalid inputs and build/runtime scope drift still fail. Hosted release and CSP/ISR evidence remain independently required."
 related:
   - compatibility-matrix.md
   - ../design-plan.md

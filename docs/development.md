@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #139: reviewed server-owned deployment scope, versioned read and signing chain, brand UI and dependency link restrictions; hosted cache switch remains a release gate."
+lastReviewedNote: "Portal #141: omitted data-brand configuration defaults to Tiangong LCA; explicit invalid inputs and build/runtime scope drift still fail. Hosted release and CSP/ISR evidence remain independently required."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -69,11 +69,11 @@ Storybook's site toolbar injects presentation identity and matching brand tokens
 
 ## Deployment data scope (Portal #139)
 
-`src/config/data-brands.ts` defines the shared build/runtime parser for the server-owned `PORTAL_DATA_BRANDS` setting. It rejects missing, empty, unknown, wildcard and empty-token inputs; trims, deduplicates and sorts valid codes; and returns an immutable, versioned scope identity. The build/runtime comparison rejects a changed scope. `PORTAL_BRAND` continues to select presentation only.
+`src/config/data-brands.ts` defines the shared build/runtime parser for the server-owned `PORTAL_DATA_BRANDS` setting. An omitted variable defaults to `tiangong_lca`. It rejects explicit empty, unknown, wildcard and empty-token inputs; trims, deduplicates and sorts valid codes; and returns an immutable, versioned scope identity. The build/runtime comparison rejects a changed scope. `PORTAL_BRAND` continues to select presentation only.
 
 The contract manifest pins the exact Database source commit. Every active catalog, facet, navigation, detail, version, exchange, summary and sitemap call uses the new scoped RPC. The central client overwrites any supplied authority with the validated server scope before request serialization and cache-key construction. Hybrid V3 and LCIA V2 similarly inject scope before final serialization and HMAC signing. Browser request schemas reject deployment-scope fields; only an optional known brand filter narrows results. There is no old-RPC fallback.
 
-Set `PORTAL_DATA_BRANDS=tiangong_lca` explicitly for a single-brand build, or a comma-separated subset of `tiangong_lca,bafu,uslci,worldsteel` for a multi-brand build. This variable is required for development, CI, Storybook and deployment; `.env.example` is an example, not a runtime default. Build identity includes the canonical set. Instrumentation rejects runtime/build drift before serving, and server adapters repeat that check. Never reuse `.next`, ISR or CDN objects across scope changes. Deploy a fresh build, stop old-instance traffic and invalidate old HTML/data/sitemap caches before exposing the new deployment.
+Omit `PORTAL_DATA_BRANDS` or set it to `tiangong_lca` for a Tiangong-only build, or a comma-separated subset of `tiangong_lca,bafu,uslci,worldsteel` for a multi-brand build. The same omitted-variable default applies to development, CI, Storybook and deployment; `.env.example` documents the setting and is not loaded automatically. Build identity includes the canonical set. Instrumentation rejects runtime/build drift before serving, and server adapters repeat that check. Never reuse `.next`, ISR or CDN objects across scope changes. Deploy a fresh build, stop old-instance traffic and invalidate old HTML/data/sitemap caches before exposing the new deployment.
 
 Database display mode must be qualified and activated separately. A scoped reader refusal stays unavailable. Single-brand pages hide the redundant brand control; multi-brand pages offer only allowed brands. Every version/card/detail carries its independent data brand, preserving existing source attribution. Exchange support may cross brand boundaries, but batch exact Flow-link eligibility emits links only for standalone in-scope Flows. No Platform synchronization is added.
 

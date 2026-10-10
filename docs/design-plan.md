@@ -24,7 +24,7 @@ checkPaths:
   - edgeone.json
 lastReviewedAt: 2026-10-10
 lastReviewedCommit: e4410a69c7db32921c4d4e103489091990603d1e
-lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
+lastReviewedNote: "Portal #141: omitted data-brand configuration defaults to Tiangong LCA; explicit invalid inputs and build/runtime scope drift still fail. Hosted release and CSP/ISR evidence remain independently required."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -113,7 +113,7 @@ Portal 没有后台机器用户、登录页面或浏览器身份 token/cookie；
 
 ### 4.1 可见范围
 
-批准的展示改造（Portal #139 / Database #807）以精确 `kind/id/version` 的 `dataset_display_settings.is_visible` 为全局公开资格；本站根对象还必须属于服务端 `PORTAL_DATA_BRANDS` 选定的品牌集合，与 `state_code` 无关。许可、精确引用完整性和 LCIA 已发布结果校验继续生效。浏览器只能通过 `filters.brand` 收窄本站集合。
+批准的展示改造（Portal #139 / Database #807）以精确 `kind/id/version` 的 `dataset_display_settings.is_visible` 为全局公开资格；本站根对象还必须属于服务端 `PORTAL_DATA_BRANDS` 选定的品牌集合，与 `state_code` 无关。`PORTAL_DATA_BRANDS` 缺失时默认仅 `tiangong_lca`，显式空值、未知品牌或通配符拒绝就绪；该默认不取决于站点外观或浏览器变量。许可、精确引用完整性和 LCIA 已发布结果校验继续生效。浏览器只能通过 `filters.brand` 收窄本站集合。
 
 全局可见的跨品牌 Flow/Flow property/Unit group 可以沿本站 Process 的真实精确引用提供必要的公开交换量及单位信息；它们不因此成为本站独立目录项，不计入本站数量，也不获得范围外详情链接。缺失或隐藏的支持对象仍不可用。
 
@@ -1129,6 +1129,7 @@ EdgeOne 只配置 Production 环境变量：
 | 公共数据 | `SUPABASE_URL`、`SUPABASE_PUBLISHABLE_KEY`、`SITE_URL` |
 | Hybrid BFF | `PORTAL_HYBRID_EDGE_TIMEOUT_MS=30000`；LCIA 继续使用独立 `PORTAL_EDGE_TIMEOUT_MS=8000` |
 | Sitemap cache | `PORTAL_SITEMAP_CACHE_MODE=no-store`；仅在该平台通过 no-stale 验收后改为 `shared-300` |
+| 数据品牌 | `PORTAL_DATA_BRANDS` 缺失默认 `tiangong_lca`；多品牌显式配置 `tiangong_lca,bafu,uslci,worldsteel` |
 | 品牌展示 | `PORTAL_BRAND=tiangong`（默认）或 `atlas`，构建时绑定 |
 | 主色 | `PORTAL_LIGHT_PRIMARY`、`PORTAL_DARK_PRIMARY`、`PORTAL_BRAND_VERSION` |
 | Logo | `PORTAL_LIGHT_LOGO`、`PORTAL_DARK_LOGO`、`PORTAL_LOGO_MARK`、`PORTAL_FAVICON` |

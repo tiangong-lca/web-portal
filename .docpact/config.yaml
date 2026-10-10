@@ -1,8 +1,8 @@
 version: 1
 layout: repo
-lastReviewedAt: "2026-09-30"
-lastReviewedCommit: "78d8061ac8cce2fd501861bd2343844e11906e3b"
-lastReviewedNote: "Reviewed Portal #128: exact Chinese home aliases use a bounded stateless edge route and one native rewrite; source coverage, validation and hosted acceptance remain explicit while public-data, root/header, CSP and ISR boundaries are preserved."
+lastReviewedAt: "2026-10-10"
+lastReviewedCommit: "24a39abcf8e830bd5c23288f144d4b4566fc07ff"
+lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
 
 catalog:
   repos:
@@ -364,6 +364,10 @@ rules:
     scope: repo
     repo: portal
     triggers:
+      - path: src/config/data-brands.ts
+        kind: deployment-data-scope
+      - path: tests/unit/data-brands.test.ts
+        kind: deployment-data-scope-test
       - path: src/features/**
         kind: feature-behavior
       - path: src/server/**

@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-08
-lastReviewedCommit: 3fc0d0be4989f07e4d1074d957b55b3d7ef63a2d
+lastReviewedAt: 2026-10-10
+lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed Portal #137: neutral entry negotiates manual preference, browser language and English with no-store redirects; explicit language URLs and localized CSP/ISR stay unchanged. Manual same-value menu selections persist without navigation; dismissal does not persist. Local tests do not claim hosted qualification."
+lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot and inactive deployment-scope parser foundation; live reads and presentation remain unchanged pending scoped rollout."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -66,6 +66,12 @@ Use the same exact source commit for paired brand releases, with separate public
 Storybook's site toolbar injects presentation identity and matching brand tokens. `Brand/Atlas` includes four locales, desktop/mobile, dark theme, unavailable counts and catalog-selection scenarios. Synthetic counts are only story fixtures. The production home uses the shared navigation DTO; missing counts are explicitly unavailable.
 
 `PORTAL_BRAND=atlas pnpm test:e2e -- tests/e2e/site-presentation.spec.ts` builds against the existing loopback fixture and checks identity, route/metadata parity, light/dark mobile/desktop accessibility, exact-version detail, citations and no-JavaScript reading. CI retains the full TianGong suite and adds the Atlas presentation suite plus existing shared functional flows. Local browser evidence does not prove a hosted Atlas release. A new domain/deployment is a separate operational scope.
+
+## Deployment data scope foundation (Portal #139)
+
+`src/config/data-brands.ts` defines the shared build/runtime parser for the server-owned `PORTAL_DATA_BRANDS` setting. It rejects missing, empty, unknown, wildcard and empty-token inputs; trims, deduplicates and sorts valid codes; and returns an immutable, versioned scope identity. The build/runtime comparison rejects a changed scope. `PORTAL_BRAND` continues to select presentation only.
+
+The new Database schemas are byte-pinned to `489402c6d118be4202cef22f9b89266c9229ed76` in the contract manifest. This first checkpoint does not yet wire the parser or new DTOs into live reads. Remaining work in #139 must bind the scope before RPC candidate selection and HMAC serialization, scope all caches/cursors/SEO, and qualify build/runtime readiness and deployment cache invalidation before enabling the new database readers. Do not deploy this foundation as evidence that brand filtering is active.
 
 ## Choose local checks
 

@@ -9,6 +9,17 @@ const destinationRoot = resolve(repositoryRoot, "contracts/database-engine/porta
 const manifestPath = resolve(destinationRoot, "manifest.json");
 const canonicalRepository = "tiangong-lca/database";
 const contractNames = [
+  "portal.common-types.v2",
+  "portal.hybrid-database-input.v3",
+  "portal.public-dataset.v2",
+  "portal.public-facet-input.v4",
+  "portal.public-facets.v3",
+  "portal.public-hybrid-candidate-page.v3",
+  "portal.public-navigation-input.v2",
+  "portal.public-navigation.v2",
+  "portal.public-search-input.v4",
+  "portal.public-search-page.v3",
+  "portal.public-version-page.v2",
   "portal.common-types.v1",
   "portal.hybrid-database-input.v1",
   "portal.hybrid-database-input.v2",

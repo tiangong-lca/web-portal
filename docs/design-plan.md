@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-10-08
-lastReviewedCommit: 3fc0d0be4989f07e4d1074d957b55b3d7ef63a2d
-lastReviewedNote: "Reviewed Portal #137: neutral entry negotiates manual preference, browser language and English with no-store redirects; explicit language URLs and localized CSP/ISR stay unchanged. Manual same-value menu selections persist without navigation; dismissal does not persist. Local tests do not claim hosted qualification."
+lastReviewedAt: 2026-10-10
+lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
+lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -85,7 +85,7 @@ Portal 的成功标准不是“提供一个数据库表格”，而是让用户�
 ### 2.2 Portal 不负责
 
 - 注册、登录、账户、团队或权限管理；
-- 私有数据、团队数据、草稿或审核中数据；
+- 未获显式展示许可的私有、团队、草稿或审核中数据；
 - 数据创建、导入、编辑、审核、发布、撤回、修复或重算；
 - 过程规范化合并政策和人工复核队列；
 - 开发者 API、GraphQL、MCP、Skills、API Explorer 或代码示例；
@@ -113,12 +113,11 @@ Portal 没有后台机器用户、登录页面或浏览器身份 token/cookie；
 
 ### 4.1 可见范围
 
-Portal 的公共候选范围固定为：
+批准的展示改造（Portal #139 / Database #807）以精确 `kind/id/version` 的 `dataset_display_settings.is_visible` 为全局公开资格；本站根对象还必须属于服务端 `PORTAL_DATA_BRANDS` 选定的品牌集合，与 `state_code` 无关。许可、精确引用完整性和 LCIA 已发布结果校验继续生效。浏览器只能通过 `filters.brand` 收窄本站集合。
 
-- `state_code = 100`；
-- `state_code = 200`。
+全局可见的跨品牌 Flow/Flow property/Unit group 可以沿本站 Process 的真实精确引用提供必要的公开交换量及单位信息；它们不因此成为本站独立目录项，不计入本站数量，也不获得范围外详情链接。缺失或隐藏的支持对象仍不可用。
 
-`state_code = 0`、`20` 以及任何用户、团队、审核或内部状态永远不进入 Portal。调用者不能通过 URL、请求体、Header 或 RPC 参数扩大范围。
+实施状态：当前提交仅提供新契约和部署范围解析器；在线入口仍保持已发布的旧读取路径。必须完成匹配的 Database/Edge/Portal 实施和验收后统一启用新规则。不得仅凭解析器存在或设置环境变量宣称新展示范围已经生效。
 
 `state_code` 是工作流状态，不直接等于许可证。前端不以状态码猜测可见能力；后端公共 DTO 必须显式返回能力及其证据：
 
@@ -138,7 +137,7 @@ type PublicCapabilities = {
 
 | 能力 | 权威计算者 | 成立条件 |
 | --- | --- | --- |
-| `metadataVisible` | `database-engine` 公共 façade | exact row 为允许对象类型且状态为 100/200 |
+| `metadataVisible` | `database-engine` 公共 façade | exact row 获准展示且 brand 属于当前部署范围（改造启用后） |
 | `exchangesVisible` | `database-engine` 公共 façade | metadata 可见，且数据集许可/公开策略明确允许 exchange projection |
 | `lciaVisible` | `data_product_results` 公共 publication | 当前 public publication 包含 exact Process 版本及请求方法 |
 | `publicArtifactVisible` | `lca_release_results` | 返回 exact release/public artifact descriptor |

@@ -178,6 +178,7 @@ function flowSearchResponse() {
     items: [
       {
         key: catalogFixture.datasetFlow.key,
+        brand: catalogFixture.datasetFlow.brand,
         accessLevel: catalogFixture.datasetFlow.accessLevel,
         capabilities: catalogFixture.datasetFlow.capabilities,
         names: catalogFixture.datasetFlow.metadata.names,
@@ -216,6 +217,7 @@ function versionsResponse(kind: unknown, id: unknown) {
       items: [
         {
           key: catalogFixture.datasetFlow.key,
+          brand: catalogFixture.datasetFlow.brand,
           accessLevel: catalogFixture.datasetFlow.accessLevel,
           capabilities: catalogFixture.datasetFlow.capabilities,
           modifiedAt: catalogFixture.datasetFlow.modifiedAt,
@@ -269,20 +271,29 @@ function sitemapShardResponse(arguments_: Record<string, unknown>) {
 }
 
 function rpcPayload(name: string, arguments_: Record<string, unknown>): unknown {
+  const { p_allowed_brands: scope, ...parameters } = arguments_;
+  if (scope !== undefined && (!Array.isArray(scope) || !scope.includes("tiangong_lca")))
+    return undefined;
+  arguments_ = parameters;
   switch (name) {
-    case "portal_navigation_v1":
+    case "portal_flow_link_eligibility_v1":
+      return (arguments_.p_flow_refs as Array<{ id: string; version: string }>).map((ref) => ({
+        ...ref,
+        linkable: true,
+      }));
+    case "portal_navigation_v2":
       return navigationFixture(arguments_);
-    case "portal_search_processes_v3":
+    case "portal_search_processes_v4":
       return filterNavigationFixture(processSearchResponse(), arguments_);
-    case "portal_search_flows_v3":
+    case "portal_search_flows_v4":
       return filterNavigationFixture(flowSearchResponse(), arguments_);
     case "portal_search_processes_v2":
       return processSearchResponse();
     case "portal_search_flows_v2":
       return flowSearchResponse();
-    case "portal_catalog_summary_v1":
+    case "portal_catalog_summary_v2":
       return Object.keys(arguments_).length === 0 ? catalogFixture.catalogSummary : undefined;
-    case "portal_get_dataset_v1":
+    case "portal_get_dataset_v2":
       if (
         arguments_.p_kind === "process" &&
         typeof arguments_.p_id === "string" &&
@@ -315,14 +326,14 @@ function rpcPayload(name: string, arguments_: Record<string, unknown>): unknown 
         return catalogFixture.datasetFlow;
       }
       return null;
-    case "portal_list_versions_v1":
+    case "portal_list_versions_v2":
       return versionsResponse(arguments_.p_kind, arguments_.p_id);
-    case "portal_list_process_exchanges_v1":
+    case "portal_list_process_exchanges_v2":
       return arguments_.p_process_id === catalogFixture.datasetProcess.key.id &&
         arguments_.p_process_version === catalogFixture.datasetProcess.key.version
         ? catalogFixture.exchanges
         : null;
-    case "portal_facets_v3":
+    case "portal_facets_v4":
     case "portal_facets_v2":
       return {
         ...catalogFixture.facets,
@@ -364,11 +375,11 @@ function rpcPayload(name: string, arguments_: Record<string, unknown>): unknown 
             },
           ]),
       };
-    case "portal_sitemap_entries_v1":
+    case "portal_sitemap_entries_v2":
       return sitemapResponse(arguments_.p_kind);
-    case "portal_sitemap_manifest_v1":
+    case "portal_sitemap_manifest_v2":
       return sitemapManifestResponse(arguments_);
-    case "portal_sitemap_shard_v1":
+    case "portal_sitemap_shard_v2":
       return sitemapShardResponse(arguments_);
     default:
       return undefined;
@@ -466,9 +477,10 @@ function verifyPortalHmac(
 }
 
 function validHybridInput(value: Record<string, unknown>): boolean {
-  const versioned = value.schemaVersion === "portal.hybrid-search-request.v2";
+  const scoped = value.schemaVersion === "portal.hybrid-search-request.v3";
+  const versioned = scoped || value.schemaVersion === "portal.hybrid-search-request.v2";
   const expectedKeys = versioned
-    ? "cursor\nfilters\nkind\nlimit\nquery\nschemaVersion"
+    ? `${scoped ? "allowedBrandCodes\n" : ""}cursor\nfilters\nkind\nlimit\nquery\nschemaVersion`
     : "filters\nkind\nlimit\nquery\nschemaVersion";
   if (Object.keys(value).sort().join("\n") !== expectedKeys) {
     return false;
@@ -497,6 +509,7 @@ function validHybridInput(value: Record<string, unknown>): boolean {
   }
 
   const allowedFilterKeys = new Set([
+    "brand",
     "accessLevel",
     "geography",
     "classification",
@@ -530,7 +543,8 @@ function hybridSearchResponse(input: Record<string, unknown>) {
   const kind = input.kind as "process" | "flow";
   const sourcePage = kind === "process" ? processSearchResponse() : flowSearchResponse();
   const limit = Number(input.limit);
-  const versioned = input.schemaVersion === "portal.hybrid-search-request.v2";
+  const scoped = input.schemaVersion === "portal.hybrid-search-request.v3";
+  const versioned = scoped || input.schemaVersion === "portal.hybrid-search-request.v2";
   const items = sourcePage.items.slice(0, limit).map((item, index) => ({
     ...item,
     match: {
@@ -546,7 +560,11 @@ function hybridSearchResponse(input: Record<string, unknown>) {
     },
   }));
   return {
-    schemaVersion: versioned ? "portal.hybrid-search-page.v2" : "portal.hybrid-search-page.v1",
+    schemaVersion: scoped
+      ? "portal.hybrid-search-page.v3"
+      : versioned
+        ? "portal.hybrid-search-page.v2"
+        : "portal.hybrid-search-page.v1",
     kind,
     queryFingerprint: "c".repeat(64),
     interpretation: {
@@ -571,11 +589,12 @@ function hybridSearchResponse(input: Record<string, unknown>) {
           versionGroups: items.map((item, index) => ({
             key: item.key,
             matches: [
-              { key: item.key, match: item.match },
+              { key: item.key, brand: item.brand, match: item.match },
               ...(index === 0
                 ? [
                     {
                       key: { ...item.key, version: "00.99.999" },
+                      brand: item.brand,
                       match: { ...item.match, score: 0.65 },
                     },
                   ]
@@ -588,6 +607,12 @@ function hybridSearchResponse(input: Record<string, unknown>) {
 }
 
 function validLciaInput(value: Record<string, unknown>): boolean {
+  if (value.schemaVersion === "portal.published-lcia-request.v2") {
+    const { schemaVersion: _version, allowedBrandCodes, ...legacy } = value;
+    if (!Array.isArray(allowedBrandCodes) || !allowedBrandCodes.includes("tiangong_lca"))
+      return false;
+    value = legacy;
+  }
   if (Object.keys(value).sort().join("\n") !== requiredLciaKeys.join("\n")) {
     return false;
   }

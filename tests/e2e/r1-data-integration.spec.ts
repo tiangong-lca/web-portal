@@ -55,13 +55,14 @@ test("deduplicates the exact public detail envelope within one render", async ({
     p_kind: "process",
     p_id: probeId,
     p_version: "01.00.000",
+    p_allowed_brands: ["tiangong_lca"],
   });
   const bodySha256 = createHash("sha256").update(expectedBody).digest("hex");
-  const receipt = await fixtureRpcReceipt(request, "portal_get_dataset_v1", bodySha256);
+  const receipt = await fixtureRpcReceipt(request, "portal_get_dataset_v2", bodySha256);
   expect(receipt).toMatchObject({
     schemaVersion: "portal.r1-fixture-rpc-receipt.v1",
     count: 1,
-    receipt: { bodySha256, name: "portal_get_dataset_v1" },
+    receipt: { bodySha256, name: "portal_get_dataset_v2" },
   });
 });
 

@@ -110,3 +110,7 @@ Any future strict-profile promotion must pass the exact enforcing browser comman
 - [EdgeOne configuration headers](https://pages.edgeone.ai/document/edgeone-json)
 - [EdgeOne Function response body](https://edgeone.ai/document/52691)
 - [EdgeOne Function TransformStream](https://edgeone.ai/document/52698)
+
+## Display-scope deployment qualification
+
+Portal #139 binds `PORTAL_DATA_BRANDS` to build identity and server readiness. Every scope change needs a fresh build and independent runtime configuration readback, old-instance traffic drain and HTML/ISR/CDN/sitemap invalidation. The retained CSP/ISR evidence above does not prove this new paired-deployment boundary. No hosted activation is claimed by local scoped-reader and browser tests.

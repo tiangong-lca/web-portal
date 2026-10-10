@@ -88,9 +88,7 @@ export async function queryPortalHybridRaw(
   rawBody: Uint8Array,
   options: QueryOptions = {},
 ): Promise<PortalHybridQueryResult> {
-  const requestBody = new Uint8Array(rawBody.byteLength);
-  requestBody.set(rawBody);
-  const parsedInput = parsePortalHybridRequestBody(requestBody);
+  const parsedInput = parsePortalHybridRequestBody(rawBody);
   if (options.signal?.aborted) return fallback("hybrid_upstream_unavailable");
 
   let environment: PortalHybridEnvironment;
@@ -99,6 +97,15 @@ export async function queryPortalHybridRaw(
   } catch {
     return fallback("hybrid_upstream_unavailable");
   }
+
+  const requestBody = new TextEncoder().encode(
+    JSON.stringify({
+      ...parsedInput,
+      schemaVersion: "portal.hybrid-search-request.v3",
+      cursor: "cursor" in parsedInput ? parsedInput.cursor : null,
+      allowedBrandCodes: environment.dataBrandScope.allowedBrandCodes,
+    }),
+  );
 
   let signed: Awaited<ReturnType<typeof signPortalHmac>>;
   try {
@@ -154,10 +161,7 @@ export async function queryPortalHybridRaw(
   }
 
   const parsedPage = portalHybridSearchPageSchema.safeParse(payload);
-  const expectedVersion =
-    parsedInput.schemaVersion === "portal.hybrid-search-request.v2"
-      ? "portal.hybrid-search-page.v2"
-      : "portal.hybrid-search-page.v1";
+  const expectedVersion = "portal.hybrid-search-page.v3";
   if (
     !parsedPage.success ||
     parsedPage.data.kind !== parsedInput.kind ||

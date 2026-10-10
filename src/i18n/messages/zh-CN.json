@@ -58,7 +58,9 @@
     "docsResource": "天工 LCA 使用文档",
     "tidasResource": "TIDAS 数据系统",
     "pcrResource": "产品类别规则库",
-    "lcdnResource": "ILCD 数据分发节点"
+    "lcdnResource": "ILCD 数据分发节点",
+    "dataBrand": "数据库品牌",
+    "allDataBrands": "可选数据库"
   },
   "Home": {
     "eyebrow": "天工 LCA 数据门户",
@@ -143,7 +145,8 @@
     "processSubtype": "过程类型",
     "classification": "分类",
     "countsDescription": "数量按匹配的公开数据集版本统计。",
-    "noScriptCompare": "选择 2–4 个过程版本后比较。"
+    "noScriptCompare": "选择 2–4 个过程版本后比较。",
+    "dataBrand": "数据库品牌"
   },
   "Hybrid": {
     "title": "描述所需数据",
@@ -313,7 +316,8 @@
     "dataGenerator": "数据生成方",
     "dataOwner": "数据所有权方",
     "licenseType": "声明的许可类型",
-    "accessRestrictions": "访问与使用限制"
+    "accessRestrictions": "访问与使用限制",
+    "dataBrand": "数据库品牌"
   },
   "Compare": {
     "title": "比较过程数据集",

@@ -55,6 +55,10 @@ const meta = {
           name: items[0].name,
         },
       ];
+    if (parameters.brands)
+      items.forEach((item, index) => {
+        item.brand = ["Tiangong LCA", "BAFU", "USLCI", "World steel"][index % 4]!;
+      });
     if (parameters.missing && items[0]) delete items[0].functionalUnit;
     return (
       <CompareSelectionProvider key={locale} labels={selectionLabels(locale)} locale={locale}>
@@ -76,7 +80,14 @@ export const ProcessAndFlow: Story = {
   },
 };
 export const Empty: Story = { parameters: { empty: true } };
-export const MissingMetadata: Story = { parameters: { missing: true } };
+export const MissingMetadata: Story = {
+  parameters: { missing: true },
+  play: async ({ canvas, globals }) => {
+    await expect(
+      canvas.queryByLabelText(dictionaries[storyLocale(globals)].Common.dataBrand),
+    ).toBeNull();
+  },
+};
 export const MatchingVersions: Story = {
   parameters: { versions: true },
   play: async ({ canvas, userEvent, globals }) => {
@@ -101,6 +112,21 @@ export const SelectForComparison: Story = {
 };
 export const MobileGerman: Story = {
   ...ProcessAndFlow,
+  parameters: { brands: true },
   globals: { ...mobileGlobals, locale: "de" },
 };
 export const DarkFrench: Story = { globals: { theme: "dark", locale: "fr" } };
+
+export const DisplayBrands: Story = {
+  parameters: { brands: true },
+  globals: { locale: "zh-CN" },
+  play: async ({ canvasElement, canvas, globals }) => {
+    const brands = canvas.getAllByLabelText(dictionaries[storyLocale(globals)].Common.dataBrand);
+    const actions = canvasElement.querySelectorAll(".catalog-result-actions");
+    for (const [index, brand] of brands.entries()) {
+      await expect(brand.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+        actions[index]!.getBoundingClientRect().bottom,
+      );
+    }
+  },
+};

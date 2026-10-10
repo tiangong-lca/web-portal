@@ -1,4 +1,7 @@
 "use client";
+
+import { DataBrandFilter } from "./data-brand-filter";
+import { dataBrandNames, type PortalDataBrandScope } from "@/config/data-brands";
 import { ResponsiveFacets } from "./responsive-facets";
 import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
@@ -124,6 +127,7 @@ function shareRequest(state: RequestState): PortalHybridSearchRequest {
 /** @import import { HybridSearchPanel } from "@/features/catalog/hybrid-search-panel"; */
 export function HybridSearchPanel({
   initialFilters,
+  allowedBrandCodes = [],
   initialKind,
   labels,
   locale,
@@ -131,6 +135,7 @@ export function HybridSearchPanel({
   siteOrigin,
 }: {
   initialFilters: PortalHybridFilters;
+  allowedBrandCodes?: PortalDataBrandScope["allowedBrandCodes"];
   initialKind: "process" | "flow";
   labels: HybridSearchLabels;
   locale: PortalLocale;
@@ -198,6 +203,7 @@ export function HybridSearchPanel({
   }, [locale, response]);
   const keptLexicalResults = search.hybrid === "empty" && results.length > 0;
   const filterLabels: Record<keyof PortalHybridFilters, string> = {
+    brand: catalog("dataBrand"),
     accessLevel: labels.filterAccess,
     classification: labels.filterClassification,
     geography: labels.filterGeography,
@@ -214,15 +220,17 @@ export function HybridSearchPanel({
     .map(([key, value]) => ({
       label: filterLabels[key as keyof PortalHybridFilters],
       value:
-        key === "geography"
-          ? formatGeographyCode(String(value), locale)
-          : key === "accessLevel"
-            ? value === "open"
-              ? resultLabels.public
-              : resultLabels.metadataOnly
-            : key === "processSubtype"
-              ? localizeProcessSubtype(String(value), locale)
-              : String(value),
+        key === "brand"
+          ? dataBrandNames[value as keyof typeof dataBrandNames]
+          : key === "geography"
+            ? formatGeographyCode(String(value), locale)
+            : key === "accessLevel"
+              ? value === "open"
+                ? resultLabels.public
+                : resultLabels.metadataOnly
+              : key === "processSubtype"
+                ? localizeProcessSubtype(String(value), locale)
+                : String(value),
     }));
 
   return (
@@ -350,6 +358,20 @@ export function HybridSearchPanel({
               }}
             >
               <div className="flex flex-col gap-4">
+                <DataBrandFilter
+                  allowedBrandCodes={allowedBrandCodes}
+                  value={requestState.filters.brand}
+                  label={common("dataBrand")}
+                  allLabel={common("allDataBrands")}
+                  onChange={(brand) =>
+                    setRequestState((current) => {
+                      const filters = { ...current.filters };
+                      if (brand) filters.brand = brand;
+                      else delete filters.brand;
+                      return { ...current, filters };
+                    })
+                  }
+                />
                 {(
                   [
                     ["geography", labels.filterGeography],

@@ -300,7 +300,7 @@ export function createPortalHybridPostHandler(dependencies: PortalHybridRouteDep
         fallbackReason: null,
         interpretation: edgeResult.data.interpretation,
         items: edgeResult.data.items,
-        ...(edgeResult.data.schemaVersion === "portal.hybrid-search-page.v2"
+        ...(versioned && edgeResult.data.schemaVersion === "portal.hybrid-search-page.v3"
           ? {
               candidateCount: edgeResult.data.candidateCount,
               datasetCount: edgeResult.data.datasetCount,

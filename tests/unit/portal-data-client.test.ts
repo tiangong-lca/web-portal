@@ -30,6 +30,10 @@ const environment = {
   supabaseUrl: "https://project.supabase.co",
   publishableKey: "sb_publishable_abcdefghijklmnopqrstuvwxyz",
   timeoutMilliseconds: 1000,
+  dataBrandScope: {
+    allowedBrandCodes: ["tiangong_lca"] as const,
+    identity: "portal-display-scope.v1:tiangong_lca",
+  },
 };
 
 function clientReturning(response: unknown): PortalRpcClient {
@@ -232,7 +236,7 @@ describe("Portal Supabase public RPC client", () => {
     const client = createPortalRpcClient({ environment, fetchImplementation });
 
     await client.call(
-      "portal_search_processes_v2",
+      "portal_search_processes_v4",
       { p_query: "electricity", p_filters: {}, p_sort: "relevance", p_cursor: null, p_limit: 20 },
       publicSearchPageSchema,
       { mode: "no-store" },
@@ -241,7 +245,7 @@ describe("Portal Supabase public RPC client", () => {
     const [target, init] = fetchImplementation.mock.calls[0]!;
     const headers = new Headers(init?.headers);
     expect(target instanceof URL ? target.href : new Request(target).url).toBe(
-      "https://project.supabase.co/rest/v1/rpc/portal_search_processes_v2",
+      "https://project.supabase.co/rest/v1/rpc/portal_search_processes_v4",
     );
     expect(headers.get("apikey")).toBe(environment.publishableKey);
     expect(headers.get("accept-profile")).toBe("api");
@@ -258,7 +262,7 @@ describe("Portal Supabase public RPC client", () => {
     const client = createPortalRpcClient({ environment, fetchImplementation });
 
     await client.call(
-      "portal_get_dataset_v1",
+      "portal_get_dataset_v2",
       {
         p_kind: "process",
         p_id: fixture.datasetProcess.key.id,
@@ -286,7 +290,7 @@ describe("Portal Supabase public RPC client", () => {
     );
     expect(manifestLogger).toHaveBeenCalledWith(
       expect.objectContaining({
-        rpcName: "portal_sitemap_manifest_v1",
+        rpcName: "portal_sitemap_manifest_v2",
         rowCount: 64,
       }),
     );
@@ -313,7 +317,7 @@ describe("Portal Supabase public RPC client", () => {
     expect(logger).toHaveBeenCalledWith(
       expect.objectContaining({
         routeFamily: "sitemap",
-        rpcName: "portal_sitemap_shard_v1",
+        rpcName: "portal_sitemap_shard_v2",
         rowCount: 4096,
       }),
     );
@@ -327,7 +331,7 @@ describe("Portal Supabase public RPC client", () => {
     });
     await expect(
       oversizedClient.call(
-        "portal_sitemap_shard_v1",
+        "portal_sitemap_shard_v2",
         { p_shard_cursor: fixture.sitemapShard.shardCursor },
         publicSitemapShardSchema,
         { mode: "no-store" },
@@ -356,7 +360,7 @@ describe("Portal Supabase public RPC client", () => {
     });
     await expect(
       chunkedClient.call(
-        "portal_sitemap_shard_v1",
+        "portal_sitemap_shard_v2",
         { p_shard_cursor: fixture.sitemapShard.shardCursor },
         publicSitemapShardSchema,
         { mode: "no-store" },
@@ -387,7 +391,7 @@ describe("Portal Supabase public RPC client", () => {
     );
 
     expect(calls[0]).toEqual([
-      "portal_search_processes_v2",
+      "portal_search_processes_v4",
       {
         p_query: "electricity",
         p_filters: { geography: "cn" },
@@ -553,14 +557,14 @@ describe("Portal Supabase public RPC client", () => {
       policy: unknown;
     }> = [];
     const responseByName: Record<string, unknown> = {
-      portal_catalog_summary_v1: fixture.catalogSummary,
-      portal_get_dataset_v1: fixture.datasetProcess,
-      portal_list_versions_v1: fixture.versions,
-      portal_list_process_exchanges_v1: fixture.exchanges,
-      portal_facets_v2: fixture.facets,
-      portal_sitemap_entries_v1: fixture.sitemap,
-      portal_sitemap_manifest_v1: fixture.sitemapManifest,
-      portal_sitemap_shard_v1: fixture.sitemapShard,
+      portal_catalog_summary_v2: fixture.catalogSummary,
+      portal_get_dataset_v2: fixture.datasetProcess,
+      portal_list_versions_v2: fixture.versions,
+      portal_list_process_exchanges_v2: fixture.exchanges,
+      portal_facets_v4: fixture.facets,
+      portal_sitemap_entries_v2: fixture.sitemap,
+      portal_sitemap_manifest_v2: fixture.sitemapManifest,
+      portal_sitemap_shard_v2: fixture.sitemapShard,
     };
     const client: PortalRpcClient = {
       async call<T>(...callArguments: Parameters<PortalRpcClient["call"]>): Promise<T> {
@@ -588,14 +592,14 @@ describe("Portal Supabase public RPC client", () => {
     await getPublicSitemapShard({ shardCursor: manifest.shards[0]!.shardCursor }, client);
 
     expect(calls.map(({ name }) => name)).toEqual([
-      "portal_catalog_summary_v1",
-      "portal_get_dataset_v1",
-      "portal_list_versions_v1",
-      "portal_list_process_exchanges_v1",
-      "portal_facets_v2",
-      "portal_sitemap_entries_v1",
-      "portal_sitemap_manifest_v1",
-      "portal_sitemap_shard_v1",
+      "portal_catalog_summary_v2",
+      "portal_get_dataset_v2",
+      "portal_list_versions_v2",
+      "portal_list_process_exchanges_v2",
+      "portal_facets_v4",
+      "portal_sitemap_entries_v2",
+      "portal_sitemap_manifest_v2",
+      "portal_sitemap_shard_v2",
     ]);
     expect(calls.map(({ policy }) => policy)).toEqual([
       expect.objectContaining({ mode: "revalidate", seconds: 300 }),
@@ -627,7 +631,7 @@ describe("Portal Supabase public RPC client", () => {
 
     await expect(
       client.call(
-        "portal_search_processes_v2",
+        "portal_search_processes_v4",
         { p_query: "electricity" },
         publicSearchPageSchema,
         { mode: "no-store" },
@@ -635,7 +639,7 @@ describe("Portal Supabase public RPC client", () => {
     ).rejects.toMatchObject({ code: "invalid_response" });
     await expect(
       client.call(
-        "portal_search_processes_v2",
+        "portal_search_processes_v4",
         { p_query: "electricity" },
         publicSearchPageSchema,
         { mode: "no-store" },
@@ -646,6 +650,7 @@ describe("Portal Supabase public RPC client", () => {
   it("accepts only modern publishable keys in the public credential slot", () => {
     expect(
       readPortalDataEnvironment({
+        PORTAL_DATA_BRANDS: "tiangong_lca",
         SUPABASE_URL: environment.supabaseUrl,
         SUPABASE_PUBLISHABLE_KEY: environment.publishableKey,
       }).publishableKey,
@@ -667,10 +672,44 @@ describe("Portal Supabase public RPC client", () => {
     ]) {
       expect(() =>
         readPortalDataEnvironment({
+          PORTAL_DATA_BRANDS: "tiangong_lca",
           SUPABASE_URL: environment.supabaseUrl,
           SUPABASE_PUBLISHABLE_KEY: forbidden,
         }),
       ).toThrow("Only Supabase publishable keys are allowed");
     }
+  });
+});
+
+describe("deployment data scope", () => {
+  it("binds the outgoing RPC bytes to the server scope despite caller-supplied authority", async () => {
+    const bodies: string[] = [];
+    const fetchImplementation = vi.fn<typeof fetch>(async (_url, init) => {
+      bodies.push(init?.body as string);
+      return Response.json(fixture.search);
+    });
+    for (const code of ["tiangong_lca", "bafu"] as const) {
+      const client = createPortalRpcClient({
+        environment: {
+          ...environment,
+          dataBrandScope: {
+            allowedBrandCodes: [code],
+            identity: `portal-display-scope.v1:${code}`,
+          },
+        },
+        fetchImplementation,
+        logger: () => {},
+      });
+      await client.call(
+        "portal_search_processes_v4",
+        { p_query: "", p_allowed_brands: ["worldsteel"] },
+        publicSearchPageSchema,
+        { mode: "no-store" },
+      );
+    }
+    expect(bodies.map((body) => JSON.parse(body).p_allowed_brands)).toEqual([
+      ["tiangong_lca"],
+      ["bafu"],
+    ]);
   });
 });

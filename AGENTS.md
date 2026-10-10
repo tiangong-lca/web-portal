@@ -16,9 +16,9 @@ checkPaths:
   - docs/development.md
   - docs/ui-system.md
   - .docpact/config.yaml
-lastReviewedAt: 2026-10-08
-lastReviewedCommit: 844c42328dd6aa7064419f181de5f82fee879161
-lastReviewedNote: "Reviewed Portal #132 at 844c423: independent Atlas presentation preserves shared routes, public DTOs, business operations and CSP/ISR. Local dual-brand browser/component validation is recorded in #132; hosted Atlas deployment and exact workspace integration remain separate."
+lastReviewedAt: 2026-10-10
+lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
+lastReviewedNote: "Portal #139: reviewed server-owned deployment scope, versioned read and signing chain, brand UI and dependency link restrictions; hosted cache switch remains a release gate."
 related:
   - docs/development.md
   - docs/ui-system.md

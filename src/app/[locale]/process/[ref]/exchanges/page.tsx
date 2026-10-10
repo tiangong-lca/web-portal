@@ -10,7 +10,7 @@ import { detailSubpageDescription } from "@/features/catalog/detail-metadata";
 import { resolvePublicDataset } from "@/features/catalog/resolve-public-dataset";
 import { isPortalLocale, localePath } from "@/i18n/routing";
 import { absolutePortalUrl, localizedMetadata } from "@/lib/seo";
-import { listPublicProcessExchanges } from "@/server/data/catalog";
+import { listPublicProcessExchanges, getPublicFlowLinkEligibility } from "@/server/data/catalog";
 
 export async function generateMetadata({
   params,
@@ -65,8 +65,13 @@ export default async function ProcessExchangesPage({
         processVersion: dataset.key.version,
       })
     : null;
+  const linkableFlowRefs = page
+    ? await getPublicFlowLinkEligibility(
+        page.rows.map((row) => ({ id: row.flow.id, version: row.flow.version })),
+      )
+    : new Set<string>();
   const rows = page
-    ? mapExchangePage(page, locale, `${dataset.key.id}@${dataset.key.version}`)
+    ? mapExchangePage(page, locale, `${dataset.key.id}@${dataset.key.version}`, linkableFlowRefs)
     : [];
   const [t, common] = await Promise.all([
     getTranslations({ locale, namespace: "Detail" }),

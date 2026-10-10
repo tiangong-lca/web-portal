@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-08
-lastReviewedCommit: 3fc0d0be4989f07e4d1074d957b55b3d7ef63a2d
+lastReviewedAt: 2026-10-10
+lastReviewedCommit: e4410a69c7db32921c4d4e103489091990603d1e
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Reviewed Portal #137: neutral entry negotiates manual preference, browser language and English with no-store redirects; explicit language URLs and localized CSP/ISR stay unchanged. Manual same-value menu selections persist without navigation; dismissal does not persist. Local tests do not claim hosted qualification."
+lastReviewedNote: "Portal #139: reviewed server-owned deployment scope, versioned read and signing chain, brand UI and dependency link restrictions; hosted cache switch remains a release gate."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -66,6 +66,16 @@ Use the same exact source commit for paired brand releases, with separate public
 Storybook's site toolbar injects presentation identity and matching brand tokens. `Brand/Atlas` includes four locales, desktop/mobile, dark theme, unavailable counts and catalog-selection scenarios. Synthetic counts are only story fixtures. The production home uses the shared navigation DTO; missing counts are explicitly unavailable.
 
 `PORTAL_BRAND=atlas pnpm test:e2e -- tests/e2e/site-presentation.spec.ts` builds against the existing loopback fixture and checks identity, route/metadata parity, light/dark mobile/desktop accessibility, exact-version detail, citations and no-JavaScript reading. CI retains the full TianGong suite and adds the Atlas presentation suite plus existing shared functional flows. Local browser evidence does not prove a hosted Atlas release. A new domain/deployment is a separate operational scope.
+
+## Deployment data scope (Portal #139)
+
+`src/config/data-brands.ts` defines the shared build/runtime parser for the server-owned `PORTAL_DATA_BRANDS` setting. It rejects missing, empty, unknown, wildcard and empty-token inputs; trims, deduplicates and sorts valid codes; and returns an immutable, versioned scope identity. The build/runtime comparison rejects a changed scope. `PORTAL_BRAND` continues to select presentation only.
+
+The contract manifest pins the exact Database source commit. Every active catalog, facet, navigation, detail, version, exchange, summary and sitemap call uses the new scoped RPC. The central client overwrites any supplied authority with the validated server scope before request serialization and cache-key construction. Hybrid V3 and LCIA V2 similarly inject scope before final serialization and HMAC signing. Browser request schemas reject deployment-scope fields; only an optional known brand filter narrows results. There is no old-RPC fallback.
+
+Set `PORTAL_DATA_BRANDS=tiangong_lca` explicitly for a single-brand build, or a comma-separated subset of `tiangong_lca,bafu,uslci,worldsteel` for a multi-brand build. This variable is required for development, CI, Storybook and deployment; `.env.example` is an example, not a runtime default. Build identity includes the canonical set. Instrumentation rejects runtime/build drift before serving, and server adapters repeat that check. Never reuse `.next`, ISR or CDN objects across scope changes. Deploy a fresh build, stop old-instance traffic and invalidate old HTML/data/sitemap caches before exposing the new deployment.
+
+Database display mode must be qualified and activated separately. A scoped reader refusal stays unavailable. Single-brand pages hide the redundant brand control; multi-brand pages offer only allowed brands. Every version/card/detail carries its independent data brand, preserving existing source attribution. Exchange support may cross brand boundaries, but batch exact Flow-link eligibility emits links only for standalone in-scope Flows. No Platform synchronization is added.
 
 ## Choose local checks
 

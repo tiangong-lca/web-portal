@@ -576,8 +576,8 @@
 .atlas-record-selection label:has(:checked) {
   color: var(--foreground);
 }
-.atlas-record-toolbar .catalog-result-actions {
-  flex-direction: row;
+.atlas-record-toolbar .catalog-result-tools {
+  flex-direction: column;
   align-items: center;
   margin-left: auto;
   flex-shrink: 0;

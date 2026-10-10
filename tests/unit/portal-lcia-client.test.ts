@@ -14,6 +14,10 @@ const environment = {
   supabaseUrl: "https://project.supabase.co",
   publishableKey: "sb_publishable_abcdefghijklmnopqrstuvwxyz",
   timeoutMilliseconds: 1000,
+  dataBrandScope: {
+    allowedBrandCodes: ["tiangong_lca"] as const,
+    identity: "portal-display-scope.v1:tiangong_lca",
+  },
   edgeOrigin: "https://project.supabase.co",
   edgeTimeoutMilliseconds: 1000,
   keyId: hmacFixture.keyId,
@@ -53,7 +57,13 @@ describe("Portal signed LCIA client", () => {
     expect(target instanceof URL ? target.href : new Request(target).url).toBe(
       `https://project.supabase.co${portalDataProductFunctionPath}`,
     );
-    expect(new TextDecoder().decode(init?.body as ArrayBuffer)).toBe(rawText);
+    expect(new TextDecoder().decode(init?.body as ArrayBuffer)).toBe(
+      JSON.stringify({
+        ...input,
+        schemaVersion: "portal.published-lcia-request.v2",
+        allowedBrandCodes: ["tiangong_lca"],
+      }),
+    );
     expect(headers.get("apikey")).toBe(environment.publishableKey);
     expect(headers.get("x-portal-key-id")).toBe(environment.keyId);
     expect(headers.get("x-portal-body-sha256")).toMatch(/^[A-Za-z0-9_-]{43}$/u);
@@ -132,6 +142,7 @@ describe("Portal signed LCIA client", () => {
   it("validates the complete LCIA signer environment", () => {
     expect(() =>
       readPortalLciaEnvironment({
+        PORTAL_DATA_BRANDS: "tiangong_lca",
         SUPABASE_URL: environment.supabaseUrl,
         SUPABASE_PUBLISHABLE_KEY: environment.publishableKey,
         PORTAL_EDGE_KEY_ID: environment.keyId,
@@ -141,6 +152,7 @@ describe("Portal signed LCIA client", () => {
 
     expect(() =>
       readPortalLciaEnvironment({
+        PORTAL_DATA_BRANDS: "tiangong_lca",
         SUPABASE_URL: environment.supabaseUrl,
         SUPABASE_PUBLISHABLE_KEY: environment.publishableKey,
         PORTAL_EDGE_KEY_ID: "_preview",

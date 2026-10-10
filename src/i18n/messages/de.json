@@ -58,7 +58,9 @@
     "docsResource": "TianGong LCA: Dokumentation",
     "tidasResource": "TIDAS-Datensystem",
     "pcrResource": "Produktkategorieregeln (Englisch)",
-    "lcdnResource": "ILCD-Datenbereitstellung (Englisch)"
+    "lcdnResource": "ILCD-Datenbereitstellung (Englisch)",
+    "dataBrand": "Datenbankmarke",
+    "allDataBrands": "Verfügbare Datenbanken"
   },
   "Home": {
     "eyebrow": "TianGong LCA Datenportal",
@@ -143,7 +145,8 @@
     "processSubtype": "Prozesstyp",
     "classification": "Klassifikation",
     "countsDescription": "Die Zahlen umfassen passende öffentliche Datensatzversionen.",
-    "noScriptCompare": "Wählen Sie 2–4 Prozessversionen zum Vergleich."
+    "noScriptCompare": "Wählen Sie 2–4 Prozessversionen zum Vergleich.",
+    "dataBrand": "Datenbankmarke"
   },
   "Hybrid": {
     "title": "Benötigte Daten beschreiben",
@@ -313,7 +316,8 @@
     "dataGenerator": "Datenersteller",
     "dataOwner": "Datensatzeigentümer",
     "licenseType": "Angegebener Lizenztyp",
-    "accessRestrictions": "Zugangs- und Nutzungsbeschränkungen"
+    "accessRestrictions": "Zugangs- und Nutzungsbeschränkungen",
+    "dataBrand": "Datenbankmarke"
   },
   "Compare": {
     "title": "Prozessdatensätze vergleichen",

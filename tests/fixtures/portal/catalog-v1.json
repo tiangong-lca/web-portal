@@ -1,6 +1,6 @@
 {
   "datasetProcess": {
-    "schemaVersion": "portal.public-dataset.v1",
+    "schemaVersion": "portal.public-dataset.v2",
     "key": {
       "kind": "process",
       "id": "11111111-1111-1111-1111-111111111111",
@@ -18,36 +18,71 @@
     },
     "metadata": {
       "kind": "process",
-      "names": [{ "language": "en", "value": "Electricity, medium voltage" }],
+      "names": [
+        {
+          "language": "en",
+          "value": "Electricity, medium voltage"
+        }
+      ],
       "generalComment": [
         {
           "language": "en",
           "value": "Public portal fixture process describing medium-voltage electricity supply from the TianGong LCA reference data set."
         }
       ],
-      "referenceProduct": [{ "language": "en", "value": "Electricity" }],
+      "referenceProduct": [
+        {
+          "language": "en",
+          "value": "Electricity"
+        }
+      ],
       "functionalUnit": {
         "amount": "1",
         "unit": "kWh",
-        "description": [{ "language": "en", "value": "1 kWh electricity" }]
+        "description": [
+          {
+            "language": "en",
+            "value": "1 kWh electricity"
+          }
+        ]
       },
       "classifications": [
         {
           "system": "CPC",
           "code": "17100",
-          "label": [{ "language": "en", "value": "Electrical energy" }]
+          "label": [
+            {
+              "language": "en",
+              "value": "Electrical energy"
+            }
+          ]
         }
       ],
       "geography": {
         "code": "CN",
-        "label": [{ "language": "en", "value": "China" }],
+        "label": [
+          {
+            "language": "en",
+            "value": "China"
+          }
+        ],
         "precision": "country"
       },
       "referenceYear": 2024,
       "validUntilYear": null,
-      "technology": [{ "language": "en", "value": "Grid mix" }],
+      "technology": [
+        {
+          "language": "en",
+          "value": "Grid mix"
+        }
+      ],
       "dataSetType": "Unit process, black box",
-      "allocationAndModeling": [{ "language": "en", "value": "Physical allocation" }],
+      "allocationAndModeling": [
+        {
+          "language": "en",
+          "value": "Physical allocation"
+        }
+      ],
       "cutoffRules": [],
       "quality": {
         "reviewStatus": "reviewed",
@@ -61,13 +96,22 @@
         "databaseId": "tg",
         "databaseVersion": "2026.1",
         "sourceRecordId": "source-1",
-        "providerName": [{ "language": "en", "value": "TianGong" }],
+        "providerName": [
+          {
+            "language": "en",
+            "value": "TianGong"
+          }
+        ],
         "licenseId": "CC-BY-4.0",
         "licenseUrl": "https://example.com/license"
       },
       "compliance": [
         {
-          "system": { "id": null, "version": null, "name": [] },
+          "system": {
+            "id": null,
+            "version": null,
+            "name": []
+          },
           "overall": null,
           "nomenclature": null,
           "methodological": null,
@@ -79,10 +123,26 @@
       "administration": {
         "workflowStatus": "published",
         "copyright": false,
-        "owner": { "id": null, "version": null, "name": [] },
-        "commissioner": { "id": null, "version": null, "name": [] },
-        "dataGenerator": { "id": null, "version": null, "name": [] },
-        "dataEntryBy": { "id": null, "version": null, "name": [] },
+        "owner": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
+        "commissioner": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
+        "dataGenerator": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
+        "dataEntryBy": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
         "project": [],
         "intendedApplications": [],
         "accessRestrictions": [],
@@ -90,7 +150,11 @@
         "registrationNumber": null,
         "lastRevisionAt": "2026-08-25T12:00:00.000000Z",
         "permanentDataSetUri": "https://example.com/datasets/process-1",
-        "precedingVersion": { "id": null, "version": null, "name": [] }
+        "precedingVersion": {
+          "id": null,
+          "version": null,
+          "name": []
+        }
       }
     },
     "provenance": {
@@ -112,12 +176,21 @@
       "packageId": "55555555-5555-5555-5555-555555555555",
       "packageVersion": "release-2026.1",
       "publishedAt": "2026-08-25T12:00:00.000000Z",
-      "lciaMethods": [{ "id": "33333333-3333-3333-3333-333333333333", "version": "01.00.000" }]
+      "lciaMethods": [
+        {
+          "id": "33333333-3333-3333-3333-333333333333",
+          "version": "01.00.000"
+        }
+      ]
     },
-    "modifiedAt": "2026-08-25T12:00:00.000000Z"
+    "modifiedAt": "2026-08-25T12:00:00.000000Z",
+    "brand": {
+      "code": "tiangong_lca",
+      "name": "Tiangong LCA"
+    }
   },
   "datasetFlow": {
-    "schemaVersion": "portal.public-dataset.v1",
+    "schemaVersion": "portal.public-dataset.v2",
     "key": {
       "kind": "flow",
       "id": "22222222-2222-2222-2222-222222222222",
@@ -135,17 +208,35 @@
     },
     "metadata": {
       "kind": "flow",
-      "names": [{ "language": "en", "value": "Carbon dioxide" }],
-      "synonyms": [{ "language": "en", "value": "CO2" }],
+      "names": [
+        {
+          "language": "en",
+          "value": "Carbon dioxide"
+        }
+      ],
+      "synonyms": [
+        {
+          "language": "en",
+          "value": "CO2"
+        }
+      ],
       "generalComment": [],
       "casNumber": "124-38-9",
       "flowType": "elementary",
       "classifications": [],
-      "locationOfSupply": { "code": null, "label": [] },
+      "locationOfSupply": {
+        "code": null,
+        "label": []
+      },
       "referenceFlowProperty": {
         "id": "66666666-6666-6666-6666-666666666666",
         "version": "01.00.000",
-        "name": [{ "language": "en", "value": "Mass" }]
+        "name": [
+          {
+            "language": "en",
+            "value": "Mass"
+          }
+        ]
       },
       "source": {
         "databaseId": null,
@@ -159,10 +250,26 @@
       "administration": {
         "workflowStatus": null,
         "copyright": null,
-        "owner": { "id": null, "version": null, "name": [] },
-        "commissioner": { "id": null, "version": null, "name": [] },
-        "dataGenerator": { "id": null, "version": null, "name": [] },
-        "dataEntryBy": { "id": null, "version": null, "name": [] },
+        "owner": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
+        "commissioner": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
+        "dataGenerator": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
+        "dataEntryBy": {
+          "id": null,
+          "version": null,
+          "name": []
+        },
         "project": [],
         "intendedApplications": [],
         "accessRestrictions": [],
@@ -170,7 +277,11 @@
         "registrationNumber": null,
         "lastRevisionAt": null,
         "permanentDataSetUri": null,
-        "precedingVersion": { "id": null, "version": null, "name": [] }
+        "precedingVersion": {
+          "id": null,
+          "version": null,
+          "name": []
+        }
       }
     },
     "provenance": {
@@ -179,10 +290,14 @@
       "fieldOrigins": []
     },
     "publication": null,
-    "modifiedAt": "2026-08-25T12:00:00Z"
+    "modifiedAt": "2026-08-25T12:00:00Z",
+    "brand": {
+      "code": "tiangong_lca",
+      "name": "Tiangong LCA"
+    }
   },
   "search": {
-    "schemaVersion": "portal.public-search-page.v2",
+    "schemaVersion": "portal.public-search-page.v3",
     "kind": "process",
     "queryFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "items": [
@@ -202,70 +317,136 @@
           "policyVersion": "portal-capability-policy.v1",
           "reasonCodes": ["state_100_public"]
         },
-        "names": [{ "language": "en", "value": "Electricity, medium voltage" }],
+        "names": [
+          {
+            "language": "en",
+            "value": "Electricity, medium voltage"
+          }
+        ],
         "summary": [],
-        "geography": { "code": "CN", "label": [], "precision": "country" },
+        "geography": {
+          "code": "CN",
+          "label": [],
+          "precision": "country"
+        },
         "referenceYear": 2024,
         "context": {
           "reference": {
             "kind": "reference_product",
-            "name": [{ "language": "en", "value": "Electricity" }]
+            "name": [
+              {
+                "language": "en",
+                "value": "Electricity"
+              }
+            ]
           },
           "functionalUnit": {
             "amount": "1",
             "unit": "kWh",
-            "description": [{ "language": "en", "value": "1 kWh electricity" }]
+            "description": [
+              {
+                "language": "en",
+                "value": "1 kWh electricity"
+              }
+            ]
           },
-          "technology": [{ "language": "en", "value": "Grid mix" }],
+          "technology": [
+            {
+              "language": "en",
+              "value": "Grid mix"
+            }
+          ],
           "source": {
             "databaseId": "tg",
             "databaseVersion": "2026.1",
             "sourceRecordId": "source-1",
-            "providerName": [{ "language": "en", "value": "TianGong" }],
+            "providerName": [
+              {
+                "language": "en",
+                "value": "TianGong"
+              }
+            ],
             "licenseId": "CC-BY-4.0",
             "licenseUrl": "https://example.com/license"
           },
-          "quality": { "reviewStatus": "reviewed" }
+          "quality": {
+            "reviewStatus": "reviewed"
+          }
         },
         "modifiedAt": "2026-08-25T12:00:00Z",
-        "match": { "kind": "lexical", "score": 0.9, "reasonCodes": ["name"] }
+        "match": {
+          "kind": "lexical",
+          "score": 0.9,
+          "reasonCodes": ["name"]
+        },
+        "brand": {
+          "code": "tiangong_lca",
+          "name": "Tiangong LCA"
+        }
       }
     ],
     "nextCursor": "eyJ2IjoxfQ"
   },
   "catalogSummary": {
     "schemaVersion": "portal.public-catalog-summary.v1",
-    "counts": { "process": 2, "flow": 1, "total": 3 },
+    "counts": {
+      "process": 2,
+      "flow": 1,
+      "total": 3
+    },
     "latestModifiedAt": "2026-08-25T12:00:00Z",
     "examples": [
       {
         "queryKind": "uuid",
         "datasetKind": "process",
         "query": "11111111-1111-1111-1111-111111111111",
-        "label": [{ "language": "en", "value": "Electricity, medium voltage" }]
+        "label": [
+          {
+            "language": "en",
+            "value": "Electricity, medium voltage"
+          }
+        ]
       },
       {
         "queryKind": "cas",
         "datasetKind": "flow",
         "query": "124-38-9",
-        "label": [{ "language": "en", "value": "Carbon dioxide" }]
+        "label": [
+          {
+            "language": "en",
+            "value": "Carbon dioxide"
+          }
+        ]
       },
       {
         "queryKind": "classification",
         "datasetKind": "process",
         "query": "17100",
-        "label": [{ "language": "en", "value": "Electrical energy" }]
+        "label": [
+          {
+            "language": "en",
+            "value": "Electrical energy"
+          }
+        ]
       }
     ]
   },
   "exchanges": {
     "schemaVersion": "portal.public-exchange-page.v1",
-    "process": { "id": "11111111-1111-1111-1111-111111111111", "version": "01.00.000" },
+    "process": {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "version": "01.00.000"
+    },
     "processContext": {
       "functionalUnit": {
         "amount": "1",
         "unit": "kWh",
-        "description": [{ "language": "en", "value": "1 kWh electricity" }]
+        "description": [
+          {
+            "language": "en",
+            "value": "1 kWh electricity"
+          }
+        ]
       },
       "capabilityPolicyVersion": "portal-capability-policy.v1"
     },
@@ -277,30 +458,49 @@
         "flow": {
           "id": "22222222-2222-2222-2222-222222222222",
           "version": "01.00.000",
-          "name": [{ "language": "en", "value": "Carbon dioxide" }]
+          "name": [
+            {
+              "language": "en",
+              "value": "Carbon dioxide"
+            }
+          ]
         },
         "classification": null,
         "amount": "1.25",
         "unit": "kg",
         "isQuantitativeReference": false,
-        "uncertainty": { "type": "uniform", "minimum": "0.1", "maximum": "2" },
+        "uncertainty": {
+          "type": "uniform",
+          "minimum": "0.1",
+          "maximum": "2"
+        },
         "origin": []
       }
     ],
     "nextCursor": null
   },
   "facets": {
-    "schemaVersion": "portal.public-facets.v2",
+    "schemaVersion": "portal.public-facets.v3",
     "kind": "all",
     "queryFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "groups": [
       {
         "id": "kind",
-        "label": [{ "language": "en", "value": "Object type" }],
+        "label": [
+          {
+            "language": "en",
+            "value": "Object type"
+          }
+        ],
         "values": [
           {
             "value": "process",
-            "label": [{ "language": "en", "value": "Process" }],
+            "label": [
+              {
+                "language": "en",
+                "value": "Process"
+              }
+            ],
             "count": 1
           }
         ],
@@ -309,8 +509,11 @@
     ]
   },
   "versions": {
-    "schemaVersion": "portal.public-version-page.v1",
-    "dataset": { "kind": "process", "id": "11111111-1111-1111-1111-111111111111" },
+    "schemaVersion": "portal.public-version-page.v2",
+    "dataset": {
+      "kind": "process",
+      "id": "11111111-1111-1111-1111-111111111111"
+    },
     "items": [
       {
         "key": {
@@ -329,7 +532,11 @@
           "reasonCodes": ["state_100_public"]
         },
         "modifiedAt": "2026-08-25T12:00:00Z",
-        "isLatest": true
+        "isLatest": true,
+        "brand": {
+          "code": "tiangong_lca",
+          "name": "Tiangong LCA"
+        }
       }
     ],
     "nextCursor": null
@@ -351,70 +558,262 @@
   "sitemapManifest": {
     "schemaVersion": "portal.public-sitemap-manifest.v1",
     "shards": [
-      { "shardCursor": "portal-sitemap-v1-00", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-01", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-02", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-03", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-04", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-05", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-06", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-07", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-08", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-09", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-10", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-11", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-12", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-13", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-14", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-15", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-16", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-17", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-18", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-19", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-20", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-21", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-22", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-23", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-24", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-25", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-26", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-27", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-28", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-29", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-30", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-31", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-32", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-33", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-34", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-35", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-36", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-37", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-38", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-39", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-40", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-41", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-42", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-43", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-44", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-45", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-46", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-47", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-48", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-49", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-50", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-51", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-52", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-53", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-54", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-55", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-56", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-57", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-58", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-59", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-60", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-61", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-62", "maxItems": 4096 },
-      { "shardCursor": "portal-sitemap-v1-63", "maxItems": 4096 }
+      {
+        "shardCursor": "portal-sitemap-v1-00",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-01",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-02",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-03",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-04",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-05",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-06",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-07",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-08",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-09",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-10",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-11",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-12",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-13",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-14",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-15",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-16",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-17",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-18",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-19",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-20",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-21",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-22",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-23",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-24",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-25",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-26",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-27",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-28",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-29",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-30",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-31",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-32",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-33",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-34",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-35",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-36",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-37",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-38",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-39",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-40",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-41",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-42",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-43",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-44",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-45",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-46",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-47",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-48",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-49",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-50",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-51",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-52",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-53",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-54",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-55",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-56",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-57",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-58",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-59",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-60",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-61",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-62",
+        "maxItems": 4096
+      },
+      {
+        "shardCursor": "portal-sitemap-v1-63",
+        "maxItems": 4096
+      }
     ]
   },
   "sitemapShard": {
@@ -450,9 +849,17 @@
         "functionalUnit": {
           "amount": "1",
           "unit": "kWh",
-          "description": [{ "language": "en", "value": "1 kWh electricity" }]
+          "description": [
+            {
+              "language": "en",
+              "value": "1 kWh electricity"
+            }
+          ]
         },
-        "geography": { "code": "CN", "precision": "country" },
+        "geography": {
+          "code": "CN",
+          "precision": "country"
+        },
         "referenceYear": 2024,
         "method": {
           "id": "33333333-3333-3333-3333-333333333333",
@@ -460,7 +867,12 @@
         },
         "impact": {
           "id": "climate-change",
-          "name": [{ "language": "en", "value": "Climate change" }]
+          "name": [
+            {
+              "language": "en",
+              "value": "Climate change"
+            }
+          ]
         },
         "value": "12.5",
         "unit": "kg CO2-Eq",

@@ -38,6 +38,7 @@ export async function OverviewPanel({
     [t("classification"), record?.classifications],
   ];
   const evidence = [
+    [t("dataBrand"), record?.brand],
     [t("sourceDatabase"), record?.source],
     ...(record?.dataGenerator ? [[t("dataGenerator"), record.dataGenerator]] : []),
     ...(record?.dataOwner ? [[t("dataOwner"), record.dataOwner]] : []),

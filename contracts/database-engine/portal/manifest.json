@@ -1,8 +1,152 @@
 {
   "schemaVersion": "portal.database-contract-snapshot.v1",
   "sourceRepository": "tiangong-lca/database",
-  "sourceCommit": "7f3c73651b5743bd4ff7da54e4ce0918c1229b63",
+  "sourceCommit": "52da798b64a4762d81e0cd452525a9b271397203",
   "files": [
+    {
+      "path": "portal.public-flow-link-eligibility.v1.schema.json",
+      "sourcePath": "contracts/portal/portal.public-flow-link-eligibility.v1.schema.json",
+      "bytes": 630,
+      "sha256": "f86d0382c426adef6949ee9855cc7c1f3ed5e37437f3c6e4ac785f2126fe71aa"
+    },
+    {
+      "path": "generated/portal.public-flow-link-eligibility.v1.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-flow-link-eligibility.v1.d.ts",
+      "bytes": 631,
+      "sha256": "967cd4d6104a33cee4fde477b3acb78f2749c0356c1f4e8a75e61172e5626846"
+    },
+    {
+      "path": "portal.common-types.v2.schema.json",
+      "sourcePath": "contracts/portal/portal.common-types.v2.schema.json",
+      "bytes": 2293,
+      "sha256": "33b731580487ab54ab0419f333da897d07c5c607559006d9ef66009676da3189"
+    },
+    {
+      "path": "generated/portal.common-types.v2.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.common-types.v2.d.ts",
+      "bytes": 1609,
+      "sha256": "80e0df533e2755a3a8aafa737a284f114ae8fe9494e095e7efa6e51068ac8fe2"
+    },
+    {
+      "path": "portal.hybrid-database-input.v3.schema.json",
+      "sourcePath": "contracts/portal/portal.hybrid-database-input.v3.schema.json",
+      "bytes": 3849,
+      "sha256": "56c51ec717bbc28b79b208b29a72b7572e645d2be0a1993cbd394ab4b4da5883"
+    },
+    {
+      "path": "generated/portal.hybrid-database-input.v3.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.hybrid-database-input.v3.d.ts",
+      "bytes": 2398,
+      "sha256": "aac68efbd832d835ea7a6761d535715f0c27c8d7943240ce52ba63fea9c2a5d7"
+    },
+    {
+      "path": "portal.public-dataset.v2.schema.json",
+      "sourcePath": "contracts/portal/portal.public-dataset.v2.schema.json",
+      "bytes": 9244,
+      "sha256": "3f11fad233d7e28cbe051a88fb8c99765044fdbbc475cffdaa9202d528dee41b"
+    },
+    {
+      "path": "generated/portal.public-dataset.v2.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-dataset.v2.d.ts",
+      "bytes": 9729,
+      "sha256": "88f1165c8331ff4706df74026423af31bbd2c3c5101968bd570f53574ebf5fbf"
+    },
+    {
+      "path": "portal.public-facet-input.v4.schema.json",
+      "sourcePath": "contracts/portal/portal.public-facet-input.v4.schema.json",
+      "bytes": 1023,
+      "sha256": "6e84a3b314e5fe33f78204f98ef9cec8ca28ab2f06532bb034ed98a847b74f9d"
+    },
+    {
+      "path": "generated/portal.public-facet-input.v4.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-facet-input.v4.d.ts",
+      "bytes": 1929,
+      "sha256": "7e34d9861b393af6cdd13ba5637fab0938590dcf4f31cd8a2ba4c398f3b1127c"
+    },
+    {
+      "path": "portal.public-facets.v3.schema.json",
+      "sourcePath": "contracts/portal/portal.public-facets.v3.schema.json",
+      "bytes": 2469,
+      "sha256": "05f4d0d857a8fac925b4f96ec47250770ae60b3ea901f2af02387b146af08a16"
+    },
+    {
+      "path": "generated/portal.public-facets.v3.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-facets.v3.d.ts",
+      "bytes": 1629,
+      "sha256": "344b78f2850af774c4ee81afb54e7d4a0cd4dd93d5c28e862dd08a5c778f9fc4"
+    },
+    {
+      "path": "portal.public-hybrid-candidate-page.v3.schema.json",
+      "sourcePath": "contracts/portal/portal.public-hybrid-candidate-page.v3.schema.json",
+      "bytes": 11059,
+      "sha256": "71a3b3268ac29da7448d9186710b38b65a02e138926f378857d29abb3f9f87de"
+    },
+    {
+      "path": "generated/portal.public-hybrid-candidate-page.v3.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-hybrid-candidate-page.v3.d.ts",
+      "bytes": 7368,
+      "sha256": "b47daac70687b28a2acb6e3dcf51b0b07c04d068f27b5126b9e4ce614c660607"
+    },
+    {
+      "path": "portal.public-navigation-input.v2.schema.json",
+      "sourcePath": "contracts/portal/portal.public-navigation-input.v2.schema.json",
+      "bytes": 1585,
+      "sha256": "40ff8b4a92ca6b82dd31f1a9f4e56c3bdd4c85fc586ea1806e7f15246b8612b3"
+    },
+    {
+      "path": "generated/portal.public-navigation-input.v2.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-navigation-input.v2.d.ts",
+      "bytes": 2153,
+      "sha256": "3db0ec984306b9308c4a90b0090a7ae5bbd750ada0e0032614911417236ff585"
+    },
+    {
+      "path": "portal.public-navigation.v2.schema.json",
+      "sourcePath": "contracts/portal/portal.public-navigation.v2.schema.json",
+      "bytes": 12771,
+      "sha256": "9a9b1417f98083aaab7777f2759e30f66809af332b1b2668c61205611bc9e220"
+    },
+    {
+      "path": "generated/portal.public-navigation.v2.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-navigation.v2.d.ts",
+      "bytes": 8479,
+      "sha256": "428567ba7d6e0e74ceb55da5aa433b0fd678a5ce9f253d0b84f38cc489cb5472"
+    },
+    {
+      "path": "portal.public-search-input.v4.schema.json",
+      "sourcePath": "contracts/portal/portal.public-search-input.v4.schema.json",
+      "bytes": 3283,
+      "sha256": "35231358879faabcc0ba122d2f6c36e4ff5ebbce6005ec15181fc233c1904235"
+    },
+    {
+      "path": "generated/portal.public-search-input.v4.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-search-input.v4.d.ts",
+      "bytes": 2231,
+      "sha256": "116bb3e731c34c4868f5ec1bbb896a1513c60fcd881ab7ef0667cff42a510905"
+    },
+    {
+      "path": "portal.public-search-page.v3.schema.json",
+      "sourcePath": "contracts/portal/portal.public-search-page.v3.schema.json",
+      "bytes": 3588,
+      "sha256": "4aa1ca5275b3b18a6d23043746c44dead76dcc202ee1bf47ec7d368cf9ac20b3"
+    },
+    {
+      "path": "generated/portal.public-search-page.v3.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-search-page.v3.d.ts",
+      "bytes": 4642,
+      "sha256": "2979c4d13fe92515f944a5550e9ce9835182d1e01a01bfe8e802f93459bf58e8"
+    },
+    {
+      "path": "portal.public-version-page.v2.schema.json",
+      "sourcePath": "contracts/portal/portal.public-version-page.v2.schema.json",
+      "bytes": 2000,
+      "sha256": "310423101513548dd6a9d27177e263622a19471fd25fb8109ac126e8b6a27386"
+    },
+    {
+      "path": "generated/portal.public-version-page.v2.d.ts",
+      "sourcePath": "contracts/portal/generated/portal.public-version-page.v2.d.ts",
+      "bytes": 2203,
+      "sha256": "26f596264344065b004bb676058f69b4ebc37e466305b191d2416a1372fcf907"
+    },
     {
       "path": "portal.common-types.v1.schema.json",
       "sourcePath": "contracts/portal/portal.common-types.v1.schema.json",

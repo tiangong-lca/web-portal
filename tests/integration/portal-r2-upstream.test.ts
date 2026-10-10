@@ -45,6 +45,10 @@ function createFixtureHandler() {
     supabaseUrl: fixture.origin,
     publishableKey: environmentFixture.preview.publishableKey,
     timeoutMilliseconds: 2000,
+    dataBrandScope: {
+      allowedBrandCodes: ["tiangong_lca"] as const,
+      identity: "portal-display-scope.v1:tiangong_lca",
+    },
     edgeOrigin: fixture.origin,
     keyId: environmentFixture.preview.keyId,
     secret: environmentFixture.preview.hmacSecret,
@@ -98,7 +102,7 @@ describe("Portal R2 isolated upstream fixture", () => {
   });
 
   it("turns a fixed Edge guard rejection into real lexical results", async () => {
-    const beforeRpc = fixture.receipts.rpcByName.portal_search_processes_v2 ?? 0;
+    const beforeRpc = fixture.receipts.rpcByName.portal_search_processes_v4 ?? 0;
     const response = await createFixtureHandler()(routeRequest("fixture:guard_unavailable"));
     expect(response.status).toBe(200);
     const body = await response.json();
@@ -109,6 +113,6 @@ describe("Portal R2 isolated upstream fixture", () => {
     });
     expect(body.items).toHaveLength(2);
     expect(body.items[0]).toMatchObject({ match: { kind: "lexical" }, context: {} });
-    expect(fixture.receipts.rpcByName.portal_search_processes_v2).toBe(beforeRpc + 1);
+    expect(fixture.receipts.rpcByName.portal_search_processes_v4).toBe(beforeRpc + 1);
   });
 });

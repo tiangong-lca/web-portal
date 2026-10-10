@@ -1,3 +1,5 @@
+import { readPortalServerBrandScope } from "@/server/data/environment";
+import { dataBrandNames } from "@/config/data-brands";
 import { CatalogFacetResults } from "@/features/catalog/catalog-facet-results";
 import { CatalogKindSwitch } from "@/features/catalog/catalog-kind-switch";
 import { CatalogPagination } from "@/features/catalog/catalog-pagination";
@@ -341,6 +343,11 @@ export default async function SearchPage({
       label: t("processSubtype"),
       value: localizeProcessSubtype(parsedSearch.filters.processSubtype, locale),
     },
+    {
+      keys: ["brand"],
+      label: t("dataBrand"),
+      value: parsedSearch.filters.brand ? dataBrandNames[parsedSearch.filters.brand] : undefined,
+    },
     { keys: ["source"], label: t("source"), value: parsedSearch.filters.source },
   ].filter((entry): entry is { keys: string[]; label: string; value: string } =>
     Boolean(entry.value),
@@ -353,7 +360,14 @@ export default async function SearchPage({
   const nextPageHref = nextCursor
     ? preserveNavigationPage(nextSearchPageHref(locale, parsedSearch, nextCursor, cursorTrail))
     : null;
-  const facetContent = await FacetsPanel({ locale, parsedSearch, facets, dataUnavailable });
+  const allowedBrandCodes = readPortalServerBrandScope().allowedBrandCodes;
+  const facetContent = await FacetsPanel({
+    locale,
+    parsedSearch,
+    facets,
+    dataUnavailable,
+    allowedBrandCodes,
+  });
 
   return (
     <main
@@ -671,6 +685,7 @@ export default async function SearchPage({
             }
             description={
               <HybridSearchPanel
+                allowedBrandCodes={allowedBrandCodes}
                 key={JSON.stringify({ kind: parsedSearch.kind, filters: parsedSearch.filters })}
                 initialFilters={parsedSearch.filters}
                 initialKind={parsedSearch.kind}

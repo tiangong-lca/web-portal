@@ -128,7 +128,7 @@ export const MatchingRegions: Story = {
         limit: 10,
       }}
       facets={{
-        schemaVersion: "portal.public-facets.v2",
+        schemaVersion: "portal.public-facets.v3",
         kind: "all",
         queryFingerprint: "0".repeat(64),
         groups: [

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { HistoryIcon } from "lucide-react";
 import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 
@@ -25,6 +26,7 @@ export function VersionsPanel({
   labels: { view: string; current: string };
   locale: PortalLocale;
 }) {
+  const t = useTranslations("Common");
   if (rows.length === 0) {
     return <DetailEmpty description={emptyDescription} icon={HistoryIcon} title={emptyTitle} />;
   }
@@ -36,6 +38,11 @@ export function VersionsPanel({
           <Card size="sm">
             <CardHeader>
               <CardTitle>{row.version}</CardTitle>
+              {row.brand && (
+                <Badge variant="outline" aria-label={t("dataBrand")}>
+                  {row.brand}
+                </Badge>
+              )}
               <CardDescription>
                 {row.summary}
                 {row.modifiedAt ? (

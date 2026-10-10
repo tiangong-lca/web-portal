@@ -73,7 +73,7 @@ const rawNode = (id: string, parentNodeId: string | null = null) => ({
 });
 function rawPage(parentNodeId: string | null): PublicNavigation {
   return {
-    schemaVersion: "portal.public-navigation.v1",
+    schemaVersion: "portal.public-navigation.v2",
     countBasis: "public_versions",
     kind: "process",
     dimension: "classification",

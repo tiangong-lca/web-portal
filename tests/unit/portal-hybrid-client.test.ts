@@ -29,6 +29,10 @@ const environment = {
   supabaseUrl: "https://project.supabase.co",
   publishableKey: environmentFixture.preview.publishableKey,
   timeoutMilliseconds: 2000,
+  dataBrandScope: {
+    allowedBrandCodes: ["tiangong_lca"] as const,
+    identity: "portal-display-scope.v1:tiangong_lca",
+  },
   edgeOrigin: "https://project.supabase.co",
   keyId: environmentFixture.preview.keyId,
   secret: environmentFixture.preview.hmacSecret,
@@ -140,7 +144,7 @@ describe("Portal Hybrid signed client", () => {
     page.items.push(second);
     page.versionGroups.push({
       key: second.key,
-      matches: [{ key: second.key, match: second.match }],
+      matches: [{ key: second.key, brand: second.brand, match: second.match }],
     });
     page.candidateCount = 3;
     page.datasetCount = 2;
@@ -164,6 +168,7 @@ describe("Portal Hybrid signed client", () => {
 
   it("uses a dedicated bounded Hybrid timeout without widening LCIA", () => {
     const runtimeEnvironment = {
+      PORTAL_DATA_BRANDS: "tiangong_lca",
       SUPABASE_URL: environment.supabaseUrl,
       SUPABASE_PUBLISHABLE_KEY: environment.publishableKey,
       PORTAL_EDGE_ENDPOINT: environment.edgeOrigin,
@@ -197,13 +202,20 @@ describe("Portal Hybrid signed client", () => {
         `https://project.supabase.co${portalHybridFunctionPath}`,
       );
       expect(init?.method).toBe("POST");
-      expect(new TextDecoder().decode(init?.body as ArrayBuffer)).toBe(JSON.stringify(request));
+      expect(new TextDecoder().decode(init?.body as ArrayBuffer)).toBe(
+        JSON.stringify({
+          ...request,
+          schemaVersion: "portal.hybrid-search-request.v3",
+          cursor: null,
+          allowedBrandCodes: ["tiangong_lca"],
+        }),
+      );
       const headers = new Headers(init?.headers);
       expect(headers.get("apikey")).toBe(environment.publishableKey);
       expect(headers.get("x-portal-key-id")).toBe(environment.keyId);
       expect(headers.get("x-portal-signature")).toMatch(/^[A-Za-z0-9_-]{43}$/u);
       expect(headers.get("x-portal-correlation-id")).toBe("aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa");
-      return Response.json(edgePage());
+      return Response.json(hybridVersionPage());
     });
 
     await expect(

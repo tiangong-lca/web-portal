@@ -1,3 +1,4 @@
+import { FeedbackLink as Link } from "@/components/shell/feedback-link";
 import { ArrowDownLeftIcon, ArrowUpRightIcon, ChevronDownIcon, NetworkIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -109,7 +110,15 @@ export function ExchangesPanel({
           <li key={row.id}>
             <Card size="sm">
               <CardHeader>
-                <CardTitle className="[overflow-wrap:anywhere]">{row.flowName}</CardTitle>
+                <CardTitle className="[overflow-wrap:anywhere]">
+                  {row.flowHref ? (
+                    <Link href={row.flowHref} prefetch={false}>
+                      {row.flowName}
+                    </Link>
+                  ) : (
+                    row.flowName
+                  )}
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -162,7 +171,13 @@ export function ExchangesPanel({
                   className="py-3 align-top [overflow-wrap:anywhere] whitespace-normal"
                   scope="row"
                 >
-                  {row.flowName}
+                  {row.flowHref ? (
+                    <Link href={row.flowHref} prefetch={false}>
+                      {row.flowName}
+                    </Link>
+                  ) : (
+                    row.flowName
+                  )}
                 </TableHead>
                 <TableCell className="py-3">
                   <ExchangeDirection row={row} locale={locale} />

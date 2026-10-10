@@ -39,6 +39,7 @@ const yearSchema = z.number().int().min(0).max(9999);
 
 export const portalHybridFiltersSchema = z
   .strictObject({
+    brand: z.enum(["tiangong_lca", "bafu", "uslci", "worldsteel"]).optional(),
     accessLevel: z.enum(["open", "metadata_only"]).optional(),
     geography: filterTextSchema.optional(),
     classification: filterTextSchema.optional(),

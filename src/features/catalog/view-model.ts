@@ -4,6 +4,7 @@ export type AccessLevel = "open" | "metadata_only";
 export type DisplayCapabilities = { exchangesVisible: boolean; lciaVisible: boolean };
 
 export type CatalogVersionMatch = {
+  brand?: string | null;
   ref: string;
   version: string;
   name?: string;
@@ -11,6 +12,7 @@ export type CatalogVersionMatch = {
 };
 
 export type CatalogResultViewModel = {
+  brand?: string | null;
   ref: string;
   kind: CatalogKind;
   name: string;
@@ -51,6 +53,7 @@ export type ExchangeViewModel = {
   id: string;
   processRef: string;
   flowRef: string;
+  flowHref?: string;
   flowName: string;
   direction: "input" | "output";
   kind: "technosphere" | "elementary" | "waste";
@@ -90,6 +93,7 @@ export type LciaViewModel =
   | { status: "temporarily_unavailable" };
 
 export type VersionViewModel = {
+  brand?: string | null;
   href: string;
   ref: string;
   modifiedAt?: string;

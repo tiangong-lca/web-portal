@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { DataBrandFilter } from "@/features/catalog/data-brand-filter";
-import { dataBrandNames } from "@/config/data-brands";
+import { DataBrandFilter } from "../../src/features/catalog/data-brand-filter";
+import { dataBrandNames } from "../../src/config/data-brands";
 import { dictionaries, storyLocale } from "../fixtures";
 
 const meta = {

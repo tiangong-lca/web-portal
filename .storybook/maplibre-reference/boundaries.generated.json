@@ -8,7 +8,7 @@
   "boundsConvention": "[west, south, east, north] in EPSG:4326. A feature box with west > east crosses the antimeridian; a layer box never does. `center` is the box centre with a seam-crossing box unwrapped.",
   "contract": {
     "sourceRepository": "tiangong-lca/database",
-    "sourceCommit": "489402c6d118be4202cef22f9b89266c9229ed76",
+    "sourceCommit": "52da798b64a4762d81e0cd452525a9b271397203",
     "vocabularySha256": "b10774794860ba4282237251907b000758a66a4e22d1e08906ac4855fbb5b30c"
   },
   "sources": [

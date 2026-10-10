@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { dataBrandCodes, dataBrandNames } from "@/config/data-brands";
 type BrandCode = (typeof dataBrandCodes)[number];
+/** @import import { DataBrandFilter } from "@/features/catalog/data-brand-filter"; */
 export function DataBrandFilter({
   allowedBrandCodes,
   value,

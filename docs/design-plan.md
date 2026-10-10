@@ -23,7 +23,7 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-10-10
-lastReviewedCommit: ed8596e8f474bff3b1f737fe1e3d441591371444
+lastReviewedCommit: 7d1564d82b35edb0be08801b57b61370b969c87a
 lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
 related:
   - docs/ui-system.md

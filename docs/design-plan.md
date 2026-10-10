@@ -23,7 +23,7 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-10-10
-lastReviewedCommit: 7d1564d82b35edb0be08801b57b61370b969c87a
+lastReviewedCommit: e4410a69c7db32921c4d4e103489091990603d1e
 lastReviewedNote: "Portal #139: reviewed exact Database contract snapshot, deployment-scope parser and routing; approved display policy is documented, with live cutover still pending."
 related:
   - docs/ui-system.md
@@ -151,7 +151,7 @@ Portal 只能进一步隐藏能力，不能把 `false` 改成 `true`。
 - 许可决定 `accessLevel` 和数值能力，不读取 `state_code` 判断展示。
 - Exchanges、LCIA 或下载只在权威公共投影返回相应 capability 时展示；数值还需完整可见依赖或当前已发布结果。
 - 缺少公开结果显示“未发布或不可提供”，绝不显示为数值 0。
-- 展示品牌与数据来源分别显示；多品牌可筛选，单品牌隐藏冗余控件。更改部署集合必须重新构建，并停止旧实例流量、清除旧 HTML/ISR/CDN/sitemap 缓存。
+- 展示品牌与数据来源分别显示；空品牌不显示标签，搜索结果品牌置于三个操作按钮下方；多品牌筛选默认显示“可选数据库”，单品牌隐藏冗余控件。更改部署集合必须重新构建，并停止旧实例流量、清除旧 HTML/ISR/CDN/sitemap 缓存。
 
 ### 4.2 接入基线
 

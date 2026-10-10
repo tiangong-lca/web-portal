@@ -11,7 +11,7 @@ const meta = {
   args: {
     allowedBrandCodes: ["bafu", "tiangong_lca", "uslci", "worldsteel"],
     label: "Database brand",
-    allLabel: "All available brands",
+    allLabel: "Available databases",
     onChange: () => {},
   },
   render: function Render(args, { globals }) {

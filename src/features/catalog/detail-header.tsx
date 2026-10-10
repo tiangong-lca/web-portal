@@ -56,9 +56,9 @@ export async function DetailHeader({ kind, locale, record, refValue }: DetailHea
             <Badge variant="outline">
               {kind === "process" ? common("process") : common("flow")}
             </Badge>
-            {record && (
+            {record?.brand && (
               <Badge variant="outline" aria-label={common("dataBrand")}>
-                {record.brand ?? common("unassignedBrand")}
+                {record.brand}
               </Badge>
             )}
             <DatasetVersionTag

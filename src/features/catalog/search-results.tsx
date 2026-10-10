@@ -130,9 +130,6 @@ export function SearchResults({
             }
             tags={
               <>
-                <Badge variant="outline" aria-label={brandText("dataBrand")}>
-                  {item.brand ?? brandText("unassignedBrand")}
-                </Badge>
                 {item.ref.includes("@") && (
                   <DatasetVersionTag version={item.ref.split("@")[1]!} label={labels.version} />
                 )}
@@ -163,25 +160,32 @@ export function SearchResults({
               </>
             }
             action={
-              <div className="catalog-result-actions">
-                <CatalogCopyIdentity reference={item.ref} />
-                <CitationCopy
-                  iconOnly
-                  showText={false}
-                  citation={citation}
-                  copiedLabel={labels.copied}
-                  copyLabel={labels.copyCitation}
-                  failureLabel={labels.copyFailure}
-                />
-                <Button asChild variant="ghost" size="icon">
-                  <Link
-                    aria-label={`${labels.collect}: ${item.name}`}
-                    title={labels.collect}
-                    href={`${localePath(locale, "collections")}${buildMemberFragment(item)}`}
-                  >
-                    <BookmarkPlusIcon aria-hidden="true" />
-                  </Link>
-                </Button>
+              <div className="catalog-result-tools">
+                <div className="catalog-result-actions">
+                  <CatalogCopyIdentity reference={item.ref} />
+                  <CitationCopy
+                    iconOnly
+                    showText={false}
+                    citation={citation}
+                    copiedLabel={labels.copied}
+                    copyLabel={labels.copyCitation}
+                    failureLabel={labels.copyFailure}
+                  />
+                  <Button asChild variant="ghost" size="icon">
+                    <Link
+                      aria-label={`${labels.collect}: ${item.name}`}
+                      title={labels.collect}
+                      href={`${localePath(locale, "collections")}${buildMemberFragment(item)}`}
+                    >
+                      <BookmarkPlusIcon aria-hidden="true" />
+                    </Link>
+                  </Button>
+                </div>
+                {item.brand && (
+                  <Badge variant="outline" aria-label={brandText("dataBrand")}>
+                    {item.brand}
+                  </Badge>
+                )}
               </div>
             }
           >
@@ -225,9 +229,11 @@ export function SearchResults({
                             >
                               {version.name ?? `${labels.version} ${version.version}`}
                             </Link>
-                            <Badge variant="outline" aria-label={brandText("dataBrand")}>
-                              {version.brand ?? brandText("unassignedBrand")}
-                            </Badge>
+                            {version.brand && (
+                              <Badge variant="outline" aria-label={brandText("dataBrand")}>
+                                {version.brand}
+                              </Badge>
+                            )}
                             {version.name ? (
                               <span className="text-muted-foreground font-mono text-xs">
                                 {labels.version} {version.version}

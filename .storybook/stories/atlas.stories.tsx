@@ -94,7 +94,10 @@ export const CatalogRecords: Story = {
           <h2 className="sr-only">{dictionaries[locale].Hybrid.resultsTitle}</h2>
           <CompareSelectionProvider locale={locale} labels={selectionLabels(locale)}>
             <SearchResults
-              items={catalogItems(locale)}
+              items={catalogItems(locale).map((item, index) => ({
+                ...item,
+                brand: ["Tiangong LCA", "BAFU", "USLCI"][index]!,
+              }))}
               labels={resultLabels(locale)}
               locale={locale}
               selectable

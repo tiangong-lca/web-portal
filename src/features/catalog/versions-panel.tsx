@@ -38,7 +38,11 @@ export function VersionsPanel({
           <Card size="sm">
             <CardHeader>
               <CardTitle>{row.version}</CardTitle>
-              <Badge variant="outline">{row.brand ?? t("unassignedBrand")}</Badge>
+              {row.brand && (
+                <Badge variant="outline" aria-label={t("dataBrand")}>
+                  {row.brand}
+                </Badge>
+              )}
               <CardDescription>
                 {row.summary}
                 {row.modifiedAt ? (

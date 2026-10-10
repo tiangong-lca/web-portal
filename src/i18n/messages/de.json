@@ -60,8 +60,7 @@
     "pcrResource": "Produktkategorieregeln (Englisch)",
     "lcdnResource": "ILCD-Datenbereitstellung (Englisch)",
     "dataBrand": "Datenbankmarke",
-    "unassignedBrand": "Marke nicht angegeben",
-    "allDataBrands": "Alle verfügbaren Marken"
+    "allDataBrands": "Verfügbare Datenbanken"
   },
   "Home": {
     "eyebrow": "TianGong LCA Datenportal",

@@ -60,8 +60,7 @@
     "pcrResource": "产品类别规则库",
     "lcdnResource": "ILCD 数据分发节点",
     "dataBrand": "数据库品牌",
-    "unassignedBrand": "未标注品牌",
-    "allDataBrands": "全部可用品牌"
+    "allDataBrands": "可选数据库"
   },
   "Home": {
     "eyebrow": "天工 LCA 数据门户",

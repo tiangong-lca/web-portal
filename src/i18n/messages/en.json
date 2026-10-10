@@ -60,8 +60,7 @@
     "pcrResource": "Product category rules",
     "lcdnResource": "ILCD data distribution",
     "dataBrand": "Database brand",
-    "unassignedBrand": "Unassigned brand",
-    "allDataBrands": "All available brands"
+    "allDataBrands": "Available databases"
   },
   "Home": {
     "eyebrow": "TianGong LCA Data Portal",

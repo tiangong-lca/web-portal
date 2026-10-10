@@ -60,8 +60,7 @@
     "pcrResource": "Règles de catégorie de produit (anglais)",
     "lcdnResource": "Distribution de données ILCD (anglais)",
     "dataBrand": "Marque de la base",
-    "unassignedBrand": "Marque non renseignée",
-    "allDataBrands": "Toutes les marques disponibles"
+    "allDataBrands": "Bases de données disponibles"
   },
   "Home": {
     "eyebrow": "Portail de données TianGong LCA",

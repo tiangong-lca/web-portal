@@ -22,7 +22,6 @@ describe("server-owned deployment data brands", () => {
   });
 
   it.each([
-    undefined,
     "",
     " ",
     ",",
@@ -42,13 +41,20 @@ describe("server-owned deployment data brands", () => {
     );
   });
 
-  it("has no default from the visual brand or a browser-prefixed variable", () => {
-    expect(() =>
-      readPortalDataBrandScope({
-        PORTAL_BRAND: "tiangong",
-        NEXT_PUBLIC_PORTAL_DATA_BRANDS: "tiangong_lca",
-      }),
-    ).toThrow("PORTAL_DATA_BRANDS");
+  it("defaults missing configuration to Tiangong independently of presentation and public inputs", () => {
+    const explicit = readPortalDataBrandScope({ PORTAL_DATA_BRANDS: "tiangong_lca" });
+    for (const visual of [undefined, "tiangong", "atlas"]) {
+      const environment = {
+        PORTAL_BRAND: visual,
+        NEXT_PUBLIC_PORTAL_DATA_BRANDS: "bafu,uslci,worldsteel",
+      };
+      expect(readPortalDataBrandScope(environment)).toEqual(explicit);
+      expect(assertPortalDataBrandScopeMatches(explicit.identity, environment)).toEqual(explicit);
+    }
+    const multi = readPortalDataBrandScope({ PORTAL_DATA_BRANDS: "tiangong_lca,bafu" });
+    expect(() => assertPortalDataBrandScopeMatches(multi.identity, {})).toThrow(
+      "rebuild and redeploy",
+    );
   });
 
   it("keeps different deployments distinct and rejects runtime/build drift", () => {

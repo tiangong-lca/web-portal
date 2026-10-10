@@ -17,9 +17,9 @@ export type PortalDataBrandScope = Readonly<{
 export function readPortalDataBrandScope(
   environment: Readonly<Record<string, string | undefined>>,
 ): PortalDataBrandScope {
-  const configured = environment.PORTAL_DATA_BRANDS;
-  if (configured === undefined || configured.length === 0 || configured.length > 1024) {
-    throw new Error("PORTAL_DATA_BRANDS must explicitly select supported data brands.");
+  const configured = environment.PORTAL_DATA_BRANDS ?? "tiangong_lca";
+  if (configured.length === 0 || configured.length > 1024) {
+    throw new Error("PORTAL_DATA_BRANDS must select supported data brands.");
   }
   const tokens = configured.split(",").map((token) => token.trim());
   if (tokens.some((token) => !validCodes.has(token))) {

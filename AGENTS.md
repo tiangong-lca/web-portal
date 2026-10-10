@@ -17,8 +17,8 @@ checkPaths:
   - docs/ui-system.md
   - .docpact/config.yaml
 lastReviewedAt: 2026-10-10
-lastReviewedCommit: 24a39abcf8e830bd5c23288f144d4b4566fc07ff
-lastReviewedNote: "Portal #139: reviewed server-owned deployment scope, versioned read and signing chain, brand UI and dependency link restrictions; hosted cache switch remains a release gate."
+lastReviewedCommit: 38ee06a68db83a346d6e3660afd6e68a74b8c854
+lastReviewedNote: "Portal #141: omitted data-brand configuration defaults to Tiangong LCA; explicit invalid inputs and build/runtime scope drift still fail. Hosted release and CSP/ISR evidence remain independently required."
 related:
   - docs/development.md
   - docs/ui-system.md

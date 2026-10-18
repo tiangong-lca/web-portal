@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-10-19
-lastReviewedCommit: 59a57de4910267769868c38d33a6fb9b8d5280e9
+lastReviewedCommit: a76cf92a11647d865d528b5f63c2e47c36f71804
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -91,6 +91,10 @@ Run the checks that demonstrate the changed behavior before committing or pushin
 | Pages, navigation or feature behavior | Formatting, lint, typecheck, relevant unit/integration tests, `pnpm build`, and the affected production browser specifications. Check all affected dictionaries and responsive states. |
 | Server, DTO or security behavior | Relevant contract and negative-path tests, typecheck, build and the applicable production integration/browser checks. Include `pnpm check:database-contracts` when consuming the generated snapshot. |
 | Dependencies, runtime/build configuration or deployment | Frozen install and affected tooling/build checks. Read the [runtime/deployment plan](design-plan.md#17-edgeone-makers-部署) and [compatibility matrix](r0/compatibility-matrix.md) when the change affects hosted behavior. |
+
+CI and the manual WebGL lane pin setup-node 7.1.0 to its executable commit. The action itself runs on Node 24 and requires runner 2.327.1 or later; the application version still comes only from `.node-version`. Portal installs exact pnpm with the existing Corepack commands after Node setup. The pnpm `packageManager` field does not enable setup-node's automatic npm cache, and no explicit cache or registry authentication input is configured, so its successful post step has no dependency cache to save. The 7.x ESM migration and removal of the dummy registry token do not add credentials or install application dependencies. Recheck the Node binary version control, workflow inputs and cache/post behavior when changing these pins.
+
+The SEO report upload pins upload-artifact 7.0.2. It retains the report name, glob, `always()` condition and warning for missing files. Default archive, hidden-file exclusion, compression, retention and non-overwrite behavior are unchanged. Its artifact client now honors a positive integer `Retry-After` with a 120-second aggregate retry-wait limit; local source controls do not prove a hosted artifact upload. Run the focused `tests/unit/actions-contract.test.ts` gate for workflow/toolchain changes, alongside workflow syntax validation. Hosted CI and release acceptance remain required independently.
 
 `pnpm check` is the aggregate static, unit, build and bundle command when the change warrants that breadth. [CI](../.github/workflows/ci.yml) retains the complete required checks on PRs and `main`, including production browser and Storybook checks. If an expected event produces no run, its manual trigger can run the same complete workflow on the reviewed branch; verify the run's exact head before treating it as evidence. Focused local verification does not waive CI or the [release acceptance requirements](design-plan.md#194-发布门).
 

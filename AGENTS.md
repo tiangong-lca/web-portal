@@ -16,9 +16,9 @@ checkPaths:
   - docs/development.md
   - docs/ui-system.md
   - .docpact/config.yaml
-lastReviewedAt: 2026-10-16
-lastReviewedCommit: 2f77c58eb89ae64ae83a4b7d8520eadb167886bd
-lastReviewedNote: "Portal #159: bounded npm/Actions monitoring reuses unchanged static/browser/components/validate CI; lock-only resolution avoids metadata churn while package, runtime, hooks, UI/generated contracts and hosted release requirements remain intact."
+lastReviewedAt: 2026-10-19
+lastReviewedCommit: 348aa23bd94fd24119d5e14cef57450a71c13241
+lastReviewedNote: "Portal #166: reviewed immutable setup-node 7.1.0 and upload-artifact 7.0.2 inputs, exact Node/pnpm selection, inactive pnpm cache/post behavior, report defaults and focused workflow contract routing; product, provider and delivery boundaries are unchanged."
 related:
   - docs/development.md
   - docs/ui-system.md

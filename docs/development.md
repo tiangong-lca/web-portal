@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #165: exact Storybook10.6.2 private TS6 and Next16.4 provider patch have reproducible local gates; browser captures stay in runner-owned output, while hosted release obligations remain separate."
+lastReviewedNote: "Portal #166: reviewed immutable setup-node 7.1.0 and upload-artifact 7.0.2 inputs, exact Node/pnpm selection, inactive pnpm cache/post behavior, report defaults and focused workflow contract routing; product, provider and delivery boundaries are unchanged."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

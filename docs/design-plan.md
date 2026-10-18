@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-10-13
-lastReviewedCommit: ad37b36f7975973aa623750d51c17c0a416a63ea
-lastReviewedNote: "Portal #157: reviewed the shared search workspace, default icon toggle, current-state/action tooltip, applied-result separation, sharing privacy and native keyword fallback."
+lastReviewedAt: 2026-10-19
+lastReviewedCommit: 59a57de4910267769868c38d33a6fb9b8d5280e9
+lastReviewedNote: "Portal #165: reviewed dependency compatibility and runner-owned screenshots; anonymous public-only access, precision, privacy, CSP/ISR, budgets and exact hosted-release requirements remain intact."
 related:
   - docs/ui-system.md
   - docs/development.md

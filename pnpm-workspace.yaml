@@ -28,7 +28,7 @@ overrides:
   # Keep Next's compatible image runtime, including the fixed librsvg binaries.
   next>sharp: 0.35.5
   # Keep Storybook's environment loader on the same compatible Next maintenance line.
-  vite-plugin-storybook-nextjs>@next/env: 16.3.8
+  vite-plugin-storybook-nextjs>@next/env: 16.4.2
 pnpmfile: scripts/pnpm-hooks.cjs
 minimumReleaseAgeExclude:
   - "@next/env@16.3.8"
@@ -43,3 +43,6 @@ minimumReleaseAgeExclude:
   - skills@1.5.24
   - three@0.186.0
   - "@next/swc-darwin-x64@16.3.8"
+# Keep the isolated Storybook router on Next 16.4's render-tree payload shape.
+patchedDependencies:
+  "@storybook/nextjs-vite@10.6.2": scripts/patches/@storybook__nextjs-vite@10.6.2.patch

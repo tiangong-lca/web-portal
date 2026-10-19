@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-16
-lastReviewedCommit: 2f77c58eb89ae64ae83a4b7d8520eadb167886bd
+lastReviewedAt: 2026-10-19
+lastReviewedCommit: a4d80c367e195970416b1c090c269d3087c86981
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #159: bounded npm/Actions monitoring reuses unchanged static/browser/components/validate CI; lock-only resolution avoids metadata churn while package, runtime, hooks, UI/generated contracts and hosted release requirements remain intact."
+lastReviewedNote: "Portal #166: reviewed the one-character optional capture access at a4d80c3 after actual hosted TS18048. Missing captures still fail exact assertions; all four Actions contracts and local Node24.19 typecheck pass. Product/graph/policy/workflows and all validation budgets remain unchanged; failed41c hosted results are retained and successor fullCI/artifact proof is required."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -92,6 +92,10 @@ Run the checks that demonstrate the changed behavior before committing or pushin
 | Server, DTO or security behavior | Relevant contract and negative-path tests, typecheck, build and the applicable production integration/browser checks. Include `pnpm check:database-contracts` when consuming the generated snapshot. |
 | Dependencies, runtime/build configuration or deployment | Frozen install and affected tooling/build checks. Read the [runtime/deployment plan](design-plan.md#17-edgeone-makers-部署) and [compatibility matrix](r0/compatibility-matrix.md) when the change affects hosted behavior. |
 
+CI and the manual WebGL lane pin setup-node 7.1.0 to its executable commit. The action itself runs on Node 24 and requires runner 2.327.1 or later; the application version still comes only from `.node-version`. Portal installs exact pnpm with the existing Corepack commands after Node setup. The pnpm `packageManager` field does not enable setup-node's automatic npm cache, and no explicit cache or registry authentication input is configured, so its successful post step has no dependency cache to save. The 7.x ESM migration and removal of the dummy registry token do not add credentials or install application dependencies. Recheck the Node binary version control, workflow inputs and cache/post behavior when changing these pins.
+
+The SEO report upload pins upload-artifact 7.0.2. It retains the report name, glob, `always()` condition and warning for missing files. Default archive, hidden-file exclusion, compression, retention and non-overwrite behavior are unchanged. Its artifact client now honors a positive integer `Retry-After` with a 120-second aggregate retry-wait limit; local source controls do not prove a hosted artifact upload. Run the focused `tests/unit/actions-contract.test.ts` gate for workflow/toolchain changes, alongside workflow syntax validation. Hosted CI and release acceptance remain required independently.
+
 `pnpm check` is the aggregate static, unit, build and bundle command when the change warrants that breadth. [CI](../.github/workflows/ci.yml) retains the complete required checks on PRs and `main`, including production browser and Storybook checks. If an expected event produces no run, its manual trigger can run the same complete workflow on the reviewed branch; verify the run's exact head before treating it as evidence. Focused local verification does not waive CI or the [release acceptance requirements](design-plan.md#194-发布门).
 
 Unit tests rendering shared localized client components must use `NextIntlClientProvider` with the test locale dictionary. Production browser checks open the shortlist add disclosure and filter drawer before interacting with their controls. For constrained local machines, use `--workers=2` for the multi-locale UI suite.
@@ -105,6 +109,14 @@ Portal uses the checked-in UI components and retains the required shadcn Tailwin
 The release audit uses the full dependency graph and fails on high or critical advisories; do not lower this gate or ignore an advisory to publish a feature. Next and `@next/env` stay aligned at the exact compatible stable version in `package.json`. The reviewed security pins retain Undici 8 only in jsdom's Node 24 test graph, patched Sharp within Next's declared range and brace-expansion's current major. The `source-map-js@` empty-range key is pnpm 11 convergence syntax: it pins the reviewed version only where the consumer's declared semver range accepts it. Preserve narrower incompatible edges rather than forcing a new major. Native packages in the upstream lockfile do not qualify macOS Intel as a supported target.
 
 The exact legacy Chinese home aliases use `edge-functions/zh/index.ts` and the single native `/zh/` rewrite. The provider compiles this TypeScript to its Web API edge runtime; the function uses no Node API, environment variable or upstream request. The ordinary Next development server does not execute this provider route. Run its Request/Response unit matrix, typecheck and lint, then build with the installed EdgeOne CLI and generate its routing output. Inspect the emitted exact edge route and rewrite before deployment. Production must verify both aliases without following redirects, with GET/HEAD and ordered, repeated, blank and encoded query values; also verify request-aware root 307/no-store with language cookie and Accept-Language, nested unknown 404 and the unchanged public/private boundary. Only the production matrix proves the rewrite's order relative to the framework's trailing-slash rule.
+
+### Storybook compatibility with the pinned runtime
+
+Keep the complete Storybook tuple aligned. `scripts/pnpm-hooks.cjs` gives only the reviewed renderer and docgen package versions their private TypeScript 6 compiler; the application still uses TypeScript 7. The renderer imports TypeScript's JavaScript compiler API to discover real component imports and props. A version-only TypeScript 7 root export cannot provide that API, so an unmatched renderer version fails the component manifest gate.
+
+The exact `@storybook/nextjs-vite@10.6.2` package uses the tracked pnpm patch in `scripts/patches/`. Next 16.4 reads `LayoutRouterContext.parentRenderTree.data.bfcacheId`, while this Storybook provider supplies the earlier `parentCacheNode` shape. The patch exposes the identical existing mock cache node through `parentRenderTree.data`, preserving the legacy field and router mocks. It supports the isolated hook/redirect boundary exercised by this workspace; it does not emulate a complete Next rendering runtime. The package selector, patch bytes and lockfile hash are exact. A tuple update must review those bindings and rerun the unchanged manifest, interaction and product browser gates. Remove the patch only after a stable upstream provider supplies the current shape and those gates pass without it. Production does not import this Storybook provider.
+
+Production browser screenshots belong to the current Playwright test's `testInfo.outputPath`, or the runner's repository-local `test-results` directory. Keep captures inside the owning checkout so concurrent tasks do not overwrite legacy shared temporary paths. The screenshot destination does not change visual, accessibility, functional or performance assertions.
 
 ## Dependency proposals
 

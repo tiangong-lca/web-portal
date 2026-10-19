@@ -18,7 +18,7 @@ describe("reviewed Actions inputs", () => {
     ];
     expect(setupSteps).toHaveLength(count);
     for (const [, step] of setupSteps) {
-      expect(step.trim()).toBe(
+      expect(step?.trim()).toBe(
         `uses: ${setupNode}\n        with:\n          node-version-file: .node-version`,
       );
     }

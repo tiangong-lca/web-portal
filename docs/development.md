@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-10-19
-lastReviewedCommit: a76cf92a11647d865d528b5f63c2e47c36f71804
+lastReviewedCommit: a4d80c367e195970416b1c090c269d3087c86981
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #166: reviewed immutable setup-node 7.1.0 and upload-artifact 7.0.2 inputs, exact Node/pnpm selection, inactive pnpm cache/post behavior, report defaults and focused workflow contract routing; product, provider and delivery boundaries are unchanged."
+lastReviewedNote: "Portal #166: reviewed the one-character optional capture access at a4d80c3 after actual hosted TS18048. Missing captures still fail exact assertions; all four Actions contracts and local Node24.19 typecheck pass. Product/graph/policy/workflows and all validation budgets remain unchanged; failed41c hosted results are retained and successor fullCI/artifact proof is required."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

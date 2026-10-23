@@ -128,6 +128,18 @@ describe("public functional crawl policy", () => {
 });
 
 describe("canonical and alternate links", () => {
+  it.each([
+    ["zh-CN", "天工 LCA"],
+    ["en", "TianGong LCA"],
+    ["de", "TianGong LCA"],
+    ["fr", "TianGong LCA"],
+  ] as const)(
+    "keeps the %s page title independent of a different-language root template",
+    (locale, brand) => {
+      expect(metadata({ locale }).title).toEqual({ absolute: `Portal SEO fixture · ${brand}` });
+    },
+  );
+
   it("keeps x-default on the same content in the default language", () => {
     const deep = metadata({ locale: "en", path: "browse/flow" });
     const languages = deep.alternates?.languages ?? {};

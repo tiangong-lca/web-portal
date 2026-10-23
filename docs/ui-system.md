@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-13
-lastReviewedCommit: ad37b36f7975973aa623750d51c17c0a416a63ea
+lastReviewedAt: 2026-10-23
+lastReviewedCommit: 0faf50c3658b86576d2ec008fb817659884d1abe
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Portal #157: reviewed the compact search toggle, 44px target, semantic colors, keyboard focus, localized tooltips and responsive shared input."
+lastReviewedNote: "Portal #169: reviewed final four-locale database definitions and find/check/cite workflow, brand-neutral Atlas inheritance, native links and mobile/light/dark accessibility. Existing homepage identity and LCDN text remain unchanged."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

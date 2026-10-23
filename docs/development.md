@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-16
-lastReviewedCommit: 2f77c58eb89ae64ae83a4b7d8520eadb167886bd
+lastReviewedAt: 2026-10-23
+lastReviewedCommit: 0faf50c3658b86576d2ec008fb817659884d1abe
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #159: bounded npm/Actions monitoring reuses unchanged static/browser/components/validate CI; lock-only resolution avoids metadata churn while package, runtime, hooks, UI/generated contracts and hosted release requirements remain intact."
+lastReviewedNote: "Portal #169: reviewed four-locale HTML-first database guidance, locale-aware titles, fixture-backed SEO tests and retained Storybook review. Toolchain, CI gates, data contracts and Git-only production publishing are unchanged."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

@@ -351,6 +351,8 @@ DTO 不返回：
 
 `lca-database` 是公开数据的阅读和查找入口，不把 Source facet 推断为独立 Database/Data Package。页面复用公开 summary 的按种类和标识去重计数；统计不可用时保留可用入口并明确说明状态，不补造数量、库级许可或覆盖。四语正文解释过程/流、范围、地区/时间、来源/质量、版本/引用与使用许可，并连接各站真实语言版本的使用文档、TIDAS、PCR 与 LCDN。LCDN 保留独立的 ILCD 发布分发语义，不由 Portal 宣称尚未发生的数据更新或 GLAD 同步。
 
+数据库指南在初始 HTML 中解释 LCA 数据库、LCI 清单、LCIA 结果和碳足迹因子的区别，提供查找、核验和引用的连续任务入口。共享说明保持品牌中立，Atlas 沿用自己的身份与机构内容。指南不把单一气候指标称为完整 LCA，不承诺全部记录都含影响结果、适用于所有研究或可自由再分发。
+
 主站 `/zh` 与 `/zh/` 是中文首页 `/zh-CN` 的受控永久别名。精确原生 rewrite 把 `/zh/` 交给 `/zh` 边缘函数，避开框架尾斜杠规范化；函数只对这两个路径的 GET/HEAD 返回 301，以固定的相对目标保留完整查询串，响应 `no-store`。该白名单不匹配 `/zh/post/**` 或其他任意旧路径；没有等价目标的地址继续返回真实 404。该处理不读取环境变量或数据，不发起上游请求，不使用 Next Proxy 或中间件。各语言首页发布最小 Organization/WebSite 标识，不把站点发布方推断为具体数据集作者或审查方。
 
 Portal 不创建 `/api` 页面，不展示 REST/GraphQL/MCP/Skill 示例。
@@ -871,6 +873,7 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - 每个 `/:locale` 初始响应的 `<html lang>` 必须等于已验证的路由 locale；不能依赖水合后脚本修正，也不能通过读取请求 header 把 SSG/ISR 全部转为动态渲染；
 - 关闭 JavaScript 后仍能完成 identifier/lexical 搜索提交、翻页、详情阅读和 tab 跳转；Hybrid 明确不属于无 JS 基线；
 - `generateMetadata` 读取同一 server query，生成 title、description、canonical、Open Graph 与 alternates；
+- 本地化页面的 HTML title 使用当前语言的页面标题与部署品牌名称，显式覆盖根 document 的默认模板；首页保留已审阅的品牌与用途完整标题，不重复追加品牌。Open Graph 的页面标题和站点名称继续分别提供。
 - 每个公开版本输出 Schema.org `Dataset` JSON-LD；Database 目录输出 `DataCatalog`；
 - JSON-LD 只声明真实存在的 license、spatialCoverage、temporalCoverage 和 distribution。当前公开 DTO 的 providerName 来自数据所有权方，dataGenerator 命名引用也不携带 Person/Organization 类型；因此当前不输出 creator，不能把所有权方、录入者或平台运营方推断成作者，也不猜实体类型。将来输出 creator 必须先有明确的创建角色与实体类型契约。
 - 详情页按原始公开字段分别展示非空的数据生成方、数据所有权方与访问/使用限制；声明的许可类型取 administration.licenseType，保持原文，不把 source.licenseId 的字段名视为正式许可证事实。数据名称沿用既有来源语言回退标记。JSON-LD license 与“查看许可”链接只取明确提供的 source.licenseUrl；免费类别、公开能力或仓库软件许可证都不能替代它。未知信息继续缺省，Google 可选字段提示不作为补造数据的理由。
@@ -883,7 +886,7 @@ Portal 只使用前两种展示详情与显式选中比较；不以公开排名�
 - Facet URL 使用 `noindex,follow`，避免 query × filter 的无限索引空间；
 - 公开 Search、Compare、Collections 路径允许抓取，使其初始 HTML 的 `noindex` 可被读取；Search/Compare 保留 `follow`，Collections 保留 `nofollow`。启用公开索引时 robots 仅保留 `/r0-compat/` 的禁抓规则，全局禁用时仍为 `Disallow: /`。这不是数据访问控制，也不保证搜索引擎已完成移除。
 - 指向四语 Search、Compare、Collections 的站内功能链接统一附加 `rel="nofollow"`，抑制参数组合发现；共享 `FeedbackLink` 与 SVG 地图原生 Link 使用同一策略，保留现有 rel token、原生 href、无 JS 操作和 `prefetch=false`。此属性只是爬虫提示，不是速率限制；详情、版本、受控 Browse 和其他正常内容链接保持可发现，三类功能页不进入 sitemap。Search HTML 的 private/no-store、公开 RPC 短缓存和有界准入不变，GET 抓取不得触发 Hybrid/AI POST。
-- zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`；基础 sitemap 为 9 个静态路径 × 4 种语言输出 36 条各自独立的规范 `<url>`，每条互指同一语言集合；
+- zh-CN/en/de/fr 在 HTML 与 sitemap 中互相声明 self-inclusive reciprocal `hreflang`；基础 sitemap 为 8 个静态路径 × 4 种语言输出 32 条各自独立的规范 `<url>`，每条互指同一语言集合；
 - `x-default` 指向同内容的默认语言页面（`/zh-CN/...`）；`/` 按用户语言协商跳转，因此不进入 sitemap，也不作为 `x-default`；
 - 页面 metadata 与 robots.txt 共用同一 `PORTAL_PUBLIC_INDEXING` 开关，且全局开关优先：未启用时即使页面显式 `index: true` 也不索引，页面仍可自行 `index: false` 退出。robots `Disallow` 仍会阻止爬虫抓取，被 disallow 的路径上的 `noindex` 因此读不到——metadata 属于纵深防御，不等于已从索引移除；确实需要移除时应让该页可被抓取并下发 `noindex`；
 - Database sitemap manifest 仍固定返回 64 个 opaque source shard。Portal 将每个 source shard 按稳定位置取模切成 4 个公开 part，因此根级 `/catalog-{process|flow}-sitemap.xml` 各固定列出 256 项；唯一规范参数为 `?shard={0..63}&part={0..3}`，确保根文件作用域覆盖四种语言；

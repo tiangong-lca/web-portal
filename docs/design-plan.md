@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-10-13
-lastReviewedCommit: ad37b36f7975973aa623750d51c17c0a416a63ea
-lastReviewedNote: "Portal #157: reviewed the shared search workspace, default icon toggle, current-state/action tooltip, applied-result separation, sharing privacy and native keyword fallback."
+lastReviewedAt: 2026-10-23
+lastReviewedCommit: 3ffcf358c42f07310514657e6c0253c877024a25
+lastReviewedNote: "Portal #169: reviewed final LCA/LCI guidance, localized title branding, existing 32-URL sitemap and the regenerated worker from the patched dependency graph. Geometry, data scope, indexing boundaries and hosted verification requirements are unchanged."
 related:
   - docs/ui-system.md
   - docs/development.md

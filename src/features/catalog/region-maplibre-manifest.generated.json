@@ -3,7 +3,7 @@
   "generator": {
     "script": "scripts/maps/build-maplibre-maps.mjs",
     "mapshaper": "0.7.61",
-    "bundler": "vite@8.2.2",
+    "bundler": "vite@8.3.5",
     "boundaryAssignment": "public/maps/*.json (the emitted SVG layers)",
     "simplificationPercent": {
       "world": "20%",
@@ -22,9 +22,9 @@
     "name": "maplibre-gl",
     "version": "6.10.0",
     "worker": {
-      "url": "/maps/gl/maplibre-gl-worker.96a97fd73283489c.js",
-      "sha256": "96a97fd73283489cdf5411ca5c93765f4310286891adf659b891f35997d4e9e8",
-      "bytes": 648270
+      "url": "/maps/gl/maplibre-gl-worker.0eb60ceea04adc18.js",
+      "sha256": "0eb60ceea04adc1809bdbdfd3b21e1b97530f9e0221967b89b499aec7f0f384f",
+      "bytes": 647649
     },
     "notice": {
       "url": "/maps/gl/maplibre-NOTICE.caeba915a2b099f3.txt",

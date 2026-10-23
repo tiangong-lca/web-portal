@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-13
-lastReviewedCommit: ad37b36f7975973aa623750d51c17c0a416a63ea
+lastReviewedAt: 2026-10-23
+lastReviewedCommit: 3ffcf358c42f07310514657e6c0253c877024a25
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Portal #157: reviewed the compact search toggle, 44px target, semantic colors, keyboard focus, localized tooltips and responsive shared input."
+lastReviewedNote: "Portal #169: reviewed four-locale database guidance, brand-neutral Atlas inheritance, native links, responsive themes and the patched Storybook framework. Vite regeneration changes the worker hash only; map geometry, source notices, homepage identity and LCDN text are unchanged."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:

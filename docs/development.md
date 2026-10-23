@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-16
-lastReviewedCommit: 2f77c58eb89ae64ae83a4b7d8520eadb167886bd
+lastReviewedAt: 2026-10-23
+lastReviewedCommit: 0faf50c3658b86576d2ec008fb817659884d1abe
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #159: bounded npm/Actions monitoring reuses unchanged static/browser/components/validate CI; lock-only resolution avoids metadata churn while package, runtime, hooks, UI/generated contracts and hosted release requirements remain intact."
+lastReviewedNote: "Portal #169: reviewed four-locale guide validation and the coordinated Next 16.4.2, Storybook 10.6.3 and Vite 8.3.5 security prerequisite, exact TS6 docgen hook and regenerated worker. Node/pnpm, required CI, public contracts and Git-only production publishing are unchanged."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -102,7 +102,7 @@ The scoped `ajv>fast-uri` override keeps AJV on the compatible 3.x API while res
 
 Portal uses the checked-in UI components and retains the required shadcn Tailwind stylesheet as an exact licensed source asset in `src/components/ui/vendor/`. The CLI is not required by build or test scripts; its dependency graph is excluded from the application lockfile. Follow the vendor NOTICE when refreshing the stylesheet, preserve the upstream bytes and MIT license, and publish the matching notice at `/licenses/shadcn-css.txt`. A generator update is separate from updating the styles used by existing components.
 
-The release audit uses the full dependency graph and fails on high or critical advisories; do not lower this gate or ignore an advisory to publish a feature. Next and `@next/env` stay aligned at the exact compatible stable version in `package.json`. The reviewed security pins retain Undici 8 only in jsdom's Node 24 test graph, patched Sharp within Next's declared range and brace-expansion's current major. The `source-map-js@` empty-range key is pnpm 11 convergence syntax: it pins the reviewed version only where the consumer's declared semver range accepts it. Preserve narrower incompatible edges rather than forcing a new major. Native packages in the upstream lockfile do not qualify macOS Intel as a supported target.
+The release audit uses the full dependency graph and fails on high or critical advisories; do not lower this gate or ignore an advisory to publish a feature. Next 16.4.2 is paired with Storybook 10.6.3, whose App Router mock includes the render-tree identity required by Next 16.4. Keep the exact Storybook React docgen hook aligned with that installed version; application React and TypeScript retain their separately pinned versions. Vite updates also regenerate the same-origin MapLibre worker and its hashed manifest through the existing offline generator; verify unchanged geometry and notices, and remove only the obsolete generated worker. Next and `@next/env` stay aligned at the exact compatible stable version in `package.json`. The reviewed security pins retain Undici 8 only in jsdom's Node 24 test graph, patched Sharp within Next's declared range and brace-expansion's current major. The `source-map-js@` empty-range key is pnpm 11 convergence syntax: it pins the reviewed version only where the consumer's declared semver range accepts it. Preserve narrower incompatible edges rather than forcing a new major. Native packages in the upstream lockfile do not qualify macOS Intel as a supported target.
 
 The exact legacy Chinese home aliases use `edge-functions/zh/index.ts` and the single native `/zh/` rewrite. The provider compiles this TypeScript to its Web API edge runtime; the function uses no Node API, environment variable or upstream request. The ordinary Next development server does not execute this provider route. Run its Request/Response unit matrix, typecheck and lint, then build with the installed EdgeOne CLI and generate its routing output. Inspect the emitted exact edge route and rewrite before deployment. Production must verify both aliases without following redirects, with GET/HEAD and ordered, repeated, blank and encoded query values; also verify request-aware root 307/no-store with language cookie and Accept-Language, nested unknown 404 and the unchanged public/private boundary. Only the production matrix proves the rewrite's order relative to the framework's trailing-slash rule.
 

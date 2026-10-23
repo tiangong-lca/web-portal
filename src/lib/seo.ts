@@ -122,7 +122,8 @@ export function localizedMetadata({
       // The global gate wins over an explicit `index: true`; a page may still opt out on its own.
       index: publicIndexingEnabled() && index !== false,
     },
-    title,
+    // Locale-aware pages must not inherit the root document's Chinese title template.
+    title: { absolute: `${title} · ${brandConfig.alt[locale]}` },
   };
 }
 

@@ -20,7 +20,7 @@ overrides:
   # TypeScript 5 compiler peer are unused. Portal retains TypeScript 7.
   tsconfck@3.1.6>typescript: "-"
   # Preserve jsdom's Undici 8 API; the patched test-only client runs on local Node 24.
-  jsdom>undici: 8.11.2
+  jsdom>undici: 8.12.3
   # Patch the current minimatch line without replacing older major APIs.
   "brace-expansion@^5": 5.0.12
   # Converge only compatible declared ranges on the patched source-map parser.

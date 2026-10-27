@@ -44,6 +44,26 @@ describe("Portal brand config", () => {
     expect(config.logoMark).toBe("/brand/logo-raster.png");
   });
 
+  it.each([
+    ["PORTAL_LOGO_ALT_ZH", "zh-CN"],
+    ["PORTAL_LOGO_ALT_EN", "en"],
+    ["PORTAL_LOGO_ALT_DE", "de"],
+    ["PORTAL_LOGO_ALT_FR", "fr"],
+  ] as const)("bounds %s to 100 Unicode code points after trimming", (variable, locale) => {
+    const astralBoundary = "😀".repeat(100);
+    const asciiBoundary = "a".repeat(100);
+
+    expect(readBrandConfig({ [variable]: `  ${astralBoundary}  ` }).alt[locale]).toBe(
+      astralBoundary,
+    );
+    expect(() => readBrandConfig({ [variable]: `${astralBoundary}😀` })).toThrow(
+      "<=100 characters",
+    );
+    expect(readBrandConfig({ [variable]: asciiBoundary }).alt[locale]).toBe(asciiBoundary);
+    expect(() => readBrandConfig({ [variable]: `${asciiBoundary}a` })).toThrow("<=100 characters");
+    expect(() => readBrandConfig({ [variable]: "   " })).toThrow(">=1 characters");
+  });
+
   it("fails closed for malformed colors", () => {
     expect(() => readBrandConfig({ PORTAL_LIGHT_PRIMARY: "purple" })).toThrow(
       "Expected a color in #RRGGBB format",

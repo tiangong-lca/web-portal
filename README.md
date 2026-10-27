@@ -16,9 +16,9 @@ checkPaths:
   - AGENTS.md
   - docs/design-plan.md
   - package.json
-lastReviewedAt: 2026-10-16
-lastReviewedCommit: 2f77c58eb89ae64ae83a4b7d8520eadb167886bd
-lastReviewedNote: "Portal #159: bounded npm/Actions monitoring reuses unchanged static/browser/components/validate CI; lock-only resolution avoids metadata churn while package, runtime, hooks, UI/generated contracts and hosted release requirements remain intact."
+lastReviewedAt: 2026-10-27
+lastReviewedCommit: 623f37fb551b9558e054ba73f76718d83263f313
+lastReviewedNote: "Portal #166: reviewed current Main setup/toolchain and unchanged validation commands against the composed React/MSW/Actions graph; full runtime qualification remains separate."
 related:
   - docs/development.md
   - docs/ui-system.md

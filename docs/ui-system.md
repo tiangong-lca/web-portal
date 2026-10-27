@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-23
-lastReviewedCommit: 3ffcf358c42f07310514657e6c0253c877024a25
+lastReviewedAt: 2026-10-27
+lastReviewedCommit: 623f37fb551b9558e054ba73f76718d83263f313
 title: Portal UI and component standards
 docType: contract
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: zh-CN
-lastReviewedNote: "Portal #169: reviewed four-locale database guidance, brand-neutral Atlas inheritance, native links, responsive themes and the patched Storybook framework. Vite regeneration changes the worker hash only; map geometry, source notices, homepage identity and LCDN text are unchanged."
+lastReviewedNote: "Portal #166: reviewed preserved four-locale Unicode branding/security contract and current Main upstream Storybook router/compiler source; theme/locale/interaction acceptance still requires fresh full candidate qualification."
 whenToUse:
   - when changing shared UI, branding, localization, accessibility or Storybook scenarios
 whenToUpdate:
@@ -132,7 +132,7 @@ Toggle 的选中态具有持续的边框、浅色背景和下划线；比较选�
 - `PORTAL_DARK_LOGO`，默认 `/brand/logo-dark.svg`；
 - `PORTAL_LOGO_MARK`，移动端/窄导航可选，默认复用当前主题 Logo；
 - `PORTAL_FAVICON`，默认 `/brand/favicon.ico`；
-- `PORTAL_LOGO_ALT_ZH` / `PORTAL_LOGO_ALT_EN`；
+- `PORTAL_LOGO_ALT_ZH` / `PORTAL_LOGO_ALT_EN` / `PORTAL_LOGO_ALT_DE` / `PORTAL_LOGO_ALT_FR`；
 - `PORTAL_LOGO_WIDTH` / `PORTAL_LOGO_HEIGHT`，默认按源文件 `170.08 × 170.08` 比例；
 - `PORTAL_SOCIAL_IMAGE`，链接预览用社交卡片，默认 `/brand/social-card.png`（仓库内由 `public/brand/logo.svg` 离线生成的 1200 × 630 PNG，见同目录 `.NOTICE.txt`）；
 - `PORTAL_SOCIAL_WIDTH` / `PORTAL_SOCIAL_HEIGHT`，默认 `1200` / `630`，必须与卡片实际像素一致（`tests/unit/brand-assets.test.ts` 会读取 PNG 头校验）。
@@ -145,7 +145,7 @@ Toggle 的选中态具有持续的边框、浅色背景和下划线；比较选�
 - 社交卡片必须是位图（SVG 标记不被链接预览渲染）；同上受 `PORTAL_BRAND_ASSET_ORIGIN` 约束；
 - Light/Dark/System 切换同步选择对应 Logo；在 `<html>` 水合前用带 SRI 的同源外部主题脚本恢复 localStorage 偏好，System 模式使用 `prefers-color-scheme`，避免 Logo 与主题 hydration flash；
 - Header、移动导航、favicon、manifest icons、Open Graph image/brand metadata 使用同一 `BrandConfig`；
-- Alt 文本本地化；旁边已有可见品牌文字时纯图形 mark 使用 `alt=""`；
+- Alt 文本本地化；每个语言的配置值经首尾空白清理后必须非空，最多 100 个 Unicode 码点，不按 UTF-16 代码单元或 UTF-8 字节计数。超过上限即拒绝，不截断；组合字符中的每个码点分别计数。旁边已有可见品牌文字时纯图形 mark 使用 `alt=""`；
 - Logo/主色替换不提供匿名上传或管理 API。通过 EdgeOne 环境变量或受审查的 `public/brand/**` 资产修改，重新部署后生效。
 
 ## 字体与密度

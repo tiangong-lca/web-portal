@@ -1,8 +1,8 @@
 version: 1
 layout: repo
-lastReviewedAt: 2026-10-16
-lastReviewedCommit: 2f77c58eb89ae64ae83a4b7d8520eadb167886bd
-lastReviewedNote: "Portal #159: bounded npm/Actions monitoring reuses unchanged static/browser/components/validate CI; lock-only resolution avoids metadata churn while package, runtime, hooks, UI/generated contracts and hosted release requirements remain intact."
+lastReviewedAt: 2026-10-27
+lastReviewedCommit: 623f37fb551b9558e054ba73f76718d83263f313
+lastReviewedNote: "Portal #166: reviewed current-Main/security/policy composition, the retained exact Actions contract route and unchanged ownership/security/publication requirements; fresh full candidate qualification remains pending."
 
 catalog:
   repos:
@@ -386,6 +386,8 @@ rules:
         kind: product-ci
       - path: .github/workflows/webgl.yml
         kind: product-ci
+      - path: tests/unit/actions-contract.test.ts
+        kind: product-ci-contract-check
       - path: tests/mocks/**
         kind: test-support
     requiredDocs:

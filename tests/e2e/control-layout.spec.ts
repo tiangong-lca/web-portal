@@ -1,4 +1,3 @@
-import { mkdir } from "node:fs/promises";
 import { expect, test, type Locator } from "@playwright/test";
 const first = "11111111-1111-1111-1111-111111111111@01.00.000";
 const second = "77777777-7777-7777-7777-777777777777@01.00.000";
@@ -12,7 +11,6 @@ function pseudoAfterContent(locator: Locator) {
 for (const width of [1440, 390]) {
   test(`control composition and visual page-family audit at ${width}px`, async ({ page }, info) => {
     await page.setViewportSize({ width, height: 1000 });
-    await mkdir("/tmp/portal103-visual", { recursive: true });
     for (const [name, route] of [
       ["catalog", "/en/search"],
       ["process", "/en/search?kind=process"],
@@ -51,7 +49,7 @@ for (const width of [1440, 390]) {
           expect(note!.y + note!.height).toBeLessThanOrEqual(selection!.y);
         }
       }
-      const path = `/tmp/portal103-visual/${name}-${width}.png`;
+      const path = info.outputPath(`${name}-${width}.png`);
       await page.screenshot({ path, fullPage: true });
       await info.attach(`${name}-${width}`, { path, contentType: "image/png" });
     }
@@ -179,12 +177,13 @@ test("long localized controls reflow at a 200-percent desktop-equivalent width",
   }
 });
 
-test("offline map keeps geographic context through China and province views", async ({ page }) => {
+test("offline map keeps geographic context through China and province views", async ({
+  page,
+}, info) => {
   // Three cold software-rendered levels plus four visual captures share this deadline.
   test.setTimeout(60_000);
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await mkdir("/tmp/portal113-visual", { recursive: true });
   const layers = new Set<string>();
   page.on("request", (request) => {
     const path = new URL(request.url()).pathname;
@@ -203,14 +202,10 @@ test("offline map keeps geographic context through China and province views", as
     await expect(scene).toHaveAttribute("data-state", "ready", { timeout: 20_000 });
     await expect(scene).not.toHaveAttribute("data-moving", { timeout: 10_000 });
     await expect(page.getByRole("link", { name: "Natural Earth", exact: true })).toBeVisible();
-    await page
-      .locator(".region-maplibre")
-      .screenshot({ path: `/tmp/portal113-visual/${name}.png` });
+    await page.locator(".region-maplibre").screenshot({ path: info.outputPath(`${name}.png`) });
   }
   await page.emulateMedia({ colorScheme: "dark" });
   await expect(page.locator("html")).toHaveClass(/dark/);
-  await page
-    .locator(".region-maplibre")
-    .screenshot({ path: "/tmp/portal113-visual/anhui-dark.png" });
+  await page.locator(".region-maplibre").screenshot({ path: info.outputPath("anhui-dark.png") });
   expect(layers.size).toBe(3);
 });

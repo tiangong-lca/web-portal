@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-10-23
-lastReviewedCommit: 3ffcf358c42f07310514657e6c0253c877024a25
-lastReviewedNote: "Portal #169: reviewed final LCA/LCI guidance, localized title branding, existing 32-URL sitemap and the regenerated worker from the patched dependency graph. Geometry, data scope, indexing boundaries and hosted verification requirements are unchanged."
+lastReviewedAt: 2026-10-27
+lastReviewedCommit: 623f37fb551b9558e054ba73f76718d83263f313
+lastReviewedNote: "Portal #166: reviewed preservation of qualified Main business/i18n/SEO/generated worker and security/policy prerequisites; anonymous access, precision, privacy, budgets and exact hosted-release requirements remain unchanged."
 related:
   - docs/ui-system.md
   - docs/development.md

@@ -91,6 +91,12 @@ export function DatabaseGuide({
           </aside>
         </section>
         <Separator />
+        <section className="flex max-w-prose flex-col gap-3" aria-labelledby="definition-title">
+          <h2 id="definition-title" className="font-heading text-2xl font-semibold">
+            {labels.definitionTitle}
+          </h2>
+          <p className="leading-7">{labels.definitionBody}</p>
+        </section>
         <section className="flex flex-col gap-6" aria-labelledby="records-title">
           <h2 id="records-title" className="font-heading text-2xl font-semibold">
             {labels.recordsTitle}
@@ -103,6 +109,19 @@ export function DatabaseGuide({
               </div>
             ))}
           </div>
+        </section>
+        <section className="flex flex-col gap-6" aria-labelledby="results-title">
+          <h2 id="results-title" className="font-heading text-2xl font-semibold">
+            {labels.resultsTitle}
+          </h2>
+          <dl className="grid gap-8 md:grid-cols-3">
+            {(["inventory", "impact", "factor"] as const).map((key) => (
+              <div key={key} className="flex max-w-prose flex-col gap-3">
+                <dt className="font-heading text-lg font-semibold">{labels[`${key}Title`]}</dt>
+                <dd className="leading-7">{labels[`${key}Body`]}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
         <section className="flex flex-col gap-6" aria-labelledby="selection-title">
           <h2 id="selection-title" className="font-heading text-2xl font-semibold">
@@ -130,6 +149,33 @@ export function DatabaseGuide({
               {labels.methodologyAction}
             </Link>
           </div>
+        </section>
+        <section className="flex flex-col gap-6" aria-labelledby="workflow-title">
+          <h2 id="workflow-title" className="font-heading text-2xl font-semibold">
+            {labels.workflowTitle}
+          </h2>
+          <ol className="grid list-decimal gap-8 pl-5 md:grid-cols-3 md:gap-10">
+            {(
+              [
+                ["find", "browse/process"],
+                ["check", "methodology"],
+                ["cite", "collections"],
+              ] as const
+            ).map(([key, path]) => (
+              <li key={key} className="max-w-prose pl-1">
+                <div className="flex flex-col items-start gap-3">
+                  <h3 className="font-heading text-lg font-semibold">{labels[`${key}Title`]}</h3>
+                  <p className="leading-7">{labels[`${key}Body`]}</p>
+                  <Link
+                    className="text-foreground underline underline-offset-4"
+                    href={localePath(locale, path)}
+                  >
+                    {labels[`${key}Action`]}
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
         <Separator />
         <section className="grid gap-8 md:grid-cols-2" aria-labelledby="access-title">

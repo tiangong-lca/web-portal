@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-19
-lastReviewedCommit: a4d80c367e195970416b1c090c269d3087c86981
+lastReviewedAt: 2026-10-27
+lastReviewedCommit: 623f37fb551b9558e054ba73f76718d83263f313
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #166: reviewed the one-character optional capture access at a4d80c3 after actual hosted TS18048. Missing captures still fail exact assertions; all four Actions contracts and local Node24.19 typecheck pass. Product/graph/policy/workflows and all validation budgets remain unchanged; failed41c hosted results are retained and successor fullCI/artifact proof is required."
+lastReviewedNote: "Portal #166: reviewed current Main Storybook 10.6.3/Vite 8.3.5/exact TS6 hook and upstream router, scoped React/MSW addon composition, inherited Zod/Undici repair and original Actions contracts; frozen install/type checks are distinct from pending full runtime qualification."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -106,7 +106,7 @@ The scoped `ajv>fast-uri` override keeps AJV on the compatible 3.x API while res
 
 Portal uses the checked-in UI components and retains the required shadcn Tailwind stylesheet as an exact licensed source asset in `src/components/ui/vendor/`. The CLI is not required by build or test scripts; its dependency graph is excluded from the application lockfile. Follow the vendor NOTICE when refreshing the stylesheet, preserve the upstream bytes and MIT license, and publish the matching notice at `/licenses/shadcn-css.txt`. A generator update is separate from updating the styles used by existing components.
 
-The release audit uses the full dependency graph and fails on high or critical advisories; do not lower this gate or ignore an advisory to publish a feature. Next and `@next/env` stay aligned at the exact compatible stable version in `package.json`. The reviewed security pins retain Undici 8 only in jsdom's Node 24 test graph, patched Sharp within Next's declared range and brace-expansion's current major. The `source-map-js@` empty-range key is pnpm 11 convergence syntax: it pins the reviewed version only where the consumer's declared semver range accepts it. Preserve narrower incompatible edges rather than forcing a new major. Native packages in the upstream lockfile do not qualify macOS Intel as a supported target.
+The release audit uses the full dependency graph and fails on high or critical advisories; do not lower this gate or ignore an advisory to publish a feature. Next 16.4.2 is paired with Storybook 10.6.3, whose App Router mock includes the render-tree identity required by Next 16.4. Keep the exact Storybook React docgen hook aligned with that installed version; application React and TypeScript retain their separately pinned versions. Vite updates also regenerate the same-origin MapLibre worker and its hashed manifest through the existing offline generator; verify unchanged geometry and notices, and remove only the obsolete generated worker. Next and `@next/env` stay aligned at the exact compatible stable version in `package.json`. The reviewed security pins retain Undici 8 only in jsdom's Node 24 test graph, patched Sharp within Next's declared range and brace-expansion's current major. The `source-map-js@` empty-range key is pnpm 11 convergence syntax: it pins the reviewed version only where the consumer's declared semver range accepts it. Preserve narrower incompatible edges rather than forcing a new major. Native packages in the upstream lockfile do not qualify macOS Intel as a supported target.
 
 The exact legacy Chinese home aliases use `edge-functions/zh/index.ts` and the single native `/zh/` rewrite. The provider compiles this TypeScript to its Web API edge runtime; the function uses no Node API, environment variable or upstream request. The ordinary Next development server does not execute this provider route. Run its Request/Response unit matrix, typecheck and lint, then build with the installed EdgeOne CLI and generate its routing output. Inspect the emitted exact edge route and rewrite before deployment. Production must verify both aliases without following redirects, with GET/HEAD and ordered, repeated, blank and encoded query values; also verify request-aware root 307/no-store with language cookie and Accept-Language, nested unknown 404 and the unchanged public/private boundary. Only the production matrix proves the rewrite's order relative to the framework's trailing-slash rule.
 
@@ -114,7 +114,7 @@ The exact legacy Chinese home aliases use `edge-functions/zh/index.ts` and the s
 
 Keep the complete Storybook tuple aligned. `scripts/pnpm-hooks.cjs` gives only the reviewed renderer and docgen package versions their private TypeScript 6 compiler; the application still uses TypeScript 7. The renderer imports TypeScript's JavaScript compiler API to discover real component imports and props. A version-only TypeScript 7 root export cannot provide that API, so an unmatched renderer version fails the component manifest gate.
 
-The exact `@storybook/nextjs-vite@10.6.2` package uses the tracked pnpm patch in `scripts/patches/`. Next 16.4 reads `LayoutRouterContext.parentRenderTree.data.bfcacheId`, while this Storybook provider supplies the earlier `parentCacheNode` shape. The patch exposes the identical existing mock cache node through `parentRenderTree.data`, preserving the legacy field and router mocks. It supports the isolated hook/redirect boundary exercised by this workspace; it does not emulate a complete Next rendering runtime. The package selector, patch bytes and lockfile hash are exact. A tuple update must review those bindings and rerun the unchanged manifest, interaction and product browser gates. Remove the patch only after a stable upstream provider supplies the current shape and those gates pass without it. Production does not import this Storybook provider.
+The qualified Main tuple retains exact `@storybook/nextjs-vite@10.6.3`. Its upstream provider supplies `parentRenderTree: { data: { bfcacheId: 0 } }` alongside the legacy router fields, matching the `LayoutRouterContext.parentRenderTree.data.bfcacheId` shape read by Next 16.4. The earlier version-specific 10.6.2 patch is therefore not configured or retained. Review the actual installed provider and exact lock graph when changing the tuple; the unchanged component manifest, interaction and product browser gates remain required before publication. Source inspection and typechecking do not replace those runtime gates. Production does not import this Storybook provider.
 
 Production browser screenshots belong to the current Playwright test's `testInfo.outputPath`, or the runner's repository-local `test-results` directory. Keep captures inside the owning checkout so concurrent tasks do not overwrite legacy shared temporary paths. The screenshot destination does not change visual, accessibility, functional or performance assertions.
 

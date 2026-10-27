@@ -16,9 +16,9 @@ checkPaths:
   - AGENTS.md
   - docs/design-plan.md
   - package.json
-lastReviewedAt: 2026-10-19
-lastReviewedCommit: 348aa23bd94fd24119d5e14cef57450a71c13241
-lastReviewedNote: "Portal #166: reviewed immutable setup-node 7.1.0 and upload-artifact 7.0.2 inputs, exact Node/pnpm selection, inactive pnpm cache/post behavior, report defaults and focused workflow contract routing; product, provider and delivery boundaries are unchanged."
+lastReviewedAt: 2026-10-27
+lastReviewedCommit: 623f37fb551b9558e054ba73f76718d83263f313
+lastReviewedNote: "Portal #166: reviewed current Main setup/toolchain and unchanged validation commands against the composed React/MSW/Actions graph; full runtime qualification remains separate."
 related:
   - docs/development.md
   - docs/ui-system.md

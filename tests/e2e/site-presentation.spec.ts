@@ -138,6 +138,16 @@ test.describe("site presentation", () => {
       for (const path of ["team", "community", "methodology", "lca-database"]) {
         await page.goto(`/${locale}/${path}`);
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+        if (path === "lca-database") {
+          const brand =
+            site === "atlas" ? "Atlas" : locale === "zh-CN" ? "天工 LCA" : "TianGong LCA";
+          await expect(page).toHaveTitle(`${messages.DatabaseGuide.title} · ${brand}`);
+          await expect(
+            page
+              .getByRole("main")
+              .getByText(messages.DatabaseGuide.definitionBody, { exact: true }),
+          ).toBeVisible();
+        }
         if (site === "atlas") {
           await expect(page.locator("body")).not.toContainText(/tiangong|天工|\bGLAD\b/i);
           await expect(

@@ -23,6 +23,9 @@ for (const locale of locales) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`/${locale}/lca-database`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(text.title);
+    await expect(page).toHaveTitle(
+      `${text.title} · ${locale === "zh-CN" ? "天工 LCA" : "TianGong LCA"}`,
+    );
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       new RegExp(`/${locale}/lca-database$`),
@@ -81,6 +84,27 @@ test("database discovery works without JavaScript and site identity does not rep
   });
   try {
     const page = await context.newPage();
+    for (const locale of locales) {
+      const text = dictionaries[locale].DatabaseGuide;
+      await page.goto(`/${locale}/lca-database`);
+      const main = page.getByRole("main");
+      for (const content of [
+        text.definitionBody,
+        text.inventoryBody,
+        text.impactBody,
+        text.factorBody,
+      ]) {
+        await expect(main.getByText(content, { exact: true })).toBeVisible();
+      }
+      await expect(main.getByRole("link", { name: text.checkAction, exact: true })).toHaveAttribute(
+        "href",
+        `/${locale}/methodology`,
+      );
+      await expect(main.getByRole("link", { name: text.citeAction, exact: true })).toHaveAttribute(
+        "href",
+        `/${locale}/collections`,
+      );
+    }
     await page.goto("/en/lca-database");
     await page.getByRole("link", { name: en.DatabaseGuide.processAction, exact: true }).click();
     await expect(page).toHaveURL(/\/en\/browse\/process$/);

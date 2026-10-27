@@ -20,7 +20,7 @@ overrides:
   # TypeScript 5 compiler peer are unused. Portal retains TypeScript 7.
   tsconfck@3.1.6>typescript: "-"
   # Preserve jsdom's Undici 8 API; the patched test-only client runs on local Node 24.
-  jsdom>undici: 8.11.2
+  jsdom>undici: 8.12.3
   # Patch the current minimatch line without replacing older major APIs.
   "brace-expansion@^5": 5.0.12
   # Converge only compatible declared ranges on the patched source-map parser.
@@ -31,18 +31,15 @@ overrides:
   vite-plugin-storybook-nextjs>@next/env: 16.4.2
 pnpmfile: scripts/pnpm-hooks.cjs
 minimumReleaseAgeExclude:
-  - "@next/env@16.3.8"
-  - "@next/swc-darwin-arm64@16.3.8"
-  - "@next/swc-linux-arm64-gnu@16.3.8"
-  - "@next/swc-linux-arm64-musl@16.3.8"
-  - "@next/swc-linux-x64-gnu@16.3.8"
-  - "@next/swc-linux-x64-musl@16.3.8"
-  - "@next/swc-win32-arm64-msvc@16.3.8"
-  - "@next/swc-win32-x64-msvc@16.3.8"
-  - next@16.3.8
+  - "@next/env@16.4.2"
+  - "@next/swc-darwin-arm64@16.4.2"
+  - "@next/swc-linux-arm64-gnu@16.4.2"
+  - "@next/swc-linux-arm64-musl@16.4.2"
+  - "@next/swc-linux-x64-gnu@16.4.2"
+  - "@next/swc-linux-x64-musl@16.4.2"
+  - "@next/swc-win32-arm64-msvc@16.4.2"
+  - "@next/swc-win32-x64-msvc@16.4.2"
+  - next@16.4.2
   - skills@1.5.24
   - three@0.186.0
-  - "@next/swc-darwin-x64@16.3.8"
-# Keep the isolated Storybook router on Next 16.4's render-tree payload shape.
-patchedDependencies:
-  "@storybook/nextjs-vite@10.6.2": scripts/patches/@storybook__nextjs-vite@10.6.2.patch
+  - "@next/swc-darwin-x64@16.4.2"

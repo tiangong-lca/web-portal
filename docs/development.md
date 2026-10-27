@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-10-23
-lastReviewedCommit: 0faf50c3658b86576d2ec008fb817659884d1abe
+lastReviewedAt: 2026-10-26
+lastReviewedCommit: 15d8e33a80c55c92713a7c2717928228467bab06
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #169: reviewed four-locale guide validation and the coordinated Next 16.4.2, Storybook 10.6.3 and Vite 8.3.5 security prerequisite, exact TS6 docgen hook and regenerated worker. Node/pnpm, required CI, public contracts and Git-only production publishing are unchanged."
+lastReviewedNote: "Portal #176: reviewed the exact Zod and scoped jsdom Undici security repair against the dependency, DTO/negative-path, license/audit and release requirements. Observed timestamp/Unicode differences remain explicit in the owning Issue; Node/pnpm, release-age/install policy, generated contracts, all required gates and Production/Main publishing authority are unchanged."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance

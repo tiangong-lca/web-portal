@@ -99,7 +99,7 @@
     "jsdom": "30.0.1",
     "mapshaper": "0.7.61",
     "msw": "2.15.0",
-    "msw-storybook-addon": "3.0.0",
+    "msw-storybook-addon": "3.0.3",
     "oxlint": "1.80.0",
     "oxlint-tsgolint": "7.0.2001",
     "postcss": "8.5.26",

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { gunzipSync } from "node:zlib";
+import { constants, gunzipSync } from "node:zlib";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { GET } from "@/app/r0-compat/compression/stream/route";
@@ -46,24 +46,44 @@ describe("isolated compression diagnostics", () => {
     expect(observedAcceptEncoding("gzip;q=0")).toBe("gzip;q=0");
   });
 
-  it("delivers independently decodable gzip shell before the delayed tail", async () => {
+  it("flushes the shell before completing a single gzip member with the delayed tail", async () => {
     vi.useFakeTimers();
     const reader = createCompressionProbeStream("gzip").getReader();
-    const first = await reader.read();
-    expect(gunzipSync(first.value!).toString()).toBe(compressionProbeShell);
+    const chunks: Uint8Array[] = [];
+    let decoded = "";
+    while (decoded.length < compressionProbeShell.length) {
+      const { done, value } = await reader.read();
+      if (done) throw new Error("Gzip stream ended before delivering the shell");
+      chunks.push(value);
+      decoded = gunzipSync(Buffer.concat(chunks), {
+        finishFlush: constants.Z_SYNC_FLUSH,
+      }).toString();
+    }
+    expect(decoded).toBe(compressionProbeShell);
+    const partial = Buffer.concat(chunks);
+    expect(partial.subarray(0, 3)).toEqual(Buffer.from([0x1f, 0x8b, 0x08]));
+    expect(() => gunzipSync(partial)).toThrow("unexpected end of file");
+
     await vi.advanceTimersByTimeAsync(2000);
-    const second = await reader.read();
-    expect(gunzipSync(Buffer.concat([first.value!, second.value!])).toString()).toBe(
-      compressionProbeShell + compressionProbeTail,
-    );
-    expect(await reader.read()).toEqual({ done: true, value: undefined });
+    for (let result = await reader.read(); !result.done; result = await reader.read()) {
+      chunks.push(result.value);
+    }
+    const compressed = Buffer.concat(chunks);
+    const expected = compressionProbeShell + compressionProbeTail;
+    expect(gunzipSync(compressed).toString()).toBe(expected);
+    // The last member's trailer covers the whole document, including the shell.
+    expect(compressed.readUInt32LE(compressed.length - 4)).toBe(Buffer.byteLength(expected));
   });
 
-  it("cancels the pending delayed chunk when a client disconnects", async () => {
-    vi.useFakeTimers();
-    const reader = createCompressionProbeStream("identity").getReader();
-    await reader.read();
-    await reader.cancel();
-    expect(vi.getTimerCount()).toBe(0);
-  });
+  it.each(["identity", "gzip"] as const)(
+    "cancels the pending delayed %s chunk when a client disconnects",
+    async (mode) => {
+      vi.useFakeTimers();
+      const reader = createCompressionProbeStream(mode).getReader();
+      await reader.read();
+      await reader.cancel();
+      await vi.advanceTimersByTimeAsync(0);
+      expect(vi.getTimerCount()).toBe(0);
+    },
+  );
 });

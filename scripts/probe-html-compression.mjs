@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto";
+import { constants as fsConstants } from "node:fs";
+import { open } from "node:fs/promises";
 import { get as httpGet } from "node:http";
 import { get as httpsGet } from "node:https";
+import { isAbsolute } from "node:path";
 import { performance } from "node:perf_hooks";
 import { Transform, Writable } from "node:stream";
 import { pipeline } from "node:stream/promises";
@@ -24,36 +27,92 @@ const diagnosticTimeoutMs = 12_000;
 const customTimeoutMs = 45_000;
 const maximumWireBytes = 4 * 1024 * 1024;
 const maximumDecodedBytes = 8 * 1024 * 1024;
+const maximumPreviewFileBytes = 2048;
 const markerOverlap = 512;
 
 const help = `Usage: node scripts/probe-html-compression.mjs <http(s) origin> [/<path>?<query>]
+       node scripts/probe-html-compression.mjs --preview-url-file <absolute private file> [/<path>?<query>]
+For a protected EdgeOne Preview, use a private file (mode 600) with its temporary HTTPS access link.
 With no path, measure the three compression diagnostics. A custom path is labeled "custom".
-Requests are anonymous HTTP/1.1 GETs, sequential, and do not follow redirects.
+Requests are sequential HTTP/1.1 GETs without cookies or redirects.
 Each line reports one request. Wire bytes exclude HTTP framing and TLS overhead.
 Timings are milliseconds from request start. Missing values are null.
 The forced identity/gzip diagnostics ignore inbound negotiation; compare their decoded hashes.
 Selected response headers are normalized; unknown values are reported as "other".
 HTTP status, negotiation, and timing are observations; check them separately from the exit code.`;
 
-function parseArguments(args) {
-  const [origin, path] = args;
-  if (args.length < 1 || args.length > 2) throw new Error();
-  const base = new URL(origin);
+function parseOrigin(origin) {
+  const url = new URL(origin);
   if (
-    !["http:", "https:"].includes(base.protocol) ||
-    base.username ||
-    base.password ||
-    base.pathname !== "/" ||
-    base.search ||
-    base.hash
+    !["http:", "https:"].includes(url.protocol) ||
+    url.username ||
+    url.password ||
+    url.pathname !== "/" ||
+    url.hash
   ) {
     throw new Error();
   }
-  if (path === undefined) return { base, selected: targets, intervalMs: 250 };
-  if (!/^\/(?![/\\])/.test(path) || path.length > 2048) throw new Error();
+  return url;
+}
+
+async function readPreviewOrigin(file) {
+  if (!file || !isAbsolute(file)) throw new Error();
+  const flags =
+    fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0) | (fsConstants.O_NONBLOCK ?? 0);
+  const handle = await open(file, flags);
+  try {
+    const stat = await handle.stat();
+    if (!stat.isFile() || (stat.mode & 0o077) !== 0 || stat.size > maximumPreviewFileBytes) {
+      throw new Error();
+    }
+    const buffer = Buffer.alloc(maximumPreviewFileBytes + 1);
+    const { bytesRead } = await handle.read(buffer);
+    if (bytesRead !== stat.size) throw new Error();
+    const link = buffer.toString("utf8", 0, bytesRead).trim();
+    if (/\s/.test(link)) throw new Error();
+    const url = parseOrigin(link);
+    if (
+      url.protocol !== "https:" ||
+      !/^[a-z0-9-]+\.edgeone\.dev$/.test(url.hostname) ||
+      url.port ||
+      url.searchParams.size !== 2 ||
+      !/^[0-9a-f]{16,128}$/i.test(url.searchParams.get("eo_token") ?? "") ||
+      !/^\d{1,16}$/.test(url.searchParams.get("eo_time") ?? "")
+    ) {
+      throw new Error();
+    }
+    return url;
+  } finally {
+    await handle.close();
+  }
+}
+
+function requestUrl(base, path) {
   const url = new URL(path, base);
+  if (base.search) {
+    if (url.searchParams.has("eo_token") || url.searchParams.has("eo_time")) throw new Error();
+    const accessQuery = base.searchParams.toString();
+    url.search = url.search ? `${url.search}&${accessQuery}` : accessQuery;
+  }
+  return url;
+}
+
+async function parseArguments(args) {
+  const preview = args[0] === "--preview-url-file";
+  const [origin, path, ...unexpected] = preview ? args.slice(1) : args;
+  if (origin === undefined || unexpected.length > 0) throw new Error();
+  const base = preview ? await readPreviewOrigin(origin) : parseOrigin(origin);
+  if (!preview && base.search) throw new Error();
+  if (path === undefined) {
+    return {
+      selected: targets.map((target) => ({ ...target, url: requestUrl(base, target.path) })),
+      intervalMs: 250,
+    };
+  }
+  if (!/^\/(?![/\\])/.test(path) || path.length > 2048) throw new Error();
+  const url = requestUrl(base, path);
   if (url.origin !== base.origin || url.hash) throw new Error();
-  return { base, selected: [{ label: "custom", path }], intervalMs: 3_100 };
+  return { selected: [{ label: "custom", url }], intervalMs: 3_100 };
 }
 
 function readHeader(headers, name) {
@@ -260,7 +319,7 @@ async function main(args) {
   }
   let config;
   try {
-    config = parseArguments(args);
+    config = await parseArguments(args);
   } catch {
     console.error(help);
     process.exitCode = 2;
@@ -268,11 +327,10 @@ async function main(args) {
   }
   let first = true;
   for (const target of config.selected) {
-    const url = new URL(target.path, config.base);
     for (const acceptEncoding of acceptanceCases) {
       if (!first) await delay(config.intervalMs);
       first = false;
-      const result = await measure(url, target, acceptEncoding);
+      const result = await measure(target.url, target, acceptEncoding);
       console.log(JSON.stringify(result));
       if (result.error) process.exitCode = 1;
     }

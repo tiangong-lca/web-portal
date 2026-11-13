@@ -1,6 +1,7 @@
 import "server-only";
 
-import { gzipSync } from "node:zlib";
+import { Readable } from "node:stream";
+import { constants, createGzip } from "node:zlib";
 
 /** Diagnostics are opt-in, synthetic and unavailable on the production environment. */
 export function compressionProbeEnabled(environment = process.env): boolean {
@@ -40,19 +41,28 @@ export const compressionProbeShell =
 export const compressionProbeTail =
   "<p data-compression-complete>Deferred transport evidence complete.</p></body></html>";
 
-export function createCompressionProbeStream(mode: "identity" | "gzip") {
-  const encode = (text: string) =>
-    mode === "gzip" ? new Uint8Array(gzipSync(text)) : new TextEncoder().encode(text);
-  // Two complete gzip members intentionally isolate transport passthrough from
-  // Next's compression negotiation. This is not a product response compressor.
-  const shell = encode(compressionProbeShell);
-  const tail = encode(compressionProbeTail);
+export function createCompressionProbeStream(
+  mode: "identity" | "gzip",
+): ReadableStream<Uint8Array> {
+  if (mode === "gzip") {
+    const gzip = createGzip();
+    const stream = Readable.toWeb(gzip);
+    const timer = setTimeout(() => gzip.end(compressionProbeTail), 2000);
+    // The web adapter destroys the compressor when the response is canceled.
+    gzip.once("close", () => clearTimeout(timer));
+    gzip.write(compressionProbeShell);
+    // Expose the shell immediately while keeping the same gzip member open.
+    gzip.flush(constants.Z_SYNC_FLUSH);
+    return stream;
+  }
+
+  const encoder = new TextEncoder();
   let timer: ReturnType<typeof setTimeout> | undefined;
   return new ReadableStream<Uint8Array>({
     start(controller) {
-      controller.enqueue(shell);
+      controller.enqueue(encoder.encode(compressionProbeShell));
       timer = setTimeout(() => {
-        controller.enqueue(tail);
+        controller.enqueue(encoder.encode(compressionProbeTail));
         controller.close();
       }, 2000);
     },

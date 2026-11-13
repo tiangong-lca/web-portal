@@ -21,7 +21,7 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
 lastReviewedAt: 2026-11-13
-lastReviewedCommit: 9cbbf6bc6159d85bb27ec7dba6bb9dcba0d81253
+lastReviewedCommit: 93ca2442472c426a8d6aefbdfda978e4cdb24da8
 lastReviewedNote: "Portal #189: reviewed the synthetic compression qualification under the existing enforcing performance CSP and the retained strict-profile evidence."
 related:
   - compatibility-matrix.md

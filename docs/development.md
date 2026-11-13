@@ -1,6 +1,6 @@
 ---
 lastReviewedAt: 2026-11-13
-lastReviewedCommit: 9cbbf6bc6159d85bb27ec7dba6bb9dcba0d81253
+lastReviewedCommit: fc206801d94324cf0f5f8cfba8e992085d1a7825
 title: Portal development workflow
 docType: guide
 scope: repo

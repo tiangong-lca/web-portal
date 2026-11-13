@@ -23,7 +23,7 @@ checkPaths:
   - contracts/database-engine/portal/**
   - edgeone.json
 lastReviewedAt: 2026-11-13
-lastReviewedCommit: fc206801d94324cf0f5f8cfba8e992085d1a7825
+lastReviewedCommit: da13d894b6e3a88b1c7b15b24e9f54db13cf1425
 lastReviewedNote: "Portal #189: reviewed the task-scoped Preview exception, synthetic transport probes, and Search cache, rendering, SEO, and release acceptance boundaries."
 related:
   - docs/ui-system.md

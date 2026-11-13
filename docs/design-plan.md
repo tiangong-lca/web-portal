@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-11-07
-lastReviewedCommit: 6b6500fdadb0cd555714facaed54d0930d7a7dc7
-lastReviewedNote: "Portal #184: reviewed separate totals/branch read demand, exact Database DTO snapshot and preserved cache, scope, UI and hosted qualification boundaries."
+lastReviewedAt: 2026-11-13
+lastReviewedCommit: 9cbbf6bc6159d85bb27ec7dba6bb9dcba0d81253
+lastReviewedNote: "Portal #189: reviewed the task-scoped Preview exception, synthetic transport probes, and Search cache, rendering, SEO, and release acceptance boundaries."
 related:
   - docs/ui-system.md
   - docs/development.md
@@ -1115,7 +1115,13 @@ tiangong-lca-portal/
 - TDD 阶段固定 `PORTAL_PUBLIC_INDEXING=disabled`，所有门通过后才以新 deployment 开启索引；
 - GitHub Actions 只做 lint、typecheck、test、build 和安全检查，不再次部署；
 - 每次部署使用不可变 commit SHA，回滚到上一成功 deployment；
-- EdgeOne 只持有 Production 环境变量并只调用 Supabase Main；本地/CI fixture 与 Main 凭据仍严格分离。
+- EdgeOne Production 只调用 Supabase Main；本地/CI fixture 和经授权的专项 Preview 与 Main 凭据严格分离。
+
+#### 17.1.1 Search HTML 压缩专项预览
+
+[Portal #189](https://github.com/tiangong-lca/web-portal/issues/189) 经用户授权，在现有 Makers Preview 环境手动部署本任务 Git 分支的精确提交，先验证动态 Search HTML 压缩，再通过常规 `main` 流程发布。Preview 自动部署保持关闭。生产环境继续绑定 `main`，常规 feature/PR 继续使用 GitHub/local gates。Preview 使用独立访问地址、`PORTAL_DEPLOYMENT_ENV=preview`、关闭公开索引及正式版的 enforcing performance CSP。Main 业务数据凭据、生产 HMAC 凭据和撤回 feed 的密钥及开关继续仅用于 Production；后续隔离数据 fixture 使用独立配置，不复制生产秘密。
+
+合成探针须同时满足 `PORTAL_DEPLOYMENT_ENV=preview` 和 `PORTAL_COMPRESSION_PROBE_ENABLED=1`。探针通过原生 Next SSR 页面和 Route Handler 分别验证协商、编码透传及流式交付。验证真实 Search 行为须使用具备结果、筛选和翻页的隔离数据；合成探针只证明传输行为。资格门包括同一 Preview 部署的实际传输字节、完整解码、首段早于延迟尾段、动态 HTML `private, no-store`、既有短期数据新鲜度、搜索交互及 SEO 元数据。记录精确部署、入口域名和结果，参见[兼容性矩阵](r0/compatibility-matrix.md#portal-189-search-html-compression-qualification)。
 
 ### 17.2 构建配置
 
@@ -1138,7 +1144,7 @@ tiangong-lca-portal/
 
 `na-ashburn` 与当前 Supabase/Edge 的 US East 入口接近，是初始候选。是否增加中国大陆 region 必须依据 ICP、目标域名和实测后决定；不能仅凭用户所在地猜测。`nodeVersion=24.18.0` 只控制构建；EdgeOne 托管 Cloud Functions/Next SSR 当前实测为 Node `v20.19.3`，不能通过该字段切换到 24，服务端代码必须继续满足 Node 20 runtime boundary。
 
-EdgeOne 只配置 Production 环境变量：
+EdgeOne Production 环境变量：
 
 | 类别 | 变量 |
 | --- | --- |
@@ -1153,7 +1159,7 @@ EdgeOne 只配置 Production 环境变量：
 | Logo metadata | `PORTAL_LOGO_ALT_ZH/EN/DE/FR`、`PORTAL_LOGO_WIDTH/HEIGHT`、可选 `PORTAL_BRAND_ASSET_ORIGIN` |
 | Social card | `PORTAL_SOCIAL_IMAGE`（默认 `/brand/social-card.png`）、`PORTAL_SOCIAL_WIDTH/HEIGHT`（默认 1200 × 630） |
 
-Supabase Edge Function 配置按项目分别保存；当前批准的例外仅共享底层 Upstash endpoint/token。EdgeOne Production 只调用 Supabase Main；本地/CI 使用 loopback fixture 或 persistent Dev 的独立凭据。用户批准不创建单独 EdgeOne Preview，R0 hosted probes 在 Production 域名、索引关闭状态下验证真实 Main signer/namespace，不部署可调用业务内核的临时替代凭据：
+Supabase Edge Function 配置按项目分别保存；当前批准的例外仅共享底层 Upstash endpoint/token。EdgeOne Production 只调用 Supabase Main；本地/CI 使用 loopback fixture 或 persistent Dev 的独立凭据。常规 R0 hosted probes 按用户批准的发布模型在 Production 域名、索引关闭状态下验证真实 Main signer/namespace，不部署可调用业务内核的临时替代凭据。§17.1.1 的独立 Preview 仅用于 Search 压缩专项验证：
 
 | 类别 | Edge Function 配置 |
 | --- | --- |

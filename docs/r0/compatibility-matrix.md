@@ -8,7 +8,7 @@ owner: tiangong-lca-portal
 language: en
 whenToUse:
   - when deciding whether R0 bootstrap can exit
-  - when reviewing local or EdgeOne main/Production compatibility evidence
+  - when reviewing local, task-scoped EdgeOne Preview, or EdgeOne main/Production compatibility evidence
 whenToUpdate:
   - when a compatibility probe, platform result, deployment SHA, or blocker changes
 checkPaths:
@@ -20,9 +20,9 @@ checkPaths:
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
   - tests/fixtures/hmac/**
-lastReviewedAt: 2026-11-12
-lastReviewedCommit: d127295f31c6a0c1f0ff2b4211b4868c3b07a2ea
-lastReviewedNote: "Portal #187: reviewed the disabled-by-default server-only withdrawal relay, public IndexNow file and credential-leak checks. Existing rendering, CSP/ISR, brand and UI boundaries remain unchanged; exact hosted feed activation remains a separate acceptance gate."
+lastReviewedAt: 2026-11-13
+lastReviewedCommit: 9cbbf6bc6159d85bb27ec7dba6bb9dcba0d81253
+lastReviewedNote: "Portal #189: reviewed the Preview-only synthetic transport contract and the outstanding hosted Search compression qualification."
 related:
   - ../design-plan.md
   - ../../AGENTS.md
@@ -131,3 +131,16 @@ Portal #117 completes the static transport qualification: on `c8c3ece4d5da968701
 ## Display-scope deployment qualification
 
 Portal #139 binds `PORTAL_DATA_BRANDS` to build identity and server readiness. Every scope change needs a fresh build and independent runtime configuration readback, old-instance traffic drain and HTML/ISR/CDN/sitemap invalidation. The retained CSP/ISR evidence above does not prove this new paired-deployment boundary. No hosted activation is claimed by local scoped-reader and browser tests.
+
+## Portal #189 Search HTML compression qualification
+
+On 2026-11-12, six GETs to the public origin returned uncompressed Search HTML across identity, gzip, and Brotli requests. Default Search at `/zh-CN/search?v=1` transferred 129,517 response-body bytes and Process Search at `/zh-CN/search?v=1&kind=process` transferred 283,679. Both were private/no-store and reported cache misses. The isolated Next 16.4.2 adapter-shim check delivered decodable streaming gzip with no-store. The exact hosted adapter and gateway behavior still need qualification. EdgeOne’s CDN Content Compression skips synchronous compression for chunked origin responses of unknown length. [EdgeOne Content Compression](https://cloud.tencent.com/document/product/1552/122770)
+
+Manually trigger the task branch’s Git Preview and record the immutable source SHA, deployment ID, request host and runtime. Enable `PORTAL_COMPRESSION_PROBE_ENABLED=1` only in Preview with `PORTAL_DEPLOYMENT_ENV=preview`, public indexing disabled, and the enforcing performance CSP. Both probes serve only synthetic content. [Portal #189](https://github.com/tiangong-lca/web-portal/issues/189)
+
+| Probe | Hosted observation |
+| --- | --- |
+| `/r0-compat/compression/native` | The noindex, request-time Next page reports the observed `Accept-Encoding` as a fixed allowlisted value, `absent`, or `other`. Measure native encoding and whether its decoded shell arrives before the Suspense completion marker, delayed by two seconds. |
+| `/r0-compat/compression/stream?mode=identity` and `?mode=gzip` | The suite deliberately includes matching and mismatched offers for each fixed mode; these select known representations and are not product negotiation tests. The Node Route Handler sets private/no-store and reports the same bounded observation in `X-Compression-Observed-Encoding`. Gzip mode sends two known gzip members. Confirm `Content-Encoding`, lossless decode, and arrival of the decoded shell before the delayed completion marker. |
+
+For exact Search qualification, measure received entity bytes before client decompression on default and populated Process Search with identity, gzip, Brotli, and mixed offers. Include absent and `gzip;q=0` controls. Verify decode, `Vary` and RSC navigation, repeated private/no-store responses without shared cache hits, the existing short public-data freshness window, and results, filters and pagination. Verify Search noindex/follow, query-free canonical, locale alternates and ordinary page hydration under the enforcing performance CSP. Use isolated data for result and freshness checks. Record the exact Preview evidence before the ordinary `main` release process and repeat the production acceptance on the canonical public origin. Hosted qualification is pending.

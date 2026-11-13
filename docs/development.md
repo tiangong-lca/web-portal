@@ -1,6 +1,6 @@
 ---
-lastReviewedAt: 2026-11-07
-lastReviewedCommit: 6b6500fdadb0cd555714facaed54d0930d7a7dc7
+lastReviewedAt: 2026-11-13
+lastReviewedCommit: 9cbbf6bc6159d85bb27ec7dba6bb9dcba0d81253
 title: Portal development workflow
 docType: guide
 scope: repo
@@ -8,7 +8,7 @@ status: active
 authoritative: true
 owner: tiangong-lca-portal
 language: en
-lastReviewedNote: "Portal #184: reviewed separate totals/branch read demand, exact Database DTO snapshot and preserved cache, scope, UI and hosted qualification boundaries."
+lastReviewedNote: "Portal #189: reviewed isolated Preview transport probes and raw-wire measurements; no production compression, cache, data or release gate change is claimed."
 whenToUse:
   - when setting up Portal, choosing local checks, or using Storybook MCP and project skills
   - when changing repository tooling or documentation governance
@@ -84,6 +84,12 @@ Database display mode must be qualified and activated separately. A scoped reade
 `PORTAL_INDEX_FEED_ENABLED` defaults off. For the canonical public deployment, provision `PORTAL_INDEX_FEED_SECRET` through the host secret store with the same dedicated read-only feed credential as the Edge dispatcher; never use its dispatch secret or a Supabase service key. Deploy and validate Database/Edge first, then verify the public IndexNow key file and activate the feed only after its complete live manifest is checked. Disable the flag to roll back the relay without changing public datasets or sitemap behavior. IndexNow sending and Baidu dead-link registration belong to the separately verified operational rollout.
 
 Run `tests/unit/portal-withdrawal-feed.test.ts` for scope, credential, redirect, byte, UTF-8, timeout and fail-closed checks; `tests/e2e/search-notifications.spec.ts` verifies the real production route and public verification file. The existing bundle/response secret scan includes the feed credential marker and CI sentinel. Hosted validation must separately prove no-store/noindex, GET/HEAD, matching origin/brands, upstream failure behavior and removal of restored URLs; local fixtures do not qualify activation.
+
+## Search transport qualification (Portal #189)
+
+The user-authorized manual Git Preview exception in [the deployment plan](design-plan.md#1711-search-html-压缩专项预览) is limited to this qualification. Set `PORTAL_DEPLOYMENT_ENV=preview` and `PORTAL_COMPRESSION_PROBE_ENABLED=1` in that Preview only; keep public indexing disabled and production credentials absent. The native and deterministic stream routes under `/r0-compat/compression/` perform no data calls, render only fixed content and closed encoding observations, and refuse activation in Production.
+
+Run `node scripts/probe-html-compression.mjs <origin>` against the exact deployed Preview to record raw entity bytes, content encoding, decoded hashes for fixed payloads, and early/delayed marker arrival. An optional second argument selects one public Search path; the script spaces those requests to preserve the existing rate limit. It emits sanitized measurements rather than a pass certificate: review HTTP status, no-store/noindex, lossless decoding and streaming intervals explicitly. Fixed-route modes intentionally select a known representation, including mismatched-offer controls, and do not implement product negotiation. A zero exit code alone does not qualify release. The [compatibility matrix](r0/compatibility-matrix.md#portal-189-search-html-compression-qualification) separates synthetic transport evidence from populated Search, freshness and production validation. Disable the task-owned probe flag after qualification and preserve the resulting resource disposition.
 
 ## Choose local checks
 

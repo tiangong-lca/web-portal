@@ -20,9 +20,9 @@ checkPaths:
   - edgeone.json
   - src/app/r0-compat/**
   - tests/e2e/r0-compat.spec.ts
-lastReviewedAt: 2026-11-12
-lastReviewedCommit: d127295f31c6a0c1f0ff2b4211b4868c3b07a2ea
-lastReviewedNote: "Portal #187: reviewed the disabled-by-default server-only withdrawal relay, public IndexNow file and credential-leak checks. Existing rendering, CSP/ISR, brand and UI boundaries remain unchanged; exact hosted feed activation remains a separate acceptance gate."
+lastReviewedAt: 2026-11-13
+lastReviewedCommit: 9cbbf6bc6159d85bb27ec7dba6bb9dcba0d81253
+lastReviewedNote: "Portal #189: reviewed the synthetic compression qualification under the existing enforcing performance CSP and the retained strict-profile evidence."
 related:
   - compatibility-matrix.md
   - ../design-plan.md
@@ -47,6 +47,8 @@ This remains the result of the no-inline research profile. Report-only, broken h
 The user explicitly selected performance and SEO for the anonymous read-only Portal. Public Production uses a separate enforcing performance profile: Next-required inline script/style is allowed, `unsafe-eval` remains forbidden, all other source/object/base/form/frame directives remain restricted, and the exact EdgeOne deployment must pass hydration, Streaming, ISR, security-header, secret and rollback gates. The current local enforcing run passes all 50 production Playwright tests without converting static/ISR routes to dynamic rendering.
 
 The strict no-inline profile remains available through `PORTAL_EXPECT_STRICT_CSP=1` for future Next/EdgeOne rechecks. Its failure is no longer a public-launch blocker and must not be confused with the enforcing performance profile.
+
+[Portal #189 Search transport qualification](compatibility-matrix.md#portal-189-search-html-compression-qualification) runs in the task-scoped Git Preview under `PORTAL_CSP_MODE=enforce`, `PORTAL_CSP_PROFILE=performance` and `PORTAL_EXPECT_STRICT_CSP=0`. The two synthetic routes check decoded streaming and header passthrough. The Search candidate must also demonstrate browser hydration and preserve the existing ISR controls before release. The strict-profile result above still governs any change to script authorization.
 
 ## Reproduction
 

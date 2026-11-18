@@ -22,9 +22,9 @@ checkPaths:
   - scripts/**
   - contracts/database-engine/portal/**
   - edgeone.json
-lastReviewedAt: 2026-11-07
-lastReviewedCommit: 6b6500fdadb0cd555714facaed54d0930d7a7dc7
-lastReviewedNote: "Portal #184: reviewed separate totals/branch read demand, exact Database DTO snapshot and preserved cache, scope, UI and hosted qualification boundaries."
+lastReviewedAt: 2026-11-18
+lastReviewedCommit: c6765bf330709f3dc14a1e95ca8c4e4078b53475
+lastReviewedNote: "Portal #194: reviewed the browser qualification and privacy requirements for retaining a bounded first-attempt navigation receipt in CI."
 related:
   - docs/ui-system.md
   - docs/development.md

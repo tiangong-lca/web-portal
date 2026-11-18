@@ -124,6 +124,8 @@ The qualified Main tuple retains exact `@storybook/nextjs-vite@10.6.3`. Its upst
 
 Production browser screenshots belong to the current Playwright test's `testInfo.outputPath`, or the runner's repository-local `test-results` directory. Keep captures inside the owning checkout so concurrent tasks do not overwrite legacy shared temporary paths. The screenshot destination does not change visual, accessibility, functional or performance assertions.
 
+If the TianGong “drills from world to a Chinese city” case fails on its first CI attempt, open the run’s `portal-region-navigation-<run ID>-<run attempt>` artifact. It retains that attempt’s click target, route requests and observed URL changes for 14 days, including when the retry passes. The browser job uploads the JSON before Atlas starts its own Playwright run. A passing first attempt produces no diagnostic artifact.
+
 ## Dependency proposals
 
 [Dependency updates](dependency-updates.md) owns monitoring scope, related groups and manual acceptance. Proposals reuse the unchanged four-job CI workflow. Lock-only resolution changes retain review guidance without mandatory documentation metadata edits; manifest, runtime, pnpm policy, hooks and product/source obligations remain active.

@@ -92,6 +92,15 @@ jobs:
           path: test-results/**/seo-report.json
           if-no-files-found: warn
 
+      - name: Upload first region-navigation failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: portal-region-navigation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/**/region-navigation-attempt-0.json
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Atlas production route and presentation parity
         env:
           PORTAL_BRAND: atlas

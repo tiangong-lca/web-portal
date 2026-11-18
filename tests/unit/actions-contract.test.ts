@@ -48,6 +48,17 @@ describe("reviewed Actions inputs", () => {
     expect(step?.trim()).toBe(
       `if: always()\n        uses: ${artifact}\n        with:\n          name: portal-seo-checker-report\n          path: test-results/**/seo-report.json\n          if-no-files-found: warn`,
     );
-    expect(workflow.match(/uses: actions\/upload-artifact@/g)).toHaveLength(1);
+    expect(workflow.match(/uses: actions\/upload-artifact@/g)).toHaveLength(2);
+  });
+
+  it("uploads the first failing attempt before the Atlas run cleans Playwright output", () => {
+    const workflow = read(".github/workflows/ci.yml");
+    const beforeAtlas = workflow.split(
+      "      - name: Atlas production route and presentation parity",
+    )[0];
+    const afterTianGong = beforeAtlas?.split("        run: pnpm test:e2e\n")[1];
+    expect(afterTianGong).toContain(
+      `      - name: Upload first region-navigation failure\n        if: always()\n        uses: ${artifact}\n        with:\n          name: portal-region-navigation-\${{ github.run_id }}-\${{ github.run_attempt }}\n          path: test-results/**/region-navigation-attempt-0.json\n          if-no-files-found: ignore\n          retention-days: 14`,
+    );
   });
 });

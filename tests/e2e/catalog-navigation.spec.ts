@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
 import manifest from "../../src/features/catalog/region-maplibre-manifest.generated.json" with { type: "json" };
+import { regionNavigationTest as nav } from "./support/region-navigation-evidence";
 
 /** Production asset paths and reviewed hashes; a renamed or missing asset must fail loudly. */
 const WORLD = manifest.layers.world;
@@ -422,7 +423,7 @@ test("China zero-count administrative entries remain native links without JavaSc
   }
 });
 
-test("drills from world to a Chinese city and opens an exact public version", async ({ page }) => {
+nav("drills from world to a Chinese city and opens an exact public version", async ({ page }) => {
   const assets = mapAssetPaths(page);
   await page.goto("/zh-CN/search?explore=region");
   await page.locator(".catalog-navigation-list").getByRole("link", { name: /中国/ }).click();
